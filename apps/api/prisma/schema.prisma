@@ -1,0 +1,148 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["filterJson", "selectRelationCount"]
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  pseudonym String?
+  ethAddress String?   @db.VarChar(42)
+  
+  roles     String[]
+
+  url String?
+  bio String?
+
+  emailVerified Boolean @default(false)
+  acceptedTerms Boolean @default(false)
+  isBanned      Boolean @default(false)
+
+  artworks   Artwork[] @relation("artworks")
+  collection Object[]  @relation("collection")
+  objects    Object[]  @relation("objects")
+
+  tokens Token[]
+
+  heroImageId Int?
+  heroImage   Image? @relation(fields: [heroImageId], references: [id], name: "userHeroImage")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Artwork {
+  id   Int @id @default(autoincrement())
+  type Int @default(1)
+
+  descriptions String?
+  url          String?
+  video        String?
+
+  isBanned      Boolean @default(false)
+
+  creatorId Int
+  creator   User? @relation(fields: [creatorId], references: [id], name: "artworks")
+
+  lat           Float
+  lng           Float
+  
+  files File[]
+
+  objects Object[]
+
+  heroImageId Int?
+  heroImage   Image? @relation(fields: [heroImageId], references: [id], name: "artworkHeroImage")
+
+  images Image[] @relation("imagesArtwork")
+}
+
+model Object {
+  id          Int     @id @default(autoincrement())
+  name        String?
+  description String?
+
+  editionOf     Int
+  editionNumber Int
+
+  lat           Float
+  lng           Float
+
+  ownerEthAdress String?   @db.VarChar(42)
+
+  isBanned      Boolean @default(false)
+
+  creatorId Int
+  creator   User? @relation(fields: [creatorId], references: [id], name: "objects")
+
+  collectorId Int?
+  collector   User? @relation(fields: [collectorId], references: [id], name: "collection")
+
+  artworkId Int
+  artwork   Artwork? @relation(fields: [artworkId], references: [id])
+
+  heroImageId Int?
+  heroImage   Image? @relation(fields: [heroImageId], references: [id], name: "objectHeroImage")
+
+  images Image[] @relation("imagesObject")
+  models Model[]
+}
+
+model Image {
+  id         Int    @id @default(autoincrement())
+  uuid       String @unique @db.VarChar(48)
+  meta       Json
+  status     Int    @default(0)
+  retryCount Int    @default(0)
+
+  artworks Artwork[] @relation("imagesArtwork")
+  objects  Object[]  @relation("imagesObject")
+
+  profileImageUsers User[]    @relation("userHeroImage")
+  heroImageArtworks Artwork[] @relation("artworkHeroImage")
+  heroImageObjects  Object[]  @relation("objectHeroImage")
+}
+
+model Model {
+  id         Int    @id @default(autoincrement())
+  uuid       String @unique @db.VarChar(48)
+  meta       Json
+  status     Int    @default(0)
+  retryCount Int    @default(0)
+  format     String @db.VarChar(8)
+  type       String @db.VarChar(8)
+  objectId   Int
+  object     Object @relation(fields: [objectId], references: [id])
+}
+
+model File {
+  id   Int    @id @default(autoincrement())
+  uuid String @unique @db.VarChar(48)
+  meta Json
+
+  artworkId Int
+  artwork   Artwork @relation(fields: [artworkId], references: [id])
+}
+
+model Token {
+  id    Int    @id @default(autoincrement())
+  token String
+  type  Int
+
+  ownerId Int
+  owner   User     @relation(fields: [ownerId], references: [id])
+  expires DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([ownerId], name: "indexTokenOwnerId")
+}

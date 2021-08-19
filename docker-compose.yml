@@ -1,0 +1,38 @@
+version: '3'
+services:
+  postgres:
+    container_name: 'OpenARDB'
+    image: postgres:13
+    restart: unless-stopped
+    ports:
+      - "${DEV_DB_PORT:-5432}:5432"
+    volumes:
+      - './data/postgresql:/var/lib/postgresql/data'
+    environment:
+      POSTGRES_USER: 'openar' # The PostgreSQL user (useful to connect to the database)
+      POSTGRES_PASSWORD: 'openar' # The PostgreSQL password (useful to connect to the database)
+      POSTGRES_DB: 'openar' # The PostgreSQL default database (automatically created at first launch)
+    networks:
+      - openar
+    healthcheck:
+      test: [ "CMD", "psql", "-U", "openar", "-c", "SELECT 1;" ]
+      interval: 1m
+      timeout: 10s
+      retries: 5
+
+  mailhog:
+    container_name: 'OpenARMailHog'
+    image: 'mailhog/mailhog:latest'
+    restart: unless-stopped
+    ports:
+      - '${DEV_FORWARD_MAILHOG_PORT:-1026}:1025'
+      - '${DEV_FORWARD_MAILHOG_DASHBOARD_PORT:-5004}:8025'
+    networks:
+      - openar
+
+networks:
+  openar:
+    driver: bridge
+volumes:
+  cmpostgres:
+    driver: local

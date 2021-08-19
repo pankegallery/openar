@@ -1,0 +1,52 @@
+{
+  "presets": [
+    [
+      "@babel/preset-typescript",
+      {
+        "target": "es2018",
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "allowJs": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
+        "noEmit": false,
+        "esModuleInterop": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "jsx": "preserve",
+        "outDir": "./build",
+        "declaration": true,
+        "baseUrl": ".",
+        "paths": {
+          "~/*" : ["src/*"]
+        }
+      }
+    ],
+    [
+      "@babel/preset-env",
+      {
+        "corejs": 3,
+        "debug": false,
+        "modules": false,
+        "useBuiltIns": "usage",
+        "targets": {
+          "esmodules": true,
+          "node": "current"
+        }
+      }
+    ]
+  ],
+  "plugins": [
+    [
+      "babel-plugin-add-import-extension",
+      {
+        "extension": "js",
+        "replace": true,
+        "observedScriptExtensions": ["js", "cjs", "mjs", "ts", "jsx", "tsx"]
+      }
+    ]
+  ]
+}
