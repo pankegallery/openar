@@ -1,4 +1,4 @@
-export default {}
+export default {};
 
 // import { Event, Prisma } from "@prisma/client";
 // import { daoEventGetDatesById, daoEventUpdate } from "../dao";

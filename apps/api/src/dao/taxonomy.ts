@@ -1,4 +1,4 @@
-export default {}
+export default {};
 
 // import httpStatus from "http-status";
 // import { Taxonomy, Term, Prisma } from "@prisma/client";

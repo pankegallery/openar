@@ -43,7 +43,7 @@ model Artwork {
   id   Int @id @default(autoincrement())
   type Int @default(1)
 
-  descriptions String?
+  description String?
   url          String?
   video        String?
 

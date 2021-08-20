@@ -1,9 +1,10 @@
 import httpStatus from "http-status";
 import { User } from "@prisma/client";
-import { JwtPayload } from "jsonwebtoken";
-import type { RoleName, AuthenticatedApiUser } from "../apiuser";
-import { createAuthenticatedApiUser } from "../apiuser";
 import { AuthenticationError } from "apollo-server-express";
+import { JwtPayload } from "jsonwebtoken";
+
+import type { RoleName, AuthenticatedAppUser } from "../apiuser";
+import { createAuthenticatedAppUser } from "../apiuser";
 
 import { AuthPayload } from "../types/auth";
 import { daoTokenDeleteMany } from "../dao/token";
@@ -34,9 +35,7 @@ export const authSendEmailConfirmationEmail = async (
   userId: number,
   email: string
 ) => {
-  const emailVerificationToken = await tokenGenerateVerifyEmailToken(
-    userId
-  );
+  const emailVerificationToken = await tokenGenerateVerifyEmailToken(userId);
 
   sendEmailConfirmationEmail(email, emailVerificationToken);
   return true;
@@ -44,7 +43,7 @@ export const authSendEmailConfirmationEmail = async (
 
 export const authAuthenticateUserByToken = (
   token: string
-): AuthenticatedApiUser | null => {
+): AuthenticatedAppUser | null => {
   try {
     const tokenPayload: JwtPayload | null = tokenVerify(token);
 
@@ -59,13 +58,13 @@ export const authAuthenticateUserByToken = (
         )
           return null;
 
-        return createAuthenticatedApiUser(
+        return createAuthenticatedAppUser(
           tokenPayload.user.id,
           tokenPayload.user.pseudonym,
           tokenPayload.user.ethAddress,
           tokenPayload.user.role,
           tokenPayload.user.roles,
-          tokenPayload.user.permissions,
+          tokenPayload.user.permissions
         );
       }
     }
@@ -99,7 +98,7 @@ export const authLoginUserWithEmailAndPassword = async (
   const authPayload: AuthPayload = await tokenGenerateAuthTokens(
     {
       id: user.id,
-      pseudonym: user.pseudonym
+      pseudonym: user.pseudonym,
     },
     user.roles as RoleName[]
   );
@@ -109,7 +108,7 @@ export const authLoginUserWithEmailAndPassword = async (
     pseudonym: user.pseudonym,
     ethAddress: user.ethAddress,
     email: user.email,
-  }
+  };
 
   return authPayload;
 };
@@ -137,18 +136,16 @@ export const authRefresh = async (refreshToken: string) => {
         httpStatus.FORBIDDEN,
         "[auth.authRefresh] Please authenticate (1)"
       );
-      
-    const user: User = await daoUserGetById(
-      tokenPayload.user.id
-    );
-    
+
+    const user: User = await daoUserGetById(tokenPayload.user.id);
+
     if (!user) {
       throw new ApiError(
         httpStatus.FORBIDDEN,
         "[auth.authRefresh] Please authenticate (2)"
       );
     }
-    
+
     if (user.isBanned)
       throw new ApiError(httpStatus.FORBIDDEN, "[auth] Access denied");
 
@@ -203,10 +200,7 @@ export const authRequestEmailVerificationEmail = async (
     const userInDb = await daoUserGetById(userId);
 
     if (userInDb)
-      return await authSendEmailConfirmationEmail(
-        userInDb.id,
-        userInDb.email
-      );
+      return await authSendEmailConfirmationEmail(userInDb.id, userInDb.email);
 
     return false;
   } catch (error) {
@@ -228,14 +222,10 @@ export const authResetPassword = async (
       TokenTypesEnum.RESET_PASSWORD
     );
 
-    if (
-      tokenPayload &&
-      "user" in tokenPayload &&
-      "id" in tokenPayload.user
-    ) {
+    if (tokenPayload && "user" in tokenPayload && "id" in tokenPayload.user) {
       const user = await daoUserGetById(tokenPayload.user.id);
 
-      // TODO: what do we need to do here? 
+      // TODO: what do we need to do here?
       // await daoUserUpdate(user.id, { password });
 
       daoTokenDeleteMany({
@@ -267,12 +257,11 @@ export const authResetPassword = async (
 
 export const authVerifyEmail = async (token: string) => {
   try {
-    const tokenPayload = await tokenVerifyInDB(token, TokenTypesEnum.VERIFY_EMAIL);
-    if (
-      tokenPayload &&
-      "user" in tokenPayload &&
-      "id" in tokenPayload.user
-    ) {
+    const tokenPayload = await tokenVerifyInDB(
+      token,
+      TokenTypesEnum.VERIFY_EMAIL
+    );
+    if (tokenPayload && "user" in tokenPayload && "id" in tokenPayload.user) {
       daoTokenDeleteMany({
         ownerId: tokenPayload.id,
         type: TokenTypesEnum.VERIFY_EMAIL,

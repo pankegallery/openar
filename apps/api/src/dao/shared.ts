@@ -100,65 +100,6 @@ export const daoSharedGenerateFullText = (data: any, keys: string[]) => {
   }, "");
 };
 
-export const daoSharedMapTranslations = (
-  data: any,
-  keys: string[]
-): any | any[] => {
-  if (!data) return data;
-
-  if (Array.isArray(data))
-    return data.map((item) => daoSharedMapTranslations(item, keys));
-
-  if (!data.translations || keys.length === 0) return data;
-
-  const returnData = {
-    ...data,
-    ...keys.reduce(
-      (acc, key) => ({
-        ...acc,
-        [key]: data.translations
-          .filter((trans: any) => trans.key === key)
-          .reduce(
-            (transAcc: any, trans: any) => ({
-              ...transAcc,
-              [trans.lang]: trans.translation,
-            }),
-            {}
-          ),
-      }),
-      {}
-    ),
-  };
-  delete returnData["translations"];
-  return returnData;
-};
-
-export const daoSharedWrapImageWithTranslationImage = (
-  imageKey: string,
-  data: any,
-  transKeys: string[]
-) => {
-  if (
-    !data ||
-    !(imageKey in data) ||
-    !data[imageKey] ||
-    !("translations" in data[imageKey])
-  )
-    return data;
-
-  const image = {
-    ...data[imageKey],
-    ...daoSharedMapTranslations(data[imageKey], transKeys),
-  };
-
-  delete image["translations"];
-
-  return {
-    ...data,
-    [imageKey]: image,
-  };
-};
-
 export default {
   daoSharedGenerateFullText,
   daoSharedCheckSlugUnique,

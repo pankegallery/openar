@@ -80,7 +80,6 @@ export interface ApiConfigJwt {
   };
 }
 
-
 export interface ApiConfig {
   enablePublicRegistration: boolean;
   baseDir: string;
@@ -142,7 +141,7 @@ const db: ApiConfigDB = {
 const trimTrailingSlash = (str: string) =>
   str.endsWith("/") ? str.slice(0, -1) : str;
 
-export let apiConfig = {
+let apiConfig = {
   enablePublicRegistration: true,
   baseDir: resolve(dirname("")),
   publicDir: "public",
@@ -358,7 +357,7 @@ export let apiConfig = {
   },
 };
 
-export const updateConfig = (aCfg: ApiConfigOverwrite) => {
+export const updateApiConfig = (aCfg: ApiConfigOverwrite) => {
   if (typeof aCfg !== "object")
     throw Error("Plase just pass objects to the apiConfig.update function");
 
@@ -372,7 +371,8 @@ export const updateConfig = (aCfg: ApiConfigOverwrite) => {
   }
 };
 
+export const getApiConfig = () => apiConfig;
+
 export const updateCors = (newCorsSettings: CorsOptions) => {
   apiConfig.corsOptions = newCorsSettings;
 };
- 

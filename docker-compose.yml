@@ -20,6 +20,20 @@ services:
       timeout: 10s
       retries: 5
 
+  ipfs:
+    container_name: 'OpenARIPFS'
+    image: ipfs/go-ipfs:latest
+    environment:
+      - IPFS_PROFILE=server
+      - IPFS_PATH=/ipfsdata
+    volumes:
+      - ./data/ipfs:/ipfsdata
+    ports:
+      - "127.0.0.1:${IPFS_HTTP_PORT_1:-4001}:4001"
+      - "127.0.0.1:${IPFS_HTTP_PORT_2:-8080}:8080"
+      - "127.0.0.1:${IPFS_HTTP_PORT_3:-8081}:8081"
+      - "127.0.0.1:${IPFS_HTTP_PORT_4:-5001}:5001"
+    
   mailhog:
     container_name: 'OpenARMailHog'
     image: 'mailhog/mailhog:latest'

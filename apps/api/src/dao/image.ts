@@ -1,12 +1,15 @@
 import { Image, Prisma } from "@prisma/client";
-import { filteredOutputByBlacklist, ImageStatusEnum, filteredOutputByBlacklistOrNotFound } from "../utils";
+import {
+  filteredOutputByBlacklist,
+  ImageStatusEnum,
+  filteredOutputByBlacklistOrNotFound,
+} from "../utils";
 
-import { apiConfig } from "../config";
+import { getApiConfig } from "../config";
 
 import { getPrismaClient } from "../db/client";
 
-import { daoSharedMapTranslations } from ".";
-
+const apiConfig = getApiConfig();
 const prisma = getPrismaClient();
 
 export const daoImageTranslatedColumns = ["alt", "credits"];
@@ -25,7 +28,7 @@ export const daoImageQuery = async (
   });
 
   return filteredOutputByBlacklist(
-    daoSharedMapTranslations(images, daoImageTranslatedColumns),
+    images,
     apiConfig.db.privateJSONDataKeys.image
   );
 };
@@ -49,9 +52,7 @@ export const daoImageGetById = async (id: number): Promise<Image> => {
   );
 };
 
-export const daoImageGetStatusById = async (
-  id: number
-): Promise<Image> => {
+export const daoImageGetStatusById = async (id: number): Promise<Image> => {
   const image = await prisma.image.findUnique({
     where: { id },
     select: {
@@ -115,7 +116,7 @@ export const daoImageSetToDelete = async (id: number): Promise<Image> => {
   const image: Image = await prisma.image.update({
     data: {
       status: ImageStatusEnum.DELETED,
-      // does it need to be extended for reviews and tours? 
+      // does it need to be extended for reviews and tours?
       artworks: {
         set: [],
       },

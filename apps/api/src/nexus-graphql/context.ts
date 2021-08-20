@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AuthenticatedApiUser } from "../apiuser";
+import { AuthenticatedAppUser } from "../apiuser";
 
 import { logger } from "../services/serviceLogging";
 
@@ -8,7 +8,7 @@ import { authAuthenticateUserByToken } from "../services/serviceAuth";
 export interface NexusResolverContext {
   req: Request;
   res: Response;
-  apiUser: AuthenticatedApiUser | null;
+  appUser: AuthenticatedAppUser | null;
   queryStartsWith: string;
   tokenInfo: {
     accessTokenProvided: boolean;
@@ -25,7 +25,7 @@ export const context = ({
   req: Request;
   res: Response;
 }): NexusResolverContext => {
-  let apiUser: AuthenticatedApiUser | null = null;
+  let appUser: AuthenticatedAppUser | null = null;
   let accessTokenProvided = false;
   let refreshTokenProvided = false;
   let validAccessTokenProvided = false;
@@ -47,9 +47,9 @@ export const context = ({
       if (token.indexOf("Bearer") > -1)
         token = token.replace(/(Bearer:? )/g, "");
 
-      apiUser = authAuthenticateUserByToken(token);
+      appUser = authAuthenticateUserByToken(token);
 
-      if (apiUser) {
+      if (appUser) {
         validAccessTokenProvided = true;
       } else {
         logger.warn("Authentication token invalid in context (1)");
@@ -74,15 +74,15 @@ export const context = ({
     refreshTokenProvided = true;
 
     try {
-      const apiUserInRefreshToken = authAuthenticateUserByToken(token);
+      const appUserInRefreshToken = authAuthenticateUserByToken(token);
 
-      if (apiUserInRefreshToken) {
+      if (appUserInRefreshToken) {
         validRefreshTokenProvided = true;
 
-        if (!apiUser && !validAccessTokenProvided) {
+        if (!appUser && !validAccessTokenProvided) {
           // seems like the request has no (valid) auth token
           // let us try to set at least the very basic reresh user from the refresh token
-          apiUser = apiUserInRefreshToken;
+          appUser = appUserInRefreshToken;
           logger.info(
             "Auth token potentially invalid. But refresh token valid."
           );
@@ -97,14 +97,14 @@ export const context = ({
 
   if (accessTokenProvided || refreshTokenProvided)
     logger.debug(
-      `Context: resolved ApiUser ID(${apiUser?.id}) AT: ${accessTokenProvided} RT: ${refreshTokenProvided}`
+      `Context: resolved ApiUser ID(${appUser?.id}) AT: ${accessTokenProvided} RT: ${refreshTokenProvided}`
     );
 
   return {
     req,
     res,
     queryStartsWith,
-    apiUser,
+    appUser,
     tokenInfo: {
       accessTokenProvided,
       refreshTokenProvided,

@@ -10,13 +10,13 @@ import {
   arg,
   nonNull,
 } from "nexus";
-import { PermissionNames } from "../../apiuser";
 import {
   GraphQLDateTime,
   GraphQLJSON,
   GraphQLJWT,
   GraphQLEmailAddress,
 } from "graphql-scalars";
+import { PermissionNames } from "../../apiuser";
 import { authorizeApiUser } from "../helpers";
 
 export const GQLDateTime = asNexusMethod(GraphQLDateTime, "date");

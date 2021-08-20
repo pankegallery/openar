@@ -1,4 +1,4 @@
-export default {}
+export default {};
 // import { Module, Prisma } from "@prisma/client";
 // import { filteredOutputByBlacklist } from "../utils";
 // import { apiConfig } from "../config";

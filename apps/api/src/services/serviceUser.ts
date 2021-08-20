@@ -18,8 +18,9 @@ import { AuthPayload } from "../types/auth";
 import { tokenGenerateAuthTokens } from "./serviceToken";
 import { authSendEmailConfirmationEmail } from "./serviceAuth";
 import { ApiError, TokenTypesEnum } from "../utils";
-import { apiConfig } from "../config";
+import { getApiConfig } from "../config";
 
+const apiConfig = getApiConfig();
 export const userRegister = async (
   data: Prisma.UserCreateInput
 ): Promise<AuthPayload> => {
@@ -49,9 +50,9 @@ export const userRegister = async (
       id: user.id,
       ethAddress: user.ethAddress,
       pseudonym: user.pseudonym,
-      email: user.email
+      email: user.email,
     };
-    
+
     return authPayload;
   }
 

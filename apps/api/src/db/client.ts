@@ -1,8 +1,9 @@
 import Prisma from "@prisma/client";
 
-import { apiConfig } from "../config";
+import { getApiConfig } from "../config";
 import { logger } from "../services/serviceLogging";
 
+const apiConfig = getApiConfig();
 const { PrismaClient } = Prisma;
 
 declare const global: {

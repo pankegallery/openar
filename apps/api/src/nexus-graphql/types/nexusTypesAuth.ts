@@ -128,14 +128,14 @@ export const AuthMutations = extendType({
         userId: nonNull(intArg()),
       },
 
-      async resolve(...[, args, { res, apiUser }]) {
+      async resolve(...[, args, { res, appUser }]) {
         // in any case we want to remove the refresh token for the submitting user
 
         logger.debug(`authLogout calling tokenClearRefreshToken`);
         tokenClearRefreshToken(res);
 
         // then test if the submitting user is the user to be logged out
-        if (!apiUser || apiUser.id !== args.userId)
+        if (!appUser || appUser.id !== args.userId)
           throw new AuthenticationError("Logout Failed (1)");
 
         // okay then log the user out
@@ -159,9 +159,7 @@ export const AuthMutations = extendType({
       },
 
       async resolve(...[, args]) {
-        const result = await authRequestPasswordResetEmail(
-          args.email
-        );
+        const result = await authRequestPasswordResetEmail(args.email);
 
         return { result };
       },
@@ -179,9 +177,7 @@ export const AuthMutations = extendType({
         isCurrentApiUser(ctx, args.userId),
 
       async resolve(...[, args]) {
-        const result = await authRequestEmailVerificationEmail(
-          args.userId
-        );
+        const result = await authRequestEmailVerificationEmail(args.userId);
 
         return { result };
       },

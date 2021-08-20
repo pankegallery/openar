@@ -19,10 +19,10 @@ export const authorizeApiUser = (
   // )
   //   return Error("Authentication failed (maybe refresh)");
 
-  // if (!ctx.apiUser) throw Error("GQL authorization rejected");
+  // if (!ctx.appUser) throw Error("GQL authorization rejected");
 
   // if (
-  //   !(typeof ctx?.apiUser?.can === "function" && ctx.apiUser.can(permissions))
+  //   !(typeof ctx?.appUser?.can === "function" && ctx.appUser.can(permissions))
   // )
   //   throw Error("GQL authorization rejected");
 

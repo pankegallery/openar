@@ -173,8 +173,9 @@ openar.config.js
 
 data/*
 !data/.keep
+!data/postgres
 !data/postgres/.keep
 !data/postgres-test/.keep
-
+!data/ipfs
 logs/*
 !logs/.keep

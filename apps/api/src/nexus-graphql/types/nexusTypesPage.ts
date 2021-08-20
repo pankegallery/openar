@@ -1,4 +1,4 @@
-export default {}
+export default {};
 
 // /// <reference path="../../types/nexus-typegen.ts" />
 // import { parseResolveInfo } from "graphql-parse-resolve-info";
@@ -74,7 +74,7 @@ export default {}
 // export const PageQueryResult = objectType({
 //   name: "PageQueryResult",
 //   description: dedent`
-//     List all the pages in the database.     
+//     List all the pages in the database.
 //   `,
 //   definition: (t) => {
 //     t.int("totalCount");
@@ -259,7 +259,7 @@ export default {}
 
 //         if (Array.isArray(args.imagesTranslations))
 //           await daoImageSaveImageTranslations(args.imagesTranslations);
-        
+
 //         return page;
 //       }
 //     });

@@ -1,9 +1,11 @@
 import nodemailer from "nodemailer";
 
 import { logger } from "./serviceLogging";
-import { apiConfig } from "../config";
+import { getApiConfig } from "../config";
 
 // TODO: maybe use https://www.npmjs.com/package/email-templates
+
+const apiConfig = getApiConfig();
 
 const transport = nodemailer.createTransport({
   host: apiConfig.smtp.host,

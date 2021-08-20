@@ -1,4 +1,4 @@
-export default {}
+export default {};
 
 // /// <reference path="../../types/nexus-typegen.ts" />
 // import { parseResolveInfo } from "graphql-parse-resolve-info";
@@ -15,7 +15,6 @@ export default {}
 //   list,
 // } from "nexus";
 // import httpStatus from "http-status";
-
 
 // import { filteredOutputByWhitelist,ApiError } from "../../utils";
 // import { GQLJson } from "./nexusTypesShared";
@@ -89,7 +88,7 @@ export default {}
 // export const LocationQueryResult = objectType({
 //   name: "LocationQueryResult",
 //   description: dedent`
-//     List all the locations in the database.     
+//     List all the locations in the database.
 //   `,
 //   definition: (t) => {
 //     t.int("totalCount");

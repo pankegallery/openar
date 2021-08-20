@@ -1,12 +1,12 @@
 import type { RoleName, PermissionNames } from "./roles";
 
-export interface AuthenticatedApiUserFunctions {
+export interface AuthenticatedAppUserFunctions {
   is(name: RoleName): boolean;
   has(names: RoleName | RoleName[]): boolean;
   can(permissions: PermissionNames | PermissionNames[]): boolean;
 }
 
-export interface AuthenticatedApiUserData {
+export interface AuthenticatedAppUserData {
   id: number;
   role: RoleName;
   roles: RoleName[];
@@ -16,11 +16,11 @@ export interface AuthenticatedApiUserData {
   ens?: string;
 }
 
-export interface AuthenticatedApiUser
-  extends AuthenticatedApiUserData,
-    AuthenticatedApiUserFunctions {}
+export interface AuthenticatedAppUser
+  extends AuthenticatedAppUserData,
+    AuthenticatedAppUserFunctions {}
 
-export interface JwtPayloadAuthenticatedApiUser {
+export interface JwtPayloadAuthenticatedAppUser {
   id: number;
   pseudonym?: string | null;
   email?: string | null;
@@ -43,15 +43,15 @@ const can = (
     permissions.includes(perm)
   );
 
-export const createAuthenticatedApiUser = (
+export const createAuthenticatedAppUser = (
   id: number,
   role: RoleName,
   roles: RoleName[],
   permissions: PermissionNames[],
-  pseudonym: string, 
-  ethAddress: string,
-): AuthenticatedApiUser => {
-  const user: AuthenticatedApiUser = {
+  pseudonym: string,
+  ethAddress: string
+): AuthenticatedAppUser => {
+  const user: AuthenticatedAppUser = {
     id,
     role,
     roles,

@@ -1,4 +1,4 @@
-export default {}
+export default {};
 
 // import httpStatus from "http-status";
 // import { Location, Prisma } from "@prisma/client";

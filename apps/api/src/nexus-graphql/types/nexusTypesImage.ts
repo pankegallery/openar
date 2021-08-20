@@ -21,7 +21,7 @@ import { GQLJson } from "./nexusTypesShared";
 
 import { authorizeApiUser } from "../helpers";
 
-import { apiConfig } from "../../config";
+import { getApiConfig } from "../../config";
 
 import {
   daoImageQuery,
@@ -33,6 +33,8 @@ import {
   daoImageGetStatusById,
   daoImageSetToDelete,
 } from "../../dao";
+
+const apiConfig = getApiConfig();
 
 export const Image = objectType({
   name: "Image",

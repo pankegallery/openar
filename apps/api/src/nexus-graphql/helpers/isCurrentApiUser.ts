@@ -7,7 +7,7 @@ export const isCurrentApiUser = (ctx: NexusResolverContext, userId: number) => {
   )
     return Error("Authentication failed (maybe refresh)");
 
-  if (!(ctx.apiUser && ctx.apiUser.id === userId))
+  if (!(ctx.appUser && ctx.appUser.id === userId))
     throw Error("GQL authorization rejected");
 
   return true;

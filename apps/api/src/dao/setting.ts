@@ -1,4 +1,4 @@
-export default {}
+export default {};
 
 // import { Setting, Prisma } from "@prisma/client";
 

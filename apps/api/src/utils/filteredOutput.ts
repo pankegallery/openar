@@ -6,7 +6,6 @@ export type FilterableObject<K extends keyof any, T> = {
   [P in K]?: T;
 };
 
-
 export const filteredOutputByBlacklist = (
   obj: object | object[] | null | undefined,
   keys?: string[] | undefined,

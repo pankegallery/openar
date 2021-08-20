@@ -1,4 +1,3 @@
-// convert TokenTypes to int ... TODO:
 export enum TokenTypesEnum {
   ACCESS,
   REFRESH,

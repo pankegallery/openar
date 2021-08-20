@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+// import bcrypt from "bcrypt";
 import httpStatus from "http-status";
 import { User, Prisma } from "@prisma/client";
 
@@ -7,10 +7,11 @@ import {
   filteredOutputByBlacklistOrNotFound,
   filteredOutputByBlacklist,
 } from "../utils";
-import { apiConfig } from "../config";
+import { getApiConfig } from "../config";
 import { getPrismaClient } from "../db/client";
-import { daoImageSetToDelete } from ".";
+import { daoImageSetToDelete } from "./image";
 
+const apiConfig = getApiConfig();
 const prisma = getPrismaClient();
 
 export const daoUserCheckIsEmailTaken = async (

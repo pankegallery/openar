@@ -3,12 +3,13 @@ import httpStatus from "http-status";
 import { mkdir } from "fs/promises";
 import { v4 as uuidv4 } from "uuid";
 import type { ApiImageMetaInformation } from "../types";
-import { ImageStatusEnum } from "../utils";
-import { ApiError } from "../utils";
-import { apiConfig } from "../config";
+import { ImageStatusEnum, ApiError } from "../utils";
+import { getApiConfig } from "../config";
 
 import { daoImageCreate } from "../dao";
 import { logger } from "./serviceLogging";
+
+const apiConfig = getApiConfig();
 
 export const imageGetUploadInfo = async (): Promise<{
   path: string;

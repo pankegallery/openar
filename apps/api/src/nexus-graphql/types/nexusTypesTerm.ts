@@ -1,4 +1,4 @@
-export default {}
+export default {};
 
 // /// <reference path="../../types/nexus-typegen.ts" />
 // import { parseResolveInfo } from "graphql-parse-resolve-info";
@@ -57,7 +57,7 @@ export default {}
 //   name: "TermQueryResult",
 
 //   description: dedent`
-//     List all the available terms of the given taxonomy in the database.     
+//     List all the available terms of the given taxonomy in the database.
 //   `,
 
 //   definition: (t) => {

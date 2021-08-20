@@ -15,7 +15,7 @@ import {
   interfaceType,
 } from "nexus";
 import httpStatus from "http-status";
-import { filteredOutputByWhitelist } from "../../utils";
+import { filteredOutputByWhitelist, ApiError } from "../../utils";
 
 import {
   userRegister,
@@ -31,13 +31,12 @@ import {
   tokenClearRefreshToken,
 } from "../../services/serviceToken";
 import { GQLJson } from "./nexusTypesShared";
-import { ApiError } from "../../utils";
 import {
   authorizeApiUser,
   isCurrentApiUser,
   isNotCurrentApiUser,
 } from "../helpers";
-import { apiConfig } from "../../config";
+import { getApiConfig } from "../../config";
 import {
   daoUserQuery,
   daoUserQueryCount,
@@ -45,6 +44,8 @@ import {
   daoImageGetById,
   daoUserProfileImageDelete,
 } from "../../dao";
+
+const apiConfig = getApiConfig();
 
 const UserBaseNode = interfaceType({
   name: "UserBaseNode",
@@ -154,7 +155,7 @@ export const UserQueries = extendType({
       },
     });
 
-    // TODO: this needs to go ... 
+    // TODO: this needs to go ...
     // t.field("adminUsers", {
     //   type: list("AdminUser"),
     //   deprecation:
@@ -396,7 +397,7 @@ export const UserMutations = extendType({
       async resolve(...[, args, ctx]) {
         const user = await daoUserProfileImageDelete(
           args.id,
-          ctx?.apiUser?.id ?? 0
+          ctx?.appUser?.id ?? 0
         );
 
         if (!user)

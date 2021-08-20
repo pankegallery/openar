@@ -5,7 +5,7 @@ import express, { Application, urlencoded } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
-import { apiConfig } from "./config";
+import { getApiConfig } from "./config";
 import {
   errorConvert404ToApiError,
   errorDisplayInResponse,
@@ -14,6 +14,8 @@ import {
 
 import { morganErrorHandler, morganSuccessHandler } from "./middlewares/morgan";
 import { postImage, postProfileImage, postImageUpload } from "./routes";
+
+const apiConfig = getApiConfig();
 
 export const app: Application = express();
 

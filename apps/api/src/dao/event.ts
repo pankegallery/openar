@@ -1,4 +1,4 @@
-export default {}
+export default {};
 
 // import httpStatus from "http-status";
 // import { Event, EventDate, Prisma } from "@prisma/client";
@@ -13,6 +13,7 @@ export default {}
 //   daoSharedWrapImageWithTranslationImage,
 //   daoImageTranslatedColumns,
 // } from ".";
+// const apiConfig = getApiConfig();
 
 // const prisma = getPrismaClient();
 
@@ -340,4 +341,3 @@ export default {}
 //   daoEventSearchQuery,
 //   daoEventGetDatesById,
 // };
-

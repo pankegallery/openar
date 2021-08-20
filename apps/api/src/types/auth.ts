@@ -1,5 +1,5 @@
-import type { JwtPayloadAuthenticatedApiUser } from "../apiuser";
-import type { PartialRecord } from "../types";
+import type { JwtPayloadAuthenticatedAppUser } from "../apiuser";
+import type { PartialRecord } from ".";
 
 export type AuthTokenType =
   | "access"
@@ -13,6 +13,6 @@ export type AuthPayloadToken = {
 };
 
 export type AuthPayload = {
-  user: JwtPayloadAuthenticatedApiUser | undefined;
+  user: JwtPayloadAuthenticatedAppUser | undefined;
   tokens: PartialRecord<AuthTokenType, AuthPayloadToken>;
 };

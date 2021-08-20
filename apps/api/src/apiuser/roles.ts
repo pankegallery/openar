@@ -141,13 +141,10 @@ export const apiRolesAndPermissions: ApiRolesAndPermissions = {
     return [];
   },
   getCombinedPermissions(roles: RoleName[]): PermissionNames[] {
-
     return roles.reduce((permissions, roleName) => {
-      if (!(roleName in this.roles))
-        return permissions;
+      if (!(roleName in this.roles)) return permissions;
 
       return [...permissions, ...this.getOwnPermissions(roleName)];
-
     }, [] as PermissionNames[]);
   },
 };
@@ -161,7 +158,7 @@ apiRolesAndPermissions.add("user", [
   "profileUpdate",
 ]);
 
-// TODO: extend roles 
+// TODO: extend roles
 apiRolesAndPermissions.add("contributor", [
   "locationRead",
   "locationCreate",
@@ -180,7 +177,6 @@ apiRolesAndPermissions.add("contributor", [
   "pageUpdate",
   "pageDeleteOwn",
 ]);
-
 
 apiRolesAndPermissions.add("editor", [
   "locationRead",

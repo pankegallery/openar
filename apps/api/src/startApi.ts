@@ -8,10 +8,11 @@ import { join } from "path";
 
 import { server } from "./server";
 import { app, addTerminatingErrorHandlingToApp } from "./app";
-import { apiConfig } from "./config";
+import { getApiConfig } from "./config";
 import { logger } from "./services/serviceLogging";
 import { getPrismaClient } from "./db/client";
 
+const apiConfig = getApiConfig();
 export const startApi = async () => {
   if (server && app) {
     try {

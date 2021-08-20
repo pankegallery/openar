@@ -1,4 +1,4 @@
-export default {}
+export default {};
 
 // /// <reference path="../../types/nexus-typegen.ts" />
 // import { parseResolveInfo } from "graphql-parse-resolve-info";
@@ -65,7 +65,7 @@ export default {}
 // export const TaxonomyQueryResult = objectType({
 //   name: "TaxonomyQueryResult",
 //   description: dedent`
-//     List all the taxonomies in the database.     
+//     List all the taxonomies in the database.
 //   `,
 //   definition: (t) => {
 //     t.int("totalCount");

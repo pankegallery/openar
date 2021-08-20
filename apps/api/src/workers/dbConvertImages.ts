@@ -5,13 +5,14 @@ import sharp from "sharp";
 
 // !!!! ALWAY REMEMBER TO CLOSE YOU DB CONNECTION !!!
 import Prisma from "@prisma/client";
-import type { ApiImageMetaInformation, ApiImageSizeInfo, ApiImageFormats } from "../types";
+import type { ApiImageMetaInformation, ApiImageSizeInfo } from "../types";
 import { ImageStatusEnum } from "../utils";
 
 import type { ApiConfigImageFormat } from "../config";
 
-import { apiConfig } from "../config";
+import { getApiConfig } from "../config";
 
+const apiConfig = getApiConfig();
 // https://github.com/breejs/bree#long-running-jobs
 // Or use https://threads.js.org/usage for a queing experience .. .
 // if (parentPort)
@@ -30,7 +31,11 @@ const postMessage = (msg: string) => {
   else console.log(msg);
 };
 
-const createImageSizeWebP = async (size: ApiConfigImageFormat, uuid: string, imageMeta: any): Promise<ApiImageSizeInfo>  =>
+const createImageSizeWebP = async (
+  size: ApiConfigImageFormat,
+  uuid: string,
+  imageMeta: any
+): Promise<ApiImageSizeInfo> =>
   new Promise((resolve, reject) => {
     const newImgFileName = `${uuid}-${size.width}-${size.height}.webp`;
     const newImgUrl = `${apiConfig.baseUrl.api}/${imageMeta.uploadFolder}/${newImgFileName}`;
@@ -61,7 +66,11 @@ const createImageSizeWebP = async (size: ApiConfigImageFormat, uuid: string, ima
       });
   });
 
-const createImageSizeJpg = async (size: ApiConfigImageFormat, uuid: string, imageMeta: any): Promise<ApiImageSizeInfo> =>
+const createImageSizeJpg = async (
+  size: ApiConfigImageFormat,
+  uuid: string,
+  imageMeta: any
+): Promise<ApiImageSizeInfo> =>
   new Promise((resolve, reject) => {
     const newImgFileName = `${uuid}-${size.width}-${size.height}.jpg`;
     const newImgUrl = `${apiConfig.baseUrl.api}/${imageMeta.uploadFolder}/${newImgFileName}`;
@@ -145,25 +154,31 @@ const doChores = async () => {
 
           if (!originalImageMetaData)
             throw Error("Original image meta data read error");
-          
-            apiConfig.imageFormats
+
+          apiConfig.imageFormats;
 
           const processedSizesMetaInfo = await Promise.all(
-            apiConfig.imageFormats[meta.imageType].reduce((acc: Promise<ApiImageSizeInfo>[], size: ApiConfigImageFormat) => {
-              if (
-                size.width > (originalImageMetaData?.width ?? 0) &&
-                size.height > (originalImageMetaData?.height ?? 0)
-              )
+            apiConfig.imageFormats[meta.imageType].reduce(
+              (
+                acc: Promise<ApiImageSizeInfo>[],
+                size: ApiConfigImageFormat
+              ) => {
+                if (
+                  size.width > (originalImageMetaData?.width ?? 0) &&
+                  size.height > (originalImageMetaData?.height ?? 0)
+                )
+                  return acc;
+
+                if (size.asJpg)
+                  acc.push(createImageSizeJpg(size, image.uuid, meta));
+
+                if (size.asWebP)
+                  acc.push(createImageSizeWebP(size, image.uuid, meta));
+
                 return acc;
-
-              if (size.asJpg)
-                acc.push(createImageSizeJpg(size, image.uuid, meta));
-
-              if (size.asWebP)
-                acc.push(createImageSizeWebP(size, image.uuid, meta));
-
-              return acc;
-            }, [] as Promise<ApiImageSizeInfo>[])
+              },
+              [] as Promise<ApiImageSizeInfo>[]
+            )
           );
 
           const newMeta = {
@@ -178,7 +193,7 @@ const doChores = async () => {
                   originalImageMetaData.format === "jpg",
                 isWebP: originalImageMetaData.format === "webp",
               },
-              ...(processedSizesMetaInfo.reduce(
+              ...processedSizesMetaInfo.reduce(
                 (acc: object, sizeMetaInfo: ApiImageSizeInfo) => ({
                   ...acc,
                   [`${sizeMetaInfo.width}-${sizeMetaInfo.height}-${
@@ -186,7 +201,7 @@ const doChores = async () => {
                   }`]: sizeMetaInfo,
                 }),
                 {}
-              )),
+              ),
             },
           };
 

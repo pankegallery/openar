@@ -1,14 +1,14 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import httpStatus from "http-status";
 import { addDays, addMinutes } from "date-fns";
+import { Response } from "express";
 import {
   apiRolesAndPermissions,
   RoleName,
-  JwtPayloadAuthenticatedApiUser,
+  JwtPayloadAuthenticatedAppUser,
 } from "../apiuser";
-import { Response } from "express";
 
-import { apiConfig } from "../config";
+import { getApiConfig } from "../config";
 import { AuthPayload } from "../types/auth";
 import { daoTokenCreate, daoTokenFindFirst } from "../dao/token";
 import { daoUserGetByEmail } from "../dao/user";
@@ -17,14 +17,16 @@ import { ApiError, TokenTypesEnum } from "../utils";
 
 import { logger } from "./serviceLogging";
 
+const apiConfig = getApiConfig();
+
 export const generateToken = (
-  payloadUser: JwtPayloadAuthenticatedApiUser,
+  payloadUser: JwtPayloadAuthenticatedAppUser,
   roles: RoleName[],
   expires: Date,
   type: TokenTypesEnum,
   secret?: string
 ) => {
-  let user: JwtPayloadAuthenticatedApiUser = {
+  let user: JwtPayloadAuthenticatedAppUser = {
     id: payloadUser.id,
   };
 
@@ -56,7 +58,9 @@ export const generateToken = (
         ...user,
         ...{
           roles: ["refresh"],
-          permissions: apiRolesAndPermissions.getCombinedPermissions(["refresh"]),
+          permissions: apiRolesAndPermissions.getCombinedPermissions([
+            "refresh",
+          ]),
         },
       };
   }
@@ -146,7 +150,7 @@ export const tokenVerifyInDB = async (
 };
 
 export const tokenGenerateAuthTokens = async (
-  user: JwtPayloadAuthenticatedApiUser,
+  user: JwtPayloadAuthenticatedAppUser,
   roles: RoleName[]
 ): Promise<AuthPayload> => {
   const accessTokenExpires = addMinutes(
@@ -198,9 +202,7 @@ export const tokenGenerateAuthTokens = async (
   return authPayload;
 };
 
-export const tokenGenerateResetPasswordToken = async (
-  email: string
-) => {
+export const tokenGenerateResetPasswordToken = async (email: string) => {
   const user = await daoUserGetByEmail(email);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "Email not found");
@@ -227,9 +229,7 @@ export const tokenGenerateResetPasswordToken = async (
   return resetPasswordToken;
 };
 
-export const tokenGenerateVerifyEmailToken = async (
-  ownerId: number
-) => {
+export const tokenGenerateVerifyEmailToken = async (ownerId: number) => {
   const expires = addDays(
     new Date(),
     apiConfig.jwt.expiration.emailConfirmation

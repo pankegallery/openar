@@ -9,8 +9,10 @@ import type { ApiImageMetaInformation } from "../types";
 import { logger } from "../services/serviceLogging";
 import { imageCreate } from "../services/serviceImage";
 
-import { apiConfig } from "../config";
+import { getApiConfig } from "../config";
 import { ApiError } from "../utils";
+
+const apiConfig = getApiConfig();
 
 const storage = multer.diskStorage({
   destination: async (req: Request, file, cb) => {
@@ -57,7 +59,7 @@ const createImageMetaInfo = (
 
   const fileUuid = file.filename.replace(extension, "");
 
-  // TODO: what to do about the image type? 
+  // TODO: what to do about the image type?
   const metainfo: ApiImageMetaInformation = {
     uploadFolder,
     originalFileName: file.originalname,
@@ -81,7 +83,9 @@ export const postImage = async (req: Request, res: Response) => {
       if (req.file) {
         const { fileUuid, metainfo } = createImageMetaInfo(req.file);
 
-        const connectWith = req?.body?.connectWith ? JSON.parse(req?.body?.connectWith) : {};
+        const connectWith = req?.body?.connectWith
+          ? JSON.parse(req?.body?.connectWith)
+          : {};
 
         const image = await imageCreate(
           parseInt(req.body.ownerId, 10),
