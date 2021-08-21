@@ -17,10 +17,11 @@ import { AuthPayload } from "../types/auth";
 
 import { tokenGenerateAuthTokens } from "./serviceToken";
 import { authSendEmailConfirmationEmail } from "./serviceAuth";
-import { ApiError, TokenTypesEnum } from "../utils";
+import { ApiError } from "../utils";
 import { getApiConfig } from "../config";
 
 const apiConfig = getApiConfig();
+
 export const userRegister = async (
   data: Prisma.UserCreateInput
 ): Promise<AuthPayload> => {
@@ -36,12 +37,18 @@ export const userRegister = async (
   const user: User = await daoUserCreate(data);
 
   if (user) {
-    await authSendEmailConfirmationEmail(user.id, user.email);
+    if (user.email && user.ethAddress)
+      await authSendEmailConfirmationEmail(
+        user.id,
+        user.ethAddress,
+        user.email
+      );
 
     const authPayload: AuthPayload = await tokenGenerateAuthTokens(
       {
         id: user.id,
         pseudonym: user.pseudonym ?? "",
+        ethAddress: user.ethAddress,
       },
       ["user"] as RoleName[]
     );
@@ -73,7 +80,8 @@ export const userCreate = async (
 
   const user: User = await daoUserCreate(data);
 
-  if (user) await authSendEmailConfirmationEmail(user.id, user.email);
+  if (user && user.email && user.ethAddress)
+    await authSendEmailConfirmationEmail(user.id, user.ethAddress, user.email);
 
   return user;
 };
@@ -104,8 +112,8 @@ export const userUpdate = async (
       ownerId: id,
     });
 
-  if (newEmailAddress)
-    await authSendEmailConfirmationEmail(user.id, user.email);
+  if (newEmailAddress && user.email && user.ethAddress)
+    await authSendEmailConfirmationEmail(user.id, user.ethAddress, user.email);
 
   return user;
 };
@@ -135,29 +143,10 @@ export const userProfileUpdate = async (
   data: Prisma.UserUpdateInput
 ): Promise<User> => userUpdate(id, data);
 
-export const userProfilePasswordUpdate = async (
-  id: number,
-  password: string
-): Promise<User> => {
-  // TODO: what to do here?
-  // const user = await userUpdate(id, { password });
-
-  // if (user && user.id)
-  //   daoTokenDeleteMany({
-  //     ownerId: id,
-  //     type: {
-  //       in: [TokenTypesEnum.RESET_PASSWORD, TokenTypesEnum.ACCESS, TokenTypesEnum.REFRESH],
-  //     },
-  //   });
-
-  return {} as User;
-};
-
 export default {
   userCreate,
   userUpdate,
   userRead,
   userRegister,
   userProfileUpdate,
-  userProfilePasswordUpdate,
 };

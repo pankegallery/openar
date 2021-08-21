@@ -39,25 +39,6 @@ export const sendEmail = (to: string, subject: string, text: string) => {
   });
 };
 
-export const sendResetPasswordEmail = async (to: string, token: string) => {
-  // TODO: multilang?
-  const subject = `${apiConfig.email.subjectPrefix} Password reset requested`;
-
-  // replace this url with the link to the reset password page of your front-end app
-  const resetPasswordUrl = `${apiConfig.baseUrl.dapp}/reset-password/?token=${token}`;
-
-  // multilang, how? Multilang TODO: Multilang
-  const text = `Dear user,
-
-To reset your password, click on this link: ${resetPasswordUrl}
-If you did not request any password resets, then ignore this email.
-
-Thank you your, 
-${apiConfig.appName} team`;
-
-  await sendEmail(to, subject, text);
-};
-
 export const sendEmailConfirmationEmail = async (to: string, token: string) => {
   // TODO: multilang?
   const subject = `${apiConfig.email.subjectPrefix} Please verify your email`;
@@ -80,6 +61,5 @@ ${apiConfig.appName} team`;
 export default {
   transport,
   sendEmail,
-  sendResetPasswordEmail,
   sendEmailConfirmationEmail,
 };

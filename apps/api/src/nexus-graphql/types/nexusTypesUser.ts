@@ -24,7 +24,6 @@ import {
   userUpdate,
   userDelete,
   userProfileUpdate,
-  userProfilePasswordUpdate,
 } from "../../services/serviceUser";
 import {
   tokenProcessRefreshToken,
@@ -43,6 +42,7 @@ import {
   daoUserFindFirst,
   daoImageGetById,
   daoUserProfileImageDelete,
+  daoUserGetByEthAddress,
 } from "../../dao";
 
 const apiConfig = getApiConfig();
@@ -134,7 +134,7 @@ export const UserQueries = extendType({
         }),
       },
 
-      authorize: (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
+      // TODO: authorize: :  (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
 
       async resolve(...[, args]) {
         const totalCount = await daoUserQueryCount(args.where);
@@ -165,7 +165,7 @@ export const UserQueries = extendType({
     //     roles: nonNull(list(stringArg())),
     //   },
 
-    //   // authorize: (...[, , ctx]) =>
+    //   // // TODO: authorize: :  (...[, , ctx]) =>
     //   //   authorizeApiUser(ctx, "accessAsAuthenticatedUser"),
 
     //   async resolve(...[, args]) {
@@ -188,6 +188,21 @@ export const UserQueries = extendType({
     //   },
     // });
 
+    t.nonNull.field("userByEthAddress", {
+      type: "User",
+
+      args: {
+        ethAddress: nonNull(stringArg()),
+      },
+
+      // TODO: authorize: :  (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
+
+      // resolve(root, args, ctx, info)
+      async resolve(...[, args]) {
+        return daoUserGetByEthAddress(args.ethAddress);
+      },
+    });
+
     t.nonNull.field("userRead", {
       type: "User",
 
@@ -195,7 +210,7 @@ export const UserQueries = extendType({
         id: nonNull(intArg()),
       },
 
-      authorize: (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
+      // TODO: authorize: :  (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
 
       // resolve(root, args, ctx, info)
       async resolve(...[, args]) {
@@ -210,8 +225,8 @@ export const UserQueries = extendType({
         id: nonNull(intArg()),
       },
 
-      authorize: (...[, args, ctx]) =>
-        authorizeApiUser(ctx, "profileRead") && isCurrentApiUser(ctx, args.id),
+      // TODO: authorize: :  (...[, args, ctx]) =>
+      //  authorizeApiUser(ctx, "profileRead") && isCurrentApiUser(ctx, args.id),
 
       // resolve(root, args, ctx, info)
       async resolve(...[, args]) {
@@ -268,23 +283,23 @@ export const UserMutations = extendType({
   type: "Mutation",
 
   definition(t) {
-    t.nonNull.field("userSignup", {
-      type: "AuthPayload",
-      args: {
-        data: nonNull(UserSignupInput),
-      },
+    // t.nonNull.field("userSignup", {
+    //   type: "AuthPayload",
+    //   args: {
+    //     data: nonNull(UserSignupInput),
+    //   },
 
-      authorize: () => apiConfig.enablePublicRegistration,
+    //   // TODO: authorize: :  () => apiConfig.enablePublicRegistration,
 
-      async resolve(...[, args, { res }]) {
-        const authPayload = await userRegister(args.data);
+    //   async resolve(...[, args, { res }]) {
+    //     const authPayload = await userRegister(args.data);
 
-        if (!authPayload)
-          throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Signup Failed");
+    //     if (!authPayload)
+    //       throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Signup Failed");
 
-        return tokenProcessRefreshToken(res, authPayload);
-      },
-    });
+    //     return tokenProcessRefreshToken(res, authPayload);
+    //   },
+    // });
 
     t.nonNull.field("userProfileUpdate", {
       type: "User",
@@ -294,39 +309,15 @@ export const UserMutations = extendType({
         data: nonNull(UserProfileUpdateInput),
       },
 
-      authorize: (...[, args, ctx]) =>
-        authorizeApiUser(ctx, "profileUpdate") &&
-        isCurrentApiUser(ctx, args.id),
+      // TODO: authorize: :  (...[, args, ctx]) =>
+      //   authorizeApiUser(ctx, "profileUpdate") &&
+      //   isCurrentApiUser(ctx, args.id),
 
       async resolve(...[, args]) {
         const user = await userProfileUpdate(args.id, args.data);
 
         if (!user)
           throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Update failed");
-
-        return user;
-      },
-    });
-
-    t.nonNull.field("userProfilePasswordUpdate", {
-      type: "User",
-
-      args: {
-        id: nonNull(intArg()),
-        password: nonNull(stringArg()),
-      },
-
-      authorize: (...[, args, ctx]) =>
-        authorizeApiUser(ctx, "profileUpdate") &&
-        isCurrentApiUser(ctx, args.id),
-
-      async resolve(...[, args, { res }]) {
-        const user = await userProfilePasswordUpdate(args.id, args.password);
-
-        if (!user)
-          throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Update failed");
-
-        tokenClearRefreshToken(res);
 
         return user;
       },
@@ -339,7 +330,7 @@ export const UserMutations = extendType({
         data: nonNull(UserCreateInput),
       },
 
-      // TODO: how to lock down the API authorize: (...[, , ctx]) => authorizeApiUser(ctx, "userCreate"),
+      // TODO: how to lock down the API // TODO: authorize: :  (...[, , ctx]) => authorizeApiUser(ctx, "userCreate"),
 
       async resolve(...[, args]) {
         const user = await userCreate(args.data);
@@ -362,7 +353,7 @@ export const UserMutations = extendType({
         data: nonNull(UserUpdateInput),
       },
 
-      authorize: (...[, , ctx]) => authorizeApiUser(ctx, "userUpdate"),
+      // TODO: authorize: :  (...[, , ctx]) => authorizeApiUser(ctx, "userUpdate"),
 
       async resolve(...[, args]) {
         const user = await userUpdate(args.id, args.data);
@@ -381,18 +372,18 @@ export const UserMutations = extendType({
         id: nonNull(intArg()),
       },
 
-      authorize: async (...[, args, ctx]) => {
-        const user = await daoUserFindFirst({ heroImageId: args.id });
+      // TODO: authorize: :  async (...[, args, ctx]) => {
+      //   const user = await daoUserFindFirst({ heroImageId: args.id });
 
-        if (user) {
-          return (
-            authorizeApiUser(ctx, "profileUpdate") &&
-            isCurrentApiUser(ctx, user.id)
-          );
-        }
+      //   if (user) {
+      //     return (
+      //       authorizeApiUser(ctx, "profileUpdate") &&
+      //       isCurrentApiUser(ctx, user.id)
+      //     );
+      //   }
 
-        return false;
-      },
+      //   return false;
+      // },
 
       async resolve(...[, args, ctx]) {
         const user = await daoUserProfileImageDelete(
@@ -417,9 +408,9 @@ export const UserMutations = extendType({
         id: nonNull(intArg()),
       },
 
-      authorize: (...[, args, ctx]) =>
-        authorizeApiUser(ctx, "userDelete") &&
-        isNotCurrentApiUser(ctx, args.id),
+      // TODO: authorize: :  (...[, args, ctx]) =>
+      // authorizeApiUser(ctx, "userDelete") &&
+      // isNotCurrentApiUser(ctx, args.id),
 
       async resolve(...[, args]) {
         const user = await userDelete(args.id);

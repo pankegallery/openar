@@ -9,16 +9,18 @@ import { createAuthenticatedAppUser } from "../apiuser";
 import { AuthPayload } from "../types/auth";
 import { daoTokenDeleteMany } from "../dao/token";
 
+import type { NexusResolverContext } from "../nexus-graphql";
+
 import {
-  daoUserGetByLogin,
   daoUserGetById,
   daoUserUpdate,
-  daoUserGetByEmail,
+  daoUserGetByEthAddress,
+  daoUserCreate,
 } from "../dao/user";
 import { ApiError, TokenTypesEnum } from "../utils";
 import {
   tokenVerify,
-  tokenGenerateResetPasswordToken,
+  tokenGenerateSignatureToken,
   tokenVerifyInDB,
   tokenGenerateAuthTokens,
   tokenGenerateVerifyEmailToken,
@@ -26,16 +28,17 @@ import {
 
 import { logger } from "./serviceLogging";
 
-import {
-  sendResetPasswordEmail,
-  sendEmailConfirmationEmail,
-} from "./serviceEmail";
+import { sendEmailConfirmationEmail } from "./serviceEmail";
 
 export const authSendEmailConfirmationEmail = async (
   userId: number,
+  ethAddress: string,
   email: string
 ) => {
-  const emailVerificationToken = await tokenGenerateVerifyEmailToken(userId);
+  const emailVerificationToken = await tokenGenerateVerifyEmailToken(
+    userId,
+    ethAddress
+  );
 
   sendEmailConfirmationEmail(email, emailVerificationToken);
   return true;
@@ -75,30 +78,38 @@ export const authAuthenticateUserByToken = (
   return null;
 };
 
-export const authLoginUserWithEmailAndPassword = async (
-  email: string,
-  password: string
+export const authLoginUserWithSignature = async (
+  ethAddress: string,
+  signedMessage: string
 ): Promise<AuthPayload> => {
-  const user = await daoUserGetByLogin(email, password);
+  const user = await daoUserGetByEthAddress(ethAddress);
 
-  if (!user) {
-    throw new AuthenticationError("Incorrect email or password");
-  }
+  if (!user)
+    throw new ApiError(httpStatus.UNAUTHORIZED, "[auth] Access denied");
 
   if (user.isBanned)
     throw new ApiError(httpStatus.UNAUTHORIZED, "[auth] Access denied");
 
+  // TODO: Implement
+  logger.info(signedMessage);
+
   daoTokenDeleteMany({
     ownerId: user.id,
     type: {
-      in: [TokenTypesEnum.REFRESH, TokenTypesEnum.ACCESS],
+      in: [
+        TokenTypesEnum.REFRESH,
+        TokenTypesEnum.ACCESS,
+        TokenTypesEnum.SIGNATURE,
+      ],
     },
   });
 
-  const authPayload: AuthPayload = await tokenGenerateAuthTokens(
+  const authPayload = await tokenGenerateAuthTokens(
     {
       id: user.id,
       pseudonym: user.pseudonym,
+      email: user.email,
+      ethAddress: user.ethAddress,
     },
     user.roles as RoleName[]
   );
@@ -107,6 +118,81 @@ export const authLoginUserWithEmailAndPassword = async (
     id: user.id,
     pseudonym: user.pseudonym,
     ethAddress: user.ethAddress,
+    email: user.email,
+  };
+
+  return authPayload;
+};
+
+export const authPreLoginUserWithEthAddress = async (
+  ethAddress: string,
+  ctx: NexusResolverContext
+): Promise<AuthPayload> => {
+  let user = await daoUserGetByEthAddress(ethAddress);
+  let authPayload: AuthPayload;
+
+  if (!user) {
+    user = await daoUserCreate({
+      ethAddress,
+    });
+    authPayload = await tokenGenerateAuthTokens(
+      {
+        id: user.id,
+        pseudonym: user.pseudonym,
+        email: user.email,
+        ethAddress,
+      },
+      user.roles as RoleName[]
+    );
+  }
+
+  if (!user) throw new AuthenticationError("[auth] Could not pre login user");
+
+  if (user.isBanned)
+    throw new ApiError(httpStatus.UNAUTHORIZED, "[auth] Access denied");
+
+  if (ctx.appUser && ctx.tokenInfo.validRefreshTokenProvided) {
+    const tokenPayload: JwtPayload | null = await tokenVerifyInDB(
+      ctx.req?.cookies?.refreshToken,
+      TokenTypesEnum.REFRESH
+    );
+
+    if (!tokenPayload)
+      throw new ApiError(
+        httpStatus.FORBIDDEN,
+        "[auth.authRefresh] Please authenticate (1)"
+      );
+
+    authPayload = await tokenGenerateAuthTokens(
+      {
+        id: user.id,
+        pseudonym: user.pseudonym,
+        email: user.email,
+        ethAddress,
+      },
+      user.roles as RoleName[]
+    );
+  } else {
+    daoTokenDeleteMany({
+      ownerId: user.id,
+      type: {
+        in: [
+          TokenTypesEnum.REFRESH,
+          TokenTypesEnum.ACCESS,
+          TokenTypesEnum.SIGNATURE,
+        ],
+      },
+    });
+    authPayload = await tokenGenerateSignatureToken({
+      id: user.id,
+      ethAddress,
+    });
+  }
+
+  authPayload.user = {
+    id: user.id,
+    pseudonym: user.pseudonym,
+    ethAddress,
     email: user.email,
   };
 
@@ -171,36 +257,18 @@ export const authRefresh = async (refreshToken: string) => {
   }
 };
 
-export const authRequestPasswordResetEmail = async (
-  email: string
-): Promise<boolean> => {
-  try {
-    const userInDB = await daoUserGetByEmail(email);
-
-    const passwordResetToken = await tokenGenerateResetPasswordToken(
-      userInDB.email
-    );
-
-    sendResetPasswordEmail(email, passwordResetToken);
-
-    return true;
-  } catch (error) {
-    logger.warn(error);
-    throw new ApiError(
-      httpStatus.BAD_REQUEST,
-      "[auth.authRequestPasswordReset] Password reset request failed"
-    );
-  }
-};
-
 export const authRequestEmailVerificationEmail = async (
   userId: number
 ): Promise<boolean> => {
   try {
     const userInDb = await daoUserGetById(userId);
 
-    if (userInDb)
-      return await authSendEmailConfirmationEmail(userInDb.id, userInDb.email);
+    if (userInDb && userInDb.email)
+      return await authSendEmailConfirmationEmail(
+        userInDb.id,
+        userInDb.ethAddress,
+        userInDb.email
+      );
 
     return false;
   } catch (error) {
@@ -208,49 +276,6 @@ export const authRequestEmailVerificationEmail = async (
     throw new ApiError(
       httpStatus.BAD_REQUEST,
       "[auth.authRequestEmailVerificationEmail] Email verification request failed"
-    );
-  }
-};
-
-export const authResetPassword = async (
-  password: string,
-  token: string
-): Promise<boolean> => {
-  try {
-    const tokenPayload = await tokenVerifyInDB(
-      token,
-      TokenTypesEnum.RESET_PASSWORD
-    );
-
-    if (tokenPayload && "user" in tokenPayload && "id" in tokenPayload.user) {
-      const user = await daoUserGetById(tokenPayload.user.id);
-
-      // TODO: what do we need to do here?
-      // await daoUserUpdate(user.id, { password });
-
-      daoTokenDeleteMany({
-        ownerId: user.id,
-        type: {
-          in: [
-            TokenTypesEnum.RESET_PASSWORD,
-            TokenTypesEnum.ACCESS,
-            TokenTypesEnum.REFRESH,
-          ],
-        },
-      });
-
-      return true;
-    }
-
-    throw new ApiError(
-      httpStatus.UNAUTHORIZED,
-      "[auth.authRefresh] Token validation failed"
-    );
-  } catch (error) {
-    logger.warn(error);
-    throw new ApiError(
-      httpStatus.BAD_REQUEST,
-      "[auth.authResetPassword] Password reset failed"
     );
   }
 };
@@ -284,12 +309,10 @@ export const authVerifyEmail = async (token: string) => {
 
 export default {
   authAuthenticateUserByToken,
-  authLoginUserWithEmailAndPassword,
+  authLoginUserWithSignature,
   authLogout,
   authRefresh,
-  authRequestPasswordResetEmail,
   authRequestEmailVerificationEmail,
-  authResetPassword,
   authSendEmailConfirmationEmail,
   authVerifyEmail,
 };

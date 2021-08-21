@@ -3,6 +3,7 @@ import Head from "next/head";
 import { Box } from "@chakra-ui/react";
 
 import { Footer, Header } from "./site";
+import { WalletConnectGate} from "./shared";
 
 export const LayoutSite = ({ children }: { children: ReactNode }) => {
   return (

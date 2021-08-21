@@ -39,9 +39,9 @@ export const daoUserCheckIsEmailTaken = async (
 export const daoUserCreate = async (
   data: Prisma.UserCreateInput
 ): Promise<User> => {
-  if (await daoUserCheckIsEmailTaken(data.email)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "Email already taken");
-  }
+  // if (await daoUserCheckIsEmailTaken(data.email)) {
+  //   throw new ApiError(httpStatus.BAD_REQUEST, "Email already taken");
+  // }
 
   const user: User = await prisma.user.create({
     data: {
@@ -110,8 +110,14 @@ export const daoUserGetById = async (id: number): Promise<User> => {
   );
 };
 
-export const daoUserGetByEmail = async (email: string): Promise<User> => {
-  const user: User | null = await prisma.user.findUnique({ where: { email } });
+export const daoUserGetByEthAddress = async (
+  ethAddress: string
+): Promise<User> => {
+  const user: User | null = await prisma.user.findUnique({
+    where: {
+      ethAddress,
+    },
+  });
 
   return filteredOutputByBlacklistOrNotFound(
     user,
@@ -119,23 +125,15 @@ export const daoUserGetByEmail = async (email: string): Promise<User> => {
   );
 };
 
-export const daoUserGetByLogin = async (
-  email: string,
-  password: string
-): Promise<User | null> => {
-  const user: User | null = await prisma.user.findUnique({ where: { email } });
-
-  // TODO: how will the login work?
-  //if (!user || !(await bcrypt.compare(password, user.password))) return null;
-
-  return filteredOutputByBlacklist(user, apiConfig.db.privateJSONDataKeys.user);
-};
-
 export const daoUserUpdate = async (
   id: number,
   data: Prisma.UserUpdateInput
 ): Promise<User> => {
-  let updateData = data;
+  const updateData = data;
+
+  if (await daoUserCheckIsEmailTaken(`${data.email ?? ""}`)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Email already taken");
+  }
 
   // TODO: will there be anything to replace the password
   // if (data.password)
@@ -203,11 +201,10 @@ export default {
   daoUserQuery,
   daoUserQueryCount,
   daoUserGetById,
-  daoUserGetByLogin,
-  daoUserGetByEmail,
   daoUserUpdate,
   daoUserDelete,
   daoUserFindFirst,
   daoUserProfileImageDelete,
   daoUserCheckIsEmailTaken,
+  daoUserGetByEthAddress,
 };

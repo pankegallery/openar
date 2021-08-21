@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+
 import { AuthenticatedAppUser } from "../apiuser";
 
 import { logger } from "../services/serviceLogging";
@@ -39,15 +40,15 @@ export const context = ({
         .substring(0, 40)
     : "no query passed in the body";
 
-  let token = req?.headers?.authorization;
-  if (token) {
+  let accessToken = req?.headers?.authorization ?? "";
+  if (accessToken) {
     accessTokenProvided = true;
 
     try {
-      if (token.indexOf("Bearer") > -1)
-        token = token.replace(/(Bearer:? )/g, "");
+      if (accessToken.indexOf("Bearer") > -1)
+        accessToken = accessToken.replace(/(Bearer:? )/g, "");
 
-      appUser = authAuthenticateUserByToken(token);
+      appUser = authAuthenticateUserByToken(accessToken);
 
       if (appUser) {
         validAccessTokenProvided = true;
@@ -60,21 +61,22 @@ export const context = ({
   }
 
   // TODO: REMOVE
-  logger.debug(`Context: Auth token: ${token}`);
+  logger.debug(`Context: Auth token: ${accessToken}`);
 
-  token = req?.cookies?.refreshToken;
+  const refreshToken = req?.cookies?.refreshToken ?? "";
 
   // TODO: REMOVE
-  logger.debug(`Context: Refresh token: ${token}`);
+  logger.debug(`Context: Refresh token: ${refreshToken}`);
 
   // TODO: Remove
-  if (token) console.log(token, authAuthenticateUserByToken(token ?? ""));
+  if (refreshToken)
+    console.log(refreshToken, authAuthenticateUserByToken(refreshToken ?? ""));
 
-  if (token) {
+  if (refreshToken) {
     refreshTokenProvided = true;
 
     try {
-      const appUserInRefreshToken = authAuthenticateUserByToken(token);
+      const appUserInRefreshToken = authAuthenticateUserByToken(refreshToken);
 
       if (appUserInRefreshToken) {
         validRefreshTokenProvided = true;

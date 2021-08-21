@@ -4,6 +4,7 @@ import type { PartialRecord } from ".";
 export type AuthTokenType =
   | "access"
   | "refresh"
+  | "sign"
   | "resetPassword"
   | "verifyEmail";
 

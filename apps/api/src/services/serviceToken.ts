@@ -2,6 +2,8 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import httpStatus from "http-status";
 import { addDays, addMinutes } from "date-fns";
 import { Response } from "express";
+import { nanoid } from "nanoid";
+
 import {
   apiRolesAndPermissions,
   RoleName,
@@ -11,7 +13,6 @@ import {
 import { getApiConfig } from "../config";
 import { AuthPayload } from "../types/auth";
 import { daoTokenCreate, daoTokenFindFirst } from "../dao/token";
-import { daoUserGetByEmail } from "../dao/user";
 
 import { ApiError, TokenTypesEnum } from "../utils";
 
@@ -28,18 +29,13 @@ export const generateToken = (
 ) => {
   let user: JwtPayloadAuthenticatedAppUser = {
     id: payloadUser.id,
+    ethAddress: payloadUser.ethAddress,
   };
 
   if (payloadUser.pseudonym)
     user = {
       ...user,
       pseudonym: payloadUser.pseudonym,
-    };
-
-  if (payloadUser.ethAddress)
-    user = {
-      ...user,
-      ethAddress: payloadUser.ethAddress,
     };
 
   if (roles) {
@@ -68,6 +64,22 @@ export const generateToken = (
   // expose roles in token TODO: expose roles
   const payload = {
     user,
+    iat: new Date().getTime() / 1000,
+    exp: expires.getTime() / 1000,
+    type,
+  };
+
+  return jwt.sign(payload, secret ?? apiConfig.jwt.secret);
+};
+
+export const generateSignToken = (
+  expires: Date,
+  type: TokenTypesEnum,
+  secret?: string
+) => {
+  // expose roles in token TODO: expose roles
+  const payload = {
+    message: nanoid(10).replace(/_/g, "-"),
     iat: new Date().getTime() / 1000,
     exp: expires.getTime() / 1000,
     type,
@@ -173,6 +185,7 @@ export const tokenGenerateAuthTokens = async (
   const refreshToken = generateToken(
     {
       id: user.id,
+      ethAddress: user.ethAddress,
     },
     roles,
     refreshTokenExpires,
@@ -202,34 +215,42 @@ export const tokenGenerateAuthTokens = async (
   return authPayload;
 };
 
-export const tokenGenerateResetPasswordToken = async (email: string) => {
-  const user = await daoUserGetByEmail(email);
-  if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Email not found");
-  }
-  const expires = addMinutes(
+export const tokenGenerateSignatureToken = async (
+  user: JwtPayloadAuthenticatedAppUser
+): Promise<AuthPayload> => {
+  const signTokenExpires = addMinutes(
     new Date(),
-    apiConfig.jwt.expiration.passwordReset
+    apiConfig.jwt.expiration.access
   );
 
-  const resetPasswordToken = generateToken(
-    {
-      id: user.id,
-    },
-    ["api"],
-    expires,
-    TokenTypesEnum.RESET_PASSWORD
+  const signToken = generateSignToken(
+    signTokenExpires,
+    TokenTypesEnum.SIGNATURE
   );
+
   await daoTokenCreate(
-    resetPasswordToken,
+    signToken,
     user.id,
-    expires,
-    TokenTypesEnum.RESET_PASSWORD
+    signTokenExpires,
+    TokenTypesEnum.SIGNATURE
   );
-  return resetPasswordToken;
+
+  const authPayload: AuthPayload = {
+    user: undefined,
+    tokens: {
+      sign: {
+        token: signToken,
+        expires: signTokenExpires.toISOString(),
+      },
+    },
+  };
+  return authPayload;
 };
 
-export const tokenGenerateVerifyEmailToken = async (ownerId: number) => {
+export const tokenGenerateVerifyEmailToken = async (
+  ownerId: number,
+  ethAddress: string
+) => {
   const expires = addDays(
     new Date(),
     apiConfig.jwt.expiration.emailConfirmation
@@ -237,6 +258,7 @@ export const tokenGenerateVerifyEmailToken = async (ownerId: number) => {
   const verifyEmailToken = generateToken(
     {
       id: ownerId,
+      ethAddress,
     },
     ["api"],
     expires,
@@ -256,19 +278,32 @@ export const tokenProcessRefreshToken = (
   authPayload: AuthPayload
 ): AuthPayload => {
   const secureCookie = apiConfig.baseUrl.api.indexOf("localhost") === -1;
-  res.cookie("refreshToken", (authPayload as any).tokens.refresh.token, {
-    sameSite: secureCookie ? "none" : "lax",
-    secure: secureCookie ?? undefined,
-    httpOnly: true,
-    maxAge:
-      new Date((authPayload as any).tokens.refresh.expires).getTime() -
-      new Date().getTime(),
-  });
+  const refreshToken = authPayload?.tokens?.refresh?.token;
+  let payload = authPayload;
 
-  // eslint-disable-next-line no-param-reassign
-  (authPayload as any).tokens.refresh.token = "content is hidden ;-P";
+  if (refreshToken) {
+    res.cookie("refreshToken", (authPayload as any).tokens.refresh.token, {
+      sameSite: secureCookie ? "none" : "lax",
+      secure: secureCookie ?? undefined,
+      httpOnly: true,
+      maxAge:
+        new Date((authPayload as any).tokens.refresh.expires).getTime() -
+        new Date().getTime(),
+    });
 
-  return authPayload;
+    payload = {
+      ...authPayload,
+      tokens: {
+        ...authPayload.tokens,
+        refresh: {
+          expires: authPayload?.tokens?.refresh?.expires ?? "",
+          token: "content is hidden ;-P",
+        },
+      },
+    };
+  }
+
+  return payload;
 };
 
 export const tokenClearRefreshToken = (res: Response): void => {
@@ -286,7 +321,6 @@ export default {
   tokenVerify,
   tokenVerifyInDB,
   tokenGenerateAuthTokens,
-  tokenGenerateResetPasswordToken,
   tokenGenerateVerifyEmailToken,
   tokenProcessRefreshToken,
 };

@@ -81,6 +81,9 @@ const themeConfig = {
     },
   },
   colors: {
+    openar: {
+      error: "#c93030",
+    },
     wine: {
       50: "#fde9ff",
       100: "#ebc6ed",
@@ -216,7 +219,6 @@ export const chakraTheme = extendTheme(
   }
 );
 
-if (typeof window !== "undefined")
-  console.log(chakraTheme);
-  
+if (typeof window !== "undefined") console.log(chakraTheme);
+
 export default chakraTheme;

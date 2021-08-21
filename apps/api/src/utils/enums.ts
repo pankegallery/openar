@@ -1,7 +1,7 @@
 export enum TokenTypesEnum {
   ACCESS,
   REFRESH,
-  RESET_PASSWORD,
+  SIGNATURE,
   VERIFY_EMAIL,
 }
 

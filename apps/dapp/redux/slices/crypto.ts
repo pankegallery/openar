@@ -23,8 +23,8 @@ const cryptoSlice = createSlice({
     ethAccount: null,
   } as CryptoState,
   reducers: {
-    cryptoWalletConnect(state, action: PayloadAction<CryptoStateWalletInfo>) {
-      console.log("State change: cryptoUpdateWalletInfo");
+    cryptoWalltetConnect(state, action: PayloadAction<CryptoStateWalletInfo>) {
+      console.log("State change: cryptoUpdateWalltetInfo");
 
       state = {
         ...state,
@@ -33,8 +33,8 @@ const cryptoSlice = createSlice({
         ethAccount: action.payload.ethAccount,
       }
     },
-    cryptoWalletDisconnect(state) {
-      console.log("State change: cryptoUpdateWalletInfo");
+    cryptoWalltetDisconnect(state) {
+      console.log("State change: cryptoUpdateWalltetInfo");
 
       state = {
         ...state,
@@ -51,8 +51,8 @@ const { actions, reducer } = cryptoSlice;
 
 // Extract and export each action creator by name
 export const {
-  cryptoWalletConnect,
-  cryptoWalletDisconnect,
+  cryptoWalltetConnect,
+  cryptoWalltetDisconnect,
 } = actions;
 
 // Export the reducer, either as a default or named export

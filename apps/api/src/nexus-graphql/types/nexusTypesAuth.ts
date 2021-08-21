@@ -1,14 +1,13 @@
 /// <reference path="../../types/nexus-typegen.ts" />
 
-import { objectType, extendType, nonNull, intArg, stringArg, arg } from "nexus";
+import { objectType, extendType, nonNull, intArg, stringArg } from "nexus";
 import { AuthenticationError } from "apollo-server-express";
 
 import {
-  authLoginUserWithEmailAndPassword,
+  authPreLoginUserWithEthAddress,
+  authLoginUserWithSignature,
   authLogout,
   authRefresh,
-  authRequestPasswordResetEmail,
-  authResetPassword,
   authRequestEmailVerificationEmail,
   authVerifyEmail,
 } from "../../services/serviceAuth";
@@ -17,7 +16,7 @@ import {
   tokenClearRefreshToken,
 } from "../../services/serviceToken";
 import { authorizeApiUser, isCurrentApiUser } from "../helpers";
-import { BooleanResult, GQLEmailAddress } from "./nexusTypesShared";
+import { BooleanResult } from "./nexusTypesShared";
 
 import { logger } from "../../services/serviceLogging";
 
@@ -25,6 +24,16 @@ export const AuthUser = objectType({
   name: "AuthUser",
   definition(t) {
     t.nonNull.int("id", { description: "Id of the user" });
+    t.nonNull.string("ethAddress", { description: "ethAddress of the user" });
+    t.string("pseudonym", { description: "Pseudonym of the user" });
+    t.string("email", { description: "email address of the user" });
+    t.string("message", {
+      description: "The message that should be signed on login",
+    });
+    t.boolean("isNew", {
+      description:
+        "true if this ethAddress has just been registered in the system (first connect)",
+    });
     t.list.string("roles", { description: "The roles the user might hold" });
     t.list.string("permissions", {
       description: "The permissions the user might have been given",
@@ -49,6 +58,9 @@ export const AuthPayloadTokens = objectType({
     t.field("refresh", {
       type: AuthPayloadToken,
     });
+    t.field("sign", {
+      type: AuthPayloadToken,
+    });
   },
 });
 
@@ -68,28 +80,51 @@ export const AuthMutations = extendType({
   type: "Mutation",
 
   definition(t) {
+    t.nonNull.field("authPreLogin", {
+      type: "AuthPayload",
+      args: {
+        ethAddress: nonNull(stringArg()),
+      },
+      // TODO: add skip of login if refreshtoken is set ...
+      async resolve(...[, args, ctx]) {
+        try {
+          const authPayload = await authPreLoginUserWithEthAddress(
+            args.ethAddress,
+            ctx
+          );
+
+          logger.debug(
+            `authLogin, about sign message ${authPayload?.tokens?.sign?.token}`
+          );
+
+          return tokenProcessRefreshToken(ctx.res, authPayload);
+        } catch (Err) {
+          throw new AuthenticationError("Pre login Failed");
+        }
+      },
+    });
+
     t.nonNull.field("authLogin", {
       type: "AuthPayload",
       args: {
-        email: nonNull(
-          arg({
-            type: GQLEmailAddress,
-          })
-        ),
-        password: nonNull(stringArg()),
+        ethAddress: nonNull(stringArg()),
+        signedMessage: nonNull(stringArg()),
       },
-      async resolve(...[, args, { res }]) {
+      // TODO: add skip of login if refreshtoken is set ...
+      async resolve(...[, args, ctx]) {
         try {
-          const authPayload = await authLoginUserWithEmailAndPassword(
-            args.email,
-            args.password
+          const authPayload = await authLoginUserWithSignature(
+            args.ethAddress,
+            args.signedMessage
           );
+
           logger.debug(
-            `authLogin, about toe set new refresh token cookie ${authPayload?.tokens?.refresh?.token}`
+            `authLogin, about sign message ${authPayload?.tokens?.sign?.token}`
           );
-          return tokenProcessRefreshToken(res, authPayload);
+
+          return tokenProcessRefreshToken(ctx.res, authPayload);
         } catch (Err) {
-          throw new AuthenticationError("Login Failed");
+          throw new AuthenticationError("Pre login Failed");
         }
       },
     });
@@ -100,7 +135,7 @@ export const AuthMutations = extendType({
       authorize: (...[, , ctx]) =>
         authorizeApiUser(ctx, "canRefreshAccessToken", true),
 
-      async resolve(...[, args, { res, req }]) {
+      async resolve(...[, , { res, req }]) {
         // throw new AuthenticationError("Access Denied"); TODO: REmove
         logger.debug("Auth refresh #1");
         const token = req?.cookies?.refreshToken;
@@ -147,24 +182,6 @@ export const AuthMutations = extendType({
       },
     });
 
-    t.nonNull.field("authPasswordRequest", {
-      type: BooleanResult,
-      args: {
-        scope: nonNull(stringArg()),
-        email: nonNull(
-          arg({
-            type: GQLEmailAddress,
-          })
-        ),
-      },
-
-      async resolve(...[, args]) {
-        const result = await authRequestPasswordResetEmail(args.email);
-
-        return { result };
-      },
-    });
-
     t.nonNull.field("authRequestEmailVerificationEmail", {
       type: BooleanResult,
       args: {
@@ -178,23 +195,6 @@ export const AuthMutations = extendType({
 
       async resolve(...[, args]) {
         const result = await authRequestEmailVerificationEmail(args.userId);
-
-        return { result };
-      },
-    });
-
-    t.nonNull.field("authPasswordReset", {
-      type: BooleanResult,
-      args: {
-        password: nonNull(stringArg()),
-        token: nonNull(stringArg()),
-      },
-
-      async resolve(...[, args, { res }]) {
-        const result = await authResetPassword(args.password, args.token);
-
-        logger.debug(`authPasswordReset calling tokenClearRefreshToken`);
-        tokenClearRefreshToken(res);
 
         return { result };
       },

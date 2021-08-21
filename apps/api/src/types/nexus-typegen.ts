@@ -123,10 +123,16 @@ export interface NexusGenObjects {
   AuthPayloadTokens: { // root type
     access?: NexusGenRootTypes['AuthPayloadToken'] | null; // AuthPayloadToken
     refresh?: NexusGenRootTypes['AuthPayloadToken'] | null; // AuthPayloadToken
+    sign?: NexusGenRootTypes['AuthPayloadToken'] | null; // AuthPayloadToken
   }
   AuthUser: { // root type
+    email?: string | null; // String
+    ethAddress: string; // String!
     id: number; // Int!
+    isNew?: boolean | null; // Boolean
+    message?: string | null; // String
     permissions?: Array<string | null> | null; // [String]
+    pseudonym?: string | null; // String
     roles?: Array<string | null> | null; // [String]
   }
   BooleanResult: { // root type
@@ -211,10 +217,16 @@ export interface NexusGenFieldTypes {
   AuthPayloadTokens: { // field return type
     access: NexusGenRootTypes['AuthPayloadToken'] | null; // AuthPayloadToken
     refresh: NexusGenRootTypes['AuthPayloadToken'] | null; // AuthPayloadToken
+    sign: NexusGenRootTypes['AuthPayloadToken'] | null; // AuthPayloadToken
   }
   AuthUser: { // field return type
+    email: string | null; // String
+    ethAddress: string; // String!
     id: number; // Int!
+    isNew: boolean | null; // Boolean
+    message: string | null; // String
     permissions: Array<string | null> | null; // [String]
+    pseudonym: string | null; // String
     roles: Array<string | null> | null; // [String]
   }
   BooleanResult: { // field return type
@@ -246,8 +258,7 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     authLogin: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     authLogout: NexusGenRootTypes['BooleanResult']; // BooleanResult!
-    authPasswordRequest: NexusGenRootTypes['BooleanResult']; // BooleanResult!
-    authPasswordReset: NexusGenRootTypes['BooleanResult']; // BooleanResult!
+    authPreLogin: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     authRefresh: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     authRequestEmailVerificationEmail: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     authVerifyEmail: NexusGenRootTypes['BooleanResult']; // BooleanResult!
@@ -256,9 +267,7 @@ export interface NexusGenFieldTypes {
     userCreate: NexusGenRootTypes['User']; // User!
     userDelete: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     userProfileImageDelete: NexusGenRootTypes['BooleanResult']; // BooleanResult!
-    userProfilePasswordUpdate: NexusGenRootTypes['User']; // User!
     userProfileUpdate: NexusGenRootTypes['User']; // User!
-    userSignup: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     userUpdate: NexusGenRootTypes['BooleanResult']; // BooleanResult!
   }
   ProfileUser: { // field return type
@@ -274,6 +283,7 @@ export interface NexusGenFieldTypes {
     imageRead: NexusGenRootTypes['Image']; // Image!
     imageStatus: NexusGenRootTypes['ImageStatus']; // ImageStatus!
     images: NexusGenRootTypes['ImageQueryResult'] | null; // ImageQueryResult
+    userByEthAddress: NexusGenRootTypes['User']; // User!
     userProfileRead: NexusGenRootTypes['ProfileUser']; // ProfileUser!
     userRead: NexusGenRootTypes['User']; // User!
     users: NexusGenRootTypes['UsersQueryResult'] | null; // UsersQueryResult
@@ -321,10 +331,16 @@ export interface NexusGenFieldTypeNames {
   AuthPayloadTokens: { // field return type name
     access: 'AuthPayloadToken'
     refresh: 'AuthPayloadToken'
+    sign: 'AuthPayloadToken'
   }
   AuthUser: { // field return type name
+    email: 'String'
+    ethAddress: 'String'
     id: 'Int'
+    isNew: 'Boolean'
+    message: 'String'
     permissions: 'String'
+    pseudonym: 'String'
     roles: 'String'
   }
   BooleanResult: { // field return type name
@@ -356,8 +372,7 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     authLogin: 'AuthPayload'
     authLogout: 'BooleanResult'
-    authPasswordRequest: 'BooleanResult'
-    authPasswordReset: 'BooleanResult'
+    authPreLogin: 'AuthPayload'
     authRefresh: 'AuthPayload'
     authRequestEmailVerificationEmail: 'BooleanResult'
     authVerifyEmail: 'BooleanResult'
@@ -366,9 +381,7 @@ export interface NexusGenFieldTypeNames {
     userCreate: 'User'
     userDelete: 'BooleanResult'
     userProfileImageDelete: 'BooleanResult'
-    userProfilePasswordUpdate: 'User'
     userProfileUpdate: 'User'
-    userSignup: 'AuthPayload'
     userUpdate: 'BooleanResult'
   }
   ProfileUser: { // field return type name
@@ -384,6 +397,7 @@ export interface NexusGenFieldTypeNames {
     imageRead: 'Image'
     imageStatus: 'ImageStatus'
     images: 'ImageQueryResult'
+    userByEthAddress: 'User'
     userProfileRead: 'ProfileUser'
     userRead: 'User'
     users: 'UsersQueryResult'
@@ -417,19 +431,14 @@ export interface NexusGenFieldTypeNames {
 export interface NexusGenArgTypes {
   Mutation: {
     authLogin: { // args
-      email: NexusGenScalars['EmailAddress']; // EmailAddress!
-      password: string; // String!
+      ethAddress: string; // String!
+      signedMessage: string; // String!
     }
     authLogout: { // args
       userId: number; // Int!
     }
-    authPasswordRequest: { // args
-      email: NexusGenScalars['EmailAddress']; // EmailAddress!
-      scope: string; // String!
-    }
-    authPasswordReset: { // args
-      password: string; // String!
-      token: string; // String!
+    authPreLogin: { // args
+      ethAddress: string; // String!
     }
     authRequestEmailVerificationEmail: { // args
       scope: string; // String!
@@ -454,16 +463,9 @@ export interface NexusGenArgTypes {
     userProfileImageDelete: { // args
       id: number; // Int!
     }
-    userProfilePasswordUpdate: { // args
-      id: number; // Int!
-      password: string; // String!
-    }
     userProfileUpdate: { // args
       data: NexusGenInputs['UserProfileUpdateInput']; // UserProfileUpdateInput!
       id: number; // Int!
-    }
-    userSignup: { // args
-      data: NexusGenInputs['UserSignupInput']; // UserSignupInput!
     }
     userUpdate: { // args
       data: NexusGenInputs['UserUpdateInput']; // UserUpdateInput!
@@ -483,6 +485,9 @@ export interface NexusGenArgTypes {
       pageSize: number | null; // Int
       taxonomyId?: number | null; // Int
       where?: NexusGenScalars['JSON'] | null; // JSON
+    }
+    userByEthAddress: { // args
+      ethAddress: string; // String!
     }
     userProfileRead: { // args
       id: number; // Int!

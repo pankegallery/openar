@@ -21,14 +21,32 @@ type AuthPayloadToken {
 type AuthPayloadTokens {
   access: AuthPayloadToken
   refresh: AuthPayloadToken
+  sign: AuthPayloadToken
 }
 
 type AuthUser {
+  """email address of the user"""
+  email: String
+
+  """ethAddress of the user"""
+  ethAddress: String!
+
   """Id of the user"""
   id: Int!
 
+  """
+  true if this ethAddress has just been registered in the system (first connect)
+  """
+  isNew: Boolean
+
+  """The message that should be signed on login"""
+  message: String
+
   """The permissions the user might have been given"""
   permissions: [String]
+
+  """Pseudonym of the user"""
+  pseudonym: String
 
   """The roles the user might hold"""
   roles: [String]
@@ -96,10 +114,9 @@ A field whose value is a JSON Web Token (JWT): https://jwt.io/introduction.
 scalar JWT
 
 type Mutation {
-  authLogin(email: EmailAddress!, password: String!): AuthPayload!
+  authLogin(ethAddress: String!, signedMessage: String!): AuthPayload!
   authLogout(userId: Int!): BooleanResult!
-  authPasswordRequest(email: EmailAddress!, scope: String!): BooleanResult!
-  authPasswordReset(password: String!, token: String!): BooleanResult!
+  authPreLogin(ethAddress: String!): AuthPayload!
   authRefresh: AuthPayload!
   authRequestEmailVerificationEmail(scope: String!, userId: Int!): BooleanResult!
   authVerifyEmail(token: String!): BooleanResult!
@@ -108,9 +125,7 @@ type Mutation {
   userCreate(data: UserCreateInput!): User!
   userDelete(id: Int!): BooleanResult!
   userProfileImageDelete(id: Int!): BooleanResult!
-  userProfilePasswordUpdate(id: Int!, password: String!): User!
   userProfileUpdate(data: UserProfileUpdateInput!, id: Int!): User!
-  userSignup(data: UserSignupInput!): AuthPayload!
   userUpdate(data: UserUpdateInput!, id: Int!): BooleanResult!
 }
 
@@ -128,6 +143,7 @@ type Query {
   imageRead(id: Int!): Image!
   imageStatus(id: Int!): ImageStatus!
   images(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, taxonomyId: Int, where: JSON): ImageQueryResult
+  userByEthAddress(ethAddress: String!): User!
   userProfileRead(id: Int!): ProfileUser!
   userRead(id: Int!): User!
   users(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): UsersQueryResult
