@@ -1,7 +1,6 @@
 import { User, Prisma } from "@prisma/client";
 import httpStatus from "http-status";
 import type { RoleName } from "../apiuser";
-import type { AppScopes } from "../types";
 
 import {
   daoUserCreate,

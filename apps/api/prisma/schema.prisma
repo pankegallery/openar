@@ -47,6 +47,8 @@ model Artwork {
   id   Int @id @default(autoincrement())
   type Int @default(1)
 
+  key         String @unique @db.VarChar(16)
+  
   description String?
   url          String?
   video        String?
@@ -71,6 +73,9 @@ model Artwork {
 
 model Object {
   id          Int     @id @default(autoincrement())
+  
+  key         String @unique @db.VarChar(16)
+
   name        String?
   description String?
 

@@ -1,5 +1,9 @@
 import Prisma from "@prisma/client";
 import bcrypt from "bcrypt";
+import { customAlphabet } from "nanoid";
+
+const nanoid = customAlphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", 16);
+
 
 import { LoremIpsum } from "lorem-ipsum";
 
@@ -209,6 +213,7 @@ const upsertUser = async (
 
 async function main() {
   const clearDb = true;
+
 
   console.log("MAIN");
   // if (clearDb) {

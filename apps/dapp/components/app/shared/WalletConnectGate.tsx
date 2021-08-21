@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import { useEthers } from "@usedapp/core";
-import { decode, JwtPayload } from "jsonwebtoken";
+import { decode } from "jsonwebtoken";
 
 import {
   useTypedSelector,
   useAuthTabWideLogInOutReload,
-  useTypedDispatch,
   useLocalStorage,
   useAppToast,
   useAuthentication,
@@ -15,7 +14,6 @@ import {
   useAuthPreLoginMutation,
   useAuthLoginMutation,
 } from "~/hooks/mutations";
-import { useWhyDidYouUpdate } from "@chakra-ui/react";
 
 export const WalletConnectGate = ({
   children,
@@ -29,7 +27,6 @@ export const WalletConnectGate = ({
     "success"
   );
 
-  const dispatch = useTypedDispatch();
   const [, setIsConnected] = useLocalStorage("connected", false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
@@ -40,25 +37,8 @@ export const WalletConnectGate = ({
   const router = useRouter();
   const { account, chainId, library, deactivate } = useEthers();
 
-  console.log(stateUser, chainId, account);
-
   const [preloginMutation] = useAuthPreLoginMutation();
   const [loginMutation] = useAuthLoginMutation();
-
-  useWhyDidYouUpdate("WCG", {
-    justConnected: stateUser.justConnected,
-    chainId,
-    account,
-    setIsLoggingIn,
-    isLoggingIn,
-    preloginMutation,
-    library,
-    triggerToast,
-    deactivate,
-    router,
-    logout,
-    setIsConnected,
-  });
 
   const processError = useCallback(
     (err) => {
@@ -90,7 +70,6 @@ export const WalletConnectGate = ({
 
       try {
         if (!errors && data.authLogin?.tokens?.access) {
-          console.log("toast 1");
           triggerToast();
           setIsLoggingIn(false);
           router.push("/openar/");
@@ -108,19 +87,11 @@ export const WalletConnectGate = ({
 
   const processPreLoginResult = useCallback(
     async (tokens) => {
-      console.log(
-        "Pre Login Okay, let's have a look if the return contains a sign requrest "
-      );
-
       const signToken = tokens?.sign?.token;
       const accessToken = tokens?.access?.token;
 
       if (signToken) {
         if (typeof signToken === "string" && signToken.length > 10) {
-          console.log(
-            "yes a sign request is set we have thus to do something more ... "
-          );
-
           if (new Date(tokens?.sign.expires).getTime() > Date.now()) {
             const payload = decode(signToken, { json: true });
 
@@ -131,12 +102,13 @@ export const WalletConnectGate = ({
             const signedMessage = await signer.signMessage(payload.message);
 
             await processLogin(signedMessage);
+          } else {
+            throw Error("We could not process the token");
           }
         } else {
-          throw Error("Signature could not be parsed");
+          throw Error("We could not process the token");
         }
       } else if (accessToken) {
-        console.log("toast 2");
         triggerToast();
         setIsLoggingIn(false);
         router.push("/openar/");
@@ -149,7 +121,6 @@ export const WalletConnectGate = ({
 
   useEffect(() => {
     const preLogin = async () => {
-      console.log("prelogin 1");
       const { data, errors } = await preloginMutation(account);
 
       try {
@@ -167,7 +138,7 @@ export const WalletConnectGate = ({
 
     if (!account) return;
 
-    if (!stateUser.justConnected && !isLoggingIn) {
+    if (!stateUser.justConnected && !stateUser.authenticated && !isLoggingIn) {
       setIsLoggingIn(true);
       preLogin();
     }
@@ -175,6 +146,7 @@ export const WalletConnectGate = ({
     processPreLoginResult,
     processError,
     stateUser.justConnected,
+    stateUser.authenticated,
     setIsLoggingIn,
     isLoggingIn,
     preloginMutation,

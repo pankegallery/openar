@@ -66,8 +66,8 @@ export const authLoginMutationGQL = gql`
 `;
 
 export const authRefreshMutationGQL = gql`
-  mutation authRefresh($scope: String!) {
-    authRefresh(scope: $scope) {
+  mutation authRefresh {
+    authRefresh {
       tokens {
         access {
           token
@@ -82,8 +82,8 @@ export const authRefreshMutationGQL = gql`
 `;
 
 export const authRequestEmailVerificationEmailMutationGQL = gql`
-  mutation authRequestEmailVerificationEmail($scope: String!, $userId: Int!) {
-    authRequestEmailVerificationEmail(scope: $scope, userId: $userId) {
+  mutation authRequestEmailVerificationEmail($userId: Int!) {
+    authRequestEmailVerificationEmail(userId: $userId) {
       result
     }
   }

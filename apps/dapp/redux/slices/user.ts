@@ -37,7 +37,6 @@ const userSlice = createSlice({
   } as UserState,
   reducers: {
     userProfileUpdate(state, action: PayloadAction<AuthenticatedAppUserData>) {
-      console.log("State change: userProfileUpdate");
       if (state.appUserData)
         state.appUserData = {
           ...state.appUserData,
@@ -51,7 +50,6 @@ const userSlice = createSlice({
         state.emailVerified = action.payload.emailVerified ? "yes" : "no";
     },
     userLogout(state) {
-      console.log("State change: userLogout");
       state.justConnected = false;
       state.authenticated = false;
       state.refreshing = false;
@@ -61,7 +59,6 @@ const userSlice = createSlice({
       state.expires = new Date().toISOString();
     },
     userPreLogoutLogout(state) {
-      console.log("State change: userPreLogoutLogout");
       state.justConnected = true;
       state.authenticated = false;
       state.refreshing = false;
@@ -71,7 +68,6 @@ const userSlice = createSlice({
       state.expires = new Date().toISOString();
     },
     userLogin(state, action: PayloadAction<UserLoginPayload>) {
-      console.log("State change: userLogin");
       state.justConnected = false;
       state.authenticated = true;
       state.appUserData = action.payload.appUserData;

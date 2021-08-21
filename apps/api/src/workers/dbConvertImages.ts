@@ -155,8 +155,6 @@ const doChores = async () => {
           if (!originalImageMetaData)
             throw Error("Original image meta data read error");
 
-          apiConfig.imageFormats;
-
           const processedSizesMetaInfo = await Promise.all(
             apiConfig.imageFormats[meta.imageType].reduce(
               (

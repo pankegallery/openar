@@ -8,16 +8,13 @@ export const useAuthPreLoginMutation = () => {
 
   const [mutation, mutationResults] = useMutation( authPreLoginMutationGQL, {
     onCompleted: (data) => {
-      console.log("012312");
-      console.log(data)
+      
       const tokens = data?.authPreLogin?.tokens;
 
       if (tokens && tokens?.access && tokens?.refresh) {
-        console.log("023432")
         const payload = authentication.getTokenPayload(tokens.access);
 
         if (payload) {
-          console.log("0333")
           authentication.setAuthToken(tokens.access);
           authentication.setRefreshCookie(tokens.refresh);
           login(payload.user);

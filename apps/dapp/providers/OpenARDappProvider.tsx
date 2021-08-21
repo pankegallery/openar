@@ -22,11 +22,8 @@ const OpenARDappEnsureDisconnect = ({
   const { deactivate } = useWeb3React<Web3Provider>()
 
   useEffect(() => {
-    console.log("wait for injected profider to become online -> is connected: ", connected);
     injectedConnector.isAuthorized().then((isAuthorized: boolean) => {
-      console.log("is authorized?", isAuthorized);
       if (isAuthorized && !connected) {
-        console.log("but is should not be");
         deactivate();
       }
     })

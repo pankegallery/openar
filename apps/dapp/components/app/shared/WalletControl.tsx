@@ -44,9 +44,9 @@ export const WalletControl = () => {
     msg: "",
   });
 
-  const { activate, deactivate, account, chainId, library } = useEthers();
+  const { activate, deactivate, account, chainId} = useEthers();
   const router = useRouter();
-
+  
   const setError = (error: any) => {
     let msg: string;
     if (error instanceof NoEthereumProviderError) {
@@ -80,14 +80,17 @@ export const WalletControl = () => {
 
   const connectToWallet = async (useWalletConnect: boolean) => {
     try {
-      setIsLoading(true);
+      
       if (useWalletConnect) {
+        setIsLoadingWC(true);
         await activate(walletConntectConnector, undefined, true);
       } else {
+        setIsLoading(true);
         await activate(injectedConnector, undefined, true);
       }
       setIsConnected(true);
       setIsLoading(false);
+      setIsLoadingWC(false);
       walletDisclosure.onClose();
       
       dispatch(authSetJustConnected());      
@@ -101,11 +104,8 @@ export const WalletControl = () => {
 
   return (
     <Box>
-      <Box
-        order={[-1, null, null, 2]}
-        textAlign={["left", null, null, "right"]}
-      >
-        {!account && library && (
+      <Box>
+        {!account && (
           <Button
             colorScheme="teal"
             variant="outline"
@@ -123,14 +123,15 @@ export const WalletControl = () => {
           </Button>
         )}
 
-        {account && library && (
+        {account && (
           <Button
             colorScheme="teal"
             variant="outline"
             onClick={async () => {
               setIsConnected(false);
-              await deactivate();
+              deactivate();
               await user.logout();
+              router.push("/");
             }}
           >
             Disconnect

@@ -20,6 +20,8 @@ let refreshTimeoutId: ReturnType<typeof setTimeout>;
 
 // TODO: xxx is the autorefresh really needed? Or is it good enough to rely on the refresh by use of the API?
 const refreshToken = async () => {
+  console.log("refreshToken", canRefresh(), getRefreshCookie());
+
   if (client && canRefresh() && getRefreshCookie()) {
     setAllowRefresh(false);
     setRefreshing(true);
@@ -79,8 +81,9 @@ const login = async (u: AuthenticatedAppUserData): Promise<boolean> =>
 
     // clearTimeout(refreshTimeoutId);
     const token = getAuthToken();
-
+    
     if (token) {
+      console.log("setting refresh token")
       refreshTimeoutId = setTimeout(
         refreshToken,
         new Date(token.expires).getTime() - Date.now() - 10000
