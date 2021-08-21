@@ -125,6 +125,18 @@ export const daoUserGetByEthAddress = async (
   );
 };
 
+export const daoUserFindByEthAddress = async (
+  ethAddress: string
+): Promise<User> => {
+  const user: User | null = await prisma.user.findUnique({
+    where: {
+      ethAddress,
+    },
+  });
+
+  return filteredOutputByBlacklist(user, apiConfig.db.privateJSONDataKeys.user);
+};
+
 export const daoUserUpdate = async (
   id: number,
   data: Prisma.UserUpdateInput
@@ -207,4 +219,5 @@ export default {
   daoUserProfileImageDelete,
   daoUserCheckIsEmailTaken,
   daoUserGetByEthAddress,
+  daoUserFindByEthAddress,
 };

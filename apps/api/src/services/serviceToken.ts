@@ -79,7 +79,10 @@ export const generateSignToken = (
 ) => {
   // expose roles in token TODO: expose roles
   const payload = {
-    message: nanoid(10).replace(/_/g, "-"),
+    message: `${apiConfig.signaturePrefixes.login}${nanoid(10).replace(
+      /_/g,
+      "-"
+    )}`,
     iat: new Date().getTime() / 1000,
     exp: expires.getTime() / 1000,
     type,

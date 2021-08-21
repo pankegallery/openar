@@ -1,6 +1,3 @@
-import type { Request, Response } from "express";
-import type { AuthenticatedAppUser } from "../apiuser";
-
 export type Complete<T> = {
   [P in keyof Required<T>]: Pick<T, P> extends Required<Pick<T, P>>
     ? T[P]

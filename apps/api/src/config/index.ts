@@ -80,6 +80,8 @@ export interface ApiConfigJwt {
   };
 }
 
+export type ApiConfigSignaturePrefix = "login";
+
 export interface ApiConfig {
   enablePublicRegistration: boolean;
   baseDir: string;
@@ -96,6 +98,7 @@ export interface ApiConfig {
   jwt: ApiConfigJwt;
   security: ApiConfigSecurity;
   imageFormats: Record<ApiImageFormats, ApiConfigImageFormat>;
+  signaturePrefixes: Record<ApiConfigSignaturePrefix, string>;
 }
 
 export interface ApiConfigOverwrite {
@@ -113,6 +116,7 @@ export interface ApiConfigOverwrite {
   corsOptions?: CorsOptions;
   security?: Partial<ApiConfigSecurity>;
   jwt?: Partial<ApiConfigJwt>;
+  signaturePrefixes?: Record<ApiConfigSignaturePrefix, string>;
 }
 
 const db: ApiConfigDB = {
@@ -315,6 +319,9 @@ let apiConfig = {
   },
   security: {
     saltRounds: 10,
+  },
+  signaturePrefixes: {
+    login: "Confirm OpenAR login request (signatures are for free) #",
   },
   jwt: {
     secret: safeGuardVariable(

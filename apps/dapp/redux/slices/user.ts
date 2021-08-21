@@ -9,7 +9,7 @@ type UserLoginPayload = {
 };
 
 type UserState = {
-  justConnected: boolean,
+  justConnected: boolean;
   authenticated: boolean;
   emailVerified: EmailVerificationState;
   appUserData: AuthenticatedAppUserData | null;
@@ -60,8 +60,19 @@ const userSlice = createSlice({
       state.emailVerified = "unknown";
       state.expires = new Date().toISOString();
     },
+    userPreLogoutLogout(state) {
+      console.log("State change: userPreLogoutLogout");
+      state.justConnected = true;
+      state.authenticated = false;
+      state.refreshing = false;
+      state.allowRefresh = true;
+      state.appUserData = null;
+      state.emailVerified = "unknown";
+      state.expires = new Date().toISOString();
+    },
     userLogin(state, action: PayloadAction<UserLoginPayload>) {
       console.log("State change: userLogin");
+      state.justConnected = false;
       state.authenticated = true;
       state.appUserData = action.payload.appUserData;
       state.expires = action.payload.expires;
@@ -80,8 +91,9 @@ const userSlice = createSlice({
     authAllowRefresh(state, action: PayloadAction<boolean>) {
       state.allowRefresh = action.payload;
     },
-    authSetJustConnected(state, action: PayloadAction<boolean>) {
-      state.justConnected = action.payload;
+    authSetJustConnected(state) {
+      state.justConnected = true;
+      state.authenticated = false;
     },
   },
 });
@@ -98,6 +110,7 @@ export const {
   userProfileUpdate,
   authAllowRefresh,
   authSetJustConnected,
+  userPreLogoutLogout,
 } = actions;
 
 // Export the reducer, either as a default or named export

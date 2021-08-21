@@ -15,6 +15,7 @@ import {
   daoUserGetById,
   daoUserUpdate,
   daoUserGetByEthAddress,
+  daoUserFindByEthAddress,
   daoUserCreate,
 } from "../dao/user";
 import { ApiError, TokenTypesEnum } from "../utils";
@@ -109,7 +110,7 @@ export const authLoginUserWithSignature = async (
       id: user.id,
       pseudonym: user.pseudonym,
       email: user.email,
-      ethAddress: user.ethAddress,
+      ethAddress,
     },
     user.roles as RoleName[]
   );
@@ -117,7 +118,7 @@ export const authLoginUserWithSignature = async (
   authPayload.user = {
     id: user.id,
     pseudonym: user.pseudonym,
-    ethAddress: user.ethAddress,
+    ethAddress,
     email: user.email,
   };
 
@@ -128,8 +129,8 @@ export const authPreLoginUserWithEthAddress = async (
   ethAddress: string,
   ctx: NexusResolverContext
 ): Promise<AuthPayload> => {
-  let user = await daoUserGetByEthAddress(ethAddress);
   let authPayload: AuthPayload;
+  let user = await daoUserFindByEthAddress(ethAddress);
 
   if (!user) {
     user = await daoUserCreate({

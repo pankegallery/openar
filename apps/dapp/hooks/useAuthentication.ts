@@ -27,11 +27,15 @@ export const useAuthentication = () => {
     return await user.logout();
   };
 
+  const preLoginLogout = async () => {
+    return await user.preLoginLogout();
+  };
+
   const logoutAndRedirect = async (path: string = "/login") => {
     const result = await user.logout();
     router.push(path);
     return result;
   };
 
-  return [appUser, { isLoggedIn, login, logout, logoutAndRedirect }] as const;
+  return [appUser, { isLoggedIn, login, logout, preLoginLogout, logoutAndRedirect }] as const;
 };

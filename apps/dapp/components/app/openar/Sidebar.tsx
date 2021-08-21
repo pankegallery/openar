@@ -13,7 +13,7 @@ import {
 import { ActiveLink } from "~/components/ui";
 
 import { useSSRSaveMediaQuery } from "~/hooks";
-import { WalletControl } from "./WalletControl";
+import { WalletControl } from "../shared/WalletControl";
 
 const NavItem = ({
   title,

@@ -3,7 +3,7 @@ export * from "./useImageStatusPoll";
 export * from "./useLocalStorage";
 export * from "./useOnScreen";
 export * from "./useAuthentication";
-export * from "./useSuccessToast";
+export * from "./useAppToast";
 export * from "./useDeleteByIdButton";
 export * from "./useAxiosCancelToken";
 export * from "./useWhyDidYouUpdate";

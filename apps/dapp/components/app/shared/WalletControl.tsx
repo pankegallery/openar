@@ -17,76 +17,82 @@ import { useEthers, useConfig } from "@usedapp/core";
 import { useRouter } from "next/router";
 import {
   NoEthereumProviderError,
-  UserRejectedRequestError as UserRejectedRequestErrorInjected
-} from '@web3-react/injected-connector'
-import { UserRejectedRequestError as UserRejectedRequestErrorWalletConnect } from '@web3-react/walletconnect-connector'
+  UserRejectedRequestError as UserRejectedRequestErrorInjected,
+} from "@web3-react/injected-connector";
+import { UserRejectedRequestError as UserRejectedRequestErrorWalletConnect } from "@web3-react/walletconnect-connector";
 
-import { InjectedConnector } from '@web3-react/injected-connector'
+import { UnsupportedChainIdError } from "@web3-react/core";
 
-import {UnsupportedChainIdError } from '@web3-react/core'
-import { walletConntectConnector } from "~/services/crypto";
-import { useTypedSelector, useTypedDispatch } from "~/hooks";
+import { walletConntectConnector, injectedConnector } from "~/services/crypto";
+
+import {  useTypedDispatch, useLocalStorage} from "~/hooks";
 import user from "~/services/user";
 import { authSetJustConnected } from "~/redux/slices/user";
 
-
-
 export const WalletControl = () => {
-  const { supportedChains } = useConfig()
+  const [ , setIsConnected ] = useLocalStorage("connected", false);
+  
+
   const dispatch = useTypedDispatch();
 
-  const { connected } = useTypedSelector(({ crypto }) => crypto);
   const walletDisclosure = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingWC, setIsLoadingWC] = useState(false);
+
   const [isError, setIsError] = useState({
     state: false,
-    msg: ""
+    msg: "",
   });
 
-  const { activate, activateBrowserWallet, deactivate } = useEthers();
+  const { activate, deactivate, account, chainId, library } = useEthers();
   const router = useRouter();
 
   const setError = (error: any) => {
-    console.log(error);
-    let msg;
+    let msg: string;
     if (error instanceof NoEthereumProviderError) {
-      msg = 'No Ethereum browser extension detected, install MetaMask for your browser, or use Wallet connect to use a wallet on your phone.'
+      msg =
+        "No Ethereum browser extension detected, install MetaMask for your browser, or use Wallet connect to use a wallet on your phone.";
     } else if (error instanceof UnsupportedChainIdError) {
-      msg = "You're connected to an unsupported network."
+      msg = "You're connected to an unsupported network.";
     } else if (
       error instanceof UserRejectedRequestErrorInjected ||
       error instanceof UserRejectedRequestErrorWalletConnect
     ) {
-      msg = 'Please authorize our website to access your Ethereum account.'
+      msg = "Please authorize our website to access your Ethereum account.";
     } else {
-      console.error(error)
-      msg = 'Oops, an error occured. Please reload the page and try again.'
+      if (error?.message && error.message.indexOf("eth_requestAccounts") > -1) {
+        msg = "Please check if your MetaMask extension. You will be able to go on with the process from there.";
+      } else {
+        msg = "Oops, an error occured. Please reload the page and try again.";
+      }
+       
+      // TODO: remove this should not be there. 
+      console.error(error);
+      
     }
-    
+
     setIsError({
       state: true,
-      msg
+      msg,
     });
     setIsLoading(false);
-  }
+  };
 
   const connectToWallet = async (useWalletConnect: boolean) => {
-
     try {
       setIsLoading(true);
       if (useWalletConnect) {
         await activate(walletConntectConnector, undefined, true);
       } else {
-        const injectedConnector = new InjectedConnector({ supportedChainIds: supportedChains })
         await activate(injectedConnector, undefined, true);
       }
-      
+      setIsConnected(true);
       setIsLoading(false);
       walletDisclosure.onClose();
-      dispatch(authSetJustConnected());
-      router.push("/openar/");
-    } catch (error) { 
+      
+      dispatch(authSetJustConnected());      
+    } catch (error) {
+      setIsConnected(false);
       // TODO: remove
       console.log(error);
       setError(error);
@@ -99,7 +105,7 @@ export const WalletControl = () => {
         order={[-1, null, null, 2]}
         textAlign={["left", null, null, "right"]}
       >
-        {!connected && (
+        {!account && library && (
           <Button
             colorScheme="teal"
             variant="outline"
@@ -108,7 +114,7 @@ export const WalletControl = () => {
               setIsLoadingWC(false);
               setIsError({
                 state: false,
-                msg: ""
+                msg: "",
               });
               walletDisclosure.onOpen();
             }}
@@ -117,12 +123,13 @@ export const WalletControl = () => {
           </Button>
         )}
 
-        {connected && (
+        {account && library && (
           <Button
             colorScheme="teal"
             variant="outline"
             onClick={async () => {
-              deactivate();
+              setIsConnected(false);
+              await deactivate();
               await user.logout();
             }}
           >
@@ -146,15 +153,12 @@ export const WalletControl = () => {
               <br />
               (1) You connect to the wallet, then
               <br />
-              (2) If you&#39;re new or haven&#39;t been around for a while we
-              ask you sign a transaction (which is free) to give out server a
-              chance to check if you are who you claim you are.
+              (2) If you&#39;re new, haven&#39;t been around for a while, or
+              cleared your cookies we ask you sign a transaction (which is free)
+              to give our server a chance to check if you are who you claim you
+              are.
             </Text>
-            {isError.state && (
-              <Text color="openar.error">
-                {isError.msg}
-              </Text>
-            )}
+            {isError.state && <Text color="openar.error">{isError.msg}</Text>}
             <Button
               justifyContent="space-between"
               width="100%"

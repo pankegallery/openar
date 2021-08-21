@@ -24,13 +24,34 @@ export const authLogoutMutationGQL = gql`
   }
 `;
 
+export const authPreLoginMutationGQL = gql`
+  mutation authPreLogin(
+    $ethAddress: String!
+  ) {
+    authPreLogin(ethAddress: $ethAddress) {
+      tokens {
+        access {
+          token
+          expires
+        }
+        refresh {
+          expires
+        }
+        sign {
+          token
+          expires
+        }
+      }
+    }
+  }
+`;
+
 export const authLoginMutationGQL = gql`
   mutation authLogin(
-    $scope: String!
-    $email: EmailAddress!
-    $password: String!
+    $ethAddress: String!
+    $signedMessage: String!    
   ) {
-    authLogin(scope: $scope, email: $email, password: $password) {
+    authLogin(ethAddress: $ethAddress, signedMessage: $signedMessage) {
       tokens {
         access {
           token

@@ -7,11 +7,15 @@ export const useAppToast = (
 ) => {
   const toast = useToast();
 
-  const trigger = (title: string = defaultTitle, msg: string = defaultMsg) => {
+  const trigger = (
+    title: string = defaultTitle,
+    msg: string = defaultMsg,
+    sts: UseToastOptions["status"] = status
+  ) => {
     toast({
       title: title,
       description: msg,
-      status,
+      status: sts,
       duration: 6000,
       isClosable: true,
       variant: "subtle",
