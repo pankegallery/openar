@@ -22,6 +22,7 @@ export type AppConfigSettings = {
   apiGraphQLUrl?: string | undefined;
   contactEmail?: string | undefined;
   infuraApiKey?: string | undefined;
+  ankrXDaiRPCURL?: string | undefined;
   defaultPageSize?: number;
 };
 

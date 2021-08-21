@@ -1,22 +1,11 @@
 import type { ReactElement } from 'react'
-import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
 
 import { LayoutSite } from "~/components/app";
 import { Box } from '@chakra-ui/react';
-
-
-// import { useEthers, useEtherBalance } from "@usedapp/core";
-// import { formatUnits } from "@ethersproject/units";
-
-const STAKING_CONTRACT = "0x00000000219ab540356cBB839Cbe05303d7705Fa";
+import Link from 'next/link';
 
 export const Home = () => {
-  // const { activateBrowserWallet, deactivate, account } = useEthers();
-  // const userBalance = useEtherBalance(account);
-  // const stakingBalance = useEtherBalance(STAKING_CONTRACT);
-
   return (
     <Box>
       <Head>
@@ -25,6 +14,7 @@ export const Home = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+    <Link href="/openar/"><a>OpenAR</a></Link>
      Some great homepage content ... 
     </Box>
   );

@@ -2,8 +2,10 @@ import { PartialRecord } from "../types";
 
 export type RoleName =
   | "administrator"
-  | "editor"
-  | "contributor"
+  | "artist"
+  | "collector"
+  | "curator"
+  | "critic"
   | "user"
   | "refresh"
   | "api"
@@ -11,62 +13,37 @@ export type RoleName =
 
 // !!! Also add new permissions to the constructing arrays on the bottom
 export type PermissionsOfAdministrator =
-  | "userCreate"
   | "userRead"
   | "userUpdate"
-  | "userDelete"
-  | "settingRead"
-  | "settingUpdate";
+  | "userDelete";
 
 // !!! Also add new permissions to the constructing arrays on the bottom
-export type PermissionsOfEditor =
-  | "locationRead"
-  | "locationCreate"
-  | "locationUpdate"
-  | "locationDelete"
-  | "eventRead"
-  | "eventCreate"
-  | "eventUpdate"
-  | "eventDelete"
-  | "tourRead"
-  | "tourCreate"
-  | "tourUpdate"
-  | "tourDelete"
-  | "pageRead"
-  | "pageCreate"
-  | "pageUpdate"
-  | "pageDelete"
-  | "taxCreate"
-  | "taxRead"
-  | "taxUpdate"
-  | "taxDelete"
-  | "imageDelete";
+export type PermissionsOfArtist =
+  | "artworkReadOwn"
+  | "artworkUpdateOwn"
+  | "artworkDeleteOwn";
 
 // !!! Also add new permissions to the constructing arrays on the bottom
-export type PermissionsOfContributor =
-  | "locationRead"
-  | "locationCreate"
-  | "locationUpdate"
-  | "locationDeleteOwn"
-  | "eventRead"
-  | "eventCreate"
-  | "eventUpdate"
-  | "eventDeleteOwn"
-  | "tourRead"
-  | "tourCreate"
-  | "tourUpdate"
-  | "tourDeleteOwn"
-  | "imageRead"
-  | "imageUpdate"
-  | "imageCreate"
-  | "imageDeleteOwn"
-  | "pageRead"
-  | "pageCreate"
-  | "pageUpdate"
-  | "pageDeleteOwn";
+export type PermissionsOfCollector =
+  | "collectionReadOwn"
+  | "collectionSellOwn"
+  | "collectionUpdateOwn";
+
+export type PermissionsOfCurator =
+  | "exhibitionReadOwn"
+  | "exhibitionUpdateOwn"
+  | "exhibitionDeleteOwn";
+
+export type PermissionsOfCritic =
+  | "critiqueReadOwn"
+  | "critiqueUpdateOwn"
+  | "critiqueDeleteOwn";
 
 // !!! Also add new permissions to the constructing arrays on the bottom
 export type PermissionsOfUser =
+  | "critiqueCreate"
+  | "exhibitionCreate"
+  | "artworkCreate"
   | "accessAsAuthenticatedUser"
   | "profileRead"
   | "profileUpdate";
@@ -77,17 +54,19 @@ export type PermissionsOfRefresh = "canRefreshAccessToken";
 // !!! Also add new permissions to the constructing arrays on the bottom
 export type PermissionsOfApi = "canConfirmToken";
 
-export type PermissionNames =
+export type PermissionName =
   | PermissionsOfAdministrator
-  | PermissionsOfEditor
-  | PermissionsOfContributor
+  | PermissionsOfCritic
+  | PermissionsOfCurator
+  | PermissionsOfCollector
+  | PermissionsOfArtist
   | PermissionsOfUser
   | PermissionsOfRefresh
   | PermissionsOfApi;
 
 export interface Role {
   name: RoleName;
-  permissions: PermissionNames[];
+  permissions: PermissionName[];
   extends: RoleName[];
 }
 
@@ -95,19 +74,19 @@ export interface ApiRolesAndPermissions {
   roles: PartialRecord<RoleName, Role>;
   add: (
     name: RoleName,
-    permissions?: PermissionNames | PermissionNames[]
+    permissions?: PermissionName | PermissionName[]
   ) => void;
   addPermissions: (
     roleName: RoleName,
-    permissions?: PermissionNames | PermissionNames[]
+    permissions?: PermissionName | PermissionName[]
   ) => void;
-  getOwnPermissions: (roleName: RoleName) => PermissionNames[];
-  getCombinedPermissions: (roles: RoleName[]) => PermissionNames[];
+  getOwnPermissions: (roleName: RoleName) => PermissionName[];
+  getCombinedPermissions: (roles: RoleName[]) => PermissionName[];
 }
 
 export const apiRolesAndPermissions: ApiRolesAndPermissions = {
   roles: {},
-  add(name: RoleName, permissions?: PermissionNames | PermissionNames[]) {
+  add(name: RoleName, permissions?: PermissionName | PermissionName[]) {
     if (!(name in this.roles)) {
       this.roles[name] = {
         name,
@@ -119,19 +98,19 @@ export const apiRolesAndPermissions: ApiRolesAndPermissions = {
   },
   addPermissions(
     roleName: RoleName,
-    permissions?: PermissionNames | PermissionNames[]
+    permissions?: PermissionName | PermissionName[]
   ) {
     if (roleName in this.roles) {
       (Array.isArray(permissions)
         ? permissions
-        : ([permissions] as PermissionNames[])
+        : ([permissions] as PermissionName[])
       ).forEach((perm) => {
         if (!(perm in (this.roles[roleName] as Role).permissions))
           (this.roles[roleName] as Role).permissions.push(perm);
       });
     }
   },
-  getOwnPermissions(roleName: RoleName): PermissionNames[] {
+  getOwnPermissions(roleName: RoleName): PermissionName[] {
     if (roleName in this.roles) {
       return Array.from(
         // using Array.from(new Set(...)) to filter duplicates out
@@ -140,73 +119,54 @@ export const apiRolesAndPermissions: ApiRolesAndPermissions = {
     }
     return [];
   },
-  getCombinedPermissions(roles: RoleName[]): PermissionNames[] {
+  getCombinedPermissions(roles: RoleName[]): PermissionName[] {
     return roles.reduce((permissions, roleName) => {
       if (!(roleName in this.roles)) return permissions;
 
       return [...permissions, ...this.getOwnPermissions(roleName)];
-    }, [] as PermissionNames[]);
+    }, [] as PermissionName[]);
   },
 };
 
 apiRolesAndPermissions.add("api", ["canConfirmToken"]);
 apiRolesAndPermissions.add("refresh", ["canRefreshAccessToken"]);
 
-apiRolesAndPermissions.add("user", [
+apiRolesAndPermissions.add("artist", [
+  "artworkReadOwn",
+  "artworkUpdateOwn",
+  "artworkDeleteOwn",
+]);
+
+apiRolesAndPermissions.add("collector", [
   "accessAsAuthenticatedUser",
   "profileRead",
   "profileUpdate",
 ]);
 
-// TODO: extend roles
-apiRolesAndPermissions.add("contributor", [
-  "locationRead",
-  "locationCreate",
-  "locationUpdate",
-  "locationDeleteOwn",
-  "eventRead",
-  "eventCreate",
-  "eventUpdate",
-  "eventDeleteOwn",
-  "tourRead",
-  "tourCreate",
-  "tourUpdate",
-  "tourDeleteOwn",
-  "pageRead",
-  "pageCreate",
-  "pageUpdate",
-  "pageDeleteOwn",
+apiRolesAndPermissions.add("curator", [
+  "exhibitionReadOwn",
+  "exhibitionUpdateOwn",
+  "exhibitionDeleteOwn",
 ]);
 
-apiRolesAndPermissions.add("editor", [
-  "locationRead",
-  "locationCreate",
-  "locationUpdate",
-  "locationDelete",
-  "eventRead",
-  "eventCreate",
-  "eventUpdate",
-  "eventDelete",
-  "tourRead",
-  "tourCreate",
-  "tourUpdate",
-  "tourDelete",
-  "pageRead",
-  "pageCreate",
-  "pageUpdate",
-  "pageDelete",
-  "taxCreate",
-  "taxRead",
-  "taxUpdate",
-  "taxDelete",
+apiRolesAndPermissions.add("critic", [
+  "critiqueReadOwn",
+  "critiqueUpdateOwn",
+  "critiqueDeleteOwn",
+]);
+
+apiRolesAndPermissions.add("user", [
+  "critiqueCreate",
+  "exhibitionCreate",
+  "artworkCreate",
+  "accessAsAuthenticatedUser",
+  "profileRead",
+  "profileUpdate",
 ]);
 
 apiRolesAndPermissions.add("administrator", [
-  "userCreate",
   "userRead",
   "userUpdate",
   "userDelete",
-  "settingRead",
-  "settingUpdate",
 ]);
 export default apiRolesAndPermissions;

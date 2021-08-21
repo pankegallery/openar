@@ -21,7 +21,7 @@ import {
   useAxiosCancelToken,
 } from "~/hooks";
 
-import {useConfigContext} from "~/providers";
+import { useConfigContext } from "~/providers";
 
 import { useFormContext } from "react-hook-form";
 

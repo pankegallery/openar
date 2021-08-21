@@ -1,11 +1,9 @@
 import { ChainId, DAppProvider } from "@usedapp/core";
 import React from "react";
-
+import { readOnlyUrls } from "~/services/crypto";
 const config = {
   readOnlyChainId: ChainId.Mainnet,
-  readOnlyUrls: {
-    [ChainId.Mainnet]: `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_URL}`,
-  },
+  readOnlyUrls: readOnlyUrls,
 };
 
 export const OpenARDappProvider = ({

@@ -30,7 +30,10 @@ model User {
   collection Object[]  @relation("collection")
   objects    Object[]  @relation("objects")
 
-  tokens Token[]
+  tokens      Token[]
+  images      Image[]
+  models      Model[]
+  files       File[]
 
   heroImageId Int?
   heroImage   Image? @relation(fields: [heroImageId], references: [id], name: "userHeroImage")
@@ -106,6 +109,9 @@ model Image {
   artworks Artwork[] @relation("imagesArtwork")
   objects  Object[]  @relation("imagesObject")
 
+  ownerId    Int  
+  owner      User   @relation(fields: [ownerId], references: [id])
+  
   profileImageUsers User[]    @relation("userHeroImage")
   heroImageArtworks Artwork[] @relation("artworkHeroImage")
   heroImageObjects  Object[]  @relation("objectHeroImage")
@@ -121,6 +127,8 @@ model Model {
   type       String @db.VarChar(8)
   objectId   Int
   object     Object @relation(fields: [objectId], references: [id])
+  ownerId    Int  
+  owner      User   @relation(fields: [ownerId], references: [id])
 }
 
 model File {
@@ -130,6 +138,8 @@ model File {
 
   artworkId Int
   artwork   Artwork @relation(fields: [artworkId], references: [id])
+  ownerId    Int  
+  owner      User   @relation(fields: [ownerId], references: [id])
 }
 
 model Token {

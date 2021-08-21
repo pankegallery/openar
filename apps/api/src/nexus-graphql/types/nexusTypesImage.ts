@@ -134,7 +134,7 @@ export const ImageQueries = extendType({
         id: nonNull(intArg()),
       },
 
-      authorize: (...[, , ctx]) => authorizeApiUser(ctx, "imageRead"),
+      // TODO: how to protect individual assets only own or authorize: (...[, , ctx]) => authorizeApiUser(ctx, "imageRead"),
 
       // resolve(root, args, ctx, info)
       async resolve(...[, args]) {
@@ -212,7 +212,7 @@ export const ImageMutations = extendType({
         data: nonNull("ImageUpdateInput"),
       },
 
-      authorize: (...[, , ctx]) => authorizeApiUser(ctx, "imageUpdate"),
+      // TODO: how to lock down the API authorize: (...[, , ctx]) => authorizeApiUser(ctx, "imageUpdate"),
 
       async resolve(...[, args]) {
         const image = await daoImageUpdate(args.id, args.data);

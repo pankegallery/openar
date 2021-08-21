@@ -2,8 +2,10 @@ import { PartialRecord } from "../types";
 
 export type RoleName =
   | "administrator"
-  | "editor"
-  | "contributor"
+  | "artist"
+  | "collector"
+  | "curator"
+  | "critic"
   | "user"
   | "refresh"
   | "api"
@@ -11,62 +13,37 @@ export type RoleName =
 
 // !!! Also add new permissions to the constructing arrays on the bottom
 export type PermissionsOfAdministrator =
-  | "userCreate"
   | "userRead"
   | "userUpdate"
-  | "userDelete"
-  | "settingRead"
-  | "settingUpdate";
+  | "userDelete";
 
 // !!! Also add new permissions to the constructing arrays on the bottom
-export type PermissionsOfEditor =
-  | "locationRead"
-  | "locationCreate"
-  | "locationUpdate"
-  | "locationDelete"
-  | "eventRead"
-  | "eventCreate"
-  | "eventUpdate"
-  | "eventDelete"
-  | "tourRead"
-  | "tourCreate"
-  | "tourUpdate"
-  | "tourDelete"
-  | "pageRead"
-  | "pageCreate"
-  | "pageUpdate"
-  | "pageDelete"
-  | "taxCreate"
-  | "taxRead"
-  | "taxUpdate"
-  | "taxDelete"
-  | "imageDelete";
+export type PermissionsOfArtist =
+  | "artworkReadOwn"
+  | "artworkUpdateOwn"
+  | "artworkDeleteOwn";
 
 // !!! Also add new permissions to the constructing arrays on the bottom
-export type PermissionsOfContributor =
-  | "locationRead"
-  | "locationCreate"
-  | "locationUpdate"
-  | "locationDeleteOwn"
-  | "eventRead"
-  | "eventCreate"
-  | "eventUpdate"
-  | "eventDeleteOwn"
-  | "tourRead"
-  | "tourCreate"
-  | "tourUpdate"
-  | "tourDeleteOwn"
-  | "imageRead"
-  | "imageUpdate"
-  | "imageCreate"
-  | "imageDeleteOwn"
-  | "pageRead"
-  | "pageCreate"
-  | "pageUpdate"
-  | "pageDeleteOwn";
+export type PermissionsOfCollector =
+  | "collectionReadOwn"
+  | "collectionSellOwn"
+  | "collectionUpdateOwn";
+
+export type PermissionsOfCurator =
+  | "exhibitionReadOwn"
+  | "exhibitionUpdateOwn"
+  | "exhibitionDeleteOwn";
+
+export type PermissionsOfCritic =
+  | "critiqueReadOwn"
+  | "critiqueUpdateOwn"
+  | "critiqueDeleteOwn";
 
 // !!! Also add new permissions to the constructing arrays on the bottom
 export type PermissionsOfUser =
+  | "critiqueCreate"
+  | "exhibitionCreate"
+  | "artworkCreate"
   | "accessAsAuthenticatedUser"
   | "profileRead"
   | "profileUpdate";
@@ -79,8 +56,10 @@ export type PermissionsOfApi = "canConfirmToken";
 
 export type PermissionName =
   | PermissionsOfAdministrator
-  | PermissionsOfEditor
-  | PermissionsOfContributor
+  | PermissionsOfCritic
+  | PermissionsOfCurator
+  | PermissionsOfCollector
+  | PermissionsOfArtist
   | PermissionsOfUser
   | PermissionsOfRefresh
   | PermissionsOfApi;
@@ -152,61 +131,42 @@ export const apiRolesAndPermissions: ApiRolesAndPermissions = {
 apiRolesAndPermissions.add("api", ["canConfirmToken"]);
 apiRolesAndPermissions.add("refresh", ["canRefreshAccessToken"]);
 
-apiRolesAndPermissions.add("user", [
+apiRolesAndPermissions.add("artist", [
+  "artworkReadOwn",
+  "artworkUpdateOwn",
+  "artworkDeleteOwn",
+]);
+
+apiRolesAndPermissions.add("collector", [
   "accessAsAuthenticatedUser",
   "profileRead",
   "profileUpdate",
 ]);
 
-// TODO: extend roles
-apiRolesAndPermissions.add("contributor", [
-  "locationRead",
-  "locationCreate",
-  "locationUpdate",
-  "locationDeleteOwn",
-  "eventRead",
-  "eventCreate",
-  "eventUpdate",
-  "eventDeleteOwn",
-  "tourRead",
-  "tourCreate",
-  "tourUpdate",
-  "tourDeleteOwn",
-  "pageRead",
-  "pageCreate",
-  "pageUpdate",
-  "pageDeleteOwn",
+apiRolesAndPermissions.add("curator", [
+  "exhibitionReadOwn",
+  "exhibitionUpdateOwn",
+  "exhibitionDeleteOwn",
 ]);
 
-apiRolesAndPermissions.add("editor", [
-  "locationRead",
-  "locationCreate",
-  "locationUpdate",
-  "locationDelete",
-  "eventRead",
-  "eventCreate",
-  "eventUpdate",
-  "eventDelete",
-  "tourRead",
-  "tourCreate",
-  "tourUpdate",
-  "tourDelete",
-  "pageRead",
-  "pageCreate",
-  "pageUpdate",
-  "pageDelete",
-  "taxCreate",
-  "taxRead",
-  "taxUpdate",
-  "taxDelete",
+apiRolesAndPermissions.add("critic", [
+  "critiqueReadOwn",
+  "critiqueUpdateOwn",
+  "critiqueDeleteOwn",
+]);
+
+apiRolesAndPermissions.add("user", [
+  "critiqueCreate",
+  "exhibitionCreate",
+  "artworkCreate",
+  "accessAsAuthenticatedUser",
+  "profileRead",
+  "profileUpdate",
 ]);
 
 apiRolesAndPermissions.add("administrator", [
-  "userCreate",
   "userRead",
   "userUpdate",
   "userDelete",
-  "settingRead",
-  "settingUpdate",
 ]);
 export default apiRolesAndPermissions;

@@ -16,7 +16,7 @@ import {
   GraphQLJWT,
   GraphQLEmailAddress,
 } from "graphql-scalars";
-import { PermissionNames } from "../../apiuser";
+import { PermissionName } from "../../apiuser";
 import { authorizeApiUser } from "../helpers";
 
 export const GQLDateTime = asNexusMethod(GraphQLDateTime, "date");

@@ -1,9 +1,9 @@
-import type { PermissionNames } from "../../apiuser";
+import type { PermissionName } from "../../apiuser";
 import type { NexusResolverContext } from "../context";
 
 export const authorizeApiUser = (
   ctx: NexusResolverContext,
-  permissions: PermissionNames | PermissionNames[],
+  permissions: PermissionName | PermissionName[],
   doingRefresh = false
 ) => {
   // TODO: enable auth gateway

@@ -9,6 +9,7 @@ export * from "./useAxiosCancelToken";
 export * from "./useWhyDidYouUpdate";
 export * from "./useTypedDispatch";
 export * from "./useTypedSelector";
+export * from "./useAuthTabWideLogInOutReload";
 
 // TODO: this awkward import should help ESLINt to work with the layout effect properly
 // don't think it does. How to fix?

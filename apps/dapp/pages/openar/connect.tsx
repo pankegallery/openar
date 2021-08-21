@@ -26,20 +26,8 @@ const OpenARDashboard = () => {
 
       <main>
         <div>
-          {/* {!account && (
-            <button onClick={() => activateBrowserWallet()}> Connect </button>
-          )}
-          {account && <button onClick={deactivate}> Disconnect </button>}
-
-          {stakingBalance && (
-            <p>ETH2 staking balance: {formatUnits(stakingBalance, 18)} ETH </p>
-          )}
-          {account && <p>Account: {account}</p>}
-          {userBalance && (
-            <p>Ether balance: {formatUnits(userBalance, 18)} ETH </p>
-          )} */}
-
-          {`${process.env.NEXT_PUBLIC_INFURA_URL}`}
+          Please connect to your wallet to access this page. 
+{`${process.env.NEXT_PUBLIC_INFURA_URL}`}
 
           {}
         </div>

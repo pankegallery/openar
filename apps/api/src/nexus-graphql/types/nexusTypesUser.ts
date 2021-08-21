@@ -339,7 +339,7 @@ export const UserMutations = extendType({
         data: nonNull(UserCreateInput),
       },
 
-      authorize: (...[, , ctx]) => authorizeApiUser(ctx, "userCreate"),
+      // TODO: how to lock down the API authorize: (...[, , ctx]) => authorizeApiUser(ctx, "userCreate"),
 
       async resolve(...[, args]) {
         const user = await userCreate(args.data);

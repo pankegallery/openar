@@ -23,7 +23,7 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
 }
 
-function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+function OpenARApp({ Component, pageProps }: AppPropsWithLayout) {
   
   const getLayout = Component.getLayout ?? ((page) => page)
 
@@ -41,4 +41,4 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     </ConfigContextProvider>
   );
 }
-export default MyApp;
+export default OpenARApp;

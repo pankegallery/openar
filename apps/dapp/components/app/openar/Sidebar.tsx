@@ -1,37 +1,28 @@
-import React, { MouseEventHandler,useState, useEffect } from "react";
-import {
-  HiMenu,
-  HiOutlineHome,
-  HiOutlineDocumentText,
-  HiOutlineLocationMarker,
-} from "react-icons/hi";
-import { RiCalendarEventLine } from "react-icons/ri";
-import { IoSettingsOutline } from "react-icons/io5";
+import React from "react";
+
+import { HiMenu } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
-import { default as RouterLink} from 'next/link'
+
 import {
   Box,
   Link,
-  Icon,
   useDisclosure,
   IconButton,
-  chakra
+  chakra,
 } from "@chakra-ui/react";
-import { useTranslation } from "next-i18next";
-import { InlineLanguageButtons, ActiveLink } from "~/components/ui";
+import { ActiveLink } from "~/components/ui";
 
 import { useSSRSaveMediaQuery } from "~/hooks";
+import { WalletControl } from "./WalletControl";
 
 const NavItem = ({
   title,
   path,
-  icon,
   onClick,
 }: {
   title: string;
   path: string;
   exact: boolean;
-  icon: any;
   onClick: Function;
 }) => {
   return (
@@ -62,46 +53,34 @@ const NavItem = ({
         }}
         onClick={onClick as any}
       >
-        <chakra.span><Icon as={icon} mr="2" />
-        {title}</chakra.span>
+        <chakra.span>{title}</chakra.span>
       </Link>
     </Box>
   );
 };
 
 export const Sidebar = () => {
-  const { t } = useTranslation();
-  
   const tw = useSSRSaveMediaQuery("(min-width: 55em)");
   
   const isMobile = tw ? false : true;
-
-  const { isOpen, onToggle, onClose } = useDisclosure();
+  
+  const menuDisclosure = useDisclosure();
 
   const mainNavLinks = [
     {
-      title: t("mainnav.home.title", "Home"),
-      path: "/",
+      title: "Dashboard",
+      path: "/openar",
       exact: true,
-      icon: HiOutlineHome,
     },
     {
-      title: t("mainnav.locations.title", "Locations"),
-      path: "/locations",
-      exact: false,
-      icon: HiOutlineLocationMarker,
+      title: "Artworks",
+      path: "/openar/artworks",
+      exact: true,
     },
     {
-      title: t("mainnav.events.title", "Events"),
-      path: "/events",
-      exact: false,
-      icon: RiCalendarEventLine,
-    },
-    {
-      title: t("mainnav.page.title", "About Us"),
-      path: "/page/about-us",
-      exact: false,
-      icon: HiOutlineDocumentText,
+      title: "Collection",
+      path: "/openar/collection",
+      exact: true,
     },
   ];
 
@@ -118,12 +97,10 @@ export const Sidebar = () => {
           w="40px"
           h="40px"
           zIndex="toast"
-          onClick={onToggle}
-          icon={isOpen ? <MdClose /> : <HiMenu />}
+          onClick={menuDisclosure.onToggle}
+          icon={menuDisclosure.isOpen ? <MdClose /> : <HiMenu />}
           fontSize="30px"
-          aria-label={
-            isOpen ? t("menu.close", "Close menu") : t("menu.open", "Open menu")
-          }
+          aria-label={menuDisclosure.isOpen ? "Close menu" : "Open menu"}
           _hover={{
             bg: "white",
           }}
@@ -133,7 +110,7 @@ export const Sidebar = () => {
         w="100%"
         maxW={{ base: "100%", tw: "calc(260px + 2rem)" }}
         className={`${isMobile ? "active" : "inactive"} ${
-          !isOpen || !isMobile ? "closed" : "open"
+          !menuDisclosure.isOpen || !isMobile ? "closed" : "open"
         }`}
         pr={{ base: 3, tw: 0 }}
         pl={{ base: 3, tw: 4 }}
@@ -149,7 +126,7 @@ export const Sidebar = () => {
             top: 0,
             height: "100%",
             overflow: "auto",
-            transition: "all 0.2s"
+            transition: "all 0.2s",
           },
           "&.active > div": {
             shadow: "none",
@@ -165,10 +142,16 @@ export const Sidebar = () => {
           w={{ base: "100%", tw: "260px" }}
         >
           {mainNavLinks.map((link) => {
-            return <NavItem key={link.path} {...link} onClick={onClose} />;
+            return (
+              <NavItem
+                key={link.path}
+                {...link}
+                onClick={menuDisclosure.onClose}
+              />
+            );
           })}
 
-         
+          <WalletControl/>
         </Box>
       </Box>
     </>

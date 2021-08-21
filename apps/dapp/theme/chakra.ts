@@ -43,8 +43,6 @@ const themeConfig = {
       },
       body: {
         minHeight: "100%",
-        bgGradient: "linear(-45deg, rgb(222,240,244), rgb(148,187,233)) fixed",
-        bgAttachment: "fixed",
       },
       a: {
         transitionProperty: "common",

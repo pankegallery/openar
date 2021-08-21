@@ -1,16 +1,16 @@
-import type { RoleName, PermissionNames } from "./roles";
+import type { RoleName, PermissionName } from "./roles";
 
 export interface AuthenticatedAppUserFunctions {
   is(name: RoleName): boolean;
   has(names: RoleName | RoleName[]): boolean;
-  can(permissions: PermissionNames | PermissionNames[]): boolean;
+  can(permissions: PermissionName | PermissionName[]): boolean;
 }
 
 export interface AuthenticatedAppUserData {
   id: number;
   role: RoleName;
   roles: RoleName[];
-  permissions: PermissionNames[];
+  permissions: PermissionName[];
   pseudonym: string;
   ethAddress: string;
   ens?: string;
@@ -27,7 +27,7 @@ export interface JwtPayloadAuthenticatedAppUser {
   ethAddress?: string | null;
   role?: string;
   roles?: RoleName[];
-  permissions?: PermissionNames[];
+  permissions?: PermissionName[];
 }
 
 const is = (role: RoleName, name: RoleName): boolean => name === role;
@@ -36,8 +36,8 @@ const has = (roles: RoleName[], names: RoleName | RoleName[]): boolean =>
   (Array.isArray(names) ? names : [names]).some((name) => roles.includes(name));
 
 const can = (
-  permissions: PermissionNames[],
-  perms: PermissionNames | PermissionNames[]
+  permissions: PermissionName[],
+  perms: PermissionName | PermissionName[]
 ): boolean =>
   (Array.isArray(perms) ? perms : [perms]).some((perm) =>
     permissions.includes(perm)
@@ -47,7 +47,7 @@ export const createAuthenticatedAppUser = (
   id: number,
   role: RoleName,
   roles: RoleName[],
-  permissions: PermissionNames[],
+  permissions: PermissionName[],
   pseudonym: string,
   ethAddress: string
 ): AuthenticatedAppUser => {
@@ -64,7 +64,7 @@ export const createAuthenticatedAppUser = (
     has(names: RoleName | RoleName[]) {
       return has(this.roles, names);
     },
-    can(perms: PermissionNames | PermissionNames[]) {
+    can(perms: PermissionName | PermissionName[]) {
       return can(this.permissions, perms);
     },
   };

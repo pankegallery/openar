@@ -8,7 +8,6 @@ export const store = configureStore({
   reducer,
   middleware: (getDefaultMiddleware) => {
     if (typeof window !== "undefined") {
-      console.log(123);
       return getDefaultMiddleware().concat(save({ debounce: 500 }));
     }
     return getDefaultMiddleware();

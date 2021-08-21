@@ -12,6 +12,8 @@ import {
   authRefreshing,
   authAllowRefresh,
 } from "~/redux/slices/user";
+import { cryptoWalltetDisconnect, cryptoWalltetConnect } from "~/redux/slices/crypto";
+
 import { setTabWideAccessStatus } from "~/hooks/useAuthTabWideLogInOutReload";
 
 let refreshTimeoutId: ReturnType<typeof setTimeout>;
@@ -70,24 +72,49 @@ const setRefreshing = (status: boolean) =>
 
 const isRefreshing = () => store.getState().user.refreshing;
 
-const login = async (u: AuthenticatedAppUserData): Promise<boolean> =>
+const login = async (): Promise<boolean> =>
   new Promise((resolve) => {
-    setRefreshing(false);
-    setTabWideAccessStatus("logged-in");
+    // setRefreshing(false);
+    // setTabWideAccessStatus("logged-in");
 
-    clearTimeout(refreshTimeoutId);
-    const token = getAuthToken();
+    // clearTimeout(refreshTimeoutId);
+    // const token = getAuthToken();
 
-    if (token) {
-      refreshTimeoutId = setTimeout(
-        refreshToken,
-        new Date(token.expires).getTime() - Date.now() - 10000
-      );
-    }
-    store.dispatch(userLogin({ appUserData: u, expires: getRefreshCookie() }));
+    // if (token) {
+    //   refreshTimeoutId = setTimeout(
+    //     refreshToken,
+    //     new Date(token.expires).getTime() - Date.now() - 10000
+    //   );
+    // }
+    // store.dispatch(userLogin({ appUserData: u, expires: getRefreshCookie() }));
+    console.log("user.login()");
+    store.dispatch(cryptoWalltetConnect({
+      connected: true,
+      chainId: 1,
+      ethAccount: "asdfsdf"
+    }));
 
     resolve(true);
   });
+
+// const login = async (u: AuthenticatedAppUserData): Promise<boolean> =>
+//   new Promise((resolve) => {
+//     setRefreshing(false);
+//     setTabWideAccessStatus("logged-in");
+
+//     clearTimeout(refreshTimeoutId);
+//     const token = getAuthToken();
+
+//     if (token) {
+//       refreshTimeoutId = setTimeout(
+//         refreshToken,
+//         new Date(token.expires).getTime() - Date.now() - 10000
+//       );
+//     }
+//     store.dispatch(userLogin({ appUserData: u, expires: getRefreshCookie() }));
+
+//     resolve(true);
+//   });
 
 const logout = async (): Promise<boolean> =>
   new Promise(async (resolve) => {
@@ -96,6 +123,7 @@ const logout = async (): Promise<boolean> =>
     authentication.removeRefreshCookie();
 
     store.dispatch(userLogout());
+    store.dispatch(cryptoWalltetDisconnect());
 
     // we're using resetStore (as clearStore cancels all ongoing queries)
     if (client) await client.resetStore();
