@@ -71,9 +71,9 @@ type Image {
   credits: JSON
   id: Int!
   meta: JSON
+  nanoid: String
   status: Int
   updatedAt: DateTime
-  uuid: String
 }
 
 """List all the available images in the database."""

@@ -9,8 +9,8 @@ export const authPasswordResetMutationGQL = gql`
 `;
 
 export const authPasswordRequestMutationGQL = gql`
-  mutation authPasswordRequest($scope: String!, $email: EmailAddress!) {
-    authPasswordRequest(scope: $scope, email: $email) {
+  mutation authPasswordRequest($email: EmailAddress!) {
+    authPasswordRequest(email: $email) {
       result
     }
   }

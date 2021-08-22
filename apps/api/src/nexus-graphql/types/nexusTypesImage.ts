@@ -40,7 +40,7 @@ export const Image = objectType({
   name: "Image",
   definition(t) {
     t.nonNull.int("id");
-    t.string("uuid");
+    t.string("nanoid");
     t.int("status");
     t.json("meta");
     t.json("alt");

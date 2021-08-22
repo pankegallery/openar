@@ -107,7 +107,7 @@ model Object {
 
 model Image {
   id         Int    @id @default(autoincrement())
-  uuid       String @unique @db.VarChar(48)
+  nanoid       String @unique @db.VarChar(21)
   meta       Json
   status     Int    @default(0)
   retryCount Int    @default(0)
@@ -125,7 +125,7 @@ model Image {
 
 model Model {
   id         Int    @id @default(autoincrement())
-  uuid       String @unique @db.VarChar(48)
+  nanoid       String @unique @db.VarChar(21)
   meta       Json
   status     Int    @default(0)
   retryCount Int    @default(0)
@@ -139,7 +139,7 @@ model Model {
 
 model File {
   id   Int    @id @default(autoincrement())
-  uuid String @unique @db.VarChar(48)
+  nanoid String @unique @db.VarChar(21)
   meta Json
 
   artworkId Int

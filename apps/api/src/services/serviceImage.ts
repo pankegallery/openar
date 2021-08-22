@@ -1,7 +1,7 @@
 import { Image } from "@prisma/client";
 import httpStatus from "http-status";
 import { mkdir } from "fs/promises";
-import { v4 as uuidv4 } from "uuid";
+import { nanoid } from "nanoid";
 import type { ApiImageMetaInformation } from "../types";
 import { ImageStatusEnum, ApiError } from "../utils";
 import { getApiConfig } from "../config";
@@ -13,7 +13,7 @@ const apiConfig = getApiConfig();
 
 export const imageGetUploadInfo = async (): Promise<{
   path: string;
-  uuid: string;
+  nanoid: string;
   baseUrl: string;
   uploadFolder: string;
 }> => {
@@ -39,12 +39,12 @@ export const imageGetUploadInfo = async (): Promise<{
     );
   }
 
-  return { path, uuid: uuidv4(), baseUrl, uploadFolder };
+  return { path, nanoid: nanoid(), baseUrl, uploadFolder };
 };
 
 export const imageCreate = async (
   ownerId: number,
-  imageUuid: string,
+  imageNanoId: string,
   meta: ApiImageMetaInformation,
   type: "image" | "profile" = "image",
   connectWith?: any
@@ -56,9 +56,8 @@ export const imageCreate = async (
       },
     },
 
-    uuid: imageUuid,
+    nanoid: imageNanoId,
     meta,
-    type,
     status: ImageStatusEnum.UPLOADED,
     ...connectWith,
     ...(type === "profile"

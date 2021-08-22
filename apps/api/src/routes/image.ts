@@ -3,7 +3,7 @@ import httpStatus from "http-status";
 import path from "path";
 import multer from "multer";
 import { mkdirSync } from "fs";
-import { v4 as uuidv4 } from "uuid";
+import { nanoid } from "nanoid";
 import type { ApiImageMetaInformation } from "../types";
 
 import { logger } from "../services/serviceLogging";
@@ -38,7 +38,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const extension = path.extname(file.originalname);
-    cb(null, `${uuidv4()}${extension}`);
+    cb(null, `${nanoid()}${extension}`);
   },
 });
 
@@ -47,7 +47,7 @@ export const postImageUpload = multer({ storage });
 const createImageMetaInfo = (
   file: Express.Multer.File
 ): {
-  fileUuid: string;
+  fileNanoId: string;
   metainfo: ApiImageMetaInformation;
 } => {
   const extension = path.extname(file.originalname);
@@ -57,7 +57,7 @@ const createImageMetaInfo = (
     ""
   );
 
-  const fileUuid = file.filename.replace(extension, "");
+  const fileNanoId = file.filename.replace(extension, "");
 
   // TODO: what to do about the image type?
   const metainfo: ApiImageMetaInformation = {
@@ -70,7 +70,7 @@ const createImageMetaInfo = (
     size: file.size,
   };
 
-  return { fileUuid, metainfo };
+  return { fileNanoId, metainfo };
 };
 
 export const postImage = async (req: Request, res: Response) => {
@@ -81,7 +81,7 @@ export const postImage = async (req: Request, res: Response) => {
   try {
     if (req.body.ownerId && !Number.isNaN(req.body.ownerId)) {
       if (req.file) {
-        const { fileUuid, metainfo } = createImageMetaInfo(req.file);
+        const { fileNanoId, metainfo } = createImageMetaInfo(req.file);
 
         const connectWith = req?.body?.connectWith
           ? JSON.parse(req?.body?.connectWith)
@@ -89,7 +89,7 @@ export const postImage = async (req: Request, res: Response) => {
 
         const image = await imageCreate(
           parseInt(req.body.ownerId, 10),
-          fileUuid,
+          fileNanoId,
           metainfo,
           "image",
           connectWith
@@ -119,11 +119,11 @@ export const postProfileImage = async (req: Request, res: Response) => {
   try {
     if (req.body.ownerId && !Number.isNaN(req.body.ownerId)) {
       if (req.file) {
-        const { fileUuid, metainfo } = createImageMetaInfo(req.file);
+        const { fileNanoId, metainfo } = createImageMetaInfo(req.file);
 
         const image = await imageCreate(
           parseInt(req.body.ownerId, 10),
-          fileUuid,
+          fileNanoId,
           metainfo,
           "profile"
         );

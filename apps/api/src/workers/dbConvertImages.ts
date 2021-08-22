@@ -33,11 +33,11 @@ const postMessage = (msg: string) => {
 
 const createImageSizeWebP = async (
   size: ApiConfigImageFormat,
-  uuid: string,
+  nanoid: string,
   imageMeta: any
 ): Promise<ApiImageSizeInfo> =>
   new Promise((resolve, reject) => {
-    const newImgFileName = `${uuid}-${size.width}-${size.height}.webp`;
+    const newImgFileName = `${nanoid}-${size.width}-${size.height}.webp`;
     const newImgUrl = `${apiConfig.baseUrl.api}/${imageMeta.uploadFolder}/${newImgFileName}`;
     const newImgPath =
       `${apiConfig.baseDir}/${apiConfig.publicDir}/${imageMeta.uploadFolder}/${newImgFileName}`.replace(
@@ -68,11 +68,11 @@ const createImageSizeWebP = async (
 
 const createImageSizeJpg = async (
   size: ApiConfigImageFormat,
-  uuid: string,
+  nanoid: string,
   imageMeta: any
 ): Promise<ApiImageSizeInfo> =>
   new Promise((resolve, reject) => {
-    const newImgFileName = `${uuid}-${size.width}-${size.height}.jpg`;
+    const newImgFileName = `${nanoid}-${size.width}-${size.height}.jpg`;
     const newImgUrl = `${apiConfig.baseUrl.api}/${imageMeta.uploadFolder}/${newImgFileName}`;
     const newImgPath = `${apiConfig.baseDir}/${apiConfig.publicDir}/${imageMeta.uploadFolder}/${newImgFileName}`;
 
@@ -122,7 +122,7 @@ const doChores = async () => {
       select: {
         id: true,
         meta: true,
-        uuid: true,
+        nanoid: true,
       },
     });
 
@@ -168,10 +168,10 @@ const doChores = async () => {
                   return acc;
 
                 if (size.asJpg)
-                  acc.push(createImageSizeJpg(size, image.uuid, meta));
+                  acc.push(createImageSizeJpg(size, image.nanoid, meta));
 
                 if (size.asWebP)
-                  acc.push(createImageSizeWebP(size, image.uuid, meta));
+                  acc.push(createImageSizeWebP(size, image.nanoid, meta));
 
                 return acc;
               },

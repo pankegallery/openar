@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
 export const userCreateMutationGQL = gql`
-  mutation userCreate($scope: String!, $data: UserCreateInput!) {
-    userCreate(scope: $scope, data: $data) {
+  mutation userCreate($data: UserCreateInput!) {
+    userCreate(data: $data) {
       id
       firstName
       lastName
@@ -12,8 +12,8 @@ export const userCreateMutationGQL = gql`
 `;
 
 export const userDeleteMutationGQL = gql`
-  mutation userDelete($scope: String!, $id: Int!) {
-    userDelete(scope: $scope, id: $id) {
+  mutation userDelete($id: Int!) {
+    userDelete(id: $id) {
       result
     }
   }
@@ -21,11 +21,10 @@ export const userDeleteMutationGQL = gql`
 
 export const userProfilePasswordUpdateMutationGQL = gql`
   mutation userProfilePasswordUpdate(
-    $scope: String!
     $id: Int!
     $password: String!
   ) {
-    userProfilePasswordUpdate(scope: $scope, id: $id, password: $password) {
+    userProfilePasswordUpdate(id: $id, password: $password) {
       id
       firstName
       lastName
@@ -34,15 +33,10 @@ export const userProfilePasswordUpdateMutationGQL = gql`
 `;
 
 export const userProfileUpdateMutationGQL = gql`
-  mutation userProfileUpdate(
-    $scope: String!
-    $id: Int!
-    $data: UserProfileUpdateInput!
-  ) {
-    userProfileUpdate(scope: $scope, id: $id, data: $data) {
+  mutation userProfileUpdate($id: Int!, $data: UserProfileUpdateInput!) {
+    userProfileUpdate(id: $id, data: $data) {
       id
-      firstName
-      lastName
+      pseudonym
       email
     }
   }
@@ -50,22 +44,20 @@ export const userProfileUpdateMutationGQL = gql`
 
 export const userProfileImageUpdateMutationGQL = gql`
   mutation userProfileImageUpdate(
-    $scope: String!
     $id: Int!
     $data: UserProfileImageUpdateInput!
   ) {
-    userProfileImageUpdate(scope: $scope, id: $id, data: $data) {
+    userProfileImageUpdate(id: $id, data: $data) {
       id
-      firstName
-      lastName
+      pseudonym
       email
     }
   }
 `;
 
 export const userProfileImageDeleteMutationGQL = gql`
-  mutation userProfileImageDelete($scope: String!, $id: Int!) {
-    userProfileImageDelete(scope: $scope, id: $id) {
+  mutation userProfileImageDelete($id: Int!) {
+    userProfileImageDelete(id: $id) {
       result
     }
   }
@@ -73,7 +65,6 @@ export const userProfileImageDeleteMutationGQL = gql`
 
 export const userSignupMutationGQL = gql`
   mutation userSignup(
-    $scope: String!
     $firstName: String!
     $lastName: String!
     $email: EmailAddress!
@@ -81,7 +72,6 @@ export const userSignupMutationGQL = gql`
     $acceptedTerms: Boolean!
   ) {
     userSignup(
-      scope: $scope
       data: {
         firstName: $firstName
         lastName: $lastName
@@ -104,8 +94,8 @@ export const userSignupMutationGQL = gql`
 `;
 
 export const userUpdateMutationGQL = gql`
-  mutation userUpdate($scope: String!, $id: Int!, $data: UserUpdateInput!) {
-    userUpdate(scope: $scope, id: $id, data: $data) {
+  mutation userUpdate($id: Int!, $data: UserUpdateInput!) {
+    userUpdate(id: $id, data: $data) {
       result
     }
   }
