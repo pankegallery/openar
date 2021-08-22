@@ -125,7 +125,15 @@ export const WalletConnectGate = ({
 
       try {
         if (!errors && data.authPreLogin?.tokens) {
-          await processPreLoginResult(data?.authPreLogin?.tokens);
+          // TODO: fix
+          // await new Promise((resolve) => {
+          //   setTimeout( async () => {
+          //     await processPreLoginResult(data?.authPreLogin?.tokens);
+          //     resolve(true)
+          //   }, 5000)
+            
+          // })
+          
         } else if (errors) {
           throw errors[0];
         } else {

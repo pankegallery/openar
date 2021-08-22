@@ -44,9 +44,9 @@ export const WalletControl = () => {
     msg: "",
   });
 
-  const { activate, deactivate, account, chainId} = useEthers();
+  const { activate, deactivate, account, library, active} = useEthers();
   const router = useRouter();
-  
+  console.log(activate, deactivate, account, library, active);
   const setError = (error: any) => {
     let msg: string;
     if (error instanceof NoEthereumProviderError) {
@@ -76,6 +76,7 @@ export const WalletControl = () => {
       msg,
     });
     setIsLoading(false);
+    setIsLoadingWC(false);
   };
 
   const connectToWallet = async (useWalletConnect: boolean) => {
@@ -128,6 +129,7 @@ export const WalletControl = () => {
             colorScheme="teal"
             variant="outline"
             onClick={async () => {
+              // TODO you've to call server to logout here too ...
               setIsConnected(false);
               deactivate();
               await user.logout();
@@ -137,7 +139,34 @@ export const WalletControl = () => {
             Disconnect
           </Button>
         )}
+
+<Button
+            colorScheme="teal"
+            variant="outline"
+            onClick={async () => {console.log(1);
+              try {
+                console.log(2, account);
+                console.log(library, library.getSigner, library.getSigner());
+                const signer = library.getSigner();
+                console.log(3);
+                const signedMessage = await signer.signMessage("xxx");
+                console.log(4);
+                console.log(signedMessage);
+                alert(signedMessage);
+              } catch(err) {
+                console.log(5);
+                console.log("sign", err);
+              }
+              
+            }}
+          >
+            Sign
+          </Button>
       </Box>
+
+
+      
+
       <Modal
         isOpen={walletDisclosure.isOpen}
         onClose={walletDisclosure.onClose}

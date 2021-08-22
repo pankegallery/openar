@@ -33,6 +33,9 @@ export const userRegister = async (
       "Please accept our terms and conditions"
     );
 
+  if (!data.ethAddress)
+    throw new ApiError(httpStatus.BAD_REQUEST, "Incomplete data");
+
   const user: User = await daoUserCreate(data);
 
   if (user) {
@@ -47,14 +50,14 @@ export const userRegister = async (
       {
         id: user.id,
         pseudonym: user.pseudonym ?? "",
-        ethAddress: user.ethAddress,
+        ethAddress: data.ethAddress,
       },
       ["user"] as RoleName[]
     );
 
     authPayload.user = {
       id: user.id,
-      ethAddress: user.ethAddress,
+      ethAddress: data.ethAddress,
       pseudonym: user.pseudonym,
       email: user.email,
     };
