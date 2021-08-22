@@ -105,9 +105,11 @@ const doChores = async () => {
   postMessage("Creating prisma client");
   const { PrismaClient } = Prisma;
   const prisma = new PrismaClient({
+    // TODO: how to ensuere how many connections are allowe??? Should only be one for this one...
     datasources: {
       db: {
         url: apiConfig.db.url,
+
       },
     },
   });

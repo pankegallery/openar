@@ -1,10 +1,10 @@
 import { string, object } from "yup";
 
 export const UserProfileUpdateValidationSchema = object().shape({
-  pseudonym: string(),
+  pseudonym: string().nullable(),
   email: string().email().required(),
-  url: string().url(),
-  bio: string(),
+  url: string().url().nullable(),
+  bio: string().nullable(),
   
 });
 

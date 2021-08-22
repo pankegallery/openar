@@ -48,7 +48,7 @@ const Index = () => {
     // },
   ];
 
-  console.log(data);
+  
 
   const {
     ethAddress,
@@ -59,6 +59,8 @@ const Index = () => {
     emailVerified,
     profileImage,
   } = data?.userProfileRead ?? {};
+
+  console.log(profileImage);
 
   const columns = { base: "100%", t: "1fr max(33.33%, 350px) " };
   const rows = { base: "auto 1fr", t: "1fr" };
@@ -90,7 +92,8 @@ const Index = () => {
               <Stat mb="4">
                 <StatLabel fontSize="md">Bio</StatLabel>
                 <StatNumber textTransform="capitalize" mt="-1">
-                  {bio}
+                  {bio && <Box  dangerouslySetInnerHTML={{ __html:bio}} />}
+                  
                 </StatNumber>
               </Stat>
 

@@ -16,7 +16,7 @@ export const useAuthentication = () => {
   //     : null;
 
   const appUser = createAuthenticatedAppUser({
-    id: 1,
+    id: 2,
     ethAddress: "0x324hhkjhakjdhsf324345h34",
     pseudonym: "Pseudo Peter",
     roles: [
@@ -28,7 +28,7 @@ export const useAuthentication = () => {
       "critic",
       "curator",
     ],
-    emailVerified: false,
+    emailVerified: "no",
     permissions: ["profileRead","profileUpdate"]
   });
   // appUserData && appUserData?.id && appUserData.pseudonym

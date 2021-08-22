@@ -22,10 +22,12 @@ export const daoUserCheckIsEmailTaken = async (
     email,
   };
 
-  if (!Number.isNaN(id)) {
+  if (id && !Number.isNaN(id)) {
     where = {
       ...where,
-      id,
+      id: {
+        not: id,
+      },
     };
   }
 
@@ -143,7 +145,7 @@ export const daoUserUpdate = async (
 ): Promise<User> => {
   const updateData = data;
 
-  if (await daoUserCheckIsEmailTaken(`${data.email ?? ""}`)) {
+  if (await daoUserCheckIsEmailTaken(`${data.email ?? ""}`, id)) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Email already taken");
   }
 
@@ -191,7 +193,7 @@ export const daoUserProfileImageDelete = async (
 ): Promise<User> => {
   const user: User = await prisma.user.update({
     data: {
-      heroImage: {
+      profileImage: {
         disconnect: true,
       },
     },

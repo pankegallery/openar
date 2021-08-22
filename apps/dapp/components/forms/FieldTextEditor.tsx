@@ -36,6 +36,8 @@ export const FieldTextEditor = ({
     setValue,
   } = useFormContext();
 
+  console.log(settings?.defaultValue);
+
   return (
     <FormControl
       id={id}
@@ -43,7 +45,7 @@ export const FieldTextEditor = ({
       isInvalid={errors[name]?.message}
       {...{ isRequired, isDisabled }}
     >
-      <Flex direction={{ base: "column", mw: "row", t: "column" }}>
+      <Flex direction={{ base: "column", mw: "row", t: "column" }} p="3">
         <FormLabel
           htmlFor={id}
           mb="0.5"
@@ -53,7 +55,7 @@ export const FieldTextEditor = ({
         </FormLabel>
 
         <TextEditor
-          content={settings?.defaultValue ?? ""}
+          content={settings?.defaultValue ?? undefined}
           placeholder={settings?.placeholder}
           type={type}
           name={name}

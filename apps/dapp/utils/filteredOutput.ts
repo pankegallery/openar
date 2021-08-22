@@ -77,3 +77,43 @@ export const filteredOutputByWhitelist = (
       };
     }, {});
 };
+
+export const filteredOutputByWhitelistNullToUndefined = (
+  obj: object | object[] | null | undefined,
+  keys?: string[] | undefined,
+  skipKeys?: string | string[]
+): any => {
+
+  if (obj === null) return undefined;
+
+  if (!obj) return obj;
+
+  if (!keys) {
+    // TODO: better error logging
+    return obj;
+  }
+
+  if (obj !== Object(obj)) {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map((item) => filteredOutputByWhitelist(item, keys, skipKeys));
+  }
+
+  let skipArray: string[] = [];
+
+  if (skipKeys) skipArray = Array.isArray(skipKeys) ? skipKeys : [skipKeys];
+
+  return Object.keys(obj)
+    .filter((key) => keys.includes(key) || skipArray.includes(key))
+    .reduce((acc, key) => {
+      return {
+        ...acc,
+        [key]:
+          skipArray.includes(key) || !isPlainObject((obj as any)[key])
+            ? ((obj as any)[key] !== null ? (obj as any)[key] : undefined)
+            : filteredOutputByWhitelist((obj as any)[key], keys, skipKeys),
+      };
+    }, {});
+};

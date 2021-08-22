@@ -2,6 +2,8 @@ import { parentPort } from "worker_threads";
 import { prismaDisconnect } from "../db";
 import { daoTokenDeleteExpired } from "../dao/token";
 
+// TODO: Should use independed prisma connect
+
 // ALWAY REMEMBER TO CLOSE YOU DB CONNECTION !!!
 
 // https://github.com/breejs/bree#long-running-jobs

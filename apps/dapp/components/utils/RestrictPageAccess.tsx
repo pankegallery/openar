@@ -33,10 +33,10 @@ export const RestrictPageAccess = (
       const wrappedProps = await AccessRestrictedComponent.getInitialProps({
         ...context,
       });
-      return { ...wrappedProps };
+      return { ...wrappedProps, appUser };
     }
-
-    return {};
+    // TODO: maybe this should not return an empty object ... 
+    return { appUser };
   };
 
   return hocComponent;

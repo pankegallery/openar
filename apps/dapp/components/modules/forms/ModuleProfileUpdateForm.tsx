@@ -23,7 +23,7 @@ export const ModuleProfileUpdateForm = ({
   errors?: any;
   disableNavigation?: Function;
 }) => {
-  const { firstName, lastName, profileImage } = data ?? {};
+  const { firstName, lastName, profileImage, bio } = data ?? {};
 
   const columns = { base: "100%", t: "1fr max(33.33%, 350px) " };
   const rows = { base: "auto 1fr", t: "1fr" };
@@ -81,33 +81,18 @@ export const ModuleProfileUpdateForm = ({
           />
         </FieldRow>
         <FieldRow>
-          <FieldInput
-            name="url"
-            id="url"
-            type="text"
-            label="WWW"
-            isRequired={yupIsFieldRequired(
-              "url",
-              UserProfileUpdateValidationSchema
-            )}
+          <FieldTextEditor
+            id="bio"
+            type="basic"
+            name="bio"
+            
+            label="Bio"
+            isRequired={false}          
             settings={{
-              // defaultValue: data.abc.key
-              placeholder: "How can people learn more about your work?",
+              defaultValue: bio ? bio : undefined,
+              placeholder: "Tell us something about yourself"
             }}
           />
-        </FieldRow>
-        <FieldRow>
-        <FieldTextEditor
-          id="bio"
-          type="basic"
-          name="bio"
-          
-          label="Bio"
-          isRequired={false}          
-          settings={{
-            placeholder: "Tell us something about yourself"
-          }}
-        />
         </FieldRow>
 
       </Box>

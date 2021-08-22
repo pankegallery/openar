@@ -36,8 +36,8 @@ model User {
   models      Model[]
   files       File[]
 
-  heroImageId Int?
-  heroImage   Image? @relation(fields: [heroImageId], references: [id], name: "userHeroImage")
+  profileImageId Int?
+  profileImage   Image? @relation(fields: [profileImageId], references: [id], name: "userProfileImage")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -118,7 +118,7 @@ model Image {
   ownerId    Int  
   owner      User   @relation(fields: [ownerId], references: [id])
   
-  profileImageUsers User[]    @relation("userHeroImage")
+  profileImageUsers User[]    @relation("userProfileImage")
   heroImageArtworks Artwork[] @relation("artworkHeroImage")
   heroImageObjects  Object[]  @relation("objectHeroImage")
 }

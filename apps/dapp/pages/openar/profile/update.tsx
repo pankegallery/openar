@@ -3,7 +3,7 @@ import type * as yup from "yup";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery } from "@apollo/client";
-import { Divider } from "@chakra-ui/react";
+import { Divider, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
 import { LayoutOpenAR } from "~/components/app";
@@ -14,7 +14,7 @@ import { UserProfileUpdateValidationSchema } from "~/components/modules/validati
 import { RestrictPageAccess } from "~/components/utils";
 
 import { useUserProfileUpdateMutation } from "~/hooks/mutations";
-import { filteredOutputByWhitelist } from "~/utils";
+import { filteredOutputByWhitelistNullToUndefined } from "~/utils";
 import {
   useAuthentication,
   useTypedDispatch,
@@ -49,7 +49,7 @@ const Update = () => {
 
   const [firstMutation, firstMutationResults] = useUserProfileUpdateMutation();
   const [isFormError, setIsFormError] = useState(false);
-
+  
   const disableForm = firstMutationResults.loading;
 
   const formMethods = useForm({
@@ -65,7 +65,7 @@ const Update = () => {
 
   useEffect(() => {
     reset(
-      filteredOutputByWhitelist(data?.userProfileRead, [
+      filteredOutputByWhitelistNullToUndefined(data?.userProfileRead, [
         "pseudonym",
         "email",
         "bio",
@@ -80,20 +80,23 @@ const Update = () => {
     setIsFormError(false);
     try {
       if (appUser) {
+
+        console.log(appUser);
+
         const { errors } = await firstMutation(
           appUser?.id,
-          filteredOutputByWhitelist(newData, [
-            "pseudonym",
-            "email",
-            "bio",
-            "url",
-          ])
+          {
+            pseudonym: newData.pseudonym ?? "",
+            email: newData.email ?? "",
+            bio: newData.bio ?? "",
+            url: newData.url ?? "",
+          }
         );
 
         if (!errors) {
           dispatch(
             userProfileUpdate({
-              pseudonym: newData.pseudonym,
+              pseudonym: newData.pseudonym ?? "",
               email: newData.email,
               emailVerified:
                 data?.userProfileRead?.email &&
@@ -145,6 +148,8 @@ const Update = () => {
     },
   ];
 
+  const errorMessage = firstMutationResults.error ? firstMutationResults?.error?.message : "";
+
   return (
     <>
       <FormNavigationBlock shouldBlock={isDirty && !isSubmitting} />
@@ -153,12 +158,7 @@ const Update = () => {
           <fieldset disabled={disableForm}>
             <ModuleSubNav breadcrumb={breadcrumb} buttonList={buttonList} />
             <ModulePage isLoading={loading} isError={!!error}>
-              {isFormError && (
-                <>
-                  <TextErrorMessage error="general.writeerror.desc" />
-                  <Divider />
-                </>
-              )}
+              {isFormError && <Text width="100%" lineHeight="3rem" px="3" borderBottom="1px solid #fff" color="red.400">{errorMessage}</Text>}
               <ModuleProfileUpdateForm
                 data={data?.userProfileRead}
                 disableNavigation={setDisableNavigation}

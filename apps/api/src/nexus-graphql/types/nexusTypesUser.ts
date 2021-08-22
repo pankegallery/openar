@@ -65,6 +65,8 @@ const UserBaseNode = interfaceType({
       type: "Image",
 
       async resolve(...[parent]) {
+        console.log(parent);
+
         if (parent?.profileImageId)
           return daoImageGetById(parent.profileImageId);
 
@@ -377,7 +379,7 @@ export const UserMutations = extendType({
       },
 
       // TODO: authorize: :  async (...[, args, ctx]) => {
-      //   const user = await daoUserFindFirst({ heroImageId: args.id });
+      //   const user = await daoUserFindFirst({ profileImageId: args.id });
 
       //   if (user) {
       //     return (
