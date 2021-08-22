@@ -50,14 +50,27 @@ const apiConfig = getApiConfig();
 const UserBaseNode = interfaceType({
   name: "UserBaseNode",
   resolveType: (data) =>
-    typeof (data as any).role !== "undefined" ? "User" : "ProfileUser",
+    typeof (data as any).role !== "undefined" ? "User" : "PublicUser",
   definition(t) {
     t.nonNull.int("id");
     t.int("profileImageId");
-    t.string("firstName");
-    t.string("lastName");
+    t.string("pseudonym");
+    t.string("ethAddress");
     t.email("email");
     t.boolean("emailVerified");
+    t.string("url");
+    t.string("bio");
+    t.list.string("roles");
+    t.field("profileImage", {
+      type: "Image",
+
+      async resolve(...[parent]) {
+        if (parent?.profileImageId)
+          return daoImageGetById(parent.profileImageId);
+
+        return null;
+      },
+    });
   },
 });
 
@@ -65,24 +78,14 @@ export const User = objectType({
   name: "User",
   definition(t) {
     t.implements(UserBaseNode);
-    t.string("role");
     t.boolean("isBanned");
     t.date("createdAt");
     t.date("updatedAt");
   },
 });
 
-export const AdminUser = objectType({
-  name: "AdminUser",
-  definition(t) {
-    t.int("id");
-    t.string("firstName");
-    t.string("lastName");
-  },
-});
-
-export const ProfileUser = objectType({
-  name: "ProfileUser",
+export const PublicUser = objectType({
+  name: "PublicUser",
   definition(t) {
     t.implements(UserBaseNode);
     t.field("profileImage", {
@@ -219,7 +222,7 @@ export const UserQueries = extendType({
     });
 
     t.nonNull.field("userProfileRead", {
-      type: "ProfileUser",
+      type: "PublicUser",
 
       args: {
         id: nonNull(intArg()),
@@ -250,8 +253,9 @@ export const UserSignupInput = inputObjectType({
 export const UserProfileUpdateInput = inputObjectType({
   name: "UserProfileUpdateInput",
   definition(t) {
-    t.nonNull.string("firstName");
-    t.nonNull.string("lastName");
+    t.nonNull.string("pseudonym");
+    t.nonNull.string("bio");
+    t.nonNull.string("url");
     t.nonNull.email("email");
   },
 });
@@ -271,9 +275,9 @@ export const UserCreateInput = inputObjectType({
 export const UserUpdateInput = inputObjectType({
   name: "UserUpdateInput",
   definition(t) {
-    t.nonNull.string("firstName");
-    t.nonNull.string("lastName");
-    t.nonNull.string("email");
+    t.nonNull.string("pseudonym");
+    t.nonNull.string("url");
+    t.nonNull.string("bio");
     t.nonNull.string("role");
     t.nonNull.boolean("isBanned");
   },

@@ -71,9 +71,10 @@ export interface NexusGenInputs {
     role: string; // String!
   }
   UserProfileUpdateInput: { // input type
+    bio: string; // String!
     email: NexusGenScalars['EmailAddress']; // EmailAddress!
-    firstName: string; // String!
-    lastName: string; // String!
+    pseudonym: string; // String!
+    url: string; // String!
   }
   UserSignupInput: { // input type
     acceptedTerms: boolean; // Boolean!
@@ -83,11 +84,11 @@ export interface NexusGenInputs {
     password: string; // String!
   }
   UserUpdateInput: { // input type
-    email: string; // String!
-    firstName: string; // String!
+    bio: string; // String!
     isBanned: boolean; // Boolean!
-    lastName: string; // String!
+    pseudonym: string; // String!
     role: string; // String!
+    url: string; // String!
   }
 }
 
@@ -107,11 +108,6 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
-  AdminUser: { // root type
-    firstName?: string | null; // String
-    id?: number | null; // Int
-    lastName?: string | null; // String
-  }
   AuthPayload: { // root type
     tokens?: NexusGenRootTypes['AuthPayloadTokens'] | null; // AuthPayloadTokens
     user?: NexusGenRootTypes['AuthUser'] | null; // AuthUser
@@ -162,26 +158,31 @@ export interface NexusGenObjects {
     status: number; // Int!
   }
   Mutation: {};
-  ProfileUser: { // root type
+  PublicUser: { // root type
+    bio?: string | null; // String
     email?: NexusGenScalars['EmailAddress'] | null; // EmailAddress
     emailVerified?: boolean | null; // Boolean
-    firstName?: string | null; // String
+    ethAddress?: string | null; // String
     id: number; // Int!
-    lastName?: string | null; // String
     profileImageId?: number | null; // Int
+    pseudonym?: string | null; // String
+    roles?: Array<string | null> | null; // [String]
+    url?: string | null; // String
   }
   Query: {};
   User: { // root type
+    bio?: string | null; // String
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     email?: NexusGenScalars['EmailAddress'] | null; // EmailAddress
     emailVerified?: boolean | null; // Boolean
-    firstName?: string | null; // String
+    ethAddress?: string | null; // String
     id: number; // Int!
     isBanned?: boolean | null; // Boolean
-    lastName?: string | null; // String
     profileImageId?: number | null; // Int
-    role?: string | null; // String
+    pseudonym?: string | null; // String
+    roles?: Array<string | null> | null; // [String]
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    url?: string | null; // String
   }
   UsersQueryResult: { // root type
     totalCount?: number | null; // Int
@@ -190,7 +191,7 @@ export interface NexusGenObjects {
 }
 
 export interface NexusGenInterfaces {
-  UserBaseNode: NexusGenRootTypes['ProfileUser'] | NexusGenRootTypes['User'];
+  UserBaseNode: NexusGenRootTypes['PublicUser'] | NexusGenRootTypes['User'];
 }
 
 export interface NexusGenUnions {
@@ -201,11 +202,6 @@ export type NexusGenRootTypes = NexusGenInterfaces & NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
-  AdminUser: { // field return type
-    firstName: string | null; // String
-    id: number | null; // Int
-    lastName: string | null; // String
-  }
   AuthPayload: { // field return type
     tokens: NexusGenRootTypes['AuthPayloadTokens'] | null; // AuthPayloadTokens
     user: NexusGenRootTypes['AuthUser'] | null; // AuthUser
@@ -270,56 +266,61 @@ export interface NexusGenFieldTypes {
     userProfileUpdate: NexusGenRootTypes['User']; // User!
     userUpdate: NexusGenRootTypes['BooleanResult']; // BooleanResult!
   }
-  ProfileUser: { // field return type
+  PublicUser: { // field return type
+    bio: string | null; // String
     email: NexusGenScalars['EmailAddress'] | null; // EmailAddress
     emailVerified: boolean | null; // Boolean
-    firstName: string | null; // String
+    ethAddress: string | null; // String
     id: number; // Int!
-    lastName: string | null; // String
     profileImage: NexusGenRootTypes['Image'] | null; // Image
     profileImageId: number | null; // Int
+    pseudonym: string | null; // String
+    roles: Array<string | null> | null; // [String]
+    url: string | null; // String
   }
   Query: { // field return type
     imageRead: NexusGenRootTypes['Image']; // Image!
     imageStatus: NexusGenRootTypes['ImageStatus']; // ImageStatus!
     images: NexusGenRootTypes['ImageQueryResult'] | null; // ImageQueryResult
     userByEthAddress: NexusGenRootTypes['User']; // User!
-    userProfileRead: NexusGenRootTypes['ProfileUser']; // ProfileUser!
+    userProfileRead: NexusGenRootTypes['PublicUser']; // PublicUser!
     userRead: NexusGenRootTypes['User']; // User!
     users: NexusGenRootTypes['UsersQueryResult'] | null; // UsersQueryResult
   }
   User: { // field return type
+    bio: string | null; // String
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     email: NexusGenScalars['EmailAddress'] | null; // EmailAddress
     emailVerified: boolean | null; // Boolean
-    firstName: string | null; // String
+    ethAddress: string | null; // String
     id: number; // Int!
     isBanned: boolean | null; // Boolean
-    lastName: string | null; // String
+    profileImage: NexusGenRootTypes['Image'] | null; // Image
     profileImageId: number | null; // Int
-    role: string | null; // String
+    pseudonym: string | null; // String
+    roles: Array<string | null> | null; // [String]
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+    url: string | null; // String
   }
   UsersQueryResult: { // field return type
     totalCount: number | null; // Int
     users: Array<NexusGenRootTypes['User'] | null> | null; // [User]
   }
   UserBaseNode: { // field return type
+    bio: string | null; // String
     email: NexusGenScalars['EmailAddress'] | null; // EmailAddress
     emailVerified: boolean | null; // Boolean
-    firstName: string | null; // String
+    ethAddress: string | null; // String
     id: number; // Int!
-    lastName: string | null; // String
+    profileImage: NexusGenRootTypes['Image'] | null; // Image
     profileImageId: number | null; // Int
+    pseudonym: string | null; // String
+    roles: Array<string | null> | null; // [String]
+    url: string | null; // String
   }
 }
 
 export interface NexusGenFieldTypeNames {
-  AdminUser: { // field return type name
-    firstName: 'String'
-    id: 'Int'
-    lastName: 'String'
-  }
   AuthPayload: { // field return type name
     tokens: 'AuthPayloadTokens'
     user: 'AuthUser'
@@ -384,47 +385,57 @@ export interface NexusGenFieldTypeNames {
     userProfileUpdate: 'User'
     userUpdate: 'BooleanResult'
   }
-  ProfileUser: { // field return type name
+  PublicUser: { // field return type name
+    bio: 'String'
     email: 'EmailAddress'
     emailVerified: 'Boolean'
-    firstName: 'String'
+    ethAddress: 'String'
     id: 'Int'
-    lastName: 'String'
     profileImage: 'Image'
     profileImageId: 'Int'
+    pseudonym: 'String'
+    roles: 'String'
+    url: 'String'
   }
   Query: { // field return type name
     imageRead: 'Image'
     imageStatus: 'ImageStatus'
     images: 'ImageQueryResult'
     userByEthAddress: 'User'
-    userProfileRead: 'ProfileUser'
+    userProfileRead: 'PublicUser'
     userRead: 'User'
     users: 'UsersQueryResult'
   }
   User: { // field return type name
+    bio: 'String'
     createdAt: 'DateTime'
     email: 'EmailAddress'
     emailVerified: 'Boolean'
-    firstName: 'String'
+    ethAddress: 'String'
     id: 'Int'
     isBanned: 'Boolean'
-    lastName: 'String'
+    profileImage: 'Image'
     profileImageId: 'Int'
-    role: 'String'
+    pseudonym: 'String'
+    roles: 'String'
     updatedAt: 'DateTime'
+    url: 'String'
   }
   UsersQueryResult: { // field return type name
     totalCount: 'Int'
     users: 'User'
   }
   UserBaseNode: { // field return type name
+    bio: 'String'
     email: 'EmailAddress'
     emailVerified: 'Boolean'
-    firstName: 'String'
+    ethAddress: 'String'
     id: 'Int'
-    lastName: 'String'
+    profileImage: 'Image'
     profileImageId: 'Int'
+    pseudonym: 'String'
+    roles: 'String'
+    url: 'String'
   }
 }
 
@@ -505,11 +516,11 @@ export interface NexusGenArgTypes {
 }
 
 export interface NexusGenAbstractTypeMembers {
-  UserBaseNode: "ProfileUser" | "User"
+  UserBaseNode: "PublicUser" | "User"
 }
 
 export interface NexusGenTypeInterfaces {
-  ProfileUser: "UserBaseNode"
+  PublicUser: "UserBaseNode"
   User: "UserBaseNode"
 }
 

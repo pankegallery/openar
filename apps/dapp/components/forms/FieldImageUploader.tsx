@@ -21,14 +21,13 @@ import {
   useAxiosCancelToken,
 } from "~/hooks";
 
-import { useConfigContext } from "~/providers";
-
 import { useFormContext } from "react-hook-form";
 
 import { FormNavigationBlock, FieldErrorMessage } from ".";
 import { ApiImage, ApiImageProps } from "~/components/ui";
 
 import { authentication } from "~/services";
+import { appConfig } from "~/config";
 
 const humanFileSize = (
   size: number | undefined,
@@ -138,7 +137,7 @@ export const FieldImageUploader = ({
   route?: string;
 }) => {
   const [appUser] = useAuthentication();
-  const config = useConfig();
+  
   const { createNewCancelToken, isCancel, getCancelToken, getCanceler } =
     useAxiosCancelToken();
   const [progressInfo, setProgressInfo] =
@@ -193,7 +192,7 @@ export const FieldImageUploader = ({
           await axios
             .request({
               method: "post",
-              url: `${config.apiUrl}/${route}`,
+              url: `${appConfig.apiUrl}/${route}`,
               headers: {
                 "Content-Type": "multipart/form-data",
                 ...(authentication.getAuthToken()

@@ -161,9 +161,10 @@ export const WalletConnectGate = ({
     account,
   ]);
 
-  useEffect(() => {
-    if (loginStatus === "logged-out" && router.asPath !== "/") router.push("/");
-  }, [loginStatus, router]);
+  // TODO: enable
+  // useEffect(() => {
+  //   if (loginStatus === "logged-out" && router.asPath !== "/") router.push("/");
+  // }, [loginStatus, router]);
 
   return <>{children}</>;
 };

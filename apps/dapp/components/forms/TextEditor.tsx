@@ -343,7 +343,10 @@ export const TextEditor = ({
   );
   extensions.push(HardBreak);
 
-  if (placeholder) extensions.push(Placeholder.configure({ placeholder }));
+
+  if (placeholder)
+    extensions.push(Placeholder.configure({ placeholder }));
+  
 
   const editor = useEditor({
     editable: true,

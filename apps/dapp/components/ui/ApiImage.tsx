@@ -172,7 +172,7 @@ export const ApiImage = ({
     const aPB = forceAspectRatioPB ?? imageAspectRationPB;
     content = (
       <Box className="aspect" pb={`${aPB}%`}>
-        <Box className="ratio">{content}</Box>
+        <Box className="ratio" bg="red">{content}</Box>
       </Box>
     );
   }

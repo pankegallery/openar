@@ -3,6 +3,7 @@ export * from "./TimeField";
 export * from "./TextErrorMessage";
 export * from "./LocationPicker";
 export * from "./TextEditor";
+export * from "./FieldTextEditor";
 export * from "./FieldInput";
 export * from "./FieldSelect";
 export * from "./FieldRow";

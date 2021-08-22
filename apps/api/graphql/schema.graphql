@@ -2,12 +2,6 @@
 ### Do not make changes to this file directly
 
 
-type AdminUser {
-  firstName: String
-  id: Int
-  lastName: String
-}
-
 type AuthPayload {
   tokens: AuthPayloadTokens
   user: AuthUser
@@ -129,14 +123,17 @@ type Mutation {
   userUpdate(data: UserUpdateInput!, id: Int!): BooleanResult!
 }
 
-type ProfileUser implements UserBaseNode {
+type PublicUser implements UserBaseNode {
+  bio: String
   email: EmailAddress
   emailVerified: Boolean
-  firstName: String
+  ethAddress: String
   id: Int!
-  lastName: String
   profileImage: Image
   profileImageId: Int
+  pseudonym: String
+  roles: [String]
+  url: String
 }
 
 type Query {
@@ -144,31 +141,38 @@ type Query {
   imageStatus(id: Int!): ImageStatus!
   images(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, taxonomyId: Int, where: JSON): ImageQueryResult
   userByEthAddress(ethAddress: String!): User!
-  userProfileRead(id: Int!): ProfileUser!
+  userProfileRead(id: Int!): PublicUser!
   userRead(id: Int!): User!
   users(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): UsersQueryResult
 }
 
 type User implements UserBaseNode {
+  bio: String
   createdAt: DateTime
   email: EmailAddress
   emailVerified: Boolean
-  firstName: String
+  ethAddress: String
   id: Int!
   isBanned: Boolean
-  lastName: String
+  profileImage: Image
   profileImageId: Int
-  role: String
+  pseudonym: String
+  roles: [String]
   updatedAt: DateTime
+  url: String
 }
 
 interface UserBaseNode {
+  bio: String
   email: EmailAddress
   emailVerified: Boolean
-  firstName: String
+  ethAddress: String
   id: Int!
-  lastName: String
+  profileImage: Image
   profileImageId: Int
+  pseudonym: String
+  roles: [String]
+  url: String
 }
 
 input UserCreateInput {
@@ -182,9 +186,10 @@ input UserCreateInput {
 }
 
 input UserProfileUpdateInput {
+  bio: String!
   email: EmailAddress!
-  firstName: String!
-  lastName: String!
+  pseudonym: String!
+  url: String!
 }
 
 input UserSignupInput {
@@ -196,11 +201,11 @@ input UserSignupInput {
 }
 
 input UserUpdateInput {
-  email: String!
-  firstName: String!
+  bio: String!
   isBanned: Boolean!
-  lastName: String!
+  pseudonym: String!
   role: String!
+  url: String!
 }
 
 """

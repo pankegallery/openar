@@ -12,7 +12,6 @@ export const FieldRow = ({
     return (
       <Flex
         direction="column"
-        mt="4"
         _first={{ mt: 0 }}
         border="2px solid"
         borderColor="red"
@@ -27,7 +26,7 @@ export const FieldRow = ({
     );
 
   return (
-    <Flex mt="4" _first={{ mt: 0 }} w="100%">
+    <Flex _first={{ mt: 0 }} w="100%">
       {children}
     </Flex>
   );

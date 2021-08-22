@@ -6,15 +6,22 @@ export interface AuthenticatedAppUserFunctions {
   can(permissions: PermissionName | PermissionName[]): boolean;
 }
 
+export type EmailVerificationState = "unknown" | "yes" | "no";
+
+export interface AuthenticatedAppUserUpdateData {
+  pseudonym: string;
+  email: string;
+  emailVerified: EmailVerificationState;
+}
+
 export interface AuthenticatedAppUserData {
   id: number;
-  role: RoleName;
   roles: RoleName[];
   permissions: PermissionName[];
   pseudonym: string;
   ethAddress: string;
   ens?: string;
-  emailVerified: boolean;
+  emailVerified: EmailVerificationState;
 }
 
 export interface AuthenticatedAppUser
@@ -26,7 +33,6 @@ export interface JwtPayloadAuthenticatedAppUser {
   pseudonym?: string | null;
   email?: string | null;
   ethAddress?: string | null;
-  role?: string;
   roles?: RoleName[];
   permissions?: PermissionName[];
 }

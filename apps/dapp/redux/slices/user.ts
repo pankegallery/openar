@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { AuthenticatedAppUserData } from "~/appuser";
+import type { AuthenticatedAppUserData, AuthenticatedAppUserUpdateData, EmailVerificationState } from "~/appuser";
 
-type EmailVerificationState = "unknown" | "yes" | "no";
 
 type UserLoginPayload = {
   appUserData: AuthenticatedAppUserData;
@@ -36,18 +35,17 @@ const userSlice = createSlice({
     expires: new Date("1970-01-01").toISOString(),
   } as UserState,
   reducers: {
-    userProfileUpdate(state, action: PayloadAction<AuthenticatedAppUserData>) {
+    userProfileUpdate(state, action: PayloadAction<AuthenticatedAppUserUpdateData>) {
       if (state.appUserData)
         state.appUserData = {
           ...state.appUserData,
           ...{
             pseudonym: action.payload.pseudonym,
-            ethAddress: action.payload.ethAddress,
+            email: action.payload.email,
+            emailVerified:  (action.payload.emailVerified ? "yes" : "no") as EmailVerificationState,            
           },
         };
 
-      if (action.payload.emailVerified)
-        state.emailVerified = action.payload.emailVerified ? "yes" : "no";
     },
     userLogout(state) {
       state.justConnected = false;

@@ -78,11 +78,17 @@ const themeConfig = {
       "select,option": {
         fontFamily: "Open Sans, Helvetica, Arial, sans-serif",
       },
+
+      ".openar.content": {
+        bg: "var(--chakra-colors-openar-muddygreen)",
+        color: "#fff"
+      }
     },
   },
   colors: {
     openar: {
       error: "#c93030",
+      muddygreen: "#99a18a",
     },
     wine: {
       50: "#fde9ff",
@@ -160,7 +166,7 @@ const defaultPropsForFormComponentents = (components: string[]): object => {
         ...options,
         [key]: {
           defaultProps: {
-            focusBorderColor: "gray.500",
+            focusBorderColor: "gray.400",
             errorBorderColor: "red.400",
           },
         },
@@ -181,15 +187,15 @@ export const chakraTheme = extendTheme(
   ]),
 
   withDefaultColorScheme({
-    colorScheme: "wine",
+    colorScheme: "gray",
     components: ["Button", "Badge", "Checkbox", "Switch"],
   }),
   withDefaultVariant({
-    variant: "solid",
+    variant: "outline",
     components: ["Button", "IconButton"],
   }),
   withDefaultVariant({
-    variant: "outline",
+    variant: "flushed",
     components: ["Input", "NumberInput", "PinInput"],
   }),
   withDefaultSize({

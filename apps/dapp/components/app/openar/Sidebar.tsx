@@ -73,14 +73,19 @@ export const Sidebar = () => {
       exact: true,
     },
     {
+      title: "Profile",
+      path: "/openar/profile",
+      exact: false,
+    },
+    {
       title: "Artworks",
       path: "/openar/artworks",
-      exact: true,
+      exact: false,
     },
     {
       title: "Collection",
       path: "/openar/collection",
-      exact: true,
+      exact: false,
     },
   ];
 
@@ -93,7 +98,7 @@ export const Sidebar = () => {
           size="sm"
           position="fixed"
           top="4px"
-          left="4"
+          left="2"
           w="40px"
           h="40px"
           zIndex="toast"
@@ -108,21 +113,24 @@ export const Sidebar = () => {
       )}
       <Box
         w="100%"
-        maxW={{ base: "100%", tw: "calc(260px + 2rem)" }}
+        h="100vh"
+        maxW={{ base: "100%", tw: "max(250px, 20vw)" }}
         className={`${isMobile ? "active" : "inactive"} ${
           !menuDisclosure.isOpen || !isMobile ? "closed" : "open"
         }`}
-        pr={{ base: 3, tw: 0 }}
-        pl={{ base: 3, tw: 4 }}
-        pb={{ base: 3, tw: 4 }}
-        position="sticky"
-        top={{ base: "48px", tw: "68px" }}
+        overflow="hidden"
+        overflowY="auto"
         sx={{
+          "&.inactive": {
+            position: "sticky",
+            top: 0,
+          },
           "&.active": {
             position: "fixed",
             transform: "translateX(-100%)",
             zIndex: "popover",
             bg: "white",
+            pt:"10",
             top: 0,
             height: "100%",
             overflow: "auto",
@@ -137,9 +145,10 @@ export const Sidebar = () => {
         }}
       >
         <Box
-          layerStyle="pageContainerWhite"
-          mt={{ base: 12, tw: "1.37rem" }}
-          w={{ base: "100%", tw: "260px" }}
+          w="100%"
+          p="4"
+          minH="100%"
+          borderRight="1px solid #fff"
         >
           {mainNavLinks.map((link) => {
             return (

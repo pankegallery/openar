@@ -12,11 +12,9 @@ export const Footer = ({ type = "full" }: { type?: string }) => {
     <Flex
       textAlign="center"
       justifyContent="center"
-      position="fixed"
-      bottom="0"
-      left="50%"
-      zIndex="5"
-      transform="translateX(-50%) translateY(-25%)"
+      w="100%"
+      borderTop="1px solid #fff"
+      height="4rem"
     >
       <HStack spacing="8">
         <Link href={`mailto:${config.contactEmail}`}>Contact</Link>

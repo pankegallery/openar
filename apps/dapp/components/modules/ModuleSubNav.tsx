@@ -12,6 +12,7 @@ import Link from "next/link";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import type { ModuleAccessRules } from "~/types";
 import { useAuthentication } from "~/hooks";
+import { ReactElement } from "react";
 
 interface BreadcrumbElement {
   title: string | React.ReactNode;
@@ -85,11 +86,11 @@ export const ModuleSubNav = ({
         key: `bl-${index}`,
       };
 
-      let b;
+      let b: ReactElement;
       switch (button.type) {
         case "navigation":
           b = (
-            <Link href={`${button.to}`} passHref>
+            <Link href={`${button.to}`} passHref key={`bl-${index}`}>
               <ChakraLink as={Button} isDisabled={button.isDisabled}>
                 {button?.label}
               </ChakraLink>
@@ -99,7 +100,7 @@ export const ModuleSubNav = ({
 
         case "back":
           b = (
-            <Link href={`${button.to}`} passHref>
+            <Link href={`${button.to}`} passHref key={`bl-${index}`}>
               <ChakraLink
                 as={Button}
                 isDisabled={button.isDisabled}
@@ -142,16 +143,19 @@ export const ModuleSubNav = ({
   return (
     <>
       <Box
-        layerStyle="pageContainerWhite"
-        mb={{ base: 3, tw: 4 }}
         position="sticky"
-        top={{ base: "48px", tw: "70px" }}
+        top={0}
         zIndex="200"
+        height="4rem"
+        borderBottom="1px solid #fff"
+        bg="openar.muddygreen"
       >
         <Flex
           justifyContent="space-between"
           alignItems={{ base: "flex-start", mw: "center" }}
           direction={{ base: "column", mw: "row" }}
+          height="100%"
+          px="3"
         >
           <Heading as="h2" fontSize={{ base: "md", t: "2xl" }}>
             {breadcrumb.map((element, index) => {
@@ -179,10 +183,11 @@ export const ModuleSubNav = ({
             })}
           </Heading>
           <Box>
-            {permissisionedButtonList &&
-              permissisionedButtonList.length > 0 && (
-                <HStack spacing="2">{permissisionedButtonList}</HStack>
-              )}
+            {permissisionedButtonList && permissisionedButtonList.length > 0 && (
+              <HStack spacing="2" key="">
+                {permissisionedButtonList}
+              </HStack>
+            )}
 
             {children}
           </Box>

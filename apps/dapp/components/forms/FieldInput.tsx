@@ -16,6 +16,8 @@ import {
   InputRightElement,
   IconButton,
   useBoolean,
+  Flex,
+  Box,
 } from "@chakra-ui/react";
 
 import { HiOutlineEyeOff, HiOutlineEye } from "react-icons/hi";
@@ -115,6 +117,7 @@ export const FieldInput = ({
 
   let input = (
     <Input
+      variant="flushed"
       name={name}
       onBlur={(event) => {
         onBlur(event);
@@ -128,6 +131,9 @@ export const FieldInput = ({
       ref={(e: HTMLInputElement) => {
         ref(e);
         fieldRef.current = e; // you can still assign to ref
+      }}
+      _placeholder={{
+        color: "gray.200",
       }}
     />
   );
@@ -180,11 +186,33 @@ export const FieldInput = ({
       isInvalid={errors[name]?.message}
       {...{ isRequired, isDisabled }}
     >
-      <FormLabel htmlFor={id} mb="0.5">
-        {label}
-      </FormLabel>
-      {input}
-      <FieldErrorMessage error={errors[name]?.message} />
+      <Box position="relative" alignItems="center">
+        <FormLabel
+          w="20%"
+          htmlFor={id}
+          m={0}
+          position="absolute"
+          top="50%"
+          left="0"
+          transform="translateY(-50%)"
+          pl="3"
+        >
+          {label}
+        </FormLabel>
+        {input}
+        {errors[name]?.message && (
+          <Box
+            m={0}
+            position="absolute"
+            top="50%"
+            right="0"
+            transform="translateY(-50%)"
+            pr="3"
+          >
+            <FieldErrorMessage error={errors[name]?.message} />
+          </Box>
+        )}
+      </Box>
     </FormControl>
   );
 };

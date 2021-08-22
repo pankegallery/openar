@@ -1,5 +1,5 @@
 import React, { ReactNode, useContext } from "react";
-import { Grid } from "@chakra-ui/react";
+import { Grid, Box } from "@chakra-ui/react";
 import { ThemeProvider } from "styled-components";
 
 import { useSSRSaveMediaQuery } from "~/hooks";
@@ -15,23 +15,24 @@ export const LayoutOpenAR = ({ children }: { children: ReactNode }) => {
       <AuthenticationSessionActiveGate>
         <ThemeProvider theme={styledComponentsTheme}>
           <Grid
-            w={isMobile ? "100%" : "max(350px, 20vw)"}
-            templateColumns={isMobile ? "1" : "2"}
-            gap="4"
+            templateColumns={isMobile ? "100%" : "max(250px, 20vw) 1fr"}
             alignItems="start"
-            pt={{ base: "3.8rem", tw: "4rem" }}
-            pb={{ base: "1.5rem", tw: "1.5rem" }}
             className="openar content"
+            minH="100%"
           >
             <Sidebar />
-            <main>
-              {children}
+            <Grid 
+              className="main" 
+              templateRows={isMobile ? "100%" : "1fr 4rem"}
+              minH="100vh"
+              >
+              <Box>{children}</Box>
               <Footer />
-            </main>
+            </Grid>
           </Grid>
           <style jsx global>{`
             body {
-              background-color: #a0a387;
+              background-color: var(--chakra-colors-openar-muddygreen);
               color: #fff;
             }
           `}</style>
@@ -40,4 +41,4 @@ export const LayoutOpenAR = ({ children }: { children: ReactNode }) => {
     </WalletConnectGate>
   );
 };
-export default LayoutOpenAR;
+export default LayoutOpenAR; 

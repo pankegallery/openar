@@ -24,30 +24,23 @@ const OpenARDashboard = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <div>
-          {/* {!account && (
-            <button onClick={() => activateBrowserWallet()}> Connect </button>
-          )}
-          {account && <button onClick={deactivate}> Disconnect </button>}
+      {/* {!account && (
+        <button onClick={() => activateBrowserWallet()}> Connect </button>
+      )}
+      {account && <button onClick={deactivate}> Disconnect </button>}
 
-          {stakingBalance && (
-            <p>ETH2 staking balance: {formatUnits(stakingBalance, 18)} ETH </p>
-          )}
-          {account && <p>Account: {account}</p>}
-          {userBalance && (
-            <p>Ether balance: {formatUnits(userBalance, 18)} ETH </p>
-          )} */}
+      {stakingBalance && (
+        <p>ETH2 staking balance: {formatUnits(stakingBalance, 18)} ETH </p>
+      )}
+      {account && <p>Account: {account}</p>}
+      {userBalance && (
+        <p>Ether balance: {formatUnits(userBalance, 18)} ETH </p>
+      )} */}
 
-          {`${process.env.NEXT_PUBLIC_INFURA_URL}`}
-
-          {}
-        </div>
-      </main>
-
-      <footer>
-        FOOOTERE 
-      </footer>
+      {`${process.env.NEXT_PUBLIC_INFURA_ID}`}
+  safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>safkakfdssadjfhjkds<br/>
+         
+      {}
     </Box>
   );
 };

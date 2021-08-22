@@ -10,10 +10,30 @@ export const useAuthentication = () => {
   const router = useRouter();
   const { authenticated, appUserData } = useTypedSelector(({ user }) => user);
 
-  const appUser =
-    appUserData && appUserData?.id && appUserData.pseudonym
-      ? createAuthenticatedAppUser(appUserData)
-      : null;
+  // const appUser =
+  //   appUserData && appUserData?.id && appUserData.pseudonym
+  //     ? createAuthenticatedAppUser(appUserData)
+  //     : null;
+
+  const appUser = createAuthenticatedAppUser({
+    id: 1,
+    ethAddress: "0x324hhkjhakjdhsf324345h34",
+    pseudonym: "Pseudo Peter",
+    roles: [
+      "user",
+      "administrator",
+      "api",
+      "artist",
+      "collector",
+      "critic",
+      "curator",
+    ],
+    emailVerified: false,
+    permissions: ["profileRead","profileUpdate"]
+  });
+  // appUserData && appUserData?.id && appUserData.pseudonym
+  //   ?
+  //   : null;
 
   const isLoggedIn = (): boolean => {
     return (authenticated && appUserData !== null) || user.isRefreshing();
@@ -37,5 +57,8 @@ export const useAuthentication = () => {
     return result;
   };
 
-  return [appUser, { isLoggedIn, login, logout, preLoginLogout, logoutAndRedirect }] as const;
+  return [
+    appUser,
+    { isLoggedIn, login, logout, preLoginLogout, logoutAndRedirect },
+  ] as const;
 };

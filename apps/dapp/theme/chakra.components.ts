@@ -42,11 +42,31 @@ export const components = {
           bg: "#fff",
           borderColor: "gray.400",
           _hover: {
-            borderColor: "gray.500",
+            borderColor: "gray.400",
           },
           _autofill: {
             bg: "wine.300",
           },
+        },
+      },
+      flushed: {
+        _placeholder: {
+          color: 'black.900'
+        },
+        field: {
+          _placeholder: {
+            color: 'black.900'
+          },
+          bg: "transparent",
+          borderColor: "white",
+          _hover: {
+            borderColor: "gray.400",
+          },
+          _autofill: {
+            bg: "gray.700",
+          },
+          h:"3rem",
+          pl: "20%"
         },
       },
     },
