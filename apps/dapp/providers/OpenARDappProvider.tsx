@@ -10,8 +10,9 @@ import { useWeb3React, Web3ReactProvider } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
 import detectEthereumProvider from "@metamask/detect-provider";
 
-import { useEagerConnect, useInactiveListener } from "~/hooks";
+import { useEagerConnect, useInactiveListener, useDisconnectListener, useAccountChangeListener } from "~/hooks";
 import { readOnlyUrls } from "~/services/crypto";
+import { boolean } from "yup";
 
 const config = {
   readOnlyChainId: ChainId.Mainnet,
@@ -40,7 +41,9 @@ const OpenARDappEnsureDisConnect = ({
 
   // handle logic to connect in reaction to certain events on the injected ethereum provider, if it exists
   useInactiveListener(!triedEager || !!activatingConnector);
-  
+  useDisconnectListener();
+  useAccountChangeListener();
+
   return <>{children}</>;
 };
 

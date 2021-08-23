@@ -8,18 +8,15 @@ export const useAuthLoginMutation = () => {
 
   const [mutation, mutationResults] = useMutation(authLoginMutationGQL, {
     onCompleted: (data) => {
-      console.log("123");
-      console.log(data);
       const tokens = data?.authLogin?.tokens;
 
       if (tokens && tokens?.access && tokens?.refresh) {
-        console.log("222")
         const payload = authentication.getTokenPayload(
           data.authLogin.tokens.access
         );
 
         if (payload) {
-          console.log("333")
+          console.log("login 2(payload.user)", payload.user);
           authentication.setAuthToken(tokens.access);
           authentication.setRefreshCookie(tokens.refresh);
           login(payload.user);

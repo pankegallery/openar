@@ -65,6 +65,5 @@ export const createAuthenticatedAppUser = (
       return can(this.permissions, perms);
     },
   };
-
   return user;
 };

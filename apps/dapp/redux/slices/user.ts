@@ -48,6 +48,7 @@ const userSlice = createSlice({
 
     },
     userLogout(state) {
+      console.log("userLogout");
       state.justConnected = false;
       state.authenticated = false;
       state.refreshing = false;
@@ -57,6 +58,7 @@ const userSlice = createSlice({
       state.expires = new Date().toISOString();
     },
     userPreLogoutLogout(state) {
+      console.log("userPreLogoutLogout");
       state.justConnected = true;
       state.authenticated = false;
       state.refreshing = false;

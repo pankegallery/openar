@@ -321,7 +321,8 @@ let apiConfig = {
     saltRounds: 10,
   },
   signaturePrefixes: {
-    login: "Confirm OpenAR login request (signatures are for free) #",
+    login:
+      "Hi there from OpenAR! Please sign this message and we will log you in. This is won't cost you anything.\n\nRequest #",
   },
   jwt: {
     secret: safeGuardVariable(

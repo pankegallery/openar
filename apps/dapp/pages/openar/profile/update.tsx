@@ -80,9 +80,6 @@ const Update = () => {
     setIsFormError(false);
     try {
       if (appUser) {
-
-        console.log(appUser);
-
         const { errors } = await firstMutation(
           appUser?.id,
           {

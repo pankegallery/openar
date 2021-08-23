@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-// TODO: https://github.com/NoahZinsmeister/web3-react/blob/v6/example/pages/index.tsx
+import React, {useEffect} from "react";
+
 import {
   Box,
   Text,
@@ -12,119 +12,46 @@ import {
   ModalOverlay,
   useDisclosure,
 } from "@chakra-ui/react";
+
 import Image from "next/image";
-import { useRouter } from "next/router";
-import {
-  NoEthereumProviderError,
-  UserRejectedRequestError as UserRejectedRequestErrorInjected,
-} from "@web3-react/injected-connector";
-import { UserRejectedRequestError as UserRejectedRequestErrorWalletConnect } from "@web3-react/walletconnect-connector";
 
-import { UnsupportedChainIdError } from "@web3-react/core";
-
-import { walletConntectConnector, injectedConnector } from "~/services/crypto";
-
-import { useTypedDispatch, useLocalStorage, useAuthentication } from "~/hooks";
-import user from "~/services/user";
-import { authSetJustConnected } from "~/redux/slices/user";
 import { useOpenARDappWeb3InjectedContext } from "~/providers";
-import { useWeb3React } from "@web3-react/core";
-import { Web3Provider } from "@ethersproject/providers";
-
-import { useAuthLogoutMutation } from "~/hooks/mutations";
+import { useTypedSelector, useWalletLogin } from "~/hooks";
 
 export const WalletControl = () => {
-  const [appUser, {logoutAndRedirect}] = useAuthentication();
-  const router = useRouter();
-  const [, setIsConnected] = useLocalStorage("connected", false);
+  const stateUser = useTypedSelector(({ user }) => user);
+  const stateCrypto = useTypedSelector(({ crypto }) => crypto);
 
   const web3Injected = useOpenARDappWeb3InjectedContext();
-  const [logoutMutation] = useAuthLogoutMutation();
-  const dispatch = useTypedDispatch();
+  const {
+    awaitingUserInteraction,
+    walletDisconnect,
+    walletLoginError,
+    connectInjected,
+    connectWalletConnect,
+    account,
+    active,
+    isLoggingIn,
+  } = useWalletLogin();
+
+  // TODO: revmoe active as not needed?
+  console.log("WC", account, active, awaitingUserInteraction);
 
   const walletDisclosure = useDisclosure();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingWC, setIsLoadingWC] = useState(false);
 
-  const [isError, setIsError] = useState({
-    state: false,
-    msg: "",
-  });
-  const { connector, library, chainId, account, activate, deactivate, active, error } = useWeb3React<Web3Provider>()
-
-  console.log("WC", activate, deactivate, account, library, active);
-  
-  const setError = (error: any) => {
-    let msg: string;
-    if (error instanceof NoEthereumProviderError) {
-      msg =
-        "No Ethereum browser extension detected, install MetaMask for your browser, or use Wallet connect to use a wallet on your phone.";
-    } else if (error instanceof UnsupportedChainIdError) {
-      msg = "You're connected to an unsupported network.";
-    } else if (
-      error instanceof UserRejectedRequestErrorInjected ||
-      error instanceof UserRejectedRequestErrorWalletConnect
-    ) {
-      msg = "Please authorize our website to access your Ethereum account.";
-    } else {
-      if (error?.message && error.message.indexOf("eth_requestAccounts") > -1) {
-        msg =
-          "Please check if your MetaMask extension. You will be able to go on with the process from there.";
-      } else {
-        msg = "Oops, an error occured. Please reload the page and try again.";
-      }
-
-      // TODO: remove this should not be there.
-      console.error(error);
-    }
-
-    setIsError({
-      state: true,
-      msg,
-    });
-    setIsLoading(false);
-    setIsLoadingWC(false);
-  };
-
-  const connectToWallet = async (useWalletConnect: boolean) => {
-    try {
-      if (useWalletConnect) {
-        setIsLoadingWC(true);
-        await activate(walletConntectConnector, undefined, true);
-      } else {
-        setIsLoading(true);
-        await activate(injectedConnector, undefined, true);
-      }
-      setIsConnected(true);
-      setIsLoading(false);
-      setIsLoadingWC(false);
+  useEffect(() => {
+    if ((stateUser.authenticated || stateCrypto.signatureRequired) && walletDisclosure.isOpen)
       walletDisclosure.onClose();
-
-      dispatch(authSetJustConnected());
-    } catch (error) {
-      setIsConnected(false);
-      // TODO: remove
-      console.log(error);
-      setError(error);
-    }
-  };
-
+    
+  }, [stateUser.authenticated, stateCrypto.signatureRequired, walletDisclosure])
+  
   return (
     <Box>
       <Box>
         {!account && (
           <Button
-            colorScheme="openarWhite"
-            variant="outline"
-            onClick={() => {
-              setIsLoading(false);
-              setIsLoadingWC(false);
-              setIsError({
-                state: false,
-                msg: "",
-              });
-              walletDisclosure.onOpen();
-            }}
+            variant="openarBlackAndWhite"
+            onClick={walletDisclosure.onOpen}
           >
             Connect to a wallet
           </Button>
@@ -132,47 +59,14 @@ export const WalletControl = () => {
 
         {account && (
           <Button
-            colorScheme="openarWhite"
-            variant="outline"
+            variant="openarBlackAndWhite"
             onClick={async () => {
-              setIsConnected(false);
-              deactivate();
-              
-              if (appUser)
-                try {
-                  await logoutMutation(appUser.id);
-                } catch (err) {}
-
-              await user.logout();
-              router.push("/");
+              await walletDisconnect();
             }}
           >
             Disconnect
           </Button>
         )}
-
-        <Button
-          colorScheme="openarWhite"
-          variant="outline"
-          onClick={async () => {
-            console.log(1);
-            try {
-              console.log(2, account);
-              console.log(library, library.getSigner, library.getSigner());
-              const signer = library.getSigner();
-              console.log(3);
-              const signedMessage = await signer.signMessage("xxx");
-              console.log(4);
-              console.log(signedMessage);
-              alert(signedMessage);
-            } catch (err) {
-              console.log(5);
-              console.log("sign", err);
-            }
-          }}
-        >
-          Sign
-        </Button>
       </Box>
 
       <Modal
@@ -201,7 +95,9 @@ export const WalletControl = () => {
               to give our server a chance to check if you are who you claim you
               are.
             </Text>
-            {isError.state && <Text color="openar.error">{isError.msg}</Text>}
+            {walletLoginError && (
+              <Text color="openar.error">{walletLoginError}</Text>
+            )}
             <Button
               colorScheme="openarWhite"
               justifyContent="space-between"
@@ -211,7 +107,10 @@ export const WalletControl = () => {
               size="lg"
               variant="outline"
               isDisabled={!web3Injected}
-              isLoading={isLoading}
+              isLoading={
+                isLoggingIn && awaitingUserInteraction &&
+                awaitingUserInteraction === "injected"
+              }
               rightIcon={
                 <Image
                   width="30px"
@@ -221,7 +120,7 @@ export const WalletControl = () => {
                 />
               }
               onClick={async () => {
-                await connectToWallet(false);
+                await connectInjected();
               }}
             >
               MetaMask
@@ -233,7 +132,10 @@ export const WalletControl = () => {
               mb="4"
               size="lg"
               variant="outline"
-              isLoading={isLoadingWC}
+              isLoading={
+                isLoggingIn && awaitingUserInteraction &&
+                awaitingUserInteraction === "walletconnect"
+              }
               rightIcon={
                 <Image
                   width="30px"
@@ -243,7 +145,7 @@ export const WalletControl = () => {
                 />
               }
               onClick={async () => {
-                await connectToWallet(true);
+                await connectWalletConnect();
               }}
             >
               WalletConnect

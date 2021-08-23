@@ -1,5 +1,6 @@
 import Cookies, { CookieSetOptions } from "universal-cookie";
 import type { AuthenticatedAppUserData } from "~/appuser";
+import { createAuthenticatedAppUser } from "~/appuser";
 
 import { decode, JwtPayload } from "jsonwebtoken";
 
@@ -26,6 +27,18 @@ const options: CookieSetOptions = {
   secure: process.env.NODE_ENV === "production",
   path: "/",
   expires: new Date("1970-01-01"),
+};
+
+import { store } from "~/redux";
+
+export const getAppUser = () => {
+  const {
+    user: { appUserData },
+  } = store.getState();
+
+  return appUserData && appUserData?.id && appUserData.ethAddress
+      ? createAuthenticatedAppUser(appUserData)
+      : null;
 };
 
 export const getAuthToken = (): Token | null => authToken;

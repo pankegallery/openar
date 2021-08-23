@@ -38,9 +38,8 @@ a {
   position: relative;
   
   .menu-bar {
-    top: -1px;
-    left: -1px;
-    width: 100%;    
+    width: 100%;
+    transform: translateX(-0.5rem);    
   }
   
   &.basic {

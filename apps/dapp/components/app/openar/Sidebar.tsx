@@ -101,7 +101,7 @@ export const Sidebar = () => {
           left="2"
           w="40px"
           h="40px"
-          zIndex="toast"
+          zIndex="1311"
           onClick={menuDisclosure.onToggle}
           icon={menuDisclosure.isOpen ? <MdClose /> : <HiMenu />}
           fontSize="30px"
@@ -128,7 +128,7 @@ export const Sidebar = () => {
           "&.active": {
             position: "fixed",
             transform: "translateX(-100%)",
-            zIndex: "popover",
+            zIndex: 1310,
             bg: "white",
             pt:"10",
             top: 0,

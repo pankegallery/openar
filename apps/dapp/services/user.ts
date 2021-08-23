@@ -13,6 +13,10 @@ import {
   authRefreshing,
   authAllowRefresh,
 } from "~/redux/slices/user";
+import {
+  cryptoStateReset,
+} from "~/redux/slices/crypto"
+
 
 import { setTabWideAccessStatus } from "~/hooks/useAuthTabWideLogInOutReload";
 
@@ -89,10 +93,12 @@ const login = async (u: AuthenticatedAppUserData): Promise<boolean> =>
         new Date(token.expires).getTime() - Date.now() - 10000
       );
     }
+
+    console.log("LOGIN USER DATA", u);
     store.dispatch(userLogin({ appUserData: u, expires: getRefreshCookie() }));
 
     console.log("user.login()");
-
+    
     resolve(true);
   });
 
@@ -116,6 +122,7 @@ const preLoginLogout = async (): Promise<boolean> =>
 
 const logout = async (): Promise<boolean> =>
   new Promise(async (resolve) => {
+    console.log("logout");
     clearTimeout(refreshTimeoutId);
     
     setRefreshing(false);
@@ -123,6 +130,9 @@ const logout = async (): Promise<boolean> =>
     authentication.removeRefreshCookie();
 
     store.dispatch(userLogout());
+
+    console.log("logout cryptostate reset");
+    store.dispatch(cryptoStateReset());
     
     // we're using resetStore (as clearStore cancels all ongoing queries)
     if (client) await client.resetStore();

@@ -13,6 +13,34 @@ export const components = {
       }
     },
     variants: {
+      openarBlackAndWhite: {
+        border: {
+          base: "1px solid",
+          tw: "1px solid"
+        },
+        borderColor: {
+          base: "black",
+          tw: "white"
+        },
+        borderRadius: "0",
+        bg: "transparent",
+        transition: "all 0.3s",
+        color:  {
+          base: "black",
+          tw: "white"
+        },
+        _hover: {
+          bg: "transparent",
+          borderColor: {
+            base: "gray.600",
+            tw: "gray.300"
+          },
+          color: {
+            base: "gray.600",
+            tw: "gray.300"
+          },
+        },
+      },
       outline: {
         boder: "1px solid #fff",
         borderRadius: "0",

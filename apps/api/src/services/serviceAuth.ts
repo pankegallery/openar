@@ -135,6 +135,7 @@ export const authPreLoginUserWithEthAddress = async (
   if (!user) {
     user = await daoUserCreate({
       ethAddress,
+      roles: ["user"],
     });
     authPayload = await tokenGenerateAuthTokens(
       {
@@ -151,7 +152,7 @@ export const authPreLoginUserWithEthAddress = async (
 
   if (user.isBanned)
     throw new ApiError(httpStatus.UNAUTHORIZED, "[auth] Access denied");
-
+  
   if (ctx.appUser && ctx.tokenInfo.validRefreshTokenProvided) {
     const tokenPayload: JwtPayload | null = await tokenVerifyInDB(
       ctx.req?.cookies?.refreshToken,

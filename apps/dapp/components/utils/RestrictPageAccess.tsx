@@ -2,14 +2,16 @@ import Router from "next/router";
 import type { PermissionName } from "~/appuser";
 
 import { appConfig } from "~/config";
-import { useAuthentication } from "~/hooks";
+import { getAppUser } from "~/services/authentication";
 
 export const RestrictPageAccess = (
   AccessRestrictedComponent: any,
   permission: PermissionName
 ) => {
-  // const [appUser] = useAuthentication();
-  const appUser = true;
+  const appUser = getAppUser();
+  
+  // TODO: this must be more complicated
+
   const hocComponent = ({ ...props }) => (
     <AccessRestrictedComponent {...props} />
   );

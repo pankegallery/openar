@@ -6,6 +6,7 @@ import Image from "next/image";
 import { LayoutOpenAR } from "~/components/app";
 import { Box } from "@chakra-ui/layout";
 import { useConfigContext } from "~/providers";
+import { RestrictPageAccess } from "~/components/utils";
 
 // import { useEthers, useEtherBalance } from "@usedapp/core";
 // import { formatUnits } from "@ethersproject/units";
@@ -49,4 +50,4 @@ OpenARDashboard.getLayout = function getLayout(page: ReactElement) {
   return <LayoutOpenAR>{page}</LayoutOpenAR>;
 };
 
-export default OpenARDashboard;
+export default RestrictPageAccess(OpenARDashboard, "profileRead");

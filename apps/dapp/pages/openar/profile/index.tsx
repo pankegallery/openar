@@ -48,8 +48,6 @@ const Index = () => {
     // },
   ];
 
-  
-
   const {
     ethAddress,
     pseudonym,
@@ -59,8 +57,6 @@ const Index = () => {
     emailVerified,
     profileImage,
   } = data?.userProfileRead ?? {};
-
-  console.log(profileImage);
 
   const columns = { base: "100%", t: "1fr max(33.33%, 350px) " };
   const rows = { base: "auto 1fr", t: "1fr" };
