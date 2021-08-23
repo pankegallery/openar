@@ -32,7 +32,6 @@ export const injectedConnector = new InjectedConnector({
 });
 
 export const walletConntectConnector = new WalletConnectConnector({
-  
   rpc: readOnlyUrls,
   qrcode: true,
   pollingInterval: POLLING_INTERVAL,

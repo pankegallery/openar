@@ -91,7 +91,7 @@ const Index = () => {
 
               <Stat mb="4">
                 <StatLabel fontSize="md">Bio</StatLabel>
-                <StatNumber textTransform="capitalize" mt="-1">
+                <StatNumber fontSize="md" mt="-1">
                   {bio && <Box  dangerouslySetInnerHTML={{ __html:bio}} />}
                   
                 </StatNumber>

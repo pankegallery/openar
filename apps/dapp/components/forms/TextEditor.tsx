@@ -70,10 +70,11 @@ const EditorMenuBarButton = ({
   onClick: MouseEventHandler<HTMLButtonElement>;
 }) => (
   <IconButton
-    color="black"
     variant="outline"
     size="sm"
-    borderColor="gray.500"
+    border="0"
+    bg="transparent"
+    color="white"
     fontSize="xl"
     p="1"
     icon={icon}
@@ -82,10 +83,19 @@ const EditorMenuBarButton = ({
     onClick={onClick}
     isActive={isActive}
     isDisabled={isDisabled}
+    _hover={{
+      color: "gray.300"
+    }}
+    _focus={{
+      outline: "none"
+    }}
+    _active={{
+      bg: "none"
+    }}
     sx={
       isFlashing
         ? {
-            bg: "var(--chakra-colors-red-500) !important",
+            color: "var(--chakra-colors-red-500) !important",
           }
         : {}
     }

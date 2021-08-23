@@ -51,6 +51,7 @@ export interface ButtonListRenderElement extends ModuleAccessRules {
   isDisabled?: boolean | undefined;
   colorScheme?: string | undefined;
   type?: "submit";
+  variant?: string;
 }
 
 export type ButtonListElement =
@@ -84,6 +85,8 @@ export const ModuleSubNav = ({
 
       let buttonProps: ButtonListRenderElement = {
         key: `bl-${index}`,
+        colorScheme: "openarWhite",
+        variant: "outline",
       };
 
       let b: ReactElement;
@@ -91,7 +94,14 @@ export const ModuleSubNav = ({
         case "navigation":
           b = (
             <Link href={`${button.to}`} passHref key={`bl-${index}`}>
-              <ChakraLink as={Button} isDisabled={button.isDisabled}>
+              <ChakraLink
+                as={Button}
+                colorScheme="openarWhite"
+                color="white"
+                variant="outline"
+                textDecoration="none !important"
+                isDisabled={button.isDisabled}
+              >
                 {button?.label}
               </ChakraLink>
             </Link>
@@ -104,7 +114,11 @@ export const ModuleSubNav = ({
               <ChakraLink
                 as={Button}
                 isDisabled={button.isDisabled}
-                colorScheme="gray"
+                colorScheme="openarGray"
+                color="openarGray.500"
+                textDecoration="none !important"
+                borderColor="openarGray.500"
+                variant="outline"
               >
                 {button?.label}
               </ChakraLink>

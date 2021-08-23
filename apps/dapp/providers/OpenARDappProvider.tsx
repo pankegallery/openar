@@ -1,68 +1,98 @@
-import React, {useState, useEffect} from "react";
-import { ChainId, DAppProvider } from "@usedapp/core";
-import { useWeb3React } from '@web3-react/core'
-import { Web3Provider } from '@ethersproject/providers'
-import detectEthereumProvider from '@metamask/detect-provider';
+import React, {
+  useState,
+  useEffect,
+  Context,
+  createContext,
+  useContext,
+} from "react";
+import { ChainId } from "@usedapp/core";
+import { useWeb3React, Web3ReactProvider } from "@web3-react/core";
+import { Web3Provider } from "@ethersproject/providers";
+import detectEthereumProvider from "@metamask/detect-provider";
 
-import { useLocalStorage } from "~/hooks";
-import { readOnlyUrls, injectedConnector } from "~/services/crypto";
+import { useEagerConnect, useInactiveListener } from "~/hooks";
+import { readOnlyUrls } from "~/services/crypto";
 
 const config = {
   readOnlyChainId: ChainId.Mainnet,
   readOnlyUrls: readOnlyUrls,
 };
 
-const OpenARDappEnsureDisconnect = ({
+const OpenARDappEnsureDisConnect = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  // const { account, chainId, deactivate, active } = useEthers();
-  const [connected] = useLocalStorage("connected", false);
   
-  const { deactivate } = useWeb3React<Web3Provider>()
-  if (typeof navigator !== "undefined")
-    console.log(navigator ?? navigator?.userAgent ?? "no navigator");
-    
-  useEffect(() => {
-    injectedConnector.isAuthorized().then((isAuthorized: boolean) => {
-      if (isAuthorized && !connected) {
-        deactivate();
-      }
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []) // intentionally only running on mount (make sure it's only mounted once :))
 
+  const { deactivate, connector} = useWeb3React<Web3Provider>();
+  
+  // handle logic to recognize the connector currently being activated
+  const [activatingConnector, setActivatingConnector] = useState<any>();
+  useEffect(() => {
+    if (activatingConnector && activatingConnector === connector) {
+      setActivatingConnector(undefined);
+    }
+  }, [activatingConnector, connector]);
+
+  // handle logic to eagerly connect to the injected ethereum provider, if it exists and has granted access already
+  const triedEager = useEagerConnect();
+
+  // handle logic to connect in reaction to certain events on the injected ethereum provider, if it exists
+  useInactiveListener(!triedEager || !!activatingConnector);
+  
   return <>{children}</>;
 };
 
+// create context
+export const OpenARDappWeb3InjectedContext: Context<boolean> =
+  createContext<boolean>(false);
 
+export const useOpenARDappWeb3InjectedContext = () =>
+  useContext(OpenARDappWeb3InjectedContext);
 
+function getWeb3Library(provider: any): Web3Provider {
+  const library = new Web3Provider(provider);
+  library.pollingInterval = 12000;
+  return library;
+}
 
+const OpenARWeb3ReactProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  return (
+    <Web3ReactProvider getLibrary={getWeb3Library}>
+      {children}
+    </Web3ReactProvider>
+  );
+};
 
 export const OpenARDappProvider = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
+  
+  const [isWeb3Injected, setIsWeb3Injected] = useState(false);
 
   useEffect(() => {
-    const test = async () => {
+    const run = async () => {
       const provider = await detectEthereumProvider();
-    
-      if (provider) {
-        // From now on, this should always be true:
-        // provider === window.ethereum
-        console.log("Provider", provider); 
-      } else {
-        console.log('Please install MetaMask!');
-      }
-    }
-    test();
-  }, [])
-  
+
+      if (provider) setIsWeb3Injected(true);
+    };
+    run();
+  }, []);
+
   return (
-  <DAppProvider config={config}>
-    <OpenARDappEnsureDisconnect>{children}</OpenARDappEnsureDisconnect>
-  </DAppProvider>
-)};
+    <OpenARWeb3ReactProvider>
+      <OpenARDappEnsureDisConnect>
+        <OpenARDappWeb3InjectedContext.Provider value={isWeb3Injected}>
+          {children}
+        </OpenARDappWeb3InjectedContext.Provider>
+      </OpenARDappEnsureDisConnect>
+    </OpenARWeb3ReactProvider>
+  );
+};

@@ -10,6 +10,7 @@ export const useAuthentication = () => {
   const router = useRouter();
   const { authenticated, appUserData } = useTypedSelector(({ user }) => user);
 
+  console.log(appUserData);
   // const appUser =
   //   appUserData && appUserData?.id && appUserData.pseudonym
   //     ? createAuthenticatedAppUser(appUserData)

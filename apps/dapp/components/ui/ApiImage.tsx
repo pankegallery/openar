@@ -109,7 +109,7 @@ export const ApiImage = ({
         fontSize="lg"
         color="gray.800"
         border="2px solid"
-        bg="red.100"
+        bg="gray.100"
         borderColor="red.100"
         minH="200px"
         p="4"
@@ -171,8 +171,8 @@ export const ApiImage = ({
   if (content && (forceAspectRatioPB || imageAspectRationPB)) {
     const aPB = forceAspectRatioPB ?? imageAspectRationPB;
     content = (
-      <Box className="aspect" pb={`${aPB}%`}>
-        <Box className="ratio" bg="red">{content}</Box>
+      <Box className="aspect" pb={`${aPB}%`} bg="gray.800">
+        <Box className="ratio">{content}</Box>
       </Box>
     );
   }

@@ -6,12 +6,25 @@ export const components = {
     baseStyle: {
       borderRadius: "md",
       _focus: {
-        boxShadow: "button-wine",
+        boxShadow: "none",
       },
+      _disabled: {
+        color: "white !important"        
+      }
     },
     variants: {
       outline: {
-        bg: "white",
+        boder: "1px solid #fff",
+        borderRadius: "0",
+        bg: "transparent",
+        transition: "all 0.3s",
+        color: "white",
+        _hover: {
+          bg: "transparent",
+          borderColor: "gray.300",
+          color: "gray.300",
+        },
+        
       },
     },
   },
@@ -51,11 +64,11 @@ export const components = {
       },
       flushed: {
         _placeholder: {
-          color: 'black.900'
+          color: "black.900",
         },
         field: {
           _placeholder: {
-            color: 'black.900'
+            color: "black.900",
           },
           bg: "transparent",
           borderColor: "white",
@@ -65,8 +78,8 @@ export const components = {
           _autofill: {
             bg: "gray.700",
           },
-          h:"3rem",
-          pl: "20%"
+          h: "3rem",
+          pl: "20%",
         },
       },
     },
@@ -90,10 +103,26 @@ export const components = {
   Link: {
     baseStyle: {
       color: "wine.600",
+      transition: "all 0.3s",
       _hover: {
         color: "wine.800",
       },
     },
+    variants: {
+      outline: {
+        boder: "1px solid #fff",
+        borderRadius: "0",
+        bg: "transparent",
+        transition: "all 0.3s",
+
+        _hover: {
+          bg: "transparent",
+          borderColor: "openarGray.300",
+          color: "openarGray.300",
+        },
+        
+      },
+    }
   },
   Switch: {
     baseStyle: {

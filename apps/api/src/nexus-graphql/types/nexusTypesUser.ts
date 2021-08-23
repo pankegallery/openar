@@ -378,20 +378,22 @@ export const UserMutations = extendType({
         id: nonNull(intArg()),
       },
 
-      // TODO: authorize: :  async (...[, args, ctx]) => {
-      //   const user = await daoUserFindFirst({ profileImageId: args.id });
+      authorize: async (...[, args, ctx]) => {
+        console.log(1, ctx?.appUser);
+        const user = await daoUserFindFirst({ profileImageId: args.id });
 
-      //   if (user) {
-      //     return (
-      //       authorizeApiUser(ctx, "profileUpdate") &&
-      //       isCurrentApiUser(ctx, user.id)
-      //     );
-      //   }
+        if (user) {
+          return (
+            authorizeApiUser(ctx, "profileUpdate") &&
+            isCurrentApiUser(ctx, user.id)
+          );
+        }
 
-      //   return false;
-      // },
+        return false;
+      },
 
       async resolve(...[, args, ctx]) {
+        console.log(2, ctx?.appUser);
         const user = await daoUserProfileImageDelete(
           args.id,
           ctx?.appUser?.id ?? 0

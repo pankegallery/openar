@@ -78,7 +78,7 @@ model Object {
 
   name        String?
   description String?
-
+  orderNumber     Int @default(0)
   editionOf     Int
   editionNumber Int
 
@@ -111,7 +111,7 @@ model Image {
   meta       Json
   status     Int    @default(0)
   retryCount Int    @default(0)
-
+  orderNumber     Int @default(0)
   artworks Artwork[] @relation("imagesArtwork")
   objects  Object[]  @relation("imagesObject")
 

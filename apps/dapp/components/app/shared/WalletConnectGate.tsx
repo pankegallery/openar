@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/router";
-import { useEthers } from "@usedapp/core";
 import { decode } from "jsonwebtoken";
+import { useWeb3React } from "@web3-react/core";
+import { Web3Provider } from "@ethersproject/providers";
 
 import {
   useTypedSelector,
@@ -10,6 +11,9 @@ import {
   useAppToast,
   useAuthentication,
 } from "~/hooks";
+
+import { useOpenARDappWeb3InjectedContext } from "~/providers";
+
 import {
   useAuthPreLoginMutation,
   useAuthLoginMutation,
@@ -20,12 +24,16 @@ export const WalletConnectGate = ({
 }: {
   children: React.ReactNode;
 }) => {
+  const [shoulAskForSignature, setShoulAskForSignature] = useState(false);
+  
   const [, { logout }] = useAuthentication();
   const triggerToast = useAppToast(
     "Welcome",
     "We hope you enjoy Open AR",
     "success"
   );
+
+  const web3Injected = useOpenARDappWeb3InjectedContext();
 
   const [, setIsConnected] = useLocalStorage("connected", false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -35,7 +43,19 @@ export const WalletConnectGate = ({
   const stateUser = useTypedSelector(({ user }) => user);
 
   const router = useRouter();
-  const { account, chainId, library, deactivate } = useEthers();
+
+  const {
+    connector,
+    library,
+    chainId,
+    account,
+    activate,
+    deactivate,
+    active,
+    error,
+  } = useWeb3React<Web3Provider>();
+
+  console.log("WCG", chainId, account, active, error, library);
 
   const [preloginMutation] = useAuthPreLoginMutation();
   const [loginMutation] = useAuthLoginMutation();
@@ -125,15 +145,18 @@ export const WalletConnectGate = ({
 
       try {
         if (!errors && data.authPreLogin?.tokens) {
+          if (web3Injected) {
+            await processPreLoginResult(data?.authPreLogin?.tokens);
+          } else {
+
+          }
           // TODO: fix
           // await new Promise((resolve) => {
           //   setTimeout( async () => {
-          //     await processPreLoginResult(data?.authPreLogin?.tokens);
+          //     
           //     resolve(true)
           //   }, 5000)
-            
           // })
-          
         } else if (errors) {
           throw errors[0];
         } else {

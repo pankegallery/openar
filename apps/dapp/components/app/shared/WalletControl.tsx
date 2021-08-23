@@ -13,7 +13,6 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import Image from "next/image";
-import { useEthers, useConfig } from "@usedapp/core";
 import { useRouter } from "next/router";
 import {
   NoEthereumProviderError,
@@ -25,14 +24,22 @@ import { UnsupportedChainIdError } from "@web3-react/core";
 
 import { walletConntectConnector, injectedConnector } from "~/services/crypto";
 
-import {  useTypedDispatch, useLocalStorage} from "~/hooks";
+import { useTypedDispatch, useLocalStorage, useAuthentication } from "~/hooks";
 import user from "~/services/user";
 import { authSetJustConnected } from "~/redux/slices/user";
+import { useOpenARDappWeb3InjectedContext } from "~/providers";
+import { useWeb3React } from "@web3-react/core";
+import { Web3Provider } from "@ethersproject/providers";
+
+import { useAuthLogoutMutation } from "~/hooks/mutations";
 
 export const WalletControl = () => {
-  const [ , setIsConnected ] = useLocalStorage("connected", false);
-  
+  const [appUser, {logoutAndRedirect}] = useAuthentication();
+  const router = useRouter();
+  const [, setIsConnected] = useLocalStorage("connected", false);
 
+  const web3Injected = useOpenARDappWeb3InjectedContext();
+  const [logoutMutation] = useAuthLogoutMutation();
   const dispatch = useTypedDispatch();
 
   const walletDisclosure = useDisclosure();
@@ -43,10 +50,10 @@ export const WalletControl = () => {
     state: false,
     msg: "",
   });
+  const { connector, library, chainId, account, activate, deactivate, active, error } = useWeb3React<Web3Provider>()
 
-  const { activate, deactivate, account, library, active} = useEthers();
-  const router = useRouter();
-  console.log(activate, deactivate, account, library, active);
+  console.log("WC", activate, deactivate, account, library, active);
+  
   const setError = (error: any) => {
     let msg: string;
     if (error instanceof NoEthereumProviderError) {
@@ -61,14 +68,14 @@ export const WalletControl = () => {
       msg = "Please authorize our website to access your Ethereum account.";
     } else {
       if (error?.message && error.message.indexOf("eth_requestAccounts") > -1) {
-        msg = "Please check if your MetaMask extension. You will be able to go on with the process from there.";
+        msg =
+          "Please check if your MetaMask extension. You will be able to go on with the process from there.";
       } else {
         msg = "Oops, an error occured. Please reload the page and try again.";
       }
-       
-      // TODO: remove this should not be there. 
+
+      // TODO: remove this should not be there.
       console.error(error);
-      
     }
 
     setIsError({
@@ -81,7 +88,6 @@ export const WalletControl = () => {
 
   const connectToWallet = async (useWalletConnect: boolean) => {
     try {
-      
       if (useWalletConnect) {
         setIsLoadingWC(true);
         await activate(walletConntectConnector, undefined, true);
@@ -93,8 +99,8 @@ export const WalletControl = () => {
       setIsLoading(false);
       setIsLoadingWC(false);
       walletDisclosure.onClose();
-      
-      dispatch(authSetJustConnected());      
+
+      dispatch(authSetJustConnected());
     } catch (error) {
       setIsConnected(false);
       // TODO: remove
@@ -108,7 +114,7 @@ export const WalletControl = () => {
       <Box>
         {!account && (
           <Button
-            colorScheme="teal"
+            colorScheme="openarWhite"
             variant="outline"
             onClick={() => {
               setIsLoading(false);
@@ -126,12 +132,17 @@ export const WalletControl = () => {
 
         {account && (
           <Button
-            colorScheme="teal"
+            colorScheme="openarWhite"
             variant="outline"
             onClick={async () => {
-              // TODO you've to call server to logout here too ...
               setIsConnected(false);
               deactivate();
+              
+              if (appUser)
+                try {
+                  await logoutMutation(appUser.id);
+                } catch (err) {}
+
               await user.logout();
               router.push("/");
             }}
@@ -140,43 +151,45 @@ export const WalletControl = () => {
           </Button>
         )}
 
-<Button
-            colorScheme="teal"
-            variant="outline"
-            onClick={async () => {console.log(1);
-              try {
-                console.log(2, account);
-                console.log(library, library.getSigner, library.getSigner());
-                const signer = library.getSigner();
-                console.log(3);
-                const signedMessage = await signer.signMessage("xxx");
-                console.log(4);
-                console.log(signedMessage);
-                alert(signedMessage);
-              } catch(err) {
-                console.log(5);
-                console.log("sign", err);
-              }
-              
-            }}
-          >
-            Sign
-          </Button>
+        <Button
+          colorScheme="openarWhite"
+          variant="outline"
+          onClick={async () => {
+            console.log(1);
+            try {
+              console.log(2, account);
+              console.log(library, library.getSigner, library.getSigner());
+              const signer = library.getSigner();
+              console.log(3);
+              const signedMessage = await signer.signMessage("xxx");
+              console.log(4);
+              console.log(signedMessage);
+              alert(signedMessage);
+            } catch (err) {
+              console.log(5);
+              console.log("sign", err);
+            }
+          }}
+        >
+          Sign
+        </Button>
       </Box>
-
-
-      
 
       <Modal
         isOpen={walletDisclosure.isOpen}
         onClose={walletDisclosure.onClose}
       >
-        <ModalOverlay />
-        <ModalContent color="black" pt="0">
-          <ModalHeader pb="0">Connect to a wallet</ModalHeader>
-          <ModalCloseButton />
+        <ModalOverlay bg="blackAlpha.800" />
+        <ModalContent
+          color="white"
+          pt="0"
+          bg="openar.muddygreen"
+          borderRadius="0"
+        >
+          <ModalHeader pb="0">Connect to your wallet</ModalHeader>
+          <ModalCloseButton fontSize="lg" />
           <ModalBody>
-            <Text color="black" mb="4">
+            <Text color="white" mb="4">
               Instead of a login we use your wallet to give you access to
               OpenAR. This is a two step process:
               <br />
@@ -190,12 +203,14 @@ export const WalletControl = () => {
             </Text>
             {isError.state && <Text color="openar.error">{isError.msg}</Text>}
             <Button
+              colorScheme="openarWhite"
               justifyContent="space-between"
               width="100%"
               mt="4"
               mb="4"
               size="lg"
               variant="outline"
+              isDisabled={!web3Injected}
               isLoading={isLoading}
               rightIcon={
                 <Image
@@ -212,6 +227,7 @@ export const WalletControl = () => {
               MetaMask
             </Button>
             <Button
+              colorScheme="openarWhite"
               justifyContent="space-between"
               width="100%"
               mb="4"
