@@ -17,12 +17,12 @@ export const LayoutOpenAR = ({ children }: { children: ReactNode }) => {
         <ThemeProvider theme={styledComponentsTheme}>
           <LoadingBar color="#fff"/>
           <Grid
-            templateColumns={isMobile ? "100%" : "max(250px, 20vw) 1fr"}
+            templateColumns={isMobile ? "100%" : "1fr max(250px, 20vw) "}
             alignItems="start"
             className="openar content"
             minH="100%"
           >
-            <Sidebar />
+            
             <Grid 
               className="main" 
               templateRows={isMobile ? "100%" : "1fr 4rem"}
@@ -31,6 +31,7 @@ export const LayoutOpenAR = ({ children }: { children: ReactNode }) => {
               <Box>{children}</Box>
               <Footer />
             </Grid>
+            <Sidebar />
           </Grid>
           <style jsx global>{`
             body {

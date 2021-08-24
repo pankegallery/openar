@@ -177,6 +177,7 @@ type Query {
   artwork(key: String!): Artwork!
   artworkReadOwn(id: Int!): Artwork!
   artworks(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ArtworkQueryResult
+  artworksReadOwn(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ArtworkQueryResult
   imageRead(id: Int!): Image!
   imageStatus(id: Int!): ImageStatus!
   images(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, taxonomyId: Int, where: JSON): ImageQueryResult

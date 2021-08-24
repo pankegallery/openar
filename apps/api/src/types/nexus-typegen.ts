@@ -332,6 +332,7 @@ export interface NexusGenFieldTypes {
     artwork: NexusGenRootTypes['Artwork']; // Artwork!
     artworkReadOwn: NexusGenRootTypes['Artwork']; // Artwork!
     artworks: NexusGenRootTypes['ArtworkQueryResult'] | null; // ArtworkQueryResult
+    artworksReadOwn: NexusGenRootTypes['ArtworkQueryResult'] | null; // ArtworkQueryResult
     imageRead: NexusGenRootTypes['Image']; // Image!
     imageStatus: NexusGenRootTypes['ImageStatus']; // ImageStatus!
     images: NexusGenRootTypes['ImageQueryResult'] | null; // ImageQueryResult
@@ -474,6 +475,7 @@ export interface NexusGenFieldTypeNames {
     artwork: 'Artwork'
     artworkReadOwn: 'Artwork'
     artworks: 'ArtworkQueryResult'
+    artworksReadOwn: 'ArtworkQueryResult'
     imageRead: 'Image'
     imageStatus: 'ImageStatus'
     images: 'ImageQueryResult'
@@ -577,6 +579,12 @@ export interface NexusGenArgTypes {
       id: number; // Int!
     }
     artworks: { // args
+      orderBy?: NexusGenScalars['JSON'] | null; // JSON
+      pageIndex?: number | null; // Int
+      pageSize: number | null; // Int
+      where?: NexusGenScalars['JSON'] | null; // JSON
+    }
+    artworksReadOwn: { // args
       orderBy?: NexusGenScalars['JSON'] | null; // JSON
       pageIndex?: number | null; // Int
       pageSize: number | null; // Int

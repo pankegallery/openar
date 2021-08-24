@@ -31,6 +31,7 @@ import {
   daoArtworkGetOwnById,
   daoNanoidCustom16,
 } from "../../dao";
+import context from "../context";
 
 const apiConfig = getApiConfig();
 
@@ -98,7 +99,7 @@ export const ArtworkQueries = extendType({
 
         let totalCount;
         let artworks;
-        let where = args.where ?? {};
+        let where: Prisma.ArtworkWhereInput = args.where ?? {};
 
         if ((pRI?.fieldsByTypeName?.ArtworkQueryResult as any)?.totalCount) {
           totalCount = await daoArtworkQueryCount(args.where);
@@ -215,6 +216,88 @@ export const ArtworkQueries = extendType({
           where,
           Object.keys(include).length > 0 ? include : undefined
         );
+      },
+    });
+
+    t.field("artworksReadOwn", {
+      type: ArtworkQueryResult,
+
+      args: {
+        pageIndex: intArg({
+          default: 0,
+        }),
+        pageSize: intArg({
+          default: apiConfig.db.defaultPageSize,
+        }),
+        orderBy: arg({
+          type: GQLJson,
+          default: undefined,
+        }),
+        where: arg({
+          type: GQLJson,
+          default: undefined,
+        }),
+      },
+
+      // Here the user are checked to have the correct permission but
+      // only the query below enforces ownership
+      authorize: (...[, , ctx]) => authorizeApiUser(ctx, "artworkReadOwn"),
+
+      async resolve(...[, args, ctx, info]) {
+        const pRI = parseResolveInfo(info);
+
+        let totalCount;
+        let artworks;
+        let where: Prisma.ArtworkWhereInput = args.where ?? {};
+
+        where = {
+          ...where,
+          creator: {
+            id: ctx.appUser?.id ?? 0,
+          },
+        };
+        if ((pRI?.fieldsByTypeName?.ArtworkQueryResult as any)?.totalCount) {
+          totalCount = await daoArtworkQueryCount(args.where);
+
+          if (totalCount === 0)
+            return {
+              totalCount,
+              artworks: [],
+            };
+        }
+
+        if ((pRI?.fieldsByTypeName?.ArtworkQueryResult as any)?.artworks) {
+          let include = {};
+
+          if (
+            (pRI as any).fieldsByTypeName?.ArtworkQueryResult?.artworks
+              ?.fieldsByTypeName.Artwork?.heroImage
+          ) {
+            include = {
+              ...include,
+              heroImage: {
+                select: {
+                  meta: true,
+                  status: true,
+                  id: true,
+                },
+              },
+            };
+          }
+
+          artworks = await daoArtworkQuery(
+            where,
+            Object.keys(include).length > 0 ? include : undefined,
+            args.orderBy,
+            args.pageIndex as number,
+            args.pageSize as number
+          );
+        }
+
+        return {
+          totalCount,
+          artworks,
+        };
       },
     });
 

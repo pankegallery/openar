@@ -27,34 +27,14 @@ const NavItem = ({
 }) => {
   return (
     <Box>
-      <Link
-        as={ActiveLink}
+      <ActiveLink
         href={path}
-        display="flex"
-        alignItems="center"
-        fontSize="lg"
-        color="var(--chakra-colors-gray-800) !important"
-        ml="-3px"
-        pl="1"
-        py="1"
-        transition="all 0.3s"
         activeClassName="active"
-        _hover={{
-          textDecoration: "none",
-          color: "var(--chakra-colors-wine-600) !important",
-        }}
-        sx={{
-          "&.active": {
-            color: "var(--chakra-colors-wine-600) !important",
-          },
-          "&.active .chakra-icon": {
-            color: "var(--chakra-colors-wine-600) !important",
-          },
-        }}
+        
         onClick={onClick as any}
       >
         <chakra.span>{title}</chakra.span>
-      </Link>
+      </ActiveLink>
     </Box>
   );
 };
@@ -148,7 +128,7 @@ export const Sidebar = () => {
           w="100%"
           p="4"
           minH="100%"
-          borderRight="1px solid #fff"
+          borderLeft="1px solid #fff"
         >
           {mainNavLinks.map((link) => {
             return (
