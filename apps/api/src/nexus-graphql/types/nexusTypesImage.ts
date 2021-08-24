@@ -185,14 +185,6 @@ export const ImageQueries = extendType({
   },
 });
 
-export const ImageTranslationInput = inputObjectType({
-  name: "ImageTranslationInput",
-  definition(t) {
-    t.nonNull.json("translations");
-    t.nonNull.int("id");
-  },
-});
-
 export const ImageUpdateInput = inputObjectType({
   name: "ImageUpdateInput",
   definition(t) {

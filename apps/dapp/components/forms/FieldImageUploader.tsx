@@ -23,7 +23,7 @@ import {
 
 import { useFormContext } from "react-hook-form";
 
-import { FormNavigationBlock, FieldErrorMessage } from ".";
+import { FieldErrorMessage } from ".";
 import { ApiImage, ApiImageProps } from "~/components/ui";
 
 import { authentication } from "~/services";
@@ -48,18 +48,17 @@ const baseStyle = {
   l: 0,
   w: "100%",
   h: "100%",
-  borderWidth: 2,
-  borderColor: "orange.200",
-  borderStyle: "solid",
-  backgroundColor: "orange.100",
-  color: "gray.800",
+  borderWidth: 4,
+  borderColor: "white",
+  borderStyle: "dashed",
+  backgroundColor: "transparent",
+  color: "white",
   outline: "none",
   transition: "all .24s ease-in-out",
   cursor: "pointer",
 
   _hover: {
-    boderColor: "gray.600",
-    bg: "orange.200",
+    bg: "openarGreen.400",
   },
 };
 
@@ -68,16 +67,13 @@ const activeStyle = {
 };
 
 const acceptStyle = {
-  borderColor: "green.200",
-  bg: "green.200",
+  bg: "green.300",
   _hover: {
-    bg: "green.200",
+    bg: "green.300",
   },
 };
 
 const rejectStyle = {
-  borderColor: "red.400",
-  color: "#fff !important",
   bg: "red.400",
   _hover: {
     bg: "red.400",
@@ -123,16 +119,22 @@ export const FieldImageUploader = ({
   onUpload,
   connectWith,
   route = "image",
+  setActiveUploadCounter,
+  shouldSetFormDirtyOnUpload = false,
+  shouldSetFormDirtyOnDelete = false,
 }: {
   settings?: FieldImageUploaderSettings;
   id: string;
   isRequired?: boolean;
   isDisabled?: boolean;
+  shouldSetFormDirtyOnUpload?: boolean;
+  shouldSetFormDirtyOnDelete?: boolean;
   label: string;
   name: string;
   deleteButtonGQL: DocumentNode;
   onDelete?: (id?: number) => void;
   onUpload?: (id?: number) => void;
+  setActiveUploadCounter?: Function;
   connectWith?: any;
   route?: string;
 }) => {
@@ -189,6 +191,9 @@ export const FieldImageUploader = ({
 
           const cancelToken = createNewCancelToken();
 
+          if (setActiveUploadCounter)
+            setActiveUploadCounter((state: number) => state + 1);
+
           await axios
             .request({
               method: "post",
@@ -214,15 +219,22 @@ export const FieldImageUploader = ({
             .then(({ data }) => {
               if (getCancelToken()) {
                 setIsUploading(false);
-                if (data?.id) {
+                
+                if (setActiveUploadCounter)
+                  setActiveUploadCounter((state: number) => state - 1);
+                
+                  if (data?.id) {
                   setUploadedImgId(data?.id ?? undefined);
-                  setValue(name, data?.id, { shouldDirty: true });
+                  setValue(name, data?.id, { shouldDirty: shouldSetFormDirtyOnDelete });
                   if (typeof onUpload === "function")
                     onUpload.call(this, data?.id);
                 }
               }
             })
             .catch((error) => {
+              if (setActiveUploadCounter)
+                setActiveUploadCounter((state: number) => state - 1);
+
               if (isCancel(error)) return;
 
               if (getCancelToken()) {
@@ -255,7 +267,7 @@ export const FieldImageUploader = ({
         setUploadedImgId(undefined);
         setimageIsDeleted(true);
         setIsUploading(false);
-        setValue(name, undefined, { shouldDirty: true });
+        setValue(name, undefined, { shouldDirty: shouldSetFormDirtyOnUpload });
         if (typeof onDelete === "function") onDelete.call(null);
       },
       {
@@ -314,8 +326,6 @@ export const FieldImageUploader = ({
 
   return (
     <>
-      <FormNavigationBlock shouldBlock={isUploading} />
-
       <FormControl
         id={id}
         isInvalid={errors[name]?.message || isDragReject}

@@ -18,9 +18,11 @@ export const ModuleProfileUpdateForm = ({
   data,
   errors,
   disableNavigation,
+  setActiveUploadCounter,
 }: {
   data?: any;
   errors?: any;
+  setActiveUploadCounter?: Function;
   disableNavigation?: Function;
 }) => {
   const { firstName, lastName, profileImage, bio } = data ?? {};
@@ -100,7 +102,9 @@ export const ModuleProfileUpdateForm = ({
         w={{ base: "50%", t: "auto" }}
         minH="100%"
         borderLeft="1px solid #fff"
-      >
+        p="3"
+      > 
+
         <FieldImageUploader
           route="profileImage"
           id="profileImage"
@@ -111,6 +115,7 @@ export const ModuleProfileUpdateForm = ({
             UserProfileUpdateValidationSchema
           )}
           deleteButtonGQL={userProfileImageDeleteMutationGQL}
+          setActiveUploadCounter={setActiveUploadCounter}
           settings={{
             minFileSize: 1024 * 1024 * 0.0488,
             maxFileSize: 1024 * 1024 * 2,

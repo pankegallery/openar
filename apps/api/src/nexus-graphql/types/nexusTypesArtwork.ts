@@ -42,6 +42,7 @@ export const Artwork = objectType({
     t.int("type");
     t.string("key");
     t.string("title");
+    t.string("description");
     t.nonNull.int("status");
     t.field("creator", {
       type: "User",
@@ -49,6 +50,11 @@ export const Artwork = objectType({
 
     t.string("url");
     t.string("video");
+    t.float("lat");
+    t.float("lng");
+    
+    // TODO: make good use of this
+    t.boolean("isBanned");
 
     t.field("heroImage", {
       type: "Image",
@@ -342,14 +348,15 @@ export const ArtworkQueries = extendType({
 export const ArtworkUpsertInput = inputObjectType({
   name: "ArtworkUpsertInput",
   definition(t) {
-    t.nonNull.int("id");
+    t.int("id");
     t.nonNull.string("title");
-    t.nonNull.int("type");
-    t.nonNull.int("status");
+    t.int("type");
+    t.int("status");
     t.nonNull.string("description");
     t.string("url");
     t.string("video");
     t.json("heroImage");
+    t.json("creator");
     t.json("objects");
     t.json("files");
     t.json("images");
@@ -390,8 +397,7 @@ export const ArtworkMutations = extendType({
 
       args: {
         id: nonNull(intArg()),
-        data: nonNull("ArtworkUpsertInput"),
-        imagesTranslations: list(arg({ type: "ImageTranslationInput" })),
+        data: nonNull("ArtworkUpsertInput")
       },
 
       authorize: async (...[, args, ctx]) => {

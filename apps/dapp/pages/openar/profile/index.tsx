@@ -72,15 +72,6 @@ const Index = () => {
           >
             <Box p="4">
               <Stat mb="4">
-                <StatLabel fontSize="md">Pseudonym</StatLabel>
-                <StatNumber textTransform="capitalize" mt="-1">
-                  {pseudonym && `${pseudonym}`.length > 0
-                    ? pseudonym
-                    : "None, given. We'll use your wallet address as your name."}
-                </StatNumber>
-              </Stat>
-
-              <Stat mb="4">
                 <StatLabel fontSize="md">Ethereum Address</StatLabel>
                 <StatNumber textTransform="capitalize" mt="-1">
                   {ethAddress}
@@ -88,16 +79,11 @@ const Index = () => {
               </Stat>
 
               <Stat mb="4">
-                <StatLabel fontSize="md">Bio</StatLabel>
-                <StatNumber fontSize="md" mt="-1">
-                  {bio && <Box dangerouslySetInnerHTML={{ __html: bio }} />}
-                </StatNumber>
-              </Stat>
-
-              <Stat mb="4">
-                <StatLabel fontSize="md">Url</StatLabel>
-                <StatNumber mt="-1">
-                  {url && `${url}`.length > 0 ? url : "%"}
+                <StatLabel fontSize="md">Pseudonym</StatLabel>
+                <StatNumber textTransform="capitalize" mt="-1">
+                  {pseudonym && `${pseudonym}`.length > 0
+                    ? pseudonym
+                    : "None, given. We'll use your wallet address as your name."}
                 </StatNumber>
               </Stat>
 
@@ -112,6 +98,20 @@ const Index = () => {
                   {emailVerified
                     ? "You've verified your email address"
                     : "You've not verified your email address. Check your inbox!"}
+                </StatNumber>
+              </Stat>
+
+              <Stat mb="4">
+                <StatLabel fontSize="md">Bio</StatLabel>
+                <StatNumber fontSize="md" mt="-1">
+                  {bio && <Box dangerouslySetInnerHTML={{ __html: bio }} />}
+                </StatNumber>
+              </Stat>
+
+              <Stat mb="4">
+                <StatLabel fontSize="md">Url</StatLabel>
+                <StatNumber mt="-1">
+                  {url && `${url}`.length > 0 ? url : "%"}
                 </StatNumber>
               </Stat>
             </Box>

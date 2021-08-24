@@ -1,79 +1,70 @@
-import { useState, useEffect, ReactElement } from "react";
+import { useState, ReactElement } from "react";
 import type * as yup from "yup";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useQuery } from "@apollo/client";
-import { Divider, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { Text } from "@chakra-ui/react";
 
 import { LayoutOpenAR } from "~/components/app";
 import { FormNavigationBlock } from "~/components/forms";
-import { moduleProfileConfig as moduleConfig } from "~/components/modules/config";
-import { ModuleProfileUpdateForm } from "~/components/modules/forms";
-import { UserProfileUpdateValidationSchema } from "~/components/modules/validation";
+import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
+import { ModuleArtworkForm } from "~/components/modules/forms";
+import { ModuelArtworkCreateSchema } from "~/components/modules/validation";
 import { RestrictPageAccess } from "~/components/utils";
 
-import { useUserProfileUpdateMutation } from "~/hooks/mutations";
-import { filteredOutputByWhitelistNullToUndefined } from "~/utils";
-import {
-  useAuthentication,
-  useTypedDispatch,
-  useSuccessfullySavedToast,
-} from "~/hooks";
-import { userProfileUpdate } from "~/redux/slices/user";
-
+import { useAuthentication, useSuccessfullySavedToast } from "~/hooks";
+import { useArtworkCreateMutation } from "~/hooks/mutations";
 import {
   ModuleSubNav,
   ModulePage,
   ButtonListElement,
 } from "~/components/modules";
 
-
-
-const Update = () => {
+const Create = () => {
   const router = useRouter();
 
-  const dispatch = useTypedDispatch();
   const [appUser] = useAuthentication();
   const successToast = useSuccessfullySavedToast();
   const [disableNavigation, setDisableNavigation] = useState(false);
 
-  const [firstMutation, firstMutationResults] = useUserProfileUpdateMutation();
+  const [firstMutation, firstMutationResults] = useArtworkCreateMutation();
   const [isFormError, setIsFormError] = useState(false);
-  
+
   const disableForm = firstMutationResults.loading;
 
   const formMethods = useForm({
     mode: "onTouched",
-    resolver: yupResolver(UserProfileUpdateValidationSchema),
+    resolver: yupResolver(ModuelArtworkCreateSchema),
   });
 
   const {
     handleSubmit,
-    reset,
     formState: { isSubmitting, isDirty },
   } = formMethods;
 
   const onSubmit = async (
-    newData: yup.InferType<typeof UserProfileUpdateValidationSchema>
+    newData: yup.InferType<typeof ModuelArtworkCreateSchema>
   ) => {
     setIsFormError(false);
     try {
       if (appUser) {
-        const { data, errors } = await firstMutation(
-          appUser?.id,
-          {
-            pseudonym: newData.pseudonym ?? "",
-            email: newData.email ?? "",
-            bio: newData.bio ?? "",
-            url: newData.url ?? "",
-          }
-        );
+        const { data, errors } = await firstMutation({
+          title: newData.title,
+          description: newData.description,
+          video: newData.video ?? "",
+          url: newData.url ?? "",
+
+          creator: {
+            connect: {
+              id: appUser.id,
+            },
+          },
+        });
 
         if (!errors) {
           successToast();
 
-          router.push(`${moduleConfig.rootPath}/${data.id}/update`);
+          router.push(`${moduleConfig.rootPath}/${data?.artworkCreate?.id}/update`);
         } else {
           setIsFormError(true);
         }
@@ -106,13 +97,15 @@ const Update = () => {
     {
       type: "submit",
       isLoading: isSubmitting,
-      label: "Update",
+      label: "Save draft",
       userCan: "artworkCreate",
       isDisabled: disableNavigation,
     },
   ];
 
-  const errorMessage = firstMutationResults.error ? firstMutationResults?.error?.message : "";
+  const errorMessage = firstMutationResults.error
+    ? firstMutationResults?.error?.message
+    : "";
 
   return (
     <>
@@ -121,12 +114,23 @@ const Update = () => {
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={disableForm}>
             <ModuleSubNav breadcrumb={breadcrumb} buttonList={buttonList} />
-            <ModulePage isLoading={loading} isError={!!error}>
-              {isFormError && <Text width="100%" lineHeight="3rem" px="3" borderBottom="1px solid #fff" color="red.400">{errorMessage}</Text>}
-              <ModuleForm
+            <ModulePage>
+              {isFormError && (
+                <Text
+                  width="100%"
+                  lineHeight="3rem"
+                  px="3"
+                  borderBottom="1px solid #fff"
+                  color="red.400"
+                >
+                  Unfortunately, we could not save your artwork. Please try
+                  again in a little bit.
+                </Text>
+              )}
+              <ModuleArtworkForm
                 action="create"
-                data={data}
-                validationSchema={ModuleLocationCreateSchema}
+                disableNavigation={setDisableNavigation}
+                validationSchema={ModuelArtworkCreateSchema}
               />
             </ModulePage>
           </fieldset>
@@ -136,9 +140,8 @@ const Update = () => {
   );
 };
 
-
-Update.getLayout = function getLayout(page: ReactElement) {
+Create.getLayout = function getLayout(page: ReactElement) {
   return <LayoutOpenAR>{page}</LayoutOpenAR>;
 };
 
-export default RestrictPageAccess(Update, "artworkCreate");
+export default RestrictPageAccess(Create, "artworkCreate");

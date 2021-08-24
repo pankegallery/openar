@@ -83,9 +83,14 @@ export const postImage = async (req: Request, res: Response) => {
       if (req.file) {
         const { fileNanoId, metainfo } = createImageMetaInfo(req.file);
 
-        const connectWith = req?.body?.connectWith
-          ? JSON.parse(req?.body?.connectWith)
-          : {};
+        let connectWith;
+        try {
+          connectWith = req?.body?.connectWith
+            ? JSON.parse(req?.body?.connectWith)
+            : {};
+        } catch (err) {
+          // nothing to be done ...
+        }
 
         const image = await imageCreate(
           parseInt(req.body.ownerId, 10),

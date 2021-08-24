@@ -79,6 +79,9 @@ export const ModuleSubNav = ({
       button,
       index
     ) {
+
+      console.log(appUser);
+      
       if (button.userIs && !appUser?.has(button.userIs)) return pButtonList;
 
       if (button.userCan && !appUser?.can(button.userCan)) return pButtonList;

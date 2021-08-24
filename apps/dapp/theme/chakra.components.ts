@@ -98,6 +98,7 @@ export const components = {
           _placeholder: {
             color: "black.900",
           },
+          fontFamily: "Source code pro, monospace",
           bg: "transparent",
           borderColor: "white",
           _hover: {
@@ -106,8 +107,7 @@ export const components = {
           _autofill: {
             bg: "gray.700",
           },
-          h: "3rem",
-          pl: "20%",
+          p: "0",
         },
       },
     },

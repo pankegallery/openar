@@ -40,6 +40,7 @@ const Update = () => {
   const [appUser] = useAuthentication();
   const successToast = useSuccessfullySavedToast();
   const [disableNavigation, setDisableNavigation] = useState(false);
+  const [activeUploadCounter, setActiveUploadCounter] = useState<number>(0);
 
   const { data, loading, error } = useQuery(userProfileReadQueryGQL, {
     variables: {
@@ -134,14 +135,14 @@ const Update = () => {
       to: moduleConfig.rootPath,
       label: "Cancel",
       userCan: "profileUpdate",
-      isDisabled: disableNavigation,
+      isDisabled: disableNavigation || activeUploadCounter > 0,
     },
     {
       type: "submit",
       isLoading: isSubmitting,
       label: "Update",
       userCan: "profileUpdate",
-      isDisabled: disableNavigation,
+      isDisabled: disableNavigation || activeUploadCounter > 0,
     },
   ];
 
@@ -149,7 +150,7 @@ const Update = () => {
 
   return (
     <>
-      <FormNavigationBlock shouldBlock={isDirty && !isSubmitting} />
+      <FormNavigationBlock shouldBlock={(isDirty && !isSubmitting) || activeUploadCounter > 0} />
       <FormProvider {...formMethods}>
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={disableForm}>
@@ -158,6 +159,7 @@ const Update = () => {
               {isFormError && <Text width="100%" lineHeight="3rem" px="3" borderBottom="1px solid #fff" color="red.400">{errorMessage}</Text>}
               <ModuleProfileUpdateForm
                 data={data?.userProfileRead}
+                setActiveUploadCounter={setActiveUploadCounter}
                 disableNavigation={setDisableNavigation}
               />
             </ModulePage>

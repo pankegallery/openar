@@ -378,7 +378,6 @@ export default {};
 //       args: {
 //         id: nonNull(intArg()),
 //         data: nonNull("EventUpsertInput"),
-//         imagesTranslations: list(arg({ type: "ImageTranslationInput" })),
 //       },
 
 //       authorize: (...[, , ctx]) => authorizeApiUser(ctx, "eventUpdate"),
@@ -389,8 +388,6 @@ export default {};
 //         if (!event)
 //           throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Update failed");
 
-//         if (Array.isArray(args.imagesTranslations))
-//           await daoImageSaveImageTranslations(args.imagesTranslations);
 
 //         return event;
 //       },

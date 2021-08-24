@@ -7,6 +7,7 @@ import { Footer, Sidebar, AuthenticationSessionActiveGate } from "./openar";
 import { styledComponentsTheme } from "~/theme";
 import { WalletConnectGate } from "./shared";
 import {LoadingBar} from "~/components/app/shared";
+import "@fontsource/source-code-pro"
 
 export const LayoutOpenAR = ({ children }: { children: ReactNode }) => {
   const isMobile = useSSRSaveMediaQuery("(max-width: 55em)");

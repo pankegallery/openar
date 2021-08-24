@@ -55,21 +55,18 @@ declare global {
 
 export interface NexusGenInputs {
   ArtworkUpsertInput: { // input type
+    creator?: NexusGenScalars['JSON'] | null; // JSON
     description: string; // String!
     files?: NexusGenScalars['JSON'] | null; // JSON
     heroImage?: NexusGenScalars['JSON'] | null; // JSON
-    id: number; // Int!
+    id?: number | null; // Int
     images?: NexusGenScalars['JSON'] | null; // JSON
     objects?: NexusGenScalars['JSON'] | null; // JSON
-    status: number; // Int!
+    status?: number | null; // Int
     title: string; // String!
-    type: number; // Int!
+    type?: number | null; // Int
     url?: string | null; // String
     video?: string | null; // String
-  }
-  ImageTranslationInput: { // input type
-    id: number; // Int!
-    translations: NexusGenScalars['JSON']; // JSON!
   }
   ImageUpdateInput: { // input type
     meta: NexusGenScalars['JSON']; // JSON!
@@ -124,9 +121,13 @@ export interface NexusGenObjects {
   Artwork: { // root type
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     creator?: NexusGenRootTypes['User'] | null; // User
+    description?: string | null; // String
     heroImage?: NexusGenRootTypes['Image'] | null; // Image
     id: number; // Int!
+    isBanned?: boolean | null; // Boolean
     key?: string | null; // String
+    lat?: number | null; // Float
+    lng?: number | null; // Float
     status: number; // Int!
     title?: string | null; // String
     type?: number | null; // Int
@@ -235,9 +236,13 @@ export interface NexusGenFieldTypes {
   Artwork: { // field return type
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     creator: NexusGenRootTypes['User'] | null; // User
+    description: string | null; // String
     heroImage: NexusGenRootTypes['Image'] | null; // Image
     id: number; // Int!
+    isBanned: boolean | null; // Boolean
     key: string | null; // String
+    lat: number | null; // Float
+    lng: number | null; // Float
     status: number; // Int!
     title: string | null; // String
     type: number | null; // Int
@@ -378,9 +383,13 @@ export interface NexusGenFieldTypeNames {
   Artwork: { // field return type name
     createdAt: 'DateTime'
     creator: 'User'
+    description: 'String'
     heroImage: 'Image'
     id: 'Int'
+    isBanned: 'Boolean'
     key: 'String'
+    lat: 'Float'
+    lng: 'Float'
     status: 'Int'
     title: 'String'
     type: 'Int'
@@ -528,7 +537,6 @@ export interface NexusGenArgTypes {
     artworkUpdate: { // args
       data: NexusGenInputs['ArtworkUpsertInput']; // ArtworkUpsertInput!
       id: number; // Int!
-      imagesTranslations?: Array<NexusGenInputs['ImageTranslationInput'] | null> | null; // [ImageTranslationInput]
     }
     authLogin: { // args
       ethAddress: string; // String!

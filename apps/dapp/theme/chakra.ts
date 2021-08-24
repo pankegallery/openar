@@ -76,7 +76,7 @@ const themeConfig = {
         mt: 2,
       },
       "select,option": {
-        fontFamily: "Open Sans, Helvetica, Arial, sans-serif",
+        fontFamily: "\"Source Code Pro\", monospace",
       },
 
       ".openar.content": {
@@ -126,17 +126,17 @@ const themeConfig = {
       800: "#000000",
       900: "#000000",
     },
-    wine: {
-      50: "#fde9ff",
-      100: "#ebc6ed",
-      200: "#d9a1de",
-      300: "#c97dd0",
-      400: "#b958c1",
-      500: "#9f3ea7",
-      600: "#7d2f83",
-      700: "#59225e",
-      800: "#37133a",
-      900: "#170418",
+    openarGreen: {
+      50: "#f3f5e7",
+      100: "#dfdfce",
+      200: "#cac8b4",
+      300: "#b4b197",
+      400: "#9f9d7a",
+      500: "#868661",
+      600: "#65684b",
+      700: "#464a34",
+      800: "#2a2d1d",
+      900: "#0f1200",
     },
   },
   shadows: {

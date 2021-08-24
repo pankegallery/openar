@@ -135,6 +135,7 @@ export const FieldInput = ({
       _placeholder={{
         color: "gray.200",
       }}
+      border="0"
     />
   );
 
@@ -186,32 +187,27 @@ export const FieldInput = ({
       isInvalid={errors[name]?.message}
       {...{ isRequired, isDisabled }}
     >
-      <Box position="relative" alignItems="center">
-        <FormLabel
-          w="20%"
-          htmlFor={id}
-          m={0}
-          position="absolute"
-          top="50%"
-          left="0"
-          transform="translateY(-50%)"
-          pl="3"
-        >
-          {label}
-        </FormLabel>
-        {input}
-        {errors[name]?.message && (
+      <Box alignItems="center" p="3" borderBottom="1px solid #fff">
+      {errors[name]?.message && (
           <Box
             m={0}
             position="absolute"
-            top="50%"
+            top="0"
             right="0"
-            transform="translateY(-50%)"
+            pt="3"
             pr="3"
           >
             <FieldErrorMessage error={errors[name]?.message} />
           </Box>
         )}
+        <FormLabel
+          htmlFor={id}
+          m={0}
+        >
+          {label}
+        </FormLabel>
+        {input}
+        
       </Box>
     </FormControl>
   );

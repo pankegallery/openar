@@ -5,9 +5,13 @@
 type Artwork {
   createdAt: DateTime
   creator: User
+  description: String
   heroImage: Image
   id: Int!
+  isBanned: Boolean
   key: String
+  lat: Float
+  lng: Float
   status: Int!
   title: String
   type: Int
@@ -23,15 +27,16 @@ type ArtworkQueryResult {
 }
 
 input ArtworkUpsertInput {
+  creator: JSON
   description: String!
   files: JSON
   heroImage: JSON
-  id: Int!
+  id: Int
   images: JSON
   objects: JSON
-  status: Int!
+  status: Int
   title: String!
-  type: Int!
+  type: Int
   url: String
   video: String
 }
@@ -122,11 +127,6 @@ type ImageStatus {
   status: Int!
 }
 
-input ImageTranslationInput {
-  id: Int!
-  translations: JSON!
-}
-
 input ImageUpdateInput {
   meta: JSON!
 }
@@ -144,7 +144,7 @@ scalar JWT
 type Mutation {
   artworkCreate(data: ArtworkUpsertInput!): Artwork!
   artworkDelete(id: Int!): BooleanResult!
-  artworkUpdate(data: ArtworkUpsertInput!, id: Int!, imagesTranslations: [ImageTranslationInput]): Artwork!
+  artworkUpdate(data: ArtworkUpsertInput!, id: Int!): Artwork!
   authLogin(ethAddress: String!, signedMessage: String!): AuthPayload!
   authLogout(userId: Int!): BooleanResult!
   authPreLogin(ethAddress: String!): AuthPayload!

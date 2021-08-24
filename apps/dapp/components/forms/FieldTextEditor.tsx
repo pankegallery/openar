@@ -2,7 +2,7 @@ import { useFormContext } from "react-hook-form";
 
 import { FormControl, FormLabel, Flex } from "@chakra-ui/react";
 
-import { TextEditor, FieldErrorMessage, TextEditorTypes } from ".";
+import { TextEditor, TextEditorTypes } from ".";
 
 export interface FieldTextEditorSettings {
   required?: boolean;
@@ -44,6 +44,7 @@ export const FieldTextEditor = ({
       className={settings?.className}
       isInvalid={errors[name]?.message}
       {...{ isRequired, isDisabled }}
+      borderBottom="1px solid #fff"
     >
       <Flex direction={{ base: "column", mw: "row", t: "column" }} p="3">
         <FormLabel
@@ -74,7 +75,7 @@ export const FieldTextEditor = ({
           })}
         />
       </Flex>
-      <FieldErrorMessage error={errors[name]?.message} />
+      {/* <FieldErrorMessage error={errors[name]?.message} /> */}
     </FormControl>
   );
 };

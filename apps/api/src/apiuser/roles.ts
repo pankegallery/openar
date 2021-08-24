@@ -162,6 +162,9 @@ apiRolesAndPermissions.add("user", [
   "accessAsAuthenticatedUser",
   "profileRead",
   "profileUpdate",
+  "artworkReadOwn",
+  "artworkUpdateOwn",
+  "artworkDeleteOwn",
 ]);
 
 apiRolesAndPermissions.add("administrator", [
