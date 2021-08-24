@@ -14,12 +14,18 @@ export const FormNavigationBlock = ({
   useEffect(() => {
     const handler = () => {
       if (shouldBlock && !window.confirm(message)) {
-        throw "Route Canceled";
+        Router.events.emit("routeChangeError");
+        throw 'routeChange aborted.';
       }
     };
-
-    Router.events.on("routeChangeStart", handler);
-
+    
+    try {
+      
+  
+      Router.events.on("routeChangeStart", handler);
+  
+    } catch (err) {}
+    
     return () => {
       Router.events.off("routeChangeStart", handler);
     };

@@ -31,6 +31,12 @@ const options: CookieSetOptions = {
 
 import { store } from "~/redux";
 
+export const getAuthToken = (): Token | null => authToken;
+
+export const getRefreshCookie = (): string =>
+  cookies.get(HAS_REFRESH_COOKIE_NAME);
+
+
 export const getAppUser = () => {
   const {
     user: { appUserData },
@@ -40,11 +46,7 @@ export const getAppUser = () => {
       ? createAuthenticatedAppUser(appUserData)
       : null;
 };
-
-export const getAuthToken = (): Token | null => authToken;
-
-export const getRefreshCookie = (): string =>
-  cookies.get(HAS_REFRESH_COOKIE_NAME);
+  
 
 export const getTokenPayload = (token: Token): TokenPayload | null => {
   if (!token) return null;

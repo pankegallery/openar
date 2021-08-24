@@ -19,7 +19,7 @@ export let client: ApolloClient<any> | null = null;
 const authLink = new ApolloLink((operation, forward) => {
   // retrieve access token from memory
   const accessToken = authentication.getAuthToken();
-
+  
   if (accessToken) {
     operation.setContext(({ headers = {} }) => ({
       headers: {

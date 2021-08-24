@@ -49,10 +49,13 @@ export const WalletConnectGate = ({
   ]);
   
   // TODO: get tab wid logout running 
-  // useEffect(() => {
-  //   console.log(loginStatus, isLoggingIn);
-  //   if (loginStatus === "logged-out" && Router.asPath !== "/" && !isLoggingIn) Router.push("/");
-  // }, [loginStatus, isLoggingIn]);
+  useEffect(() => {
+    console.log(loginStatus, isLoggingIn);
+    if (loginStatus === "logged-out" && Router.asPath !== "/" && !isLoggingIn) {
+      console.log("trigger redirect to /");
+      Router.push("/");
+    }
+  }, [loginStatus, isLoggingIn]);
 
   return <>{children}</>;
 };

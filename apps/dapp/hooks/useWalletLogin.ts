@@ -112,17 +112,14 @@ export function useWalletLogin() {
         try {
           await logoutMutation(appUser.id);
         } catch (err) {
-          console.log("loutout mutation", err);
+          // just fail silently 
         }
       }
       await user.logout();
 
       deactivate();
 
-      console.log("and out!");
-      
       Router.push("/");
-      console.log("and out!");
 
     } catch (error) {
       setIsConnected(false);
@@ -180,6 +177,7 @@ export function useWalletLogin() {
     setWalletLoginError(null);
     setIsLoggingIn(false);
     triggerToast();
+    setIsConnected(true);
     Router.push("/openar/");
 
   }, [triggerToast, setIsLoggingIn, setWalletLoginError]);

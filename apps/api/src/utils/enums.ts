@@ -15,6 +15,15 @@ export enum ImageStatusEnum {
   DELETED,
 }
 
+export enum ArtworkStatusEnum {
+  DRAFT,
+  SAVED,
+  PUBLISHED,
+  MINTED,
+  TRASHED,
+  DELETED,
+}
+
 export enum PublishStatus {
   AUTODRAFT,
   DRAFT,

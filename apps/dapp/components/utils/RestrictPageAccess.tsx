@@ -1,5 +1,7 @@
 import Router from "next/router";
 import type { PermissionName } from "~/appuser";
+import cookie from 'cookie';
+import { AuthenticatedAppUser } from "~/appuser";
 
 import { appConfig } from "~/config";
 import { getAppUser } from "~/services/authentication";
@@ -20,8 +22,19 @@ export const RestrictPageAccess = (
     hocComponent.getLayout = AccessRestrictedComponent.getLayout
 
   hocComponent.getInitialProps = async (context) => {
+    let canPotentiallyReadPage = false;
+    if (context.req) {
+      context.req.cookies = cookie.parse(context.req.headers['cookie'] ?? "");
+      if (context.req.cookies.refreshToken)
+        canPotentiallyReadPage = true;
+
+    } else {
+      if (getAppUser())
+        canPotentiallyReadPage = true;
+    } 
+    
     // Are you an authorized user or not?
-    if (!appUser) { // || !appUser.can(permission)) {
+    if (!canPotentiallyReadPage) {
       // Handle server-side and client-side rendering.
       if (context.res) {
         context.res?.writeHead(302, {
@@ -35,10 +48,10 @@ export const RestrictPageAccess = (
       const wrappedProps = await AccessRestrictedComponent.getInitialProps({
         ...context,
       });
-      return { ...wrappedProps, appUser };
+      return { ...wrappedProps, canPotentiallyReadPage };
     }
     // TODO: maybe this should not return an empty object ... 
-    return { appUser };
+    return { canPotentiallyReadPage };
   };
 
   return hocComponent;

@@ -49,7 +49,10 @@ model Artwork {
 
   key         String @unique @db.VarChar(16)
   
-  description String?
+  status     Int    @default(0)
+
+  title       String?
+  description String @default("")
   url          String?
   video        String?
 
@@ -58,8 +61,8 @@ model Artwork {
   creatorId Int
   creator   User? @relation(fields: [creatorId], references: [id], name: "artworks")
 
-  lat           Float
-  lng           Float
+  lat           Float?
+  lng           Float?
   
   files File[]
 
@@ -75,8 +78,10 @@ model Object {
   id          Int     @id @default(autoincrement())
   
   key         String @unique @db.VarChar(16)
-
-  name        String?
+  
+  status     Int    @default(0)
+  
+  title        String?
   description String?
   orderNumber     Int @default(0)
   editionOf     Int

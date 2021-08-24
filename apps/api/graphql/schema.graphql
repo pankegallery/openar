@@ -2,6 +2,40 @@
 ### Do not make changes to this file directly
 
 
+type Artwork {
+  createdAt: DateTime
+  creator: User
+  heroImage: Image
+  id: Int!
+  key: String
+  status: Int!
+  title: String
+  type: Int
+  updatedAt: DateTime
+  url: String
+  video: String
+}
+
+"""List all the artworks in the database."""
+type ArtworkQueryResult {
+  artworks: [Artwork]
+  totalCount: Int
+}
+
+input ArtworkUpsertInput {
+  description: String!
+  files: JSON
+  heroImage: JSON
+  id: Int!
+  images: JSON
+  objects: JSON
+  status: Int!
+  title: String!
+  type: Int!
+  url: String
+  video: String
+}
+
 type AuthPayload {
   tokens: AuthPayloadTokens
   user: AuthUser
@@ -108,11 +142,14 @@ A field whose value is a JSON Web Token (JWT): https://jwt.io/introduction.
 scalar JWT
 
 type Mutation {
+  artworkCreate(data: ArtworkUpsertInput!): Artwork!
+  artworkDelete(id: Int!): BooleanResult!
+  artworkUpdate(data: ArtworkUpsertInput!, id: Int!, imagesTranslations: [ImageTranslationInput]): Artwork!
   authLogin(ethAddress: String!, signedMessage: String!): AuthPayload!
   authLogout(userId: Int!): BooleanResult!
   authPreLogin(ethAddress: String!): AuthPayload!
   authRefresh: AuthPayload!
-  authRequestEmailVerificationEmail(scope: String!, userId: Int!): BooleanResult!
+  authRequestEmailVerificationEmail(userId: Int!): BooleanResult!
   authVerifyEmail(token: String!): BooleanResult!
   imageDelete(id: Int!): BooleanResult!
   imageUpdate(data: ImageUpdateInput!, id: Int!): Image!
@@ -137,6 +174,9 @@ type PublicUser implements UserBaseNode {
 }
 
 type Query {
+  artwork(key: String!): Artwork!
+  artworkReadOwn(id: Int!): Artwork!
+  artworks(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ArtworkQueryResult
   imageRead(id: Int!): Image!
   imageStatus(id: Int!): ImageStatus!
   images(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, taxonomyId: Int, where: JSON): ImageQueryResult

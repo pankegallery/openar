@@ -115,3 +115,25 @@ a {
   pointer-events: none;
   height: 0;
 }
+
+@keyframes loadingAnimationCross {
+  0%   { width: 0%; left: 0px; right: auto;}
+  49.99% { width: 100%; left: 0px; right: auto;}
+  50% { width: 100%; left: auto; right: 0px;}
+  99.99% { width: 0%; left: auto; right: 0px;}
+}
+
+.loadingbar {
+  display: none;
+  width: 0px;
+  height: 3px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 3000;
+
+  &.loading {
+    display: block;
+    animation: loadingAnimationCross 1.5s infinite;
+  }
+}

@@ -6,7 +6,7 @@ import Image from "next/image";
 import { LayoutOpenAR } from "~/components/app";
 import { Box } from "@chakra-ui/layout";
 import { useConfigContext } from "~/providers";
-import { RestrictPageAccess } from "~/components/utils";
+import { RestrictPageAccess, AlertEmailVerification} from "~/components/utils";
 
 // import { useEthers, useEtherBalance } from "@usedapp/core";
 // import { formatUnits } from "@ethersproject/units";
@@ -18,6 +18,8 @@ const OpenARDashboard = () => {
   const appConfig = useConfigContext();
   
   return (
+    <>
+    <AlertEmailVerification />
     <Box>
       <Head>
         <title>TODO: OpenAR Title</title>
@@ -43,6 +45,7 @@ const OpenARDashboard = () => {
          
       {}
     </Box>
+    </>
   );
 };
 

@@ -6,6 +6,7 @@ import { useSSRSaveMediaQuery } from "~/hooks";
 import { Footer, Sidebar, AuthenticationSessionActiveGate } from "./openar";
 import { styledComponentsTheme } from "~/theme";
 import { WalletConnectGate } from "./shared";
+import {LoadingBar} from "~/components/app/shared";
 
 export const LayoutOpenAR = ({ children }: { children: ReactNode }) => {
   const isMobile = useSSRSaveMediaQuery("(max-width: 55em)");
@@ -14,6 +15,7 @@ export const LayoutOpenAR = ({ children }: { children: ReactNode }) => {
     <WalletConnectGate>
       <AuthenticationSessionActiveGate>
         <ThemeProvider theme={styledComponentsTheme}>
+          <LoadingBar color="#fff"/>
           <Grid
             templateColumns={isMobile ? "100%" : "max(250px, 20vw) 1fr"}
             alignItems="start"

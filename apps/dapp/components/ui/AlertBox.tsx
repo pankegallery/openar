@@ -44,8 +44,10 @@ export const AlertBox = ({
       variant="subtle"
       status={status}
       mb={{ base: 3, tw: 4 }}
-      borderRadius="lg"
-      shadow="md"
+      borderRadius="0"
+      shadow="none"
+      color="gray.800"
+      borderBottom="1px solid #fff"
     >
       <Grid
         templateColumns={hasClose ? "32px 1fr 32px" : "32px 1fr"}

@@ -1,5 +1,12 @@
 import { Prisma } from "@prisma/client";
 
+import { customAlphabet } from "nanoid";
+
+export const daoNanoidCustom16 = customAlphabet(
+  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+  16
+);
+
 export const daoSharedCheckSlugUnique = async (
   findMany: Function,
   slug: Record<string, string>,

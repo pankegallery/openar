@@ -69,7 +69,7 @@ export const DangerZoneAlertDialog = ({
       size={size}
     >
       <AlertDialogOverlay>
-        <AlertDialogContent borderRadius="xl">
+        <AlertDialogContent borderRadius="0" bg="openar.muddygreen">
           <AlertDialogHeader
             fontSize="3xl"
             fontWeight="bold"

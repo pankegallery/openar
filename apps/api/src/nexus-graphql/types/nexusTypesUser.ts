@@ -315,9 +315,9 @@ export const UserMutations = extendType({
         data: nonNull(UserProfileUpdateInput),
       },
 
-      // TODO: authorize: :  (...[, args, ctx]) =>
-      //   authorizeApiUser(ctx, "profileUpdate") &&
-      //   isCurrentApiUser(ctx, args.id),
+      authorize: (...[, args, ctx]) =>
+        authorizeApiUser(ctx, "profileUpdate") &&
+        isCurrentApiUser(ctx, args.id),
 
       async resolve(...[, args]) {
         const user = await userProfileUpdate(args.id, args.data);

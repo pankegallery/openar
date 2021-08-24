@@ -187,7 +187,6 @@ export const AuthMutations = extendType({
     t.nonNull.field("authRequestEmailVerificationEmail", {
       type: BooleanResult,
       args: {
-        scope: nonNull(stringArg()),
         userId: nonNull(intArg()),
       },
 

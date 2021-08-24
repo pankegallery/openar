@@ -4,18 +4,19 @@ import { createAuthenticatedAppUser } from "~/appuser";
 import { useRouter } from "next/router";
 import { useTypedSelector } from "~/hooks";
 
-import { user } from "~/services";
-
-let appUser = null;
+import { user, authentication } from "~/services";
 
 export const useAuthentication = () => {
   const router = useRouter();
   const { authenticated, appUserData } = useTypedSelector(({ user }) => user);
 
-  const appUser = appUserData && appUserData?.id && appUserData.ethAddress
+  const appUser =
+    authentication.getRefreshCookie() &&
+    appUserData &&
+    appUserData?.id &&
+    appUserData.ethAddress
       ? createAuthenticatedAppUser(appUserData)
       : null;
-
 
   const isLoggedIn = (): boolean => {
     return (authenticated && appUserData !== null) || user.isRefreshing();

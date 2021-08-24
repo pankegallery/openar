@@ -97,8 +97,6 @@ const login = async (u: AuthenticatedAppUserData): Promise<boolean> =>
     console.log("LOGIN USER DATA", u);
     store.dispatch(userLogin({ appUserData: u, expires: getRefreshCookie() }));
 
-    console.log("user.login()");
-    
     resolve(true);
   });
 

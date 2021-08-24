@@ -30,12 +30,8 @@ export const WalletControl = () => {
     connectInjected,
     connectWalletConnect,
     account,
-    active,
     isLoggingIn,
   } = useWalletLogin();
-
-  // TODO: revmoe active as not needed?
-  console.log("WC", account, active, awaitingUserInteraction);
 
   const walletDisclosure = useDisclosure();
 

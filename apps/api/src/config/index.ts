@@ -28,14 +28,12 @@ dotenv.config();
 
 export type ApiModelScopes =
   | "all"
-  | "location"
-  | "event"
-  | "tour"
+  | "artwork"
+  | "object"
+  | "exhibition"
   | "user"
-  | "taxonomy"
-  | "term"
-  | "image"
-  | "page";
+  | "review"
+  | "image";
 
 export interface ApiConfigDB {
   url: string;
@@ -131,12 +129,9 @@ const db: ApiConfigDB = {
   maxPageSize: 500,
   privateJSONDataKeys: {
     all: ["password"],
-    location: ["createdAt", "updatedAt", "fullText"],
-    event: ["createdAt", "updatedAt", "fullText"],
-    tour: ["createdAt", "updatedAt", "fullText"],
-    taxonomy: [],
-    term: [],
-    page: ["fullText"],
+    artwork: ["createdAt", "updatedAt", "fullText"],
+    object: ["createdAt", "updatedAt", "fullText"],
+    exhibition: ["createdAt", "updatedAt", "fullText"],
     image: [],
     user: ["password"],
   },

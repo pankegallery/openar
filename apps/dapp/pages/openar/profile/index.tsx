@@ -74,7 +74,9 @@ const Index = () => {
               <Stat mb="4">
                 <StatLabel fontSize="md">Pseudonym</StatLabel>
                 <StatNumber textTransform="capitalize" mt="-1">
-                  {pseudonym}
+                  {pseudonym && `${pseudonym}`.length > 0
+                    ? pseudonym
+                    : "None, given. We'll use your wallet address as your name."}
                 </StatNumber>
               </Stat>
 
@@ -88,15 +90,14 @@ const Index = () => {
               <Stat mb="4">
                 <StatLabel fontSize="md">Bio</StatLabel>
                 <StatNumber fontSize="md" mt="-1">
-                  {bio && <Box  dangerouslySetInnerHTML={{ __html:bio}} />}
-                  
+                  {bio && <Box dangerouslySetInnerHTML={{ __html: bio }} />}
                 </StatNumber>
               </Stat>
 
               <Stat mb="4">
                 <StatLabel fontSize="md">Url</StatLabel>
-                <StatNumber textTransform="capitalize" mt="-1">
-                  {url}
+                <StatNumber mt="-1">
+                  {url && `${url}`.length > 0 ? url : "%"}
                 </StatNumber>
               </Stat>
 

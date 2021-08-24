@@ -54,6 +54,19 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  ArtworkUpsertInput: { // input type
+    description: string; // String!
+    files?: NexusGenScalars['JSON'] | null; // JSON
+    heroImage?: NexusGenScalars['JSON'] | null; // JSON
+    id: number; // Int!
+    images?: NexusGenScalars['JSON'] | null; // JSON
+    objects?: NexusGenScalars['JSON'] | null; // JSON
+    status: number; // Int!
+    title: string; // String!
+    type: number; // Int!
+    url?: string | null; // String
+    video?: string | null; // String
+  }
   ImageTranslationInput: { // input type
     id: number; // Int!
     translations: NexusGenScalars['JSON']; // JSON!
@@ -108,6 +121,23 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  Artwork: { // root type
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    creator?: NexusGenRootTypes['User'] | null; // User
+    heroImage?: NexusGenRootTypes['Image'] | null; // Image
+    id: number; // Int!
+    key?: string | null; // String
+    status: number; // Int!
+    title?: string | null; // String
+    type?: number | null; // Int
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    url?: string | null; // String
+    video?: string | null; // String
+  }
+  ArtworkQueryResult: { // root type
+    artworks?: Array<NexusGenRootTypes['Artwork'] | null> | null; // [Artwork]
+    totalCount?: number | null; // Int
+  }
   AuthPayload: { // root type
     tokens?: NexusGenRootTypes['AuthPayloadTokens'] | null; // AuthPayloadTokens
     user?: NexusGenRootTypes['AuthUser'] | null; // AuthUser
@@ -202,6 +232,23 @@ export type NexusGenRootTypes = NexusGenInterfaces & NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  Artwork: { // field return type
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    creator: NexusGenRootTypes['User'] | null; // User
+    heroImage: NexusGenRootTypes['Image'] | null; // Image
+    id: number; // Int!
+    key: string | null; // String
+    status: number; // Int!
+    title: string | null; // String
+    type: number | null; // Int
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+    url: string | null; // String
+    video: string | null; // String
+  }
+  ArtworkQueryResult: { // field return type
+    artworks: Array<NexusGenRootTypes['Artwork'] | null> | null; // [Artwork]
+    totalCount: number | null; // Int
+  }
   AuthPayload: { // field return type
     tokens: NexusGenRootTypes['AuthPayloadTokens'] | null; // AuthPayloadTokens
     user: NexusGenRootTypes['AuthUser'] | null; // AuthUser
@@ -252,6 +299,9 @@ export interface NexusGenFieldTypes {
     status: number; // Int!
   }
   Mutation: { // field return type
+    artworkCreate: NexusGenRootTypes['Artwork']; // Artwork!
+    artworkDelete: NexusGenRootTypes['BooleanResult']; // BooleanResult!
+    artworkUpdate: NexusGenRootTypes['Artwork']; // Artwork!
     authLogin: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     authLogout: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     authPreLogin: NexusGenRootTypes['AuthPayload']; // AuthPayload!
@@ -279,6 +329,9 @@ export interface NexusGenFieldTypes {
     url: string | null; // String
   }
   Query: { // field return type
+    artwork: NexusGenRootTypes['Artwork']; // Artwork!
+    artworkReadOwn: NexusGenRootTypes['Artwork']; // Artwork!
+    artworks: NexusGenRootTypes['ArtworkQueryResult'] | null; // ArtworkQueryResult
     imageRead: NexusGenRootTypes['Image']; // Image!
     imageStatus: NexusGenRootTypes['ImageStatus']; // ImageStatus!
     images: NexusGenRootTypes['ImageQueryResult'] | null; // ImageQueryResult
@@ -321,6 +374,23 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  Artwork: { // field return type name
+    createdAt: 'DateTime'
+    creator: 'User'
+    heroImage: 'Image'
+    id: 'Int'
+    key: 'String'
+    status: 'Int'
+    title: 'String'
+    type: 'Int'
+    updatedAt: 'DateTime'
+    url: 'String'
+    video: 'String'
+  }
+  ArtworkQueryResult: { // field return type name
+    artworks: 'Artwork'
+    totalCount: 'Int'
+  }
   AuthPayload: { // field return type name
     tokens: 'AuthPayloadTokens'
     user: 'AuthUser'
@@ -371,6 +441,9 @@ export interface NexusGenFieldTypeNames {
     status: 'Int'
   }
   Mutation: { // field return type name
+    artworkCreate: 'Artwork'
+    artworkDelete: 'BooleanResult'
+    artworkUpdate: 'Artwork'
     authLogin: 'AuthPayload'
     authLogout: 'BooleanResult'
     authPreLogin: 'AuthPayload'
@@ -398,6 +471,9 @@ export interface NexusGenFieldTypeNames {
     url: 'String'
   }
   Query: { // field return type name
+    artwork: 'Artwork'
+    artworkReadOwn: 'Artwork'
+    artworks: 'ArtworkQueryResult'
     imageRead: 'Image'
     imageStatus: 'ImageStatus'
     images: 'ImageQueryResult'
@@ -441,6 +517,17 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    artworkCreate: { // args
+      data: NexusGenInputs['ArtworkUpsertInput']; // ArtworkUpsertInput!
+    }
+    artworkDelete: { // args
+      id: number; // Int!
+    }
+    artworkUpdate: { // args
+      data: NexusGenInputs['ArtworkUpsertInput']; // ArtworkUpsertInput!
+      id: number; // Int!
+      imagesTranslations?: Array<NexusGenInputs['ImageTranslationInput'] | null> | null; // [ImageTranslationInput]
+    }
     authLogin: { // args
       ethAddress: string; // String!
       signedMessage: string; // String!
@@ -452,7 +539,6 @@ export interface NexusGenArgTypes {
       ethAddress: string; // String!
     }
     authRequestEmailVerificationEmail: { // args
-      scope: string; // String!
       userId: number; // Int!
     }
     authVerifyEmail: { // args
@@ -484,6 +570,18 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    artwork: { // args
+      key: string; // String!
+    }
+    artworkReadOwn: { // args
+      id: number; // Int!
+    }
+    artworks: { // args
+      orderBy?: NexusGenScalars['JSON'] | null; // JSON
+      pageIndex?: number | null; // Int
+      pageSize: number | null; // Int
+      where?: NexusGenScalars['JSON'] | null; // JSON
+    }
     imageRead: { // args
       id: number; // Int!
     }
