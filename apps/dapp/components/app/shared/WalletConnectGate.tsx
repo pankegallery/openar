@@ -50,7 +50,6 @@ export const WalletConnectGate = ({
   
   // TODO: get tab wid logout running 
   useEffect(() => {
-    console.log(loginStatus, isLoggingIn);
     if (loginStatus === "logged-out" && Router.asPath !== "/" && !isLoggingIn) {
       console.log("trigger redirect to /");
       Router.push("/");

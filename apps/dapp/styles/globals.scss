@@ -29,6 +29,13 @@ a {
     left: 0;
     height: 100%;
     width: 100%;
+
+    img, 
+    picture {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
   }
 }
 
@@ -140,5 +147,61 @@ a {
   &.loading {
     display: block;
     animation: loadingAnimationCross 1.5s infinite;
+  }
+}
+
+
+.artwork.item {
+  width: 100%;
+  display: flex;
+  overflow: hidden;
+  .info {
+    width: 33.33%;
+    padding: 0.5rem;
+    writing-mode:vertical-rl;
+    transform: rotate(180deg);
+
+    a::before {
+      width: 100vw;
+    }
+  } 
+  .img {
+    width: 66.66%;
+    picture, img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+    pointer-events: none;
+  }
+
+  &:nth-child(2n + 1) {
+    flex-direction: row-reverse;
+  }
+}
+
+@media (min-width: 45rem) {
+  .artwork.item {
+    width: 50%;
+    display: flex;
+
+    flex-direction: row-reverse;
+
+    .info {
+      a::before {
+        width: 50vw;
+      }
+    } 
+
+    &:nth-child(4n + 1),
+    &:nth-child(4n + 2) {
+      flex-direction: row;
+      .info {
+        a::before {
+          left: auto;
+          right: 0;
+        }
+      } 
+    }
   }
 }

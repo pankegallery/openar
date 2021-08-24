@@ -1,7 +1,8 @@
 import { ReactElement } from "react";
 
 import { useQuery, gql } from "@apollo/client";
-import { Stat, StatLabel, StatNumber, Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
+import pick from "lodash/pick";
 
 import {
   ModuleSubNav,
@@ -15,6 +16,7 @@ import { moduleArtworksConfig } from "~/components/modules/config";
 import { useAuthentication } from "~/hooks";
 import { ApiImage } from "~/components/ui";
 import { LayoutOpenAR } from "~/components/app";
+import { ArtworkListItem } from "~/components/frontend";
 
 const GET_OWN_ARTWORKS_LIST = gql`
   query artworksReadOwn {
@@ -25,7 +27,11 @@ const GET_OWN_ARTWORKS_LIST = gql`
         title
         key
         status
-
+        creator {
+          id
+          ethAddress
+          pseudonym
+        }
         heroImage {
           id
           status
@@ -63,26 +69,39 @@ const Index = () => {
 
   const { totalCount, artworks } = data?.artworksReadOwn ?? {};
 
+
+  console.log(data?.artworksReadOwn);
+  
   return (
     <>
       <ModuleSubNav breadcrumb={breadcrumb} buttonList={buttonList} />
       <ModulePage isLoading={loading} isError={!!error}>
         <Box>
-        {!loading && !error && (
-          <>
-            {artworks.length === 0 && (
-              <Text p="4">You haven&#34;t created any artworks yet</Text>
-            )}
+          {!loading && !error && (
+            <>
+              {artworks.length === 0 && (
+                <Text p="4">You haven&#34;t created any artworks yet</Text>
+              )}
 
-            {artworks.length > 0 && (
-              <Flex width="100%" flexWrap="wrap">
-                <Box>sdafsdalfkj</Box>
-                <Box>sdafsdalfkj</Box>
-                <Box>TODO: SHOW ARTWORKS</Box>
-              </Flex>
-            )}
-          </>
-        )}
+              {artworks.length > 0 && (
+                <Flex width="100%" flexWrap="wrap">
+                  {" "}
+                  {artworks.map((artwork) => (
+                    <ArtworkListItem key={`aw-${artwork.id}`}
+                      isAdmin={true}
+                      {...pick(artwork, [
+                        "id",
+                        "status",
+                        "heroImage",
+                        "title",
+                        "creator",
+                      ])}
+                    />
+                  ))}
+                </Flex>
+              )}
+            </>
+          )}
         </Box>
       </ModulePage>
     </>

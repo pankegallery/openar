@@ -1,12 +1,11 @@
 import React from "react";
 import { BeatLoader } from "react-spinners";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, chakra, Flex, Text } from "@chakra-ui/react";
 
 import type { ApiImageMetaInformation } from "~/types";
 import { ImageStatusEnum } from "~/utils";
 
 import { useImageStatusPoll } from "~/hooks";
-import Image from "next/image";
 
 export type ApiImageProps = {
   id: number | undefined;
@@ -86,11 +85,11 @@ export const ApiImage = ({
                 type="image/jpeg"
               />
             )}
-            <Image
+            <chakra.img
               src={originalUrl}
               alt={alt}
-              width={originalWidth}
-              height={originalHeight}
+              htmlWidth={originalWidth}
+              htmlHeight={originalHeight}
             />
           </picture>
         );

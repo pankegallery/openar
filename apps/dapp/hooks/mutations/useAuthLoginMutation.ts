@@ -16,7 +16,6 @@ export const useAuthLoginMutation = () => {
         );
 
         if (payload) {
-          console.log("login 2(payload.user)", payload.user);
           authentication.setAuthToken(tokens.access);
           authentication.setRefreshCookie(tokens.refresh);
           login(payload.user);

@@ -17,17 +17,17 @@ const themeConfig = {
   components,
   breakpoints: createBreakpoints({
     // 16px default font size * ...em
-    mn: "0em", // 0px - aka "Mobile Narrow"
-    sm: "22em", // ~360px < Chakra requirement don't use
-    m: "22em", // ~360px - aka "Mobile"
-    md: "30em", // ~480px < Chakra requirement don't use
-    mw: "30em", // ~480px - aka "Mobile wide"
-    lg: "45em", // 720px < Chakra requirement don't use
-    t: "45em", // 720px - aka "Tablet"
-    xl: "55em", // 880px < Chakra requirement don't use
-    tw: "55em", // 880px - aka "Tablet Wide"
-    d: "75em", // 1200px - aka "Desktop"
-    s: "106em", // ~1700px - aka "Screen"
+    mn: "0rem", // 0px - aka "Mobile Narrow"
+    sm: "22rem", // ~360px < Chakra requirement don't use
+    m: "22rem", // ~360px - aka "Mobile"
+    md: "30rem", // ~480px < Chakra requirement don't use
+    mw: "30rem", // ~480px - aka "Mobile wide"
+    lg: "45rem", // 720px < Chakra requirement don't use
+    t: "45rem", // 720px - aka "Tablet"
+    xl: "55rem", // 880px < Chakra requirement don't use
+    tw: "55rem", // 880px - aka "Tablet Wide"
+    d: "75rem", // 1200px - aka "Desktop"
+    s: "106rem", // ~1700px - aka "Screen"
   }),
   styles: {
     global: {

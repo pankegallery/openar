@@ -18,7 +18,7 @@ export const LayoutOpenAR = ({ children }: { children: ReactNode }) => {
         <ThemeProvider theme={styledComponentsTheme}>
           <LoadingBar color="#fff"/>
           <Grid
-            templateColumns={isMobile ? "100%" : "1fr max(250px, 20vw) "}
+            templateColumns={isMobile ? "100%" : "calc(100% - max(350px, 20vw)) max(350px, 20vw) "}
             alignItems="start"
             className="openar content"
             minH="100%"

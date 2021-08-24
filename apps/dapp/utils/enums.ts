@@ -17,3 +17,23 @@ export enum PublishStatus {
   TRASHED,
   DELETED,
 }
+
+export enum ArtworkStatusEnum {
+  DRAFT,
+  SAVED,
+  PUBLISHED,
+  MINTING,
+  MINTED,
+  TRASHED,
+  DELETED,
+}
+
+export enum ObjectStatusEnum {
+  DRAFT,
+  SAVED,
+  PUBLISHED,
+  MINTING,
+  MINTED,
+  TRASHED,
+  DELETED,
+}

@@ -157,7 +157,7 @@ const Update = () => {
   const breadcrumb = [
     {
       path: moduleConfig.rootPath,
-      title: "Events",
+      title: "Artworks",
       userCan: "artworkReadOwn",
     },
     {
@@ -165,6 +165,8 @@ const Update = () => {
     },
   ];
 
+  // TODO: this makes some trouble on SSR as the buttons look differently 
+  // as the user can't do thing on the server 
   const buttonList: ButtonListElement[] = [
     {
       type: "back",

@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 import { userProfileReadQueryGQL } from "~/graphql/queries";
 
 import { useQuery } from "@apollo/client";
-import { Stat, StatLabel, StatNumber, Box, Grid } from "@chakra-ui/react";
+import { Stat, StatLabel, StatNumber, Box, Grid, chakra } from "@chakra-ui/react";
 
 import {
   ModuleSubNav,
@@ -58,7 +58,7 @@ const Index = () => {
     profileImage,
   } = data?.userProfileRead ?? {};
 
-  const columns = { base: "100%", t: "1fr max(33.33%, 350px) " };
+  const columns = { base: "100%", t: "calc(100% - max(33.33%, 350px)) max(33.33%, 350px) " };
   const rows = { base: "auto 1fr", t: "1fr" };
   return (
     <>
@@ -70,11 +70,11 @@ const Index = () => {
             templateRows={rows}
             minH="calc(100vh - 8rem)"
           >
-            <Box p="4">
+            <Box p="4" w="100%" overflow="hidden">
               <Stat mb="4">
                 <StatLabel fontSize="md">Ethereum Address</StatLabel>
                 <StatNumber textTransform="capitalize" mt="-1">
-                  {ethAddress}
+                  <chakra.span display="block" w="100%" overflow="hidden" whiteSpace="nowrap" textOverflow="ellipsis">{ethAddress}</chakra.span>
                 </StatNumber>
               </Stat>
 
@@ -88,7 +88,7 @@ const Index = () => {
               </Stat>
 
               <Stat mb="4">
-                <StatLabel fontSize="md">Email address</StatLabel>
+                <StatLabel font0Size="md">Email address</StatLabel>
                 <StatNumber mt="-1">{email}</StatNumber>
               </Stat>
 

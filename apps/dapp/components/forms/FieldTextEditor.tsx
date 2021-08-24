@@ -36,8 +36,6 @@ export const FieldTextEditor = ({
     setValue,
   } = useFormContext();
 
-  console.log(settings?.defaultValue);
-
   return (
     <FormControl
       id={id}

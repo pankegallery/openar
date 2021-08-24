@@ -48,7 +48,6 @@ const createImageSizeWebP = async (
     sharp(imageMeta.originalFilePath)
       .resize(size.width, size.height, {
         fit: size.crop ? sharp.fit.cover : sharp.fit.inside,
-        withoutEnlargement: true,
       })
       .toFile(newImgPath)
       .then((resizedImageMeta) => {
@@ -79,7 +78,6 @@ const createImageSizeJpg = async (
     sharp(imageMeta.originalFilePath)
       .resize(size.width, size.height, {
         fit: size.crop ? sharp.fit.cover : sharp.fit.inside,
-        withoutEnlargement: true,
       })
       .jpeg({
         mozjpeg: true,
@@ -109,7 +107,6 @@ const doChores = async () => {
     datasources: {
       db: {
         url: apiConfig.db.url,
-
       },
     },
   });

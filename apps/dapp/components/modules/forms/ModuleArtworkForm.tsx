@@ -1,4 +1,4 @@
-import { userProfileImageDeleteMutationGQL } from "~/graphql/mutations";
+import { imageDeleteMutationGQL } from "~/graphql/mutations";
 
 import { AspectRatio, Box, Grid, Text } from "@chakra-ui/react";
 
@@ -120,7 +120,14 @@ export const ModuleArtworkForm = ({
                 ModuelArtworkCreateSchema
               )}
               setActiveUploadCounter={setActiveUploadCounter}
-              deleteButtonGQL={userProfileImageDeleteMutationGQL}
+              deleteButtonGQL={imageDeleteMutationGQL}
+              connectWith={{
+                heroImageArtworks: {
+                  connect: {
+                    id: artworkReadOwn.id
+                  }
+                }
+              }}
               settings={{
                 minFileSize: 1024 * 1024 * 0.0488,
                 maxFileSize: 1024 * 1024 * 2,

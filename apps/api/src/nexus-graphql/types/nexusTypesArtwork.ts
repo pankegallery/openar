@@ -31,7 +31,6 @@ import {
   daoArtworkGetOwnById,
   daoNanoidCustom16,
 } from "../../dao";
-import context from "../context";
 
 const apiConfig = getApiConfig();
 
@@ -52,7 +51,7 @@ export const Artwork = objectType({
     t.string("video");
     t.float("lat");
     t.float("lng");
-    
+
     // TODO: make good use of this
     t.boolean("isBanned");
 
@@ -211,6 +210,7 @@ export const ArtworkQueries = extendType({
             ...include,
             creator: {
               select: {
+                id: true,
                 pseudonym: true,
                 ethAddress: true,
                 isBanned: true,
@@ -290,6 +290,22 @@ export const ArtworkQueries = extendType({
               },
             };
           }
+
+          if (
+            (pRI as any).fieldsByTypeName?.ArtworkQueryResult?.artworks
+              ?.fieldsByTypeName.Artwork?.creator
+          )
+            include = {
+              ...include,
+              creator: {
+                select: {
+                  id: true,
+                  pseudonym: true,
+                  ethAddress: true,
+                  isBanned: true,
+                },
+              },
+            };
 
           artworks = await daoArtworkQuery(
             where,
@@ -380,6 +396,8 @@ export const ArtworkMutations = extendType({
         const page = await daoArtworkCreate({
           ...args.data,
           key: daoNanoidCustom16(),
+          type: 1, // TODO: make this dynamic
+          status: ArtworkStatusEnum.DRAFT,
         });
 
         if (!page)
@@ -397,7 +415,7 @@ export const ArtworkMutations = extendType({
 
       args: {
         id: nonNull(intArg()),
-        data: nonNull("ArtworkUpsertInput")
+        data: nonNull("ArtworkUpsertInput"),
       },
 
       authorize: async (...[, args, ctx]) => {
@@ -417,7 +435,11 @@ export const ArtworkMutations = extendType({
       },
 
       async resolve(...[, args]) {
-        const artwork = await daoArtworkUpdate(args.id, args.data);
+        const artwork = await daoArtworkUpdate(args.id, {
+          ...args.data,
+          type: 1,
+          status: args.data?.status ?? ArtworkStatusEnum.DRAFT,
+        });
 
         if (!artwork)
           throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Update failed");
