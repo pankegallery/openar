@@ -54,6 +54,23 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  ArObjectUpsertInput: { // input type
+    collector?: NexusGenScalars['JSON'] | null; // JSON
+    creator?: NexusGenScalars['JSON'] | null; // JSON
+    description: string; // String!
+    editionNumber?: number | null; // Int
+    editionOf?: number | null; // Int
+    heroImage?: NexusGenScalars['JSON'] | null; // JSON
+    id?: number | null; // Int
+    images?: NexusGenScalars['JSON'] | null; // JSON
+    lat?: number | null; // Float
+    lng?: number | null; // Float
+    models?: NexusGenScalars['JSON'] | null; // JSON
+    orderNumber?: number | null; // Int
+    ownerEthAddress?: string | null; // String
+    status?: number | null; // Int
+    title: string; // String!
+  }
   ArtworkUpsertInput: { // input type
     creator?: NexusGenScalars['JSON'] | null; // JSON
     description: string; // String!
@@ -61,6 +78,8 @@ export interface NexusGenInputs {
     heroImage?: NexusGenScalars['JSON'] | null; // JSON
     id?: number | null; // Int
     images?: NexusGenScalars['JSON'] | null; // JSON
+    lat?: number | null; // Float
+    lng?: number | null; // Float
     objects?: NexusGenScalars['JSON'] | null; // JSON
     status?: number | null; // Int
     title: string; // String!
@@ -118,7 +137,35 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  ArObject: { // root type
+    collector?: NexusGenRootTypes['User'] | null; // User
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    creator?: NexusGenRootTypes['User'] | null; // User
+    description?: string | null; // String
+    editionNumber?: number | null; // Int
+    editionOf?: number | null; // Int
+    heroImage?: NexusGenRootTypes['Image'] | null; // Image
+    id: number; // Int!
+    images?: Array<NexusGenRootTypes['Image'] | null> | null; // [Image]
+    isBanned?: boolean | null; // Boolean
+    key?: string | null; // String
+    lat?: number | null; // Float
+    lng?: number | null; // Float
+    orderNumber?: number | null; // Int
+    ownerEthAddress?: string | null; // String
+    status: number; // Int!
+    title?: string | null; // String
+    type?: number | null; // Int
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    url?: string | null; // String
+    video?: string | null; // String
+  }
+  ArObjectQueryResult: { // root type
+    arObjects?: Array<NexusGenRootTypes['ArObject'] | null> | null; // [ArObject]
+    totalCount?: number | null; // Int
+  }
   Artwork: { // root type
+    arObjects?: Array<NexusGenRootTypes['ArObject'] | null> | null; // [ArObject]
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     creator?: NexusGenRootTypes['User'] | null; // User
     description?: string | null; // String
@@ -176,6 +223,7 @@ export interface NexusGenObjects {
     id: number; // Int!
     meta?: NexusGenScalars['JSON'] | null; // JSON
     nanoid?: string | null; // String
+    orderNumber?: number | null; // Int
     status?: number | null; // Int
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
   }
@@ -233,7 +281,35 @@ export type NexusGenRootTypes = NexusGenInterfaces & NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  ArObject: { // field return type
+    collector: NexusGenRootTypes['User'] | null; // User
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    creator: NexusGenRootTypes['User'] | null; // User
+    description: string | null; // String
+    editionNumber: number | null; // Int
+    editionOf: number | null; // Int
+    heroImage: NexusGenRootTypes['Image'] | null; // Image
+    id: number; // Int!
+    images: Array<NexusGenRootTypes['Image'] | null> | null; // [Image]
+    isBanned: boolean | null; // Boolean
+    key: string | null; // String
+    lat: number | null; // Float
+    lng: number | null; // Float
+    orderNumber: number | null; // Int
+    ownerEthAddress: string | null; // String
+    status: number; // Int!
+    title: string | null; // String
+    type: number | null; // Int
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+    url: string | null; // String
+    video: string | null; // String
+  }
+  ArObjectQueryResult: { // field return type
+    arObjects: Array<NexusGenRootTypes['ArObject'] | null> | null; // [ArObject]
+    totalCount: number | null; // Int
+  }
   Artwork: { // field return type
+    arObjects: Array<NexusGenRootTypes['ArObject'] | null> | null; // [ArObject]
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     creator: NexusGenRootTypes['User'] | null; // User
     description: string | null; // String
@@ -291,6 +367,7 @@ export interface NexusGenFieldTypes {
     id: number; // Int!
     meta: NexusGenScalars['JSON'] | null; // JSON
     nanoid: string | null; // String
+    orderNumber: number | null; // Int
     status: number | null; // Int
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
@@ -304,6 +381,9 @@ export interface NexusGenFieldTypes {
     status: number; // Int!
   }
   Mutation: { // field return type
+    arObjectCreate: NexusGenRootTypes['ArObject']; // ArObject!
+    arObjectDelete: NexusGenRootTypes['BooleanResult']; // BooleanResult!
+    arObjectUpdate: NexusGenRootTypes['ArObject']; // ArObject!
     artworkCreate: NexusGenRootTypes['Artwork']; // Artwork!
     artworkDelete: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     artworkUpdate: NexusGenRootTypes['Artwork']; // Artwork!
@@ -334,6 +414,9 @@ export interface NexusGenFieldTypes {
     url: string | null; // String
   }
   Query: { // field return type
+    arObject: NexusGenRootTypes['ArObject']; // ArObject!
+    arObjects: NexusGenRootTypes['ArObjectQueryResult'] | null; // ArObjectQueryResult
+    arObjectsReadOwn: NexusGenRootTypes['ArObjectQueryResult'] | null; // ArObjectQueryResult
     artwork: NexusGenRootTypes['Artwork']; // Artwork!
     artworkReadOwn: NexusGenRootTypes['Artwork']; // Artwork!
     artworks: NexusGenRootTypes['ArtworkQueryResult'] | null; // ArtworkQueryResult
@@ -380,7 +463,35 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  ArObject: { // field return type name
+    collector: 'User'
+    createdAt: 'DateTime'
+    creator: 'User'
+    description: 'String'
+    editionNumber: 'Int'
+    editionOf: 'Int'
+    heroImage: 'Image'
+    id: 'Int'
+    images: 'Image'
+    isBanned: 'Boolean'
+    key: 'String'
+    lat: 'Float'
+    lng: 'Float'
+    orderNumber: 'Int'
+    ownerEthAddress: 'String'
+    status: 'Int'
+    title: 'String'
+    type: 'Int'
+    updatedAt: 'DateTime'
+    url: 'String'
+    video: 'String'
+  }
+  ArObjectQueryResult: { // field return type name
+    arObjects: 'ArObject'
+    totalCount: 'Int'
+  }
   Artwork: { // field return type name
+    arObjects: 'ArObject'
     createdAt: 'DateTime'
     creator: 'User'
     description: 'String'
@@ -438,6 +549,7 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
     meta: 'JSON'
     nanoid: 'String'
+    orderNumber: 'Int'
     status: 'Int'
     updatedAt: 'DateTime'
   }
@@ -451,6 +563,9 @@ export interface NexusGenFieldTypeNames {
     status: 'Int'
   }
   Mutation: { // field return type name
+    arObjectCreate: 'ArObject'
+    arObjectDelete: 'BooleanResult'
+    arObjectUpdate: 'ArObject'
     artworkCreate: 'Artwork'
     artworkDelete: 'BooleanResult'
     artworkUpdate: 'Artwork'
@@ -481,6 +596,9 @@ export interface NexusGenFieldTypeNames {
     url: 'String'
   }
   Query: { // field return type name
+    arObject: 'ArObject'
+    arObjects: 'ArObjectQueryResult'
+    arObjectsReadOwn: 'ArObjectQueryResult'
     artwork: 'Artwork'
     artworkReadOwn: 'Artwork'
     artworks: 'ArtworkQueryResult'
@@ -528,6 +646,16 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    arObjectCreate: { // args
+      data: NexusGenInputs['ArObjectUpsertInput']; // ArObjectUpsertInput!
+    }
+    arObjectDelete: { // args
+      id: number; // Int!
+    }
+    arObjectUpdate: { // args
+      data: NexusGenInputs['ArObjectUpsertInput']; // ArObjectUpsertInput!
+      id: number; // Int!
+    }
     artworkCreate: { // args
       data: NexusGenInputs['ArtworkUpsertInput']; // ArtworkUpsertInput!
     }
@@ -580,6 +708,21 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    arObject: { // args
+      key: string; // String!
+    }
+    arObjects: { // args
+      orderBy?: NexusGenScalars['JSON'] | null; // JSON
+      pageIndex?: number | null; // Int
+      pageSize: number | null; // Int
+      where?: NexusGenScalars['JSON'] | null; // JSON
+    }
+    arObjectsReadOwn: { // args
+      orderBy?: NexusGenScalars['JSON'] | null; // JSON
+      pageIndex?: number | null; // Int
+      pageSize: number | null; // Int
+      where?: NexusGenScalars['JSON'] | null; // JSON
+    }
     artwork: { // args
       key: string; // String!
     }

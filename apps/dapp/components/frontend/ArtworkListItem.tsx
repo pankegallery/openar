@@ -27,8 +27,8 @@ export const ArtworkListItem = ({
   creator: any;
   heroImage: any;
   status: number;
-  isWhite: boolean;
-  isAdmin: boolean;
+  isWhite?: boolean;
+  isAdmin?: boolean;
 }) => {
   let artist = creator?.pseudonym ? `${creator?.pseudonym}` : "";
   if (artist.trim().length === 0) artist = creator?.ethAddress;

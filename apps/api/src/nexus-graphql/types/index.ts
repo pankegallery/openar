@@ -2,6 +2,7 @@ export * from "./nexusTypesShared";
 export * from "./nexusTypesAuth";
 export * from "./nexusTypesUser";
 export * from "./nexusTypesArtwork";
+export * from "./nexusTypesArObject";
 // export * from "./nexusTypesModule";
 // export * from "./nexusTypesSetting";
 // export * from "./nexusTypesTaxonomy";

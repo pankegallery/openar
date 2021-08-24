@@ -2,7 +2,56 @@
 ### Do not make changes to this file directly
 
 
+type ArObject {
+  collector: User
+  createdAt: DateTime
+  creator: User
+  description: String
+  editionNumber: Int
+  editionOf: Int
+  heroImage: Image
+  id: Int!
+  images: [Image]
+  isBanned: Boolean
+  key: String
+  lat: Float
+  lng: Float
+  orderNumber: Int
+  ownerEthAddress: String
+  status: Int!
+  title: String
+  type: Int
+  updatedAt: DateTime
+  url: String
+  video: String
+}
+
+"""List all the ArObjects in the database."""
+type ArObjectQueryResult {
+  arObjects: [ArObject]
+  totalCount: Int
+}
+
+input ArObjectUpsertInput {
+  collector: JSON
+  creator: JSON
+  description: String!
+  editionNumber: Int
+  editionOf: Int
+  heroImage: JSON
+  id: Int
+  images: JSON
+  lat: Float
+  lng: Float
+  models: JSON
+  orderNumber: Int
+  ownerEthAddress: String
+  status: Int
+  title: String!
+}
+
 type Artwork {
+  arObjects: [ArObject]
   createdAt: DateTime
   creator: User
   description: String
@@ -33,6 +82,8 @@ input ArtworkUpsertInput {
   heroImage: JSON
   id: Int
   images: JSON
+  lat: Float
+  lng: Float
   objects: JSON
   status: Int
   title: String!
@@ -111,6 +162,7 @@ type Image {
   id: Int!
   meta: JSON
   nanoid: String
+  orderNumber: Int
   status: Int
   updatedAt: DateTime
 }
@@ -142,6 +194,9 @@ A field whose value is a JSON Web Token (JWT): https://jwt.io/introduction.
 scalar JWT
 
 type Mutation {
+  arObjectCreate(data: ArObjectUpsertInput!): ArObject!
+  arObjectDelete(id: Int!): BooleanResult!
+  arObjectUpdate(data: ArObjectUpsertInput!, id: Int!): ArObject!
   artworkCreate(data: ArtworkUpsertInput!): Artwork!
   artworkDelete(id: Int!): BooleanResult!
   artworkUpdate(data: ArtworkUpsertInput!, id: Int!): Artwork!
@@ -174,6 +229,9 @@ type PublicUser implements UserBaseNode {
 }
 
 type Query {
+  arObject(key: String!): ArObject!
+  arObjects(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ArObjectQueryResult
+  arObjectsReadOwn(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ArObjectQueryResult
   artwork(key: String!): Artwork!
   artworkReadOwn(id: Int!): Artwork!
   artworks(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ArtworkQueryResult

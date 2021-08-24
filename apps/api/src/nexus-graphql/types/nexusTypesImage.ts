@@ -15,11 +15,11 @@ import {
 } from "nexus";
 import httpStatus from "http-status";
 
-import { ApiError, ImageStatusEnum } from "../../utils";
+import { ApiError } from "../../utils";
 
 import { GQLJson } from "./nexusTypesShared";
 
-import { authorizeApiUser } from "../helpers";
+// import { authorizeApiUser } from "../helpers"; TODO: enable!
 
 import { getApiConfig } from "../../config";
 
@@ -27,7 +27,6 @@ import {
   daoImageQuery,
   // daoImageCreate,
   daoImageUpdate,
-  daoImageDelete,
   daoImageQueryCount,
   daoImageGetById,
   daoImageGetStatusById,
@@ -43,6 +42,7 @@ export const Image = objectType({
     t.string("nanoid");
     t.int("status");
     t.json("meta");
+    t.int("orderNumber");
     t.json("alt");
     t.json("credits");
     t.date("createdAt");
@@ -153,28 +153,6 @@ export const ImageQueries = extendType({
       async resolve(...[, args]) {
         const image = await daoImageGetStatusById(args.id);
 
-        // let status;
-        // switch (image.status) {
-        //   case ImageStatusEnum.UPLOADED:
-        //     status = "uploaded";
-        //     break;
-
-        //   case ImageStatusEnum.PROCESSING:
-        //   case ImageStatusEnum.FAILEDRETRY:
-        //     status = "processing";
-        //     break;
-
-        //   case ImageStatusEnum.ERROR:
-        //     status = "error";
-        //     break;
-
-        //   case ImageStatusEnum.READY:
-        //     status = "ready";
-        //     break;
-
-        //   default:
-        //     status = "unknown";
-        // }
         return {
           id: image.id,
           status: image.status,

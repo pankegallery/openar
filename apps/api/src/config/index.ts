@@ -29,7 +29,7 @@ dotenv.config();
 export type ApiModelScopes =
   | "all"
   | "artwork"
-  | "object"
+  | "arobject"
   | "exhibition"
   | "user"
   | "review"
@@ -130,7 +130,7 @@ const db: ApiConfigDB = {
   privateJSONDataKeys: {
     all: ["password"],
     artwork: ["createdAt", "updatedAt", "fullText"],
-    object: ["createdAt", "updatedAt", "fullText"],
+    arobject: ["createdAt", "updatedAt", "fullText"],
     exhibition: ["createdAt", "updatedAt", "fullText"],
     image: [],
     user: ["password"],

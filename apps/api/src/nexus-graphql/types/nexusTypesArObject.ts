@@ -14,7 +14,7 @@ import {
 } from "nexus";
 import httpStatus from "http-status";
 
-import { ImageStatusEnum, ArtworkStatusEnum, ApiError } from "../../utils";
+import { ImageStatusEnum, ArObjectStatusEnum, ApiError } from "../../utils";
 import { GQLJson } from "./nexusTypesShared";
 
 import { authorizeApiUser } from "../helpers";
@@ -22,20 +22,20 @@ import { authorizeApiUser } from "../helpers";
 import { getApiConfig } from "../../config";
 
 import {
-  daoArtworkQuery,
-  daoArtworkQueryCount,
-  daoArtworkCreate,
-  daoArtworkUpdate,
-  daoArtworkDelete,
-  daoArtworkGetByKey,
-  daoArtworkGetOwnById,
+  daoArObjectQuery,
+  daoArObjectQueryCount,
+  daoArObjectCreate,
+  daoArObjectUpdate,
+  daoArObjectDelete,
+  daoArObjectGetByKey,
+  daoArObjectGetOwnById,
   daoNanoidCustom16,
 } from "../../dao";
 
 const apiConfig = getApiConfig();
 
-export const Artwork = objectType({
-  name: "Artwork",
+export const ArObject = objectType({
+  name: "ArObject",
   definition(t) {
     t.nonNull.int("id");
     t.int("type");
@@ -43,9 +43,28 @@ export const Artwork = objectType({
     t.string("title");
     t.string("description");
     t.nonNull.int("status");
+
+    t.int("orderNumber");
+    t.int("editionOf");
+    t.int("editionNumber");
+
     t.field("creator", {
       type: "User",
     });
+
+    t.field("collector", {
+      type: "User",
+    });
+
+    t.list.field("images", {
+      type: "Image",
+    });
+
+    // t.field("models", {
+    //   type: "Model",
+    // });
+
+    t.string("ownerEthAddress");
 
     t.string("url");
     t.string("video");
@@ -58,34 +77,29 @@ export const Artwork = objectType({
     t.field("heroImage", {
       type: "Image",
     });
-
-    t.list.field("arObjects", {
-      type: "ArObject",
-    });
-
     t.date("createdAt");
     t.date("updatedAt");
   },
 });
 
-export const ArtworkQueryResult = objectType({
-  name: "ArtworkQueryResult",
+export const ArObjectQueryResult = objectType({
+  name: "ArObjectQueryResult",
   description: dedent`
-    List all the artworks in the database.
+    List all the ArObjects in the database.
   `,
   definition: (t) => {
     t.int("totalCount");
-    t.field("artworks", {
-      type: list("Artwork"),
+    t.field("arObjects", {
+      type: list("ArObject"),
     });
   },
 });
 
-export const ArtworkQueries = extendType({
+export const ArObjectQueries = extendType({
   type: "Query",
   definition(t) {
-    t.field("artworks", {
-      type: ArtworkQueryResult,
+    t.field("arObjects", {
+      type: ArObjectQueryResult,
 
       args: {
         pageIndex: intArg({
@@ -108,25 +122,25 @@ export const ArtworkQueries = extendType({
         const pRI = parseResolveInfo(info);
 
         let totalCount;
-        let artworks;
-        let where: Prisma.ArtworkWhereInput = args.where ?? {};
+        let arObjects;
+        let where: Prisma.ArObjectWhereInput = args.where ?? {};
 
-        if ((pRI?.fieldsByTypeName?.ArtworkQueryResult as any)?.totalCount) {
-          totalCount = await daoArtworkQueryCount(args.where);
+        if ((pRI?.fieldsByTypeName?.ArObjectQueryResult as any)?.totalCount) {
+          totalCount = await daoArObjectQueryCount(args.where);
 
           if (totalCount === 0)
             return {
               totalCount,
-              artworks: [],
+              arObjects: [],
             };
         }
 
-        if ((pRI?.fieldsByTypeName?.ArtworkQueryResult as any)?.artworks) {
+        if ((pRI?.fieldsByTypeName?.ArObjectQueryResult as any)?.arObjects) {
           let include = {};
 
           if (
-            (pRI as any).fieldsByTypeName?.ArtworkQueryResult?.artworks
-              ?.fieldsByTypeName.Artwork?.heroImage
+            (pRI as any).fieldsByTypeName?.ArObjectQueryResult?.arObjects
+              ?.fieldsByTypeName.ArObject?.heroImage
           ) {
             include = {
               ...include,
@@ -147,32 +161,7 @@ export const ArtworkQueries = extendType({
             };
           }
 
-          if (
-            (pRI as any).fieldsByTypeName?.ArtworkQueryResult?.artworks
-              ?.fieldsByTypeName.Artwork?.arObjects
-          ) {
-            include = {
-              ...include,
-              arObjects: {
-                select: {
-                  key: true,
-                  title: true,
-                  askPrice: true,
-                  editionOf: true,
-                  sold: true,
-                },
-              },
-            };
-
-            where = {
-              ...where,
-              heroImage: {
-                status: ImageStatusEnum.READY,
-              },
-            };
-          }
-
-          if ((pRI?.fieldsByTypeName?.Artwork as any)?.creator)
+          if ((pRI?.fieldsByTypeName?.ArObject as any)?.creator)
             include = {
               ...include,
               creator: {
@@ -184,7 +173,7 @@ export const ArtworkQueries = extendType({
               },
             };
 
-          artworks = await daoArtworkQuery(
+          arObjects = await daoArObjectQuery(
             where,
             Object.keys(include).length > 0 ? include : undefined,
             args.orderBy,
@@ -195,13 +184,13 @@ export const ArtworkQueries = extendType({
 
         return {
           totalCount,
-          artworks,
+          arObjects,
         };
       },
     });
 
-    t.nonNull.field("artwork", {
-      type: "Artwork",
+    t.nonNull.field("arObject", {
+      type: "ArObject",
 
       args: {
         key: nonNull(stringArg()),
@@ -212,10 +201,10 @@ export const ArtworkQueries = extendType({
         const pRI = parseResolveInfo(info);
 
         let include = {};
-        let where: Prisma.ArtworkWhereInput = {
+        let where: Prisma.ArObjectWhereInput = {
           key: args.key,
         };
-        if ((pRI?.fieldsByTypeName?.Artwork as any)?.heroImage) {
+        if ((pRI?.fieldsByTypeName?.ArObject as any)?.heroImage) {
           include = {
             ...include,
             heroImage: {
@@ -235,7 +224,7 @@ export const ArtworkQueries = extendType({
           };
         }
 
-        if ((pRI?.fieldsByTypeName?.Artwork as any)?.creator)
+        if ((pRI?.fieldsByTypeName?.ArObject as any)?.creator)
           include = {
             ...include,
             creator: {
@@ -248,15 +237,15 @@ export const ArtworkQueries = extendType({
             },
           };
 
-        return daoArtworkGetByKey(
+        return daoArObjectGetByKey(
           where,
           Object.keys(include).length > 0 ? include : undefined
         );
       },
     });
 
-    t.field("artworksReadOwn", {
-      type: ArtworkQueryResult,
+    t.field("arObjectsReadOwn", {
+      type: ArObjectQueryResult,
 
       args: {
         pageIndex: intArg({
@@ -283,8 +272,8 @@ export const ArtworkQueries = extendType({
         const pRI = parseResolveInfo(info);
 
         let totalCount;
-        let artworks;
-        let where: Prisma.ArtworkWhereInput = args.where ?? {};
+        let arObjects;
+        let where: Prisma.ArObjectWhereInput = args.where ?? {};
 
         where = {
           ...where,
@@ -292,22 +281,22 @@ export const ArtworkQueries = extendType({
             id: ctx.appUser?.id ?? 0,
           },
         };
-        if ((pRI?.fieldsByTypeName?.ArtworkQueryResult as any)?.totalCount) {
-          totalCount = await daoArtworkQueryCount(args.where);
+        if ((pRI?.fieldsByTypeName?.ArObjectQueryResult as any)?.totalCount) {
+          totalCount = await daoArObjectQueryCount(args.where);
 
           if (totalCount === 0)
             return {
               totalCount,
-              artworks: [],
+              arObjects: [],
             };
         }
 
-        if ((pRI?.fieldsByTypeName?.ArtworkQueryResult as any)?.artworks) {
+        if ((pRI?.fieldsByTypeName?.ArObjectQueryResult as any)?.arObjects) {
           let include = {};
 
           if (
-            (pRI as any).fieldsByTypeName?.ArtworkQueryResult?.artworks
-              ?.fieldsByTypeName.Artwork?.heroImage
+            (pRI as any).fieldsByTypeName?.ArObjectQueryResult?.arObjects
+              ?.fieldsByTypeName.ArObject?.heroImage
           ) {
             include = {
               ...include,
@@ -322,8 +311,8 @@ export const ArtworkQueries = extendType({
           }
 
           if (
-            (pRI as any).fieldsByTypeName?.ArtworkQueryResult?.artworks
-              ?.fieldsByTypeName.Artwork?.creator
+            (pRI as any).fieldsByTypeName?.ArObjectQueryResult?.arObjects
+              ?.fieldsByTypeName.ArObject?.creator
           )
             include = {
               ...include,
@@ -337,7 +326,7 @@ export const ArtworkQueries = extendType({
               },
             };
 
-          artworks = await daoArtworkQuery(
+          arObjects = await daoArObjectQuery(
             where,
             Object.keys(include).length > 0 ? include : undefined,
             args.orderBy,
@@ -348,13 +337,13 @@ export const ArtworkQueries = extendType({
 
         return {
           totalCount,
-          artworks,
+          arObjects,
         };
       },
     });
 
     t.nonNull.field("artworkReadOwn", {
-      type: "Artwork",
+      type: "ArObject",
 
       args: {
         id: nonNull(intArg()),
@@ -369,19 +358,19 @@ export const ArtworkQueries = extendType({
         const pRI = parseResolveInfo(info);
 
         let include = {};
-        if ((pRI?.fieldsByTypeName?.Artwork as any)?.heroImage)
+        if ((pRI?.fieldsByTypeName?.ArObject as any)?.heroImage)
           include = {
             ...include,
             heroImage: true,
           };
 
-        if ((pRI?.fieldsByTypeName?.Artwork as any)?.creator)
+        if ((pRI?.fieldsByTypeName?.ArObject as any)?.creator)
           include = {
             ...include,
             creator: true,
           };
 
-        return daoArtworkGetOwnById(
+        return daoArObjectGetOwnById(
           args.id,
           appUser?.id ?? 0,
           Object.keys(include).length > 0 ? include : undefined
@@ -391,45 +380,47 @@ export const ArtworkQueries = extendType({
   },
 });
 
-export const ArtworkUpsertInput = inputObjectType({
-  name: "ArtworkUpsertInput",
+export const ArObjectUpsertInput = inputObjectType({
+  name: "ArObjectUpsertInput",
   definition(t) {
     t.int("id");
     t.nonNull.string("title");
-    t.int("type");
-    t.int("status");
     t.nonNull.string("description");
-    t.string("url");
-    t.string("video");
+    t.int("status");
+    t.int("orderNumber");
+    t.int("editionOf");
+    t.int("editionNumber");
     t.float("lat");
     t.float("lng");
-    t.json("heroImage");
+    t.string("ownerEthAddress");
+
     t.json("creator");
-    t.json("objects");
-    t.json("files");
+    t.json("collector");
+    t.json("heroImage");
+
+    t.json("models");
     t.json("images");
   },
 });
 
-export const ArtworkMutations = extendType({
+export const ArObjectMutations = extendType({
   type: "Mutation",
 
   definition(t) {
-    t.nonNull.field("artworkCreate", {
-      type: "Artwork",
+    t.nonNull.field("arObjectCreate", {
+      type: "ArObject",
 
       args: {
-        data: nonNull("ArtworkUpsertInput"),
+        data: nonNull("ArObjectUpsertInput"),
       },
 
       authorize: (...[, , ctx]) => authorizeApiUser(ctx, "artworkCreate"),
 
       async resolve(...[, args]) {
-        const page = await daoArtworkCreate({
+        const page = await daoArObjectCreate({
           ...args.data,
           key: daoNanoidCustom16(),
-          type: 1, // TODO: make this dynamic
-          status: ArtworkStatusEnum.DRAFT,
+          status: ArObjectStatusEnum.DRAFT,
         });
 
         if (!page)
@@ -442,61 +433,24 @@ export const ArtworkMutations = extendType({
       },
     });
 
-    t.nonNull.field("artworkUpdate", {
-      type: "Artwork",
+    t.nonNull.field("arObjectUpdate", {
+      type: "ArObject",
 
       args: {
         id: nonNull(intArg()),
-        data: nonNull("ArtworkUpsertInput"),
+        data: nonNull("ArObjectUpsertInput"),
       },
 
       authorize: async (...[, args, ctx]) => {
         if (!authorizeApiUser(ctx, "artworkUpdateOwn")) return false;
 
-        const count = await daoArtworkQueryCount({
-          id: args.id,
-          status: {
-            notIn: [ArtworkStatusEnum.MINTED, ArtworkStatusEnum.DELETED],
-          },
-          creator: {
-            id: ctx.appUser?.id ?? 0,
-          },
-        });
-
-        return count === 1;
-      },
-
-      async resolve(...[, args]) {
-        const artwork = await daoArtworkUpdate(args.id, {
-          ...args.data,
-          type: 1,
-          status: args.data?.status ?? ArtworkStatusEnum.DRAFT,
-        });
-
-        if (!artwork)
-          throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Update failed");
-
-        return artwork;
-      },
-    });
-
-    t.nonNull.field("artworkDelete", {
-      type: "BooleanResult",
-
-      args: {
-        id: nonNull(intArg()),
-      },
-
-      authorize: async (...[, args, ctx]) => {
-        if (!authorizeApiUser(ctx, "artworkDeleteOwn")) return false;
-
-        const count = await daoArtworkQueryCount({
+        const count = await daoArObjectQueryCount({
           id: args.id,
           status: {
             notIn: [
-              ArtworkStatusEnum.MINTED,
-              ArtworkStatusEnum.MINTING,
-              ArtworkStatusEnum.DELETED,
+              ArObjectStatusEnum.MINTING,
+              ArObjectStatusEnum.MINTED,
+              ArObjectStatusEnum.DELETED,
             ],
           },
           creator: {
@@ -508,9 +462,45 @@ export const ArtworkMutations = extendType({
       },
 
       async resolve(...[, args]) {
-        const artwork = await daoArtworkDelete(args.id);
+        const arObject = await daoArObjectUpdate(args.id, {
+          ...args.data,
+          status: args.data?.status ?? ArObjectStatusEnum.DRAFT,
+        });
 
-        if (!artwork)
+        if (!arObject)
+          throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Update failed");
+
+        return arObject;
+      },
+    });
+
+    t.nonNull.field("arObjectDelete", {
+      type: "BooleanResult",
+
+      args: {
+        id: nonNull(intArg()),
+      },
+
+      authorize: async (...[, args, ctx]) => {
+        if (!authorizeApiUser(ctx, "artworkDeleteOwn")) return false;
+
+        const count = await daoArObjectQueryCount({
+          id: args.id,
+          status: {
+            notIn: [ArObjectStatusEnum.MINTED, ArObjectStatusEnum.DELETED],
+          },
+          creator: {
+            id: ctx.appUser?.id ?? 0,
+          },
+        });
+
+        return count === 1;
+      },
+
+      async resolve(...[, args]) {
+        const arObject = await daoArObjectDelete(args.id);
+
+        if (!arObject)
           throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Delete failed");
 
         return { result: true };

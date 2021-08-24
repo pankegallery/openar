@@ -25,7 +25,7 @@ export enum ArtworkStatusEnum {
   DELETED,
 }
 
-export enum ObjectStatusEnum {
+export enum ArObjectStatusEnum {
   DRAFT,
   SAVED,
   PUBLISHED,

@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE "ArObject" ADD COLUMN     "askedPrice" DECIMAL(65,30) DEFAULT 0.0,
+ADD COLUMN     "public" BOOLEAN NOT NULL DEFAULT true,
+ALTER COLUMN "lat" DROP NOT NULL,
+ALTER COLUMN "lng" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "Artwork" ADD COLUMN     "public" BOOLEAN NOT NULL DEFAULT true;

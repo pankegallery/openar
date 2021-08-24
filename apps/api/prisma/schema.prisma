@@ -28,9 +28,9 @@ model User {
   isNew         Boolean @default(true)
 
   artworks   Artwork[] @relation("artworks")
-  collection Object[]  @relation("collection")
-  objects    Object[]  @relation("objects")
-
+  collection ArObject2Collector[]
+  arObjects  ArObject[] @relation("arObjects")
+  
   tokens      Token[]
   images      Image[]
   models      Model[]
@@ -58,6 +58,8 @@ model Artwork {
 
   isBanned      Boolean @default(false)
 
+  public        Boolean @default(true)
+
   creatorId Int
   creator   User? @relation(fields: [creatorId], references: [id], name: "artworks")
 
@@ -66,7 +68,7 @@ model Artwork {
   
   files File[]
 
-  objects Object[]
+  arObjects ArObject[]
 
   heroImageId Int?
   heroImage   Image? @relation(fields: [heroImageId], references: [id], name: "artworkHeroImage")
@@ -74,40 +76,54 @@ model Artwork {
   images Image[] @relation("imagesArtwork")
 }
 
-model Object {
+model ArObject {
   id          Int     @id @default(autoincrement())
   
   key         String @unique @db.VarChar(16)
   
   status     Int    @default(0)
   
-  title        String?
-  description String?
-  orderNumber     Int @default(0)
-  editionOf     Int
-  editionNumber Int
+  title         String?
+  description   String?
+  orderNumber     Int? @default(0)
+  editionOf     Int?
+  sold          Int?
 
-  lat           Float
-  lng           Float
+  lat           Float?
+  lng           Float?
 
-  ownerEthAdress String?   @db.VarChar(42)
+  askPrice    Decimal? @default(0.0)
+  public        Boolean @default(true)
+
+  ownerEthAddress String?   @db.VarChar(42)
 
   isBanned      Boolean @default(false)
 
   creatorId Int
-  creator   User? @relation(fields: [creatorId], references: [id], name: "objects")
+  creator   User? @relation(fields: [creatorId], references: [id], name: "arObjects")
 
-  collectorId Int?
-  collector   User? @relation(fields: [collectorId], references: [id], name: "collection")
-
+  collectors  ArObject2Collector[] 
   artworkId Int
   artwork   Artwork? @relation(fields: [artworkId], references: [id])
 
   heroImageId Int?
-  heroImage   Image? @relation(fields: [heroImageId], references: [id], name: "objectHeroImage")
+  heroImage   Image? @relation(fields: [heroImageId], references: [id], name: "arObjectHeroImage")
 
   images Image[] @relation("imagesObject")
   models Model[]
+}
+
+model ArObject2Collector {
+  id              Int     @id @default(autoincrement())
+  arObjectId      Int
+  
+  userId          Int?
+  tokenId         String
+  editonNumber    Int
+  ownerEthAddress String? 
+  
+  collector User? @relation(fields: [userId], references: [id])
+  arObject  ArObject? @relation(fields: [arObjectId], references: [id])
 }
 
 model Image {
@@ -116,16 +132,16 @@ model Image {
   meta       Json
   status     Int    @default(0)
   retryCount Int    @default(0)
-  orderNumber     Int @default(0)
+  orderNumber     Int? @default(0)
   artworks Artwork[] @relation("imagesArtwork")
-  objects  Object[]  @relation("imagesObject")
+  arObjects  ArObject[]  @relation("imagesObject")
 
   ownerId    Int  
   owner      User   @relation(fields: [ownerId], references: [id])
   
   profileImageUsers User[]    @relation("userProfileImage")
   heroImageArtworks Artwork[] @relation("artworkHeroImage")
-  heroImageObjects  Object[]  @relation("objectHeroImage")
+  heroImageObjects  ArObject[]  @relation("arObjectHeroImage")
 }
 
 model Model {
@@ -136,8 +152,8 @@ model Model {
   retryCount Int    @default(0)
   format     String @db.VarChar(8)
   type       String @db.VarChar(8)
-  objectId   Int
-  object     Object @relation(fields: [objectId], references: [id])
+  arObjectId   Int
+  arObject     ArObject @relation(fields: [arObjectId], references: [id])
   ownerId    Int  
   owner      User   @relation(fields: [ownerId], references: [id])
 }

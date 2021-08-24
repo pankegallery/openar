@@ -123,7 +123,7 @@ export const daoArtworkUpdate = async (
   id: number,
   data: Prisma.ArtworkUpdateInput
 ): Promise<Artwork> => {
-  const term: Artwork = await prisma.artwork.update({
+  const artwork: Artwork = await prisma.artwork.update({
     data,
     where: {
       id,
@@ -131,20 +131,20 @@ export const daoArtworkUpdate = async (
   });
 
   return filteredOutputByBlacklistOrNotFound(
-    term,
+    artwork,
     apiConfig.db.privateJSONDataKeys.artwork
   );
 };
 
 export const daoArtworkDelete = async (id: number): Promise<Artwork> => {
-  const term: Artwork = await prisma.artwork.delete({
+  const artwork: Artwork = await prisma.artwork.delete({
     where: {
       id,
     },
   });
 
   return filteredOutputByBlacklistOrNotFound(
-    term,
+    artwork,
     apiConfig.db.privateJSONDataKeys.artwork
   );
 };
