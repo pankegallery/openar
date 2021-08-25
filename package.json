@@ -15,7 +15,7 @@
     "dev": "concurrently -k -p \"[{name}]\" -n \"API,DAPP\" -c \"#f41788,#c8b320\" \"npm run app:api:dev\" \"npm run app:dapp:dev\"",
     "dev:dapp": "npm run dev -w dapp",
     "dev:api": "npm run app:api:dev",
-    "build:api": "NODE_ENV=production npm npm run app:api:build && npm run app:api:build",
+    "build:api": "NODE_ENV=production npm run app:api:build && npm run app:api:build",
     "app:api:dev": "concurrently -k -p \"[{name}]\" -n \"BABEL,NODE,TS\" -c \"#d531f5,#4d5ffa,#09e3b4\" \"npm run app:api:dev:watch:babel\" \"sleep 5 && npm run app:api:dev:watch:nodemon\" \"sleep 5 && npm run app:api:dev:watch:typings\"",
     "app:api:dev:watch:babel": "NODE_ENV=development babel ./apps/api/src --watch --out-dir ./apps/api/build --extensions .ts",
     "app:api:dev:watch:nodemon": "NODE_ENV=development env-cmd -f ./.env nodemon --watch ./apps/api/build ./apps/api/build/index.js",
@@ -31,7 +31,7 @@
     "app:api:db:studio": "prisma studio",
     "app:api:db:seed": "node ./apps/api/build/db/seeds/resetdb.js",
     "app:api:db:dev:seed": "NODE_ENV=development dotenv -e .env -- node --loader ts-node/esm ./apps/api/src/db/seeds/resetdb.ts",
-    "app:dapp:start": "npm run start -w dapp",
+    "app:dapp:start": "NODE_END=production npm run start -w dapp",
     "app:dapp:build": "npm run build -w dapp",
     "app:dapp:dev": "PORT=$(grep DEV_DAPP_PORT .env | cut -d '=' -f2) NEXT_PUBLIC_API_URL=$(grep '^BASE_URL_API' .env | cut -d '=' -f2) npm run dev -w dapp",
     "app:dapp:lint": "npm run lint -w dapp"
