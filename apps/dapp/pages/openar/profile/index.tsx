@@ -111,7 +111,7 @@ const Index = () => {
               {url && <Stat mb="4">
                 <StatLabel fontSize="md">Url</StatLabel>
                 <StatNumber mt="-1">
-                  {url}}
+                  {url}
                 </StatNumber>
               </Stat>}
             </Box>
