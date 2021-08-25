@@ -80,7 +80,7 @@ const Index = () => {
           {!loading && !error && (
             <>
               {artworks.length === 0 && (
-                <Text p="4">You haven&#34;t created any artworks yet</Text>
+                <Text p="4">You haven&#39;t created any artworks yet</Text>
               )}
 
               {artworks.length > 0 && (

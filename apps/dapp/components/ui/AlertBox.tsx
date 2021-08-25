@@ -48,6 +48,8 @@ export const AlertBox = ({
       shadow="none"
       color="gray.800"
       borderBottom="1px solid #fff"
+      position="sticky"
+      top="0"
     >
       <Grid
         templateColumns={hasClose ? "32px 1fr 32px" : "32px 1fr"}

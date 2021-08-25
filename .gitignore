@@ -176,7 +176,7 @@ data/*
 !data/postgres
 !data/postgres/.keep
 !data/postgres-test/.keep
-!data/ipfs
+!data/ipfs/.keep
 logs/*
 !logs/.keep
 /public/img

@@ -29,10 +29,18 @@ services:
     volumes:
       - ./data/ipfs:/ipfsdata
     ports:
-      - "127.0.0.1:${IPFS_HTTP_PORT_1:-4001}:4001"
+      # - "127.0.0.1:${IPFS_HTTP_PORT_1:-4001}:4001"
       - "127.0.0.1:${IPFS_HTTP_PORT_2:-8080}:8080"
       - "127.0.0.1:${IPFS_HTTP_PORT_3:-8081}:8081"
       - "127.0.0.1:${IPFS_HTTP_PORT_4:-5001}:5001"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 256M
     
   mailhog:
     container_name: 'OpenARMailHog'

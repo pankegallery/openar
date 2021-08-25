@@ -120,17 +120,16 @@ export const daoImageSetToDelete = async (id: number): Promise<Image> => {
       artworks: {
         set: [],
       },
-      objects: {
+      arObjects: {
         set: [],
       },
       profileImageUsers: {
         set: [],
       },
-      // TODO: tours?
       heroImageArtworks: {
         set: [],
       },
-      heroImageObjects: {
+      heroImageArObjects: {
         set: [],
       },
     },

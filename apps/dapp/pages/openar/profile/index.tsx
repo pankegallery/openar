@@ -88,32 +88,32 @@ const Index = () => {
               </Stat>
 
               <Stat mb="4">
-                <StatLabel font0Size="md">Email address</StatLabel>
-                <StatNumber mt="-1">{email}</StatNumber>
+                <StatLabel fontSize="md">Email address</StatLabel>
+                <StatNumber mt="-1">{email ?? "Please configure an email address"}</StatNumber>
               </Stat>
 
-              <Stat mb="4">
+              {email && <Stat mb="4">
                 <StatLabel fontSize="md">Email verification status</StatLabel>
                 <StatNumber mt="-1">
                   {emailVerified
                     ? "You've verified your email address"
                     : "You've not verified your email address. Check your inbox!"}
                 </StatNumber>
-              </Stat>
+              </Stat>}
 
-              <Stat mb="4">
+              {bio && <Stat mb="4">
                 <StatLabel fontSize="md">Bio</StatLabel>
                 <StatNumber fontSize="md" mt="-1">
                   {bio && <Box dangerouslySetInnerHTML={{ __html: bio }} />}
                 </StatNumber>
-              </Stat>
+              </Stat>}
 
-              <Stat mb="4">
+              {url && <Stat mb="4">
                 <StatLabel fontSize="md">Url</StatLabel>
                 <StatNumber mt="-1">
-                  {url && `${url}`.length > 0 ? url : "%"}
+                  {url}}
                 </StatNumber>
-              </Stat>
+              </Stat>}
             </Box>
             <Box
               w={{ base: "50%", t: "auto" }}

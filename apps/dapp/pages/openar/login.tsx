@@ -35,7 +35,7 @@ const OpenARLogin = () => {
       {!appUser && stateUser.justConnected && !stateUser.authenticated && stateCrypto.loginMessage && (
         <Box>
           <Text mb="4">
-            Welcome, you&#34;re using a mobile browser that request a second manual step. Please click the button below to request the signature required to finish loging in.
+            Welcome, you&#39;re using a mobile browser that request a second manual step. Please click the button below to request the signature required to finish loging in.
           </Text>
 
           {walletLoginError && <Text color="red.400">{walletLoginError}</Text>}

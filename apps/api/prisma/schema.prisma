@@ -141,7 +141,7 @@ model Image {
   
   profileImageUsers User[]    @relation("userProfileImage")
   heroImageArtworks Artwork[] @relation("artworkHeroImage")
-  heroImageObjects  ArObject[]  @relation("arObjectHeroImage")
+  heroImageArObjects  ArObject[]  @relation("arObjectHeroImage")
 }
 
 model Model {
