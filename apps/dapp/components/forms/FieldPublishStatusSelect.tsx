@@ -40,19 +40,19 @@ export const FieldPublishStatusSelect = ({
     {
       value: PublishStatus.REJECTED,
       label: "Rejected",
-      disabled: !appUser?.has("editor"),
+      disabled: !appUser?.has("administrator"),
     },
     {
       value: PublishStatus.PUBLISHED,
       label: "Published",
-      disabled: !appUser?.has("editor"),
+      disabled: !appUser?.has("administrator"),
     },
     {
       value: PublishStatus.TRASHED,
       label: "Trashed",
       disabled: !(
-        appUser?.has("editor") ||
-        (appUser?.is("contributor") &&
+        appUser?.has("administrator") ||
+        (appUser?.is("administrator") &&
           appUser?.can(`${module}DeleteOwn` as PermissionName) &&
           ownerId === appUser.id)
       ),
