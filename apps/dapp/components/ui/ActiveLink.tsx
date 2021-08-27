@@ -23,14 +23,19 @@ export const ActiveLink = ({ children, activeClassName = "active", href, ...prop
   return (
     
       <Link href={href} passHref>
-        <chakra.a {...{className}} onClick={(props as any)?.onClick} color="white !important" _hover={{
-          color: "var(--chakra-colors-gray-600) !important"
-          
-        }} sx={{
-          "&.active": {
-            color: "var(--chakra-colors-gray-600) !important"
-          }
-        }} transition="all 0.3s">{children}</chakra.a>
+        <chakra.a {...{className}}
+          onClick={(props as any)?.onClick}
+          color="white !important"
+          _hover={{
+            opacity: 0.6
+          }}
+          sx={{
+            "&.active": {
+              color: "var(--chakra-colors-gray-600) !important"
+            }
+          }}
+          transition="all 0.1s"
+        >{children}</chakra.a>
       </Link>
       
   )
