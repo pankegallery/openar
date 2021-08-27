@@ -88,8 +88,8 @@ export const ApiImage = ({
             <chakra.img
               src={originalUrl}
               alt={alt}
-              htmlWidth={originalWidth}
-              htmlHeight={originalHeight}
+              width={originalWidth}
+              height={originalHeight}
             />
           </picture>
         );

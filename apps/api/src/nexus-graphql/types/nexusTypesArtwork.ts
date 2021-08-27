@@ -160,12 +160,13 @@ export const ArtworkQueries = extendType({
               ...include,
               arObjects: {
                 select: {
+                  id: true,
+                  status: true,
                   key: true,
                   orderNumber: true,
                   title: true,
                   askPrice: true,
                   editionOf: true,
-                  sold: true,
                 },
                 where: {
                   status: [
@@ -259,12 +260,13 @@ export const ArtworkQueries = extendType({
             ...include,
             arObjects: {
               select: {
+                id: true,
+                status: true,
                 key: true,
                 orderNumber: true,
                 title: true,
                 askPrice: true,
                 editionOf: true,
-                sold: true,
               },
               where: {
                 status: [
@@ -374,12 +376,20 @@ export const ArtworkQueries = extendType({
               ...include,
               arObjects: {
                 select: {
+                  id: true,
+                  status: true,
                   key: true,
                   orderNumber: true,
                   title: true,
                   askPrice: true,
                   editionOf: true,
-                  sold: true,
+                },
+                heroImage: {
+                  select: {
+                    meta: true,
+                    status: true,
+                    id: true,
+                  },
                 },
                 where: {
                   status: [
@@ -387,6 +397,9 @@ export const ArtworkQueries = extendType({
                     ArObjectStatusEnum.MINTING,
                     ArObjectStatusEnum.MINTED,
                   ],
+                },
+                orderby: {
+                  orderNumber: "asc",
                 },
               },
             };
@@ -435,6 +448,33 @@ export const ArtworkQueries = extendType({
             ...include,
             creator: true,
           };
+
+        if ((pRI?.fieldsByTypeName?.Artwork as any)?.arObjects) {
+          include = {
+            ...include,
+            arObjects: {
+              select: {
+                id: true,
+                status: true,
+                key: true,
+                orderNumber: true,
+                title: true,
+                askPrice: true,
+                editionOf: true,
+                heroImage: {
+                  select: {
+                    meta: true,
+                    status: true,
+                    id: true,
+                  },
+                },
+              },
+              orderBy: {
+                orderNumber: "asc",
+              },
+            },
+          };
+        }
 
         return daoArtworkGetOwnById(
           args.id,

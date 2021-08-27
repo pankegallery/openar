@@ -91,7 +91,7 @@ model ArObject {
   lat           Float?
   lng           Float?
 
-  askPrice    Decimal? @default(0.0)
+  askPrice    Float? @default(0.0)
   public        Boolean @default(true)
 
   isBanned      Boolean @default(false)

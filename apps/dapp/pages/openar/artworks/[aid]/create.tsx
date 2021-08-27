@@ -10,7 +10,7 @@ import { useQuery, gql } from "@apollo/client";
 import { LayoutOpenAR } from "~/components/app";
 import { FormNavigationBlock } from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
-import { ModuleArtworkForm } from "~/components/modules/forms";
+import { ModuleArtworkArObjectForm } from "~/components/modules/forms";
 import { ModuleArObjectCreateSchema } from "~/components/modules/validation";
 import { RestrictPageAccess } from "~/components/utils";
 import { BeatLoader } from "react-spinners";
@@ -74,6 +74,10 @@ const Create = () => {
         const { data, errors } = await firstMutation({
           title: newData.title,
           description: newData.description,
+          editionOf: newData.editionOf ?? null,
+          orderNumber: newData.orderNumber ?? null,
+          askPrice: newData.editionOf ?? null,
+
           artwork: {
             connect: {
               id: parseInt(router.query.aid as string, 10),
@@ -105,7 +109,7 @@ const Create = () => {
 
   const breadcrumb = [
     {
-      path: moduleConfig.rootPath,
+      path: `${moduleConfig.rootPath}/${router.query.aid}/update`,
       title: "Artworks",
     },
     {
@@ -113,7 +117,7 @@ const Create = () => {
       title: data && (data.artworkReadOwn?.title ? trimTitle(data.artworkReadOwn?.title) : <BeatLoader size="10px" color="#fff"/>),
     },
     {
-      title: "Create object",
+      title: "Create object ",
     },
   ];
 
@@ -154,11 +158,11 @@ const Create = () => {
                   borderBottom="1px solid #fff"
                   color="red.400"
                 >
-                  Unfortunately, we could not save your artwork. Please try
+                  Unfortunately, we could not save your object. Please try
                   again in a little bit.
                 </Text>
               )}
-              <ModuleArtworkForm
+              <ModuleArtworkArObjectForm
                 action="create"
                 disableNavigation={setDisableNavigation}
                 validationSchema={ModuleArObjectCreateSchema}

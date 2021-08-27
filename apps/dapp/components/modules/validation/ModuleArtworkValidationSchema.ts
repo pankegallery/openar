@@ -18,8 +18,9 @@ export const ModuleArtworkUpdateSchema = ModuleArtworkCreateSchema.concat(
 export const ModuleArObjectCreateSchema = object().shape({
   title: string().required(),
   description: string().html({ max: 500 }),
-  orderNumber: number(),
-  editionOf: number(),  
+  orderNumber: number().transform((v, o) => o === '' ? null : v).nullable().typeError('should be a number > 0'),
+  askPrice: number().transform((v, o) => o === '' ? null : v).nullable().typeError('should be a number > 0'),
+  editionOf: number().transform((v, o) => o === '' ? null : v).nullable().typeError('should be a number > 0').min(1).max(100),  
 });
 
 

@@ -27,7 +27,7 @@ export const ModuleArtworkArObjectForm = ({
   setActiveUploadCounter?: Function;
   disableNavigation?: Function;
 }) => {
-  const { artworkReadOwn } = data ?? {};
+  const { arObjectReadOwn } = data ?? {};
 
   const columns = { base: "100%", t: "50% 50%" };
   const rows = { base: "auto 1fr", t: "1fr" };
@@ -44,7 +44,7 @@ export const ModuleArtworkArObjectForm = ({
             name="title"
             id="title"
             type="title"
-            label="Title"
+            label="Object title"
             isRequired={yupIsFieldRequired("title", validationSchema)}
             settings={{
               // defaultValue: data.abc.key
@@ -57,12 +57,12 @@ export const ModuleArtworkArObjectForm = ({
             id="description"
             type="basic"
             name="description"
-            label="Description"
+            label="Additional description"
             isRequired={yupIsFieldRequired("description", validationSchema)}
             settings={{
               maxLength: 500,
-              defaultValue: artworkReadOwn?.description
-                ? artworkReadOwn?.description
+              defaultValue: arObjectReadOwn?.description
+                ? arObjectReadOwn?.description
                 : undefined,
               placeholder: "Please describe your artwork in a few words",
             }}
@@ -70,27 +70,40 @@ export const ModuleArtworkArObjectForm = ({
         </FieldRow>
         <FieldRow>
           <FieldInput
-            name="url"
-            id="url"
-            type="url"
-            label="Url"
-            isRequired={yupIsFieldRequired("url", validationSchema)}
+            name="askPrice"
+            id="askPrice"
+            type="askPrice"
+            label="Initial ask price"
+            isRequired={yupIsFieldRequired("askPrice", validationSchema)}
             settings={{
               // defaultValue: data.abc.key
-              placeholder: "Can people find more information somewhere else?",
+              placeholder: "How much would you ask for on the first sales",
             }}
           />
         </FieldRow>
         <FieldRow>
           <FieldInput
-            name="video"
-            id="video"
-            type="video"
-            label="Video"
-            isRequired={yupIsFieldRequired("video", validationSchema)}
+            name="editionOf"
+            id="editionOf"
+            type="editionOf"
+            label="Editon of"
+            isRequired={yupIsFieldRequired("editionOf", validationSchema)}
             settings={{
               // defaultValue: data.abc.key
-              placeholder: "https://vimeo.com/... or https://youtube.com/...",
+              placeholder: "How many NFTs of this object should be minted?",
+            }}
+          />
+        </FieldRow>
+        <FieldRow>
+          <FieldInput
+            name="orderNumber"
+            id="orderNumber"
+            type="orderNumber"
+            label="Order Number"
+            isRequired={yupIsFieldRequired("orderNumber", validationSchema)}
+            settings={{
+              // defaultValue: data.abc.key
+              placeholder: "The object is number ... in the artwork listing",
             }}
           />
         </FieldRow>
@@ -125,9 +138,9 @@ export const ModuleArtworkArObjectForm = ({
               setActiveUploadCounter={setActiveUploadCounter}
               deleteButtonGQL={imageDeleteMutationGQL}
               connectWith={{
-                heroImageArtworks: {
+                heroImageArObjects: {
                   connect: {
-                    id: artworkReadOwn.id,
+                    id: arObjectReadOwn.id,
                   },
                 },
               }}
@@ -137,9 +150,9 @@ export const ModuleArtworkArObjectForm = ({
                 aspectRatioPB: 100, // % bottom padding
 
                 image: {
-                  status: artworkReadOwn?.heroImage?.status,
-                  id: artworkReadOwn?.heroImage?.id,
-                  meta: artworkReadOwn?.heroImage?.meta,
+                  status: arObjectReadOwn?.heroImage?.status,
+                  id: arObjectReadOwn?.heroImage?.id,
+                  meta: arObjectReadOwn?.heroImage?.meta,
                   alt: `Featured Image`,
                   forceAspectRatioPB: 100,
                   showPlaceholder: true,

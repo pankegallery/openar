@@ -3,7 +3,7 @@
 
 
 type ArObject {
-  askPrice: Currency
+  askPrice: Float
   collector: User
   createdAt: DateTime
   creator: User
@@ -35,6 +35,7 @@ type ArObjectQueryResult {
 
 input ArObjectUpsertInput {
   artwork: JSON
+  askPrice: Float
   collector: JSON
   creator: JSON
   description: String!
@@ -142,11 +143,6 @@ type BooleanResult {
 }
 
 """
-A field whose value is a Currency: https://en.wikipedia.org/wiki/ISO_4217.
-"""
-scalar Currency @specifiedBy(url: "https://en.wikipedia.org/wiki/ISO_4217")
-
-"""
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
 scalar DateTime
@@ -236,6 +232,7 @@ type PublicUser implements UserBaseNode {
 
 type Query {
   arObject(key: String!): ArObject!
+  arObjectReadOwn(id: Int!): ArObject!
   arObjects(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ArObjectQueryResult
   arObjectsReadOwn(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ArObjectQueryResult
   artwork(key: String!): Artwork!

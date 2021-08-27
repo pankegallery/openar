@@ -44,7 +44,7 @@ export const ArObject = objectType({
     t.string("description");
     t.nonNull.int("status");
 
-    t.currency("askPrice");
+    t.float("askPrice");
     t.boolean("public");
 
     t.int("orderNumber");
@@ -345,7 +345,7 @@ export const ArObjectQueries = extendType({
       },
     });
 
-    t.nonNull.field("artworkReadOwn", {
+    t.nonNull.field("arObjectReadOwn", {
       type: "ArObject",
 
       args: {
@@ -394,6 +394,7 @@ export const ArObjectUpsertInput = inputObjectType({
     t.int("editionOf");
     t.float("lat");
     t.float("lng");
+    t.float("askPrice");
     t.string("ownerEthAddress");
 
     t.json("creator");

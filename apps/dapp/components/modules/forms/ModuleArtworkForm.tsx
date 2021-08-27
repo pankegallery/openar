@@ -9,7 +9,7 @@ import {
   FieldImageUploader,
 } from "~/components/forms";
 
-import { ModuleArtworkArObjectsForm } from ".";
+import { ModuleArtworkArObjectsList } from ".";
 
 import { yupIsFieldRequired } from "../validation";
 
@@ -119,10 +119,7 @@ export const ModuleArtworkForm = ({
               id="heroImage"
               name="heroImage"
               label="Featured Image"
-              isRequired={yupIsFieldRequired(
-                "heroImage",
-                validationSchema
-              )}
+              isRequired={yupIsFieldRequired("heroImage", validationSchema)}
               setActiveUploadCounter={setActiveUploadCounter}
               deleteButtonGQL={imageDeleteMutationGQL}
               connectWith={{
@@ -152,9 +149,10 @@ export const ModuleArtworkForm = ({
         )}
 
         {action === "update" && (
-          <ModuleArtworkArObjectsForm
+          <ModuleArtworkArObjectsList
             {...{
               data,
+              errors,
               validationSchema,
               disableNavigation,
               setActiveUploadCounter,
