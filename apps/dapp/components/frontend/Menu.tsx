@@ -49,7 +49,8 @@ export const Menu = () => {
             zIndex="301"
             templateRows={{
               base: "var(--openar-header-height-mobile) 100vw auto",
-              t: "var(--openar-header-height-desktop) 33.33vw auto",
+              t: "var(--openar-header-height-desktop) 50vw auto",
+              d: "var(--openar-header-height-desktop) 33.33vw auto",
             }}
             color="white"
           >
@@ -109,11 +110,11 @@ export const Menu = () => {
                   }}
                   w={{
                     base: "100%",
-                    t: "33.33vw",
+                    d: "33.33vw",
                   }}
                   h={{
                     base: "var(--openar-header-height-mobile)",
-                    t: "33.33vw",
+                    d: "33.33vw",
                   }}
                   borderTop={{
                     base: "none",
@@ -133,11 +134,13 @@ export const Menu = () => {
                 p="6"
                 w={{
                   base: "66.66vw",
-                  t: "33.33vw",
+                  t: "50vw",
+                  d: "33.33vw",
                 }}
                 h={{
                   base: "66.66vw",
-                  t: "33.33vw",
+                  t: "50vw",
+                  d: "33.33vw",
                 }}
                 layerStyle="backdropDark"
               >
@@ -157,10 +160,16 @@ export const Menu = () => {
                 </nav>
               </Flex>
               <Flex
-                w="calc(33.33vw - 2px)"
+                w={{
+                  base: "calc(33.33vw - 2px)",
+                  t: "calc(50vw - 2px)",
+                  d: "calc(33.33vw - 2px)",
+                }}
+                p="6"
                 h={{
                   base: "66.66vw",
-                  t: "33.33vw",
+                  t: "50vw",
+                  d: "33.33vw",
                 }}
                 borderTop="1px solid #fff"
               >

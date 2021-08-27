@@ -54,6 +54,18 @@ export const components = {
         },
         
       },
+      link: {
+        boder: "none",
+        borderRadius: "0",
+        bg: "transparent",
+        transition: "all 0.3s",
+        color: "white",
+        p: "0",
+        _hover: {
+          color: "gray.300",
+        },
+
+      },
     },
   },
   Checkbox: {
