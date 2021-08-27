@@ -31,6 +31,10 @@ const themeConfig = {
   }),
   styles: {
     global: {
+      ":root": {
+        "--openar-header-height-mobile": "33vw",
+        "--openar-header-height-desktop": "25vw"
+      },
       "html, body": {
         color: "gray.900",
         lineHeight: "tall",
@@ -166,6 +170,27 @@ const themeConfig = {
     full: "9999px",
   },
   layerStyles: {
+    backdropDark: {
+      bg: "rgba(0,0,0,0.6)"
+    },
+    backdropExtraDark: {
+      bg: "rgba(0,0,0,0.5)"
+    },
+    backdropBlurred: {
+      position: "relative",
+      "&:before": {
+        display: "block",
+        position:"absolute", 
+        width: "100%",
+        height: "100%",
+        top: 0,
+        left: 0,
+        filter: "blur(10px)",
+      }
+    },
+    backdropGradient: {
+      bg: "linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0.4));"
+    },
     pageContainerGray: {
       bg: "gray.100",
       borderRadius: "lg",

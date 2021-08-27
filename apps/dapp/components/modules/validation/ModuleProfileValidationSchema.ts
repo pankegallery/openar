@@ -1,7 +1,7 @@
 import { string, object } from "yup";
 
 export const UserProfileUpdateValidationSchema = object().shape({
-  pseudonym: string().nullable(),
+  pseudonym: string().required(),
   email: string().email().required(),
   url: string().url().nullable(),
   bio: string().nullable(),
