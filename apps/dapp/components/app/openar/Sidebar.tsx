@@ -69,6 +69,11 @@ export const Sidebar = () => {
     },
   ];
 
+  const x=  <Box>jaklsjdflksdlkjf</Box>
+
+
+
+
   return (
     <>
       {isMobile && (
@@ -91,6 +96,7 @@ export const Sidebar = () => {
           }}
         />
       )}
+      {isMobile && x}
       <Box
         w="100%"
         h="100vh"
@@ -123,7 +129,7 @@ export const Sidebar = () => {
             transform: "translateX(0%)",
           },
         }}
-      >
+      >{isMobile && x}
         <Box
           w="100%"
           p="4"

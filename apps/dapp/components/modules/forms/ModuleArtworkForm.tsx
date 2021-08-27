@@ -9,6 +9,8 @@ import {
   FieldImageUploader,
 } from "~/components/forms";
 
+import { ModuleArtworkArObjectsForm} from ".";
+
 import { yupIsFieldRequired, ModuelArtworkCreateSchema } from "../validation";
 
 export const ModuleArtworkForm = ({
@@ -146,6 +148,9 @@ export const ModuleArtworkForm = ({
             />
           </>
         )}
+
+        {action === "update" && <ModuleArtworkArObjectsForm />}
+
       </Box>
     </Grid>
   );

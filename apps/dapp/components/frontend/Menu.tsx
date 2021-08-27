@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   useDisclosure,
   Portal,
@@ -10,23 +10,24 @@ import {
 } from "@chakra-ui/react";
 import { ActiveLink } from "~/components/ui";
 import { WalletControl } from "~/components/app/shared";
-import {useSSRSaveMediaQuery} from "~/hooks"
-
-import logo from "~/assets/img/logo-white.svg"
+import { useSSRSaveMediaQuery } from "~/hooks";
+import Close from "~/assets/img/close.svg";
 
 export const Menu = () => {
   const { isOpen, onToggle } = useDisclosure();
-
-  const isTablet = useSSRSaveMediaQuery("(min-width: 45rem) and (max-width: 74em)")
-  const aboutText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse a sodales nulla, sed semper nisi."
-
+  const [isClosing, setIsClosing] = useState(false);
+  const isTablet = useSSRSaveMediaQuery(
+    "(min-width: 45rem) and (max-width: 74em)"
+  );
+  const aboutText =
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse a sodales nulla, sed semper nisi.";
 
   return (
     <>
       <Button
         onClick={onToggle}
         w="100px"
-        h="100px"
+        h="100"
         position="fixed"
         top="0"
         right="0"
@@ -42,7 +43,7 @@ export const Menu = () => {
             className="menu"
             position="fixed"
             top="0"
-            left="0"
+            left={isOpen || isClosing ? 0 : "-100vw"}
             w="100vw"
             h="100%"
             layerStyle="backdropDark"
@@ -74,7 +75,7 @@ export const Menu = () => {
               >
                 LOGO
               </Box>
-              {isTablet &&
+              {isTablet && (
                 <Box
                   className="about"
                   p="0"
@@ -86,11 +87,19 @@ export const Menu = () => {
                 >
                   {aboutText}
                 </Box>
-              }
+              )}
               <Button
-                onClick={onToggle}
+                onClick={() => {
+                  setIsClosing(true);
+                  onToggle();
+                  setTimeout(() => {
+                    setIsClosing(false);
+                  }, 500);
+                }}
                 border="none"
-              >X</Button>
+              >
+                <Close/>
+              </Button>
             </Flex>
             {/* --------- About, main nav, login nav --------- */}
             <Flex
@@ -101,7 +110,7 @@ export const Menu = () => {
               direction="row"
               zIndex="302"
             >
-              {!isTablet &&
+              {!isTablet && (
                 <Flex
                   className="about"
                   p={{
@@ -118,18 +127,18 @@ export const Menu = () => {
                   }}
                   borderTop={{
                     base: "none",
-                    d: "1px solid #fff"
+                    d: "1px solid #fff",
                   }}
                 >
                   {aboutText}
                 </Flex>
-              }
+              )}
               <Flex
                 borderTop="1px solid #fff"
                 borderRight="1px solid #fff"
                 borderLeft={{
                   base: "none",
-                  d: "1px solid #fff"
+                  d: "1px solid #fff",
                 }}
                 p="6"
                 w={{
@@ -185,7 +194,7 @@ export const Menu = () => {
               }}
               borderRight="1px solid #fff"
               borderLeft={{
-                t:"1px solid #fff"
+                t: "1px solid #fff",
               }}
               justifySelf={{
                 base: "start",
@@ -202,16 +211,16 @@ export const Menu = () => {
                 <ActiveLink key="s3" href="/pages/wallets/">
                   Wallets
                 </ActiveLink>
-                <ActiveLink key="s3" href="/pages/tandc/">
+                <ActiveLink key="s4" href="/pages/tandc/">
                   Terms and Conditions
                 </ActiveLink>
-                <ActiveLink key="s3" href="/pages/funding/">
+                <ActiveLink key="s5" href="/pages/funding/">
                   Platform funding
                 </ActiveLink>
-                <ActiveLink key="s3" href="/pages/privpol/">
+                <ActiveLink key="s6" href="/pages/privpol/">
                   Privacy Policy
                 </ActiveLink>
-                <ActiveLink key="s3" href="/pages/imprint/">
+                <ActiveLink key="s7" href="/pages/imprint/">
                   Imprint
                 </ActiveLink>
               </nav>
