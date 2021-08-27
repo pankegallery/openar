@@ -10,6 +10,7 @@ import {
 import { ApiImage } from "../ui";
 import { ArtworkStatusEnum } from "~/utils";
 import Link from "next/link";
+import Blockies from 'react-blockies';
 
 export const ArtworkListItem = ({
   id,
@@ -43,7 +44,12 @@ export const ArtworkListItem = ({
             <LinkOverlay>{title}</LinkOverlay>
           </Link>
         </Heading>
-        <chakra.span className="artist">{artist}</chakra.span>
+        <chakra.span className="artist"><Blockies
+    seed={creator?.ethAddress}
+    size={10}
+    scale={3}
+    className="identicon"
+  />{artist}</chakra.span>
       </Box>
       <Box
         className={`${

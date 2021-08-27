@@ -47,14 +47,16 @@ export const WalletConnectGate = ({
     setIsLoggingIn,
     stateCrypto.signatureRequired
   ]);
-  
-  // TODO: get tab wid logout running 
-  useEffect(() => {
-    if (loginStatus === "logged-out" && Router.asPath !== "/" && !isLoggingIn) {
-      console.log("trigger redirect to /");
-      Router.push("/");
-    }
-  }, [loginStatus, isLoggingIn]);
+
+  // TODO: that shouldn't redirect
+  // console.log(loginStatus, isLoggingIn);
+  // // TODO: get tab wid logout running 
+  // useEffect(() => {
+  //   if (loginStatus === "logged-out" && Router.asPath !== "/" && !isLoggingIn) {
+  //     console.log("trigger redirect to /");
+  //     Router.push("/");
+  //   }
+  // }, [loginStatus, isLoggingIn]);
 
   return <>{children}</>;
 };

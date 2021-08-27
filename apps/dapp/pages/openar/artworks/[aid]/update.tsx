@@ -14,7 +14,7 @@ import { ModuleArtworkUpdateSchema } from "~/components/modules/validation";
 import { RestrictPageAccess } from "~/components/utils";
 
 import { useAuthentication, useSuccessfullySavedToast } from "~/hooks";
-import { useArtworkCreateMutation } from "~/hooks/mutations";
+import { useArtworkUpdateMutation } from "~/hooks/mutations";
 import {
   ModuleSubNav,
   ModulePage,
@@ -62,7 +62,7 @@ const Update = () => {
   const [disableNavigation, setDisableNavigation] = useState(false);
   const [activeUploadCounter, setActiveUploadCounter] = useState<number>(0);
 
-  const [firstMutation, firstMutationResults] = useArtworkCreateMutation();
+  const [firstMutation, firstMutationResults] = useArtworkUpdateMutation();
   const [isFormError, setIsFormError] = useState(false);
 
   const disableForm = firstMutationResults.loading;

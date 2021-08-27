@@ -291,21 +291,20 @@ export function useWalletLogin() {
           if (!library?.provider?.send)
             throw Error("Neccessary provider not found");
 
-          let directSignatureRequest = false;
+          // let directSignatureRequest = false;
 
-          if (typeof navigator !== "undefined")
-            directSignatureRequest = /Android/i.test(navigator.userAgent);
+          // if (typeof navigator !== "undefined")
+          //   directSignatureRequest = /Android/i.test(navigator.userAgent);
 
-          if (
-            directSignatureRequest ||
-            primaryInput === "mouse" ||
-            (web3Injected && connector instanceof InjectedConnector)
-          ) {
-            await walletLoginRequestSignature(payload?.message, account);
-          } else {
-            alert(1);
+          // if (
+          //   directSignatureRequest ||
+          //   primaryInput === "mouse" ||
+          //   (web3Injected && connector instanceof InjectedConnector)
+          // ) {
+          //   await walletLoginRequestSignature(payload?.message, account);
+          // } else {
             Router.push("/openar/login");
-          }
+          //}
         } else if (errors) {
           throw errors[0];
         } else {
