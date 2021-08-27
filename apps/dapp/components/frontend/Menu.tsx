@@ -10,9 +10,14 @@ import {
 } from "@chakra-ui/react";
 import { ActiveLink } from "~/components/ui";
 import { WalletControl } from "~/components/app/shared";
+import {useSSRSaveMediaQuery} from "~/hooks"
 
 export const Menu = () => {
   const { isOpen, onToggle } = useDisclosure();
+
+  const isTablet = useSSRSaveMediaQuery("(min-width: 45rem) and (max-width: 74em)")
+  const aboutText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse a sodales nulla, sed semper nisi."
+
 
   return (
     <>
@@ -35,7 +40,7 @@ export const Menu = () => {
             className="menu"
             position="fixed"
             top="0"
-            lleft="0"
+            left="0"
             w="100vw"
             h="100%"
             layerStyle="backdropDark"
@@ -46,6 +51,7 @@ export const Menu = () => {
             }}
             color="white"
           >
+            {/* --------- Logo and Close --------- */}
             <Flex
               className="Header"
               w="100vw"
@@ -65,36 +71,63 @@ export const Menu = () => {
               >
                 LOGO
               </Box>
-              <Button onClick={onToggle}>X</Button>
+              {isTablet &&
+                <Box
+                  className="about"
+                  p="0"
+                  w="66.66vw"
+                  h={{
+                    base: "var(--openar-header-height-mobile)",
+                    t: "33.33vw",
+                  }}
+                >
+                  {aboutText}
+                </Box>
+              }
+              <Button
+                onClick={onToggle}
+                border="none"
+              >X</Button>
             </Flex>
+            {/* --------- About, main nav, login nav --------- */}
             <Flex
               className="main"
               w="100%"
               borderBottom="1px solid #fff"
               flexWrap="wrap"
               direction="row"
+              zIndex="302"
             >
-              <Flex
-                className="left"
-                p={{
-                  base: "4",
-                  tw: "6",
-                }}
-                w={{
-                  base: "100%",
-                  t: "33.33vw",
-                }}
-                h={{
-                  base: "var(--openar-header-height-mobile)",
-                  t: "33.33vw",
-                }}
-              >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse a sodales nulla, sed semper nisi.
-              </Flex>
+              {!isTablet &&
+                <Flex
+                  className="about"
+                  p={{
+                    base: "4",
+                    tw: "6",
+                  }}
+                  w={{
+                    base: "100%",
+                    t: "33.33vw",
+                  }}
+                  h={{
+                    base: "var(--openar-header-height-mobile)",
+                    t: "33.33vw",
+                  }}
+                  borderTop={{
+                    base: "none",
+                    d: "1px solid #fff"
+                  }}
+                >
+                  {aboutText}
+                </Flex>
+              }
               <Flex
                 borderTop="1px solid #fff"
                 borderRight="1px solid #fff"
+                borderLeft={{
+                  base: "none",
+                  d: "1px solid #fff"
+                }}
                 p="6"
                 w={{
                   base: "66.66vw",
@@ -117,7 +150,7 @@ export const Menu = () => {
                     Artworks
                   </ActiveLink>
                   <ActiveLink key="m4" href="/pages/help/">
-                    Help
+                    Blog
                   </ActiveLink>
                 </nav>
               </Flex>
@@ -149,14 +182,26 @@ export const Menu = () => {
               }}
             >
               <nav className="secondary">
-                <ActiveLink key="s1" href="/pages/imprint/">
-                  Imprint
+                <ActiveLink key="s1" href="/pages/help/">
+                  Help
                 </ActiveLink>
                 <ActiveLink key="s2" href="/pages/tandc/">
-                  Terms and conditions
+                  Roles and Badges
+                </ActiveLink>
+                <ActiveLink key="s3" href="/pages/wallets/">
+                  Wallets
+                </ActiveLink>
+                <ActiveLink key="s3" href="/pages/tandc/">
+                  Terms and Conditions
                 </ActiveLink>
                 <ActiveLink key="s3" href="/pages/funding/">
                   Platform funding
+                </ActiveLink>
+                <ActiveLink key="s3" href="/pages/privpol/">
+                  Privacy Policy
+                </ActiveLink>
+                <ActiveLink key="s3" href="/pages/imprint/">
+                  Imprint
                 </ActiveLink>
               </nav>
             </Box>

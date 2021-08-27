@@ -33,7 +33,7 @@ const themeConfig = {
     global: {
       ":root": {
         "--openar-header-height-mobile": "33vw",
-        "--openar-header-height-desktop": "25vw"
+        "--openar-header-height-desktop": "22vh"
       },
       "html, body": {
         color: "gray.900",
@@ -189,7 +189,7 @@ const themeConfig = {
       }
     },
     backdropGradient: {
-      bg: "linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0.4));"
+      bg: "linear-gradient(256deg, rgba(0,0,0,0), rgba(0,0,0,0.4));"
     },
     pageContainerGray: {
       bg: "gray.100",

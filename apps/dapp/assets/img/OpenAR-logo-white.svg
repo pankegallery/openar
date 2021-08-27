@@ -1,0 +1,4 @@
+<svg id="Logo" xmlns="http://www.w3.org/2000/svg" width="63" height="66" viewBox="0 0 63 66">
+  <text id="AR" transform="translate(25 30)" fill="#fff" font-size="28" font-family="Manrope-Bold, Manrope" font-weight="700"><tspan x="0" y="0">AR</tspan></text>
+  <text id="Open" transform="translate(6 13) rotate(90)" fill="#fff" font-size="21" font-family="Manrope-ExtraLight, Manrope" font-weight="200"><tspan x="0" y="0">OPEN</tspan></text>
+</svg>
