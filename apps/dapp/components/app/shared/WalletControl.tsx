@@ -46,10 +46,11 @@ export const WalletControl = () => {
       <Box>
         {!account && (
           <Button
-            variant="openarBlackAndWhite"
+            variant="menuLink"
             onClick={walletDisclosure.onOpen}
+
           >
-            Connect to a wallet
+            Login
           </Button>
         )}
 
