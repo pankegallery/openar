@@ -1,4 +1,4 @@
-import isPlainObject from "is-plain-object";
+import { isPlainObject } from 'is-plain-object';
 
 export type FilterableObject<K extends keyof any, T> = {
   [P in K]?: T;
