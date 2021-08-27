@@ -1,4 +1,4 @@
-import { imageDeleteMutationGQL } from "~/graphql/mutations";
+import { arModelDeleteMutationGQL, imageDeleteMutationGQL } from "~/graphql/mutations";
 
 import { AspectRatio, Box, Grid, Text } from "@chakra-ui/react";
 
@@ -7,6 +7,7 @@ import {
   FieldRow,
   FieldTextEditor,
   FieldImageUploader,
+  FieldModelUploader,
 } from "~/components/forms";
 
 
@@ -158,6 +159,38 @@ export const ModuleArtworkArObjectForm = ({
                   showPlaceholder: true,
                   sizes: "(min-width: 45em) 20v, 95vw",
                 },
+              }}
+            />
+
+            <FieldModelUploader
+              route="model"
+              id="modelGlb"
+              type="glb"
+              name="modelGlb"
+              label="Ar Model (.glb/.gltf)"
+              isRequired={yupIsFieldRequired(
+                "modelGlb",
+                validationSchema
+              )}
+              setActiveUploadCounter={setActiveUploadCounter}
+              deleteButtonGQL={arModelDeleteMutationGQL}
+              connectWith={{
+                arObject: {
+                  connect: {
+                    id: arObjectReadOwn.id,
+                  },
+                },
+              }}
+              settings={{
+                minFileSize: 1024 * 1024 * 0.0488,
+                maxFileSize: 1024 * 1024 * 50,
+                accept: ".glb",
+                // model: {
+                //   // status: arObjectReadOwn?.heroImage?.status,
+                //   // id: arObjectReadOwn?.heroImage?.id,
+                //   // meta: arObjectReadOwn?.heroImage?.meta,
+                //   showPlaceholder: true,
+                // },
               }}
             />
           </>

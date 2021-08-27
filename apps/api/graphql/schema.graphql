@@ -2,6 +2,22 @@
 ### Do not make changes to this file directly
 
 
+type ArModel {
+  createdAt: DateTime
+  id: Int!
+  meta: JSON
+  nanoid: String
+  orderNumber: Int
+  status: Int
+  updatedAt: DateTime
+}
+
+type ArModelStatus {
+  id: Int!
+  meta: JSON
+  status: Int!
+}
+
 type ArObject {
   askPrice: Float
   collector: User
@@ -158,9 +174,7 @@ type GeoPoint {
 }
 
 type Image {
-  alt: JSON
   createdAt: DateTime
-  credits: JSON
   id: Int!
   meta: JSON
   nanoid: String
@@ -196,6 +210,7 @@ A field whose value is a JSON Web Token (JWT): https://jwt.io/introduction.
 scalar JWT
 
 type Mutation {
+  arModelDelete(id: Int!): BooleanResult!
   arObjectCreate(data: ArObjectUpsertInput!): ArObject!
   arObjectDelete(id: Int!): BooleanResult!
   arObjectUpdate(data: ArObjectUpsertInput!, id: Int!): ArObject!
@@ -231,6 +246,8 @@ type PublicUser implements UserBaseNode {
 }
 
 type Query {
+  arModelRead(id: Int!): ArModel!
+  arModelStatus(id: Int!): ArModelStatus!
   arObject(key: String!): ArObject!
   arObjectReadOwn(id: Int!): ArObject!
   arObjects(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ArObjectQueryResult

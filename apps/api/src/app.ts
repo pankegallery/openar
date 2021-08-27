@@ -13,7 +13,13 @@ import {
 } from "./middlewares/error";
 
 import { morganErrorHandler, morganSuccessHandler } from "./middlewares/morgan";
-import { postImage, postProfileImage, postImageUpload } from "./routes";
+import {
+  postImage,
+  postProfileImage,
+  postImageUpload,
+  arModelUpload,
+  postArModel,
+} from "./routes";
 
 const apiConfig = getApiConfig();
 
@@ -31,6 +37,7 @@ export const initializeExpressApp = () => {
 
   app.post("/profileImage", postImageUpload.single("image"), postProfileImage);
   app.post("/image", postImageUpload.single("image"), postImage);
+  app.post("/model", arModelUpload.single("model"), postArModel);
 };
 
 export const addTerminatingErrorHandlingToApp = () => {

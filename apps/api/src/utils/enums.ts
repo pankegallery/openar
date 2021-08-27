@@ -35,6 +35,16 @@ export enum ArObjectStatusEnum {
   DELETED,
 }
 
+export enum ArModelStatusEnum {
+  UPLOADED,
+  PROCESSING,
+  FAILEDRETRY,
+  ERROR,
+  READY,
+  TRASHED,
+  DELETED,
+}
+
 export enum PublishStatus {
   AUTODRAFT,
   DRAFT,

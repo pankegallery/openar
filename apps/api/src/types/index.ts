@@ -11,6 +11,7 @@ export type PartialRecord<K extends keyof any, T> = {
 export type AppScopes = "api" | "dapp";
 
 export type ApiImageFormats = "square" | "normal";
+export type ApiArModelFormats = "glb" | "gltf" | "usdz" | "usd";
 
 export type ApiImageSizeInfo = {
   width: number;
@@ -29,4 +30,13 @@ export type ApiImageMetaInformation = {
   imageType: ApiImageFormats;
   size: number;
   availableSizes?: Record<string, ApiImageSizeInfo>;
+};
+
+export type ApiArModelMetaInformation = {
+  uploadFolder: string;
+  originalFileName: string;
+  originalFileUrl: string;
+  originalFilePath: string;
+  mimeType: any;
+  size: number;
 };

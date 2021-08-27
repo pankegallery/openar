@@ -26,7 +26,9 @@ export const ModuleArObjectCreateSchema = object().shape({
 
 export const ModuleArObjectUpdateSchema = ModuleArObjectCreateSchema.concat(
   object().shape(
-    {}
+    {
+      modelGlb: number().required(),
+    }
     
   )
 );

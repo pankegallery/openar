@@ -43,8 +43,6 @@ export const Image = objectType({
     t.int("status");
     t.json("meta");
     t.int("orderNumber");
-    t.json("alt");
-    t.json("credits");
     t.date("createdAt");
     t.date("updatedAt");
   },

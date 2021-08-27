@@ -12,6 +12,7 @@ export * from "./FieldCheckbox";
 export * from "./FieldSwitch";
 export * from "./TwoColFieldRow";
 export * from "./FieldImageUploader";
+export * from "./FieldModelUploader";
 export * from "./FieldPublishStatusSelect";
 export * from "./FieldRadioOrCheckboxGroup";
 export * from "./FieldHiddenShow";

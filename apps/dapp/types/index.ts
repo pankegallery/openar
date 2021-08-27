@@ -52,6 +52,15 @@ export type ApiImageMetaInformation = {
   availableSizes?: Record<string, ApiImageSizeInfo>;
 };
 
+export type ApiArModelMetaInformation = {
+  uploadFolder: string;
+  originalFileName: string;
+  originalFileUrl: string;
+  originalFilePath: string;
+  mimeType: any;
+  size: number;
+};
+
 export interface ModuleAccessRules {
   userIs?: RoleName | RoleName[] | undefined;
   userCan?: PermissionName | PermissionName[] | undefined;

@@ -33,7 +33,7 @@ model User {
   
   tokens      Token[]
   images      Image[]
-  models      Model[]
+  models      ArModel[]
   files       File[]
 
   profileImageId Int?
@@ -108,7 +108,7 @@ model ArObject {
   heroImage   Image? @relation(fields: [heroImageId], references: [id], name: "arObjectHeroImage")
 
   images Image[] @relation("imagesObject")
-  models Model[]
+  models ArModel[]
 }
 
 model ArObject2Collector {
@@ -143,13 +143,12 @@ model Image {
   heroImageArObjects  ArObject[]  @relation("arObjectHeroImage")
 }
 
-model Model {
+model ArModel {
   id         Int    @id @default(autoincrement())
   nanoid       String @unique @db.VarChar(21)
   meta       Json
   status     Int    @default(0)
   retryCount Int    @default(0)
-  format     String @db.VarChar(8)
   type       String @db.VarChar(8)
   arObjectId   Int
   arObject     ArObject @relation(fields: [arObjectId], references: [id])
