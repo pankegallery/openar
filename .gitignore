@@ -178,7 +178,8 @@ data/*
 !data/ipfs/.keep
 logs/*
 !logs/.keep
-/public/img
+public/
+!public/.keep
 
 # editors
 .brackets.json

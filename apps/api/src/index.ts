@@ -1,8 +1,9 @@
 import { app, initializeExpressApp } from "./app";
 import { startApi } from "./startApi";
 import { initializeApolloServer } from "./server";
-import { updateApiConfig } from "./config";
+// import { updateApiConfig } from "./config";
 
+// TODO: make sure that the configs are properly
 // @ts-ignore (CMSetting is JS file)
 // import OpenARSettings from "../../../openar.config";
 

@@ -43,7 +43,10 @@ export const ModuleProfileUpdateForm = ({
             id="pseudonym"
             type="text"
             label="Pseudonym"
-            isRequired={false}
+            isRequired={yupIsFieldRequired(
+              "email",
+              UserProfileUpdateValidationSchema
+            )}
             settings={{
               // defaultValue: data.abc.key
               placeholder: "How would you like to be called?",
