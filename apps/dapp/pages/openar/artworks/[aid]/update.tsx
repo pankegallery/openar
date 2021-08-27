@@ -126,7 +126,9 @@ const Update = () => {
     setIsFormError(false);
     try {
       if (appUser) {
-        const { data, errors } = await firstMutation({
+        const { data, errors } = await firstMutation(
+          parseInt(router.query.aid as string),
+          {
           title: newData.title,
           description: newData.description,
           video: newData.video ?? "",
