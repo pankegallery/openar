@@ -202,16 +202,16 @@ export const Menu = () => {
                 <ActiveLink key="s3" href="/pages/wallets/">
                   Wallets
                 </ActiveLink>
-                <ActiveLink key="s3" href="/pages/tandc/">
+                <ActiveLink key="s4" href="/pages/tandc/">
                   Terms and Conditions
                 </ActiveLink>
-                <ActiveLink key="s3" href="/pages/funding/">
+                <ActiveLink key="s5" href="/pages/funding/">
                   Platform funding
                 </ActiveLink>
-                <ActiveLink key="s3" href="/pages/privpol/">
+                <ActiveLink key="s6" href="/pages/privpol/">
                   Privacy Policy
                 </ActiveLink>
-                <ActiveLink key="s3" href="/pages/imprint/">
+                <ActiveLink key="s7" href="/pages/imprint/">
                   Imprint
                 </ActiveLink>
               </nav>
