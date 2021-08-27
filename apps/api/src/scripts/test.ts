@@ -20,11 +20,11 @@ const run = async () => {
       )
     );
 
-    console.log(file);
+    console.log(file.cid.toString());
 
-    const files = await ipfs.files.read(`/${file.path}`);
+    // const files = await ipfs.files.read(`/${file.path}`);
 
-    console.log(files);
+    // console.log(files.cid);
     // files.forEach((file) => {
     //   console.log(file.path);
     //   //console.log(file.content.toString('utf8'))
