@@ -12,6 +12,8 @@ import { ActiveLink } from "~/components/ui";
 import { WalletControl } from "~/components/app/shared";
 import {useSSRSaveMediaQuery} from "~/hooks"
 
+import logo from "~/assets/img/logo-white.svg"
+
 export const Menu = () => {
   const { isOpen, onToggle } = useDisclosure();
 
@@ -24,7 +26,7 @@ export const Menu = () => {
       <Button
         onClick={onToggle}
         w="100px"
-        h="100"
+        h="100px"
         position="fixed"
         top="0"
         right="0"

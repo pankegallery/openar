@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="125.707" height="125.707" viewBox="0 0 125.707 125.707">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="Path_38" data-name="Path 38" d="M2965,4543l124.67,124.861V4543Z" transform="translate(-2965 -4543)" fill="#fff"/>
+    </clipPath>
+  </defs>
+  <g id="Menu_corner" data-name="Menu corner" transform="translate(0.354 0.354)">
+    <path id="Path_33" data-name="Path 33" d="M0,0,125,125H0Z" transform="translate(125 125) rotate(180)" opacity="0.022" style="mix-blend-mode: lighten;isolation: isolate"/>
+    <line id="Line_20" data-name="Line 20" x2="125" y2="125" fill="none" stroke="#555" stroke-width="1"/>
+    <g id="Mask_Group_2" data-name="Mask Group 2" clip-path="url(#clip-path)">
+      <g id="Logo" transform="translate(47.5 6.482)">
+        <text id="AR" transform="translate(25 30)" fill="#555" font-size="28" font-family="Manrope-Bold, Manrope" font-weight="700"><tspan x="0" y="0">AR</tspan></text>
+        <text id="Open" transform="translate(6 13) rotate(90)" fill="#555" font-size="21" font-family="Manrope-ExtraLight, Manrope" font-weight="200"><tspan x="0" y="0">OPEN</tspan></text>
+      </g>
+    </g>
+  </g>
+</svg>
