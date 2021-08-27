@@ -13,7 +13,7 @@ export const artworkCreateMutationGQL = gql`
 
 export const artworkUpdateMutationGQL = gql`
   mutation artworkUpdate($id: Int!, $data: ArtworkUpsertInput!) {
-    artworkCreate(id: $id, data: $data) {
+    artworkUpdate(id: $id, data: $data) {
       id 
       title
       description
