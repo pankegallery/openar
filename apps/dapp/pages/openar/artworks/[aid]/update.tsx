@@ -144,7 +144,7 @@ const Update = () => {
         if (!errors) {
           successToast();
 
-          router.push(`${moduleConfig.rootPath}/${data?.artworkCreate?.id}/update`);
+          router.push(`${moduleConfig.rootPath}/${data?.artworkUpdate?.id}/update`);
         } else {
           setIsFormError(true);
         }
