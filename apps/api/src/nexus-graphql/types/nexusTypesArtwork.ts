@@ -14,7 +14,12 @@ import {
 } from "nexus";
 import httpStatus from "http-status";
 
-import { ImageStatusEnum, ArtworkStatusEnum, ApiError } from "../../utils";
+import {
+  ImageStatusEnum,
+  ArtworkStatusEnum,
+  ArObjectStatusEnum,
+  ApiError,
+} from "../../utils";
 import { GQLJson } from "./nexusTypesShared";
 
 import { authorizeApiUser } from "../helpers";
@@ -156,18 +161,19 @@ export const ArtworkQueries = extendType({
               arObjects: {
                 select: {
                   key: true,
+                  orderNumber: true,
                   title: true,
                   askPrice: true,
                   editionOf: true,
                   sold: true,
                 },
-              },
-            };
-
-            where = {
-              ...where,
-              heroImage: {
-                status: ImageStatusEnum.READY,
+                where: {
+                  status: [
+                    ArObjectStatusEnum.PUBLISHED,
+                    ArObjectStatusEnum.MINTING,
+                    ArObjectStatusEnum.MINTED,
+                  ],
+                },
               },
             };
           }
@@ -247,6 +253,29 @@ export const ArtworkQueries = extendType({
               },
             },
           };
+
+        if ((pRI?.fieldsByTypeName?.Artwork as any)?.arObjects) {
+          include = {
+            ...include,
+            arObjects: {
+              select: {
+                key: true,
+                orderNumber: true,
+                title: true,
+                askPrice: true,
+                editionOf: true,
+                sold: true,
+              },
+              where: {
+                status: [
+                  ArObjectStatusEnum.PUBLISHED,
+                  ArObjectStatusEnum.MINTING,
+                  ArObjectStatusEnum.MINTED,
+                ],
+              },
+            },
+          };
+        }
 
         return daoArtworkGetByKey(
           where,
@@ -336,6 +365,32 @@ export const ArtworkQueries = extendType({
                 },
               },
             };
+
+          if (
+            (pRI as any).fieldsByTypeName?.ArtworkQueryResult?.artworks
+              ?.fieldsByTypeName.Artwork?.arObjects
+          ) {
+            include = {
+              ...include,
+              arObjects: {
+                select: {
+                  key: true,
+                  orderNumber: true,
+                  title: true,
+                  askPrice: true,
+                  editionOf: true,
+                  sold: true,
+                },
+                where: {
+                  status: [
+                    ArObjectStatusEnum.PUBLISHED,
+                    ArObjectStatusEnum.MINTING,
+                    ArObjectStatusEnum.MINTED,
+                  ],
+                },
+              },
+            };
+          }
 
           artworks = await daoArtworkQuery(
             where,

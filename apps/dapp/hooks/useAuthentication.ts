@@ -34,7 +34,7 @@ export const useAuthentication = () => {
     return await user.preLoginLogout();
   };
 
-  const logoutAndRedirect = async (path: string = "/login") => {
+  const logoutAndRedirect = async (path: string = "/openar/login") => {
     const result = await user.logout();
     router.push(path);
     return result;

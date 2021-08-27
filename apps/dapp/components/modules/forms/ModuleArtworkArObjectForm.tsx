@@ -9,11 +9,10 @@ import {
   FieldImageUploader,
 } from "~/components/forms";
 
-import { ModuleArtworkArObjectsForm } from ".";
 
 import { yupIsFieldRequired } from "../validation";
 
-export const ModuleArtworkForm = ({
+export const ModuleArtworkArObjectForm = ({
   action,
   data,
   errors,
@@ -150,19 +149,8 @@ export const ModuleArtworkForm = ({
             />
           </>
         )}
-
-        {action === "update" && (
-          <ModuleArtworkArObjectsForm
-            {...{
-              data,
-              validationSchema,
-              disableNavigation,
-              setActiveUploadCounter,
-            }}
-          />
-        )}
       </Box>
     </Grid>
   );
 };
-export default ModuleArtworkForm;
+export default ModuleArtworkArObjectForm;

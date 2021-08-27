@@ -10,6 +10,10 @@ import type { core } from "nexus"
 declare global {
   interface NexusGenCustomInputMethods<TypeName extends string> {
     /**
+     * A field whose value is a Currency: https://en.wikipedia.org/wiki/ISO_4217.
+     */
+    currency<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "Currency";
+    /**
      * A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
      */
     date<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "DateTime";
@@ -29,6 +33,10 @@ declare global {
 }
 declare global {
   interface NexusGenCustomOutputMethods<TypeName extends string> {
+    /**
+     * A field whose value is a Currency: https://en.wikipedia.org/wiki/ISO_4217.
+     */
+    currency<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "Currency";
     /**
      * A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
      */
@@ -55,10 +63,10 @@ declare global {
 
 export interface NexusGenInputs {
   ArObjectUpsertInput: { // input type
+    artwork?: NexusGenScalars['JSON'] | null; // JSON
     collector?: NexusGenScalars['JSON'] | null; // JSON
     creator?: NexusGenScalars['JSON'] | null; // JSON
     description: string; // String!
-    editionNumber?: number | null; // Int
     editionOf?: number | null; // Int
     heroImage?: NexusGenScalars['JSON'] | null; // JSON
     id?: number | null; // Int
@@ -130,6 +138,7 @@ export interface NexusGenScalars {
   Float: number
   Boolean: boolean
   ID: string
+  Currency: any
   DateTime: any
   EmailAddress: any
   JSON: any
@@ -138,11 +147,11 @@ export interface NexusGenScalars {
 
 export interface NexusGenObjects {
   ArObject: { // root type
+    askPrice?: NexusGenScalars['Currency'] | null; // Currency
     collector?: NexusGenRootTypes['User'] | null; // User
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     creator?: NexusGenRootTypes['User'] | null; // User
     description?: string | null; // String
-    editionNumber?: number | null; // Int
     editionOf?: number | null; // Int
     heroImage?: NexusGenRootTypes['Image'] | null; // Image
     id: number; // Int!
@@ -153,6 +162,7 @@ export interface NexusGenObjects {
     lng?: number | null; // Float
     orderNumber?: number | null; // Int
     ownerEthAddress?: string | null; // String
+    public?: boolean | null; // Boolean
     status: number; // Int!
     title?: string | null; // String
     type?: number | null; // Int
@@ -282,11 +292,11 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
   ArObject: { // field return type
+    askPrice: NexusGenScalars['Currency'] | null; // Currency
     collector: NexusGenRootTypes['User'] | null; // User
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     creator: NexusGenRootTypes['User'] | null; // User
     description: string | null; // String
-    editionNumber: number | null; // Int
     editionOf: number | null; // Int
     heroImage: NexusGenRootTypes['Image'] | null; // Image
     id: number; // Int!
@@ -297,6 +307,7 @@ export interface NexusGenFieldTypes {
     lng: number | null; // Float
     orderNumber: number | null; // Int
     ownerEthAddress: string | null; // String
+    public: boolean | null; // Boolean
     status: number; // Int!
     title: string | null; // String
     type: number | null; // Int
@@ -464,11 +475,11 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenFieldTypeNames {
   ArObject: { // field return type name
+    askPrice: 'Currency'
     collector: 'User'
     createdAt: 'DateTime'
     creator: 'User'
     description: 'String'
-    editionNumber: 'Int'
     editionOf: 'Int'
     heroImage: 'Image'
     id: 'Int'
@@ -479,6 +490,7 @@ export interface NexusGenFieldTypeNames {
     lng: 'Float'
     orderNumber: 'Int'
     ownerEthAddress: 'String'
+    public: 'Boolean'
     status: 'Int'
     title: 'String'
     type: 'Int'

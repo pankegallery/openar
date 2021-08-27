@@ -87,15 +87,12 @@ model ArObject {
   description   String?
   orderNumber     Int? @default(0)
   editionOf     Int?
-  sold          Int?
-
+  
   lat           Float?
   lng           Float?
 
   askPrice    Decimal? @default(0.0)
   public        Boolean @default(true)
-
-  ownerEthAddress String?   @db.VarChar(42)
 
   isBanned      Boolean @default(false)
 
@@ -103,6 +100,7 @@ model ArObject {
   creator   User? @relation(fields: [creatorId], references: [id], name: "arObjects")
 
   collectors  ArObject2Collector[] 
+  
   artworkId Int
   artwork   Artwork? @relation(fields: [artworkId], references: [id])
 
@@ -121,6 +119,7 @@ model ArObject2Collector {
   tokenId         String
   editonNumber    Int
   ownerEthAddress String? 
+  sold            Boolean?
   
   collector User? @relation(fields: [userId], references: [id])
   arObject  ArObject? @relation(fields: [arObjectId], references: [id])

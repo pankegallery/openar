@@ -9,7 +9,7 @@ import {
   FieldImageUploader,
 } from "~/components/forms";
 
-import { yupIsFieldRequired, ModuelArtworkCreateSchema } from "../validation";
+import { yupIsFieldRequired, ModuleArtworkCreateSchema } from "../validation";
 import { useRouter } from "next/router";
 import { moduleArtworksConfig as moduleConfig } from "../config";
 

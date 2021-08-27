@@ -3,11 +3,11 @@
 
 
 type ArObject {
+  askPrice: Currency
   collector: User
   createdAt: DateTime
   creator: User
   description: String
-  editionNumber: Int
   editionOf: Int
   heroImage: Image
   id: Int!
@@ -18,6 +18,7 @@ type ArObject {
   lng: Float
   orderNumber: Int
   ownerEthAddress: String
+  public: Boolean
   status: Int!
   title: String
   type: Int
@@ -33,10 +34,10 @@ type ArObjectQueryResult {
 }
 
 input ArObjectUpsertInput {
+  artwork: JSON
   collector: JSON
   creator: JSON
   description: String!
-  editionNumber: Int
   editionOf: Int
   heroImage: JSON
   id: Int
@@ -139,6 +140,11 @@ type AuthUser {
 type BooleanResult {
   result: Boolean!
 }
+
+"""
+A field whose value is a Currency: https://en.wikipedia.org/wiki/ISO_4217.
+"""
+scalar Currency @specifiedBy(url: "https://en.wikipedia.org/wiki/ISO_4217")
 
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
