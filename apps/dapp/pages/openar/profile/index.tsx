@@ -68,6 +68,7 @@ const Index = () => {
           <Grid
             templateColumns={columns}
             templateRows={rows}
+            height="100%"
           >
             <Box p="4" w="100%" overflow="hidden">
               <Stat mb="4">
