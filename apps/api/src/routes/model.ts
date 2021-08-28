@@ -83,8 +83,8 @@ export const postArModel = async (req: Request, res: Response) => {
   // TODO: howto trigger refresh?
   // Maybe autosend auth token
   // Userland fix attempt for https://github.com/expressjs/multer/pull/971
-  (req.connection || req.socket).on("error", (error) => {
-    console.log("Connection Error Detected", error.message || error);
+  req.socket.on("error", (error) => {
+    logger.warn(error);
     req.emit("end");
   });
 

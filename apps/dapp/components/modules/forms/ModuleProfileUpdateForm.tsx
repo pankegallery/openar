@@ -121,7 +121,7 @@ export const ModuleProfileUpdateForm = ({
           setActiveUploadCounter={setActiveUploadCounter}
           settings={{
             minFileSize: 1024 * 1024 * 0.0488,
-            maxFileSize: 1024 * 1024 * 200,
+            maxFileSize: 1024 * 1024 * 5,
             aspectRatioPB: 100, // % bottom padding
 
             image: {
