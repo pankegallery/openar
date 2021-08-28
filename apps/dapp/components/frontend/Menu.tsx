@@ -14,3 +14,4 @@ export const Menu = ({ pages }: { pages?: any }) => {
     </>
   );
 };
+

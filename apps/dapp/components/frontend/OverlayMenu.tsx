@@ -14,11 +14,14 @@ import { WalletControl } from "~/components/app/shared";
 import { useSSRSaveMediaQuery } from "~/hooks";
 import { Menu } from "~/components/frontend";
 
+import { useWalletLogin } from "~/hooks";
+
 import Close from "~/assets/img/close.svg";
 import Logo from "~/assets/img/logo-white.svg";
 import MenuCornerWhite from "~/assets/img/menu-corner-light.svg";
 
 export const OverlayMenu = () => {
+  const { account} = useWalletLogin();
   const { isOpen, onToggle } = useDisclosure();
   const [isClosing, setIsClosing] = useState(false);
   const isTablet = useSSRSaveMediaQuery(
@@ -190,7 +193,7 @@ export const OverlayMenu = () => {
                   <Menu pages={mainMenu} />
                 </chakra.nav>
               </Flex>
-              <Flex
+              <Box
                 w={{
                   base: "calc(33.33vw - 2px)",
                   t: "calc(50vw - 2px)",
@@ -205,8 +208,22 @@ export const OverlayMenu = () => {
                 borderTop="1px solid #fff"
                 layerStyle="backdropBlurred"
               >
-                <WalletControl />
-              </Flex>
+                <chakra.nav
+                  className="main"
+                  textStyle="worktitle"
+                  sx={{
+                    "a": {
+                      display: "block",
+                      mb: "2",
+                    }
+                  }}
+                >
+                  {account && (
+                    <ActiveLink href="/openar">Dashboard</ActiveLink>
+                  )}
+                  <WalletControl />
+                </chakra.nav>
+              </Box>
             </Flex>
             <Box
               className="footer"
