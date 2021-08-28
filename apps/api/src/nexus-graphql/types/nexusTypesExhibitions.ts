@@ -1,19 +1,17 @@
-export default {};
-
-// /// <reference path="../../types/nexus-typegen.ts" />
+/// <reference path="../../types/nexus-typegen.ts" />
 import { parseResolveInfo } from "graphql-parse-resolve-info";
 // import { filteredOutputByWhitelist } from "../../utils";
 
 // import dedent from "dedent";
 import {
   objectType,
-//   extendType,
-//   inputObjectType,
-//   nonNull,
-//   stringArg,
-//   intArg,
-//   arg,
-//   list,
+  //   extendType,
+  //   inputObjectType,
+  nonNull,
+  stringArg,
+  //   intArg,
+  //   arg,
+  //   list,
 } from "nexus";
 // import httpStatus from "http-status";
 // import { ApiError } from "../../utils";
@@ -24,8 +22,8 @@ import {
 
 // import { apiConfig } from "../../config";
 
-// import {
-//   daoEventQuery,
+import {
+  daoArtworkQueryAll,
 //   daoEventQueryCount,
 //   daoEventQueryFirst,
 //   daoEventCreate,
@@ -33,7 +31,7 @@ import {
 //   daoUserGetById,
 //   daoEventGetBySlug,
 //   daoImageSaveImageTranslations,
-// } from "../../dao";
+} from "../../dao";
 
 // import { eventUpdate } from "../../services/serviceEvent";
 
@@ -60,7 +58,7 @@ export const Exhibition = objectType({
     t.date("dateBegin");
     t.date("dateEnd");
     t.nonNull.int("status");
-    
+
     t.field("curators", {
       type: "User",
 
@@ -100,71 +98,17 @@ export const EventQueries = extendType({
 
       // resolve(root, args, ctx, info)
       async resolve(...[, args, , info]) {
-        const pRI = parseResolveInfo(info);
+        return {
+          title: "OpenAR.art",
+          subtitle:
+            "Platform launch and groupshow curated by Sakrowski and Jeremy Bailey",
+          dateBegin: new Date("20210829").toISOString(),
+          dateEnd: new Date("20211004").toISOString(),
+          description:
+            "On the occasion of the launch of the new platform “openar.art”, panke.gallery presents a hybrid group exhibition with experimental Augmented Reality works. The open platform makes it easy to exhibit, collect and discuss Augmented Reality works and allows artists to sell their works as NFTs. Since the platform is organized as a cooperative, profits will be shared among the artists. As part of the project openAR, the exhibition and platform have been developed in collaboration between workshop participants and digital artists Jeremy Bailey, Sarah Buser and Tamás Páll. The works examine the possibilities of AR technology in artistic applications. Visual, acoustic and performative Augmented Reality formats can be experienced in the exhibition.",
 
-        let include = {};
-
-        if ((pRI?.fieldsByTypeName?.Event as any)?.terms)
-          include = {
-            ...include,
-            terms: {
-              select: {
-                id: true,
-                name: true,
-                slug: true,
-              },
-            },
-          };
-
-        if ((pRI?.fieldsByTypeName?.Event as any)?.dates)
-          include = {
-            ...include,
-            dates: {
-              select: {
-                id: true,
-                date: true,
-                begin: true,
-                end: true,
-              },
-              orderBy: {
-                date: "asc",
-              },
-            },
-          };
-
-        if ((pRI?.fieldsByTypeName?.Event as any)?.locations)
-          include = {
-            ...include,
-            locations: {
-              select: {
-                id: true,
-                title: true,
-                description: true,
-                lat: true,
-                lng: true,
-              },
-              orderBy: {
-                title: "asc",
-              },
-            },
-          };
-
-        if ((pRI?.fieldsByTypeName?.Event as any)?.heroImage)
-          include = {
-            ...include,
-            heroImage: {
-              include: {
-                translations: true,
-              },
-            },
-          };
-
-        return daoEventQueryFirst(
-          {
-            id: args.id,
-          },
-          Object.keys(include).length > 0 ? include : undefined
-        );
+          artworks: daoArtworkQueryAll(),
+        };
       },
     });
   },
