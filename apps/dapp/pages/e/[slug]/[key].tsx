@@ -14,7 +14,7 @@ import Arrow from "~/assets/img/arrow.svg";
 import { ArtworkListItem } from "~/components/frontend";
 import pick from "lodash/pick";
 
-export const Exhibition = ({ exhibition }: { exhibition: any }) => {
+export const Artwork = ({ artwork }: { artwork: any }) => {
   //TODO: was passiert beim live rendern und nicht bekannten slugs?
   // {
   //   {
@@ -90,10 +90,10 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
   return (
     <>
       <Head>
-        <title>{exhibition.title} · OpenAR</title>
+        <title>{artwork.title} · OpenAR</title>
         <meta
           property="og:title"
-          content={`${exhibition.title} · OpenAR`}
+          content={`${artwork.title} · OpenAR`}
           key="title"
         />
       </Head>
@@ -237,8 +237,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
               base: "3",
               t: "inherit",
             }}
-            overflowX="hidden"
-            overflowY="auto"
+            overflow="scroll"
           >
             <chakra.p my="auto !important" fontWeight="normal">
               {exhibition.description}
@@ -293,9 +292,9 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
           base: "relative",
           d: "fixed",
         }}
-        overflowY={{
-          base: "visible",
-          d: "auto",
+        overflow={{
+          base: "show",
+          d: "scroll",
         }}
         zIndex="210"
         top={{
@@ -322,11 +321,10 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
               {" "}
               {exhibition.artworks.map((artwork) => (
                 <ArtworkListItem
+                  key={`aw-${artwork.id}`}
                   isAdmin={false}
-                  urlKey={artwork.key}
                   {...pick(artwork, [
                     "id",
-                    "key",
                     "status",
                     "heroImage",
                     "title",
@@ -351,8 +349,43 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   const client = getApolloClient();
 
   const exhibitionQuery = gql`
-    query ($slug: String!) {
-      exhibition(slug: $slug) {
+    query ($key: String!, $slug: String!) {
+      artwork(key: $key) {
+        id
+        key
+        title
+        description
+        status
+        creator {
+          pseudonym
+          ethAddress
+          bio
+          url
+        }
+        url
+        video
+        heroImage {
+          id
+          meta
+
+          status
+        }
+        arObjects {
+          id
+          key
+          title
+          orderNumber
+          status
+          askPrice
+          editionOf
+          heroImage {
+            id
+            meta
+            status
+          }
+        }
+      }
+      exhibition(slug:  $slug) {
         id
         slug
         title
@@ -365,7 +398,6 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           pseudonym
           id
           ethAddress
-          bio
         }
         artworks {
           id
@@ -373,6 +405,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           title
           description
           creator {
+            id
             pseudonym
             ethAddress
           }
@@ -383,12 +416,12 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           }
         }
       }
-    }
-  `;
+    }`;
 
   const { data } = await client.query({
     query: exhibitionQuery,
     variables: {
+      key: params.key,
       slug: params.slug,
     },
   });
@@ -406,8 +439,8 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   };
 };
 
-Exhibition.getLayout = function getLayout(page: ReactElement) {
+Artwork.getLayout = function getLayout(page: ReactElement) {
   return <LayoutBlank>{page}</LayoutBlank>;
 };
 
-export default Exhibition;
+export default Artwork;

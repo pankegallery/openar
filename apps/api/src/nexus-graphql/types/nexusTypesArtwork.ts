@@ -169,11 +169,13 @@ export const ArtworkQueries = extendType({
                   editionOf: true,
                 },
                 where: {
-                  status: [
-                    ArObjectStatusEnum.PUBLISHED,
-                    ArObjectStatusEnum.MINTING,
-                    ArObjectStatusEnum.MINTED,
-                  ],
+                  status: {
+                    in: [
+                      ArObjectStatusEnum.PUBLISHED,
+                      ArObjectStatusEnum.MINTING,
+                      ArObjectStatusEnum.MINTED,
+                    ],
+                  },
                 },
               },
             };
@@ -221,6 +223,12 @@ export const ArtworkQueries = extendType({
         let include = {};
         let where: Prisma.ArtworkWhereInput = {
           key: args.key,
+          status: {
+            in: [
+              ArtworkStatusEnum.PUBLISHED,
+              ArtworkStatusEnum.HASMINTEDOBJECTS,
+            ],
+          },
         };
         if ((pRI?.fieldsByTypeName?.Artwork as any)?.heroImage) {
           include = {
@@ -269,12 +277,17 @@ export const ArtworkQueries = extendType({
                 editionOf: true,
               },
               where: {
-                status: [
-                  ArObjectStatusEnum.PUBLISHED,
-                  ArObjectStatusEnum.MINTING,
-                  ArObjectStatusEnum.MINTED,
-                ],
+                status: {
+                  in: [
+                    ArObjectStatusEnum.PUBLISHED,
+                    ArObjectStatusEnum.MINTING,
+                    ArObjectStatusEnum.MINTED,
+                  ],
+                },
               },
+              orderBy: {
+                orderNumber: "asc"
+              }
             },
           };
         }

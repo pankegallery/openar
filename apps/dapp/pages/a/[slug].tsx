@@ -11,7 +11,7 @@ import { getApolloClient } from "~/services/apolloClient";
 
 import openingBg from "~/assets/img/opening-bg.png";
 import Arrow from "~/assets/img/arrow.svg";
-import {ArtworkListItem} from "~/components/frontend";
+import { ArtworkListItem } from "~/components/frontend";
 import pick from "lodash/pick";
 
 export const Artwork = ({ artwork }: { artwork: any }) => {
@@ -120,7 +120,7 @@ export const Artwork = ({ artwork }: { artwork: any }) => {
       <Grid
         position={{
           base: "relative",
-          d: "fixed"
+          d: "fixed",
         }}
         backgroundImage="url(/image/opening-bg.png)"
         className="exhibition"
@@ -158,7 +158,7 @@ export const Artwork = ({ artwork }: { artwork: any }) => {
           className="main"
           w={{
             base: "100%",
-            d: "66.66vw"
+            d: "66.66vw",
           }}
           ml={{
             base: "0",
@@ -210,7 +210,8 @@ export const Artwork = ({ artwork }: { artwork: any }) => {
                   {exhibition.subtitle}
                 </chakra.p>
                 <chakra.p textStyle="workmeta">
-                  {new Date(exhibition.dateBegin).toLocaleDateString("de")}{" - "}
+                  {new Date(exhibition.dateBegin).toLocaleDateString("de")}
+                  {" - "}
                   {new Date(exhibition.dateEnd).toLocaleDateString("de")}
                 </chakra.p>
               </chakra.a>
@@ -269,11 +270,11 @@ export const Artwork = ({ artwork }: { artwork: any }) => {
             textAlign="right"
             h={{
               base: "66.66vw",
-              t: "100%"
+              t: "100%",
             }}
             ml={{
               base: "0",
-              d: "auto"
+              d: "auto",
             }}
           >
             <chakra.p textStyle="bigLabel" ml="auto">
@@ -282,8 +283,6 @@ export const Artwork = ({ artwork }: { artwork: any }) => {
             <Arrow className="arrow down" />
           </Flex>
         </Flex>
-
-
       </Grid>
       {/* --------- Artworks  --------- */}
       <Flex
@@ -291,11 +290,11 @@ export const Artwork = ({ artwork }: { artwork: any }) => {
         layerStyle="backdropLight"
         position={{
           base: "relative",
-          d:"fixed",
+          d: "fixed",
         }}
         overflow={{
           base: "show",
-          d: "scroll"
+          d: "scroll",
         }}
         zIndex="210"
         top={{
@@ -321,7 +320,8 @@ export const Artwork = ({ artwork }: { artwork: any }) => {
             <Flex width="100%" flexWrap="wrap">
               {" "}
               {exhibition.artworks.map((artwork) => (
-                <ArtworkListItem key={`aw-${artwork.id}`}
+                <ArtworkListItem
+                  key={`aw-${artwork.id}`}
                   isAdmin={false}
                   {...pick(artwork, [
                     "id",
@@ -349,8 +349,43 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   const client = getApolloClient();
 
   const exhibitionQuery = gql`
-    query ($slug: String!) {
-      exhibition(slug: $slug) {
+    query ($key: String!, $slug: String!) {
+      artwork(key: $key) {
+        id
+        key
+        title
+        description
+        status
+        creator {
+          pseudonym
+          ethAddress
+          bio
+          url
+        }
+        url
+        video
+        heroImage {
+          id
+          meta
+
+          status
+        }
+        arObjects {
+          id
+          key
+          title
+          orderNumber
+          status
+          askPrice
+          editionOf
+          heroImage {
+            id
+            metagit 
+            status
+          }
+        }
+      }
+      exhibition(slug:  $slug) {
         id
         slug
         title
@@ -363,15 +398,14 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           pseudonym
           id
           ethAddress
-          bio
         }
-
         artworks {
           id
           key
           title
           description
-          creator{
+          creator {
+            id
             pseudonym
             ethAddress
           }
@@ -382,12 +416,12 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           }
         }
       }
-    }
-  `;
+    }`;
 
   const { data } = await client.query({
     query: exhibitionQuery,
     variables: {
+      key: params.key,
       slug: params.slug,
     },
   });
