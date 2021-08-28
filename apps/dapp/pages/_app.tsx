@@ -49,7 +49,7 @@ export default OpenARApp;
 /*
 TODO:  Warning: Expected server HTML to contain a matching <div> in <div>.
 
-Chase the mismatching divs ... 
+Chase the mismatching divs ...
 
 This message can also occurs due to bad code that doesn't render consistent content between your SSR and CSR, thus hydrate can't resolve.
 

@@ -92,7 +92,7 @@ const themeConfig = {
         width: "100%",
         height: "100%",
         margin: 0,
-        "--poster-color": "#ccc", // 
+        "--poster-color": "#ccc", //
         border: 0,
       },
     },

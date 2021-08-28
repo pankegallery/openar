@@ -109,7 +109,7 @@ const Update = () => {
     reset({
       ...filteredOutputByWhitelist(
         data.artworkReadOwn,
-        ["title", "description", "url", "video", "status"]        
+        ["title", "description", "url", "video", "status"]
       )
     });
   }, [reset, data]);

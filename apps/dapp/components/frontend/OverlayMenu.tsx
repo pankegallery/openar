@@ -76,7 +76,7 @@ export const OverlayMenu = () => {
             top="0"
             left={isOpen || isClosing ? 0 : "-100vw"}
             w="100vw"
-            h="auto"
+            h="100%"
             layerStyle="backdropDark"
             zIndex="301"
             templateRows={{
@@ -86,7 +86,7 @@ export const OverlayMenu = () => {
             }}
             color="white"
           >
-            {/* --------- Logo and Close --------- */}
+            {/* --------- Logo and Clo  se --------- */}
             <Flex
               className="Header"
               w="100vw"
