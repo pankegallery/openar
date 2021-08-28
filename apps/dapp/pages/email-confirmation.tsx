@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ReactElement } from "react";
 
-import { LayoutSite } from "~/components/app";
+import { LayoutOpenAR } from "~/components/app";
 import {
   Button,
   Box,
@@ -182,7 +182,7 @@ const EmailConfirmation = () => {
 };
 
 EmailConfirmation.getLayout = function getLayout(page: ReactElement) {
-  return <LayoutSite>{page}</LayoutSite>;
+  return <LayoutOpenAR>{page}</LayoutOpenAR>;
 };
 
 export default EmailConfirmation;

@@ -35,7 +35,7 @@ export const Exhibition = (props) => {
         overflow="hidden"
 
       >
-        <Image src={openingBg} layout="fill" objectFit="cover" objectPosition="50% 100%" />
+        <Image src={openingBg} layout="fill" objectFit="cover" objectPosition="50% 100%" alt="" role="presentation" />
       </Box>
 
       {/* --------- Grid --------- */}
