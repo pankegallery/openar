@@ -5,8 +5,8 @@ export default {};
 // import { filteredOutputByWhitelist } from "../../utils";
 
 // import dedent from "dedent";
-// import {
-//   objectType,
+import {
+  objectType,
 //   extendType,
 //   inputObjectType,
 //   nonNull,
@@ -14,7 +14,7 @@ export default {};
 //   intArg,
 //   arg,
 //   list,
-// } from "nexus";
+} from "nexus";
 // import httpStatus from "http-status";
 // import { ApiError } from "../../utils";
 
@@ -50,55 +50,43 @@ export default {};
 //   },
 // });
 
-// export const Event = objectType({
-//   name: "Event",
-//   definition(t) {
-//     t.nonNull.int("id");
-//     t.json("title");
-//     t.json("slug");
+export const Exhibition = objectType({
+  name: "Exhibition",
+  definition(t) {
+    t.nonNull.int("id");
+    t.json("title");
+    t.json("slug");
+    t.string("subtitle");
+    t.date("dateBegin");
+    t.date("dateEnd");
+    t.nonNull.int("status");
+    
+    t.field("curators", {
+      type: "User",
 
-//     t.nonNull.int("ownerId");
-//     t.nonNull.int("status");
-//     t.field("author", {
-//       type: "User",
+      // // resolve(root, args, ctx, info)
+      // async resolve(...[p]) {
+      //   if (p.ownerId) {
+      //     const user = await daoUserGetById(p.ownerId);
+      //     if (user)
+      //       return filteredOutputByWhitelist(user, [
+      //         "id",
+      //         "firstName",
+      //         "lastName",
+      //       ]);
+      //   }
+      //   return null;
+      // },
+    });
 
-//       // resolve(root, args, ctx, info)
-//       async resolve(...[p]) {
-//         if (p.ownerId) {
-//           const user = await daoUserGetById(p.ownerId);
-//           if (user)
-//             return filteredOutputByWhitelist(user, [
-//               "id",
-//               "firstName",
-//               "lastName",
-//             ]);
-//         }
-//         return null;
-//       },
-//     });
-//     t.json("description");
-//     t.json("descriptionLocation");
+    t.list.field("artworks", {
+      type: "Artwork",
+    });
 
-//     t.list.field("dates", {
-//       type: "EventDate",
-//     });
-
-//     t.list.field("terms", {
-//       type: "Term",
-//     });
-
-//     t.list.field("locations", {
-//       type: "Location",
-//     });
-
-//     t.field("heroImage", {
-//       type: "Image",
-//     });
-
-//     t.date("createdAt");
-//     t.date("updatedAt");
-//   },
-// });
+    t.date("createdAt");
+    t.date("updatedAt");
+  },
+});
 
 // export const EventQueryResult = objectType({
 //   name: "EventQueryResult",
