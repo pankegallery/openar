@@ -14,7 +14,7 @@ import Link from "next/link";
 export const ArtworkListItem = ({
   id,
   title,
-  key,
+  urlKey,
   creator,
   heroImage,
   status,
@@ -23,7 +23,7 @@ export const ArtworkListItem = ({
 }: {
   id: number;
   title: string;
-  key: string;
+  urlKey: string;
   creator: any;
   heroImage: any;
   status: number;
@@ -33,7 +33,7 @@ export const ArtworkListItem = ({
   let artist = creator?.pseudonym ? `${creator?.pseudonym}` : "";
   if (artist.trim().length === 0) artist = creator?.ethAddress;
 
-  const href = isAdmin ? `/openar/artworks/${id}/update` : `/a/${key}/`;
+  const href = isAdmin ? `/openar/artworks/${id}/update` : `/a/${urlKey}/`;
 
   return (
     <LinkBox
@@ -42,12 +42,12 @@ export const ArtworkListItem = ({
       key={`artwork-${id}`}
     >
       <Box className="info">
-        <Heading as="h2" className="title">
+        <chakra.h2 className="title" textStyle="subtitle">
           <Link href={href} passHref>
             <LinkOverlay>{title}</LinkOverlay>
           </Link>
-        </Heading>
-        <chakra.span className="artist">{artist}</chakra.span>
+        </chakra.h2>
+        <chakra.span className="artist" textStyle="meta">{artist}</chakra.span>
       </Box>
       <Box
         className={`${

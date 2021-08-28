@@ -14,8 +14,8 @@ import Arrow from "~/assets/img/arrow.svg";
 import {ArtworkListItem} from "~/components/frontend";
 import pick from "lodash/pick";
 
-export const Exhibition = ({ exhibition }: { exhibition: any }) => {
-  //TODO: was passiert beim live rendern und nicht bekannten slugs? 
+export const Artwork = ({ artwork }: { artwork: any }) => {
+  //TODO: was passiert beim live rendern und nicht bekannten slugs?
   // {
   //   {
   //     "id": 1,
@@ -90,10 +90,10 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
   return (
     <>
       <Head>
-        <title>{exhibition.title} · OpenAR</title>
+        <title>{artwork.title} · OpenAR</title>
         <meta
           property="og:title"
-          content={`${exhibition.title} · OpenAR`}
+          content={`${artwork.title} · OpenAR`}
           key="title"
         />
       </Head>
@@ -321,11 +321,10 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
             <Flex width="100%" flexWrap="wrap">
               {" "}
               {exhibition.artworks.map((artwork) => (
-                <ArtworkListItem
-                  isAdmin={false} urlKey={artwork.key}
+                <ArtworkListItem key={`aw-${artwork.id}`}
+                  isAdmin={false}
                   {...pick(artwork, [
                     "id",
-                    "key",
                     "status",
                     "heroImage",
                     "title",
@@ -366,6 +365,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           ethAddress
           bio
         }
+
         artworks {
           id
           key
@@ -405,8 +405,8 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   };
 };
 
-Exhibition.getLayout = function getLayout(page: ReactElement) {
+Artwork.getLayout = function getLayout(page: ReactElement) {
   return <LayoutBlank>{page}</LayoutBlank>;
 };
 
-export default Exhibition;
+export default Artwork;

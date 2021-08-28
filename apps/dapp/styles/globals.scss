@@ -206,10 +206,10 @@ a {
     padding: 0.5rem;
     writing-mode:vertical-rl;
     transform: rotate(180deg);
-
     a::before {
       width: 100vw;
     }
+    height: 22.22vw;
   } 
   .img {
     width: 66.66%;
@@ -226,7 +226,7 @@ a {
   }
 }
 
-@media (min-width: 45rem) {
+@media (min-width: 45rem) and (max-width: 74rem){
   .artwork.item {
     width: 50%;
     display: flex;
@@ -234,6 +234,7 @@ a {
     flex-direction: row-reverse;
 
     .info {
+      height: 33.33vw;
       a::before {
         width: 50vw;
       }
@@ -250,4 +251,10 @@ a {
       } 
     }
   }
+}
+
+@media (min-width: 75rem){
+    .artwork.item {
+        width: 100%;
+    }
 }
