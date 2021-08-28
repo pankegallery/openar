@@ -170,6 +170,20 @@ A field whose value conforms to the standard internet email address format as sp
 """
 scalar EmailAddress @specifiedBy(url: "https://www.w3.org/Protocols/rfc822/")
 
+type Exhibition {
+  artworks: [Artwork]
+  createdAt: DateTime
+  curators: User
+  dateBegin: DateTime
+  dateEnd: DateTime
+  id: Int!
+  slug: JSON
+  status: Int!
+  subtitle: String
+  title: JSON
+  updatedAt: DateTime
+}
+
 type GeoPoint {
   lat: Float
   lng: Float
@@ -258,6 +272,7 @@ type Query {
   artworkReadOwn(id: Int!): Artwork!
   artworks(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ArtworkQueryResult
   artworksReadOwn(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ArtworkQueryResult
+  exhibition(slug: String!): Exhibition!
   imageRead(id: Int!): Image!
   imageStatus(id: Int!): ImageStatus!
   images(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, taxonomyId: Int, where: JSON): ImageQueryResult

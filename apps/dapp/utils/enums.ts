@@ -54,3 +54,14 @@ export enum ArModelStatusEnum {
   MINTING,
   MINTED,
 }
+
+export enum ExhibitionStatusEnum {
+  DRAFT,
+  SAVED,
+  PUBLISHED,
+  MINTING,
+  MINTED,
+  TRASHED,
+  DELETED,
+  AUTODRAFT,
+}

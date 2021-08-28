@@ -5,7 +5,7 @@ import { parseResolveInfo } from "graphql-parse-resolve-info";
 // import dedent from "dedent";
 import {
   objectType,
-  //   extendType,
+  extendType,
   //   inputObjectType,
   nonNull,
   stringArg,
@@ -23,30 +23,17 @@ import {
 // import { apiConfig } from "../../config";
 
 import {
-  daoArtworkQueryAll,
-//   daoEventQueryCount,
-//   daoEventQueryFirst,
-//   daoEventCreate,
-//   daoEventDelete,
-//   daoUserGetById,
-//   daoEventGetBySlug,
-//   daoImageSaveImageTranslations,
+  daoArtworkQuery,
+  //   daoEventQueryCount,
+  //   daoEventQueryFirst,
+  //   daoEventCreate,
+  //   daoEventDelete,
+  //   daoUserGetById,
+  //   daoEventGetBySlug,
+  //   daoImageSaveImageTranslations,
 } from "../../dao";
 
-// import { eventUpdate } from "../../services/serviceEvent";
-
-// export const EventDate = objectType({
-//   name: "EventDate",
-//   definition(t) {
-//     t.nonNull.int("id");
-//     t.date("date");
-//     t.date("begin");
-//     t.date("end");
-
-//     t.date("createdAt");
-//     t.date("updatedAt");
-//   },
-// });
+import { ArtworkStatusEnum, ExhibitionStatusEnum } from "../../utils";
 
 export const Exhibition = objectType({
   name: "Exhibition",
@@ -99,15 +86,31 @@ export const EventQueries = extendType({
       // resolve(root, args, ctx, info)
       async resolve(...[, args, , info]) {
         return {
+          id: 1,
           title: "OpenAR.art",
           subtitle:
             "Platform launch and groupshow curated by Sakrowski and Jeremy Bailey",
-          dateBegin: new Date("20210829").toISOString(),
-          dateEnd: new Date("20211004").toISOString(),
+          dateBegin: new Date("2021-08-29 12:00"),
+          dateEnd: new Date("2021-10-04 12:00"),
           description:
             "On the occasion of the launch of the new platform “openar.art”, panke.gallery presents a hybrid group exhibition with experimental Augmented Reality works. The open platform makes it easy to exhibit, collect and discuss Augmented Reality works and allows artists to sell their works as NFTs. Since the platform is organized as a cooperative, profits will be shared among the artists. As part of the project openAR, the exhibition and platform have been developed in collaboration between workshop participants and digital artists Jeremy Bailey, Sarah Buser and Tamás Páll. The works examine the possibilities of AR technology in artistic applications. Visual, acoustic and performative Augmented Reality formats can be experienced in the exhibition.",
-
-          artworks: daoArtworkQueryAll(),
+          status: ExhibitionStatusEnum.PUBLISHED,
+          artworks: await daoArtworkQuery(
+            {
+              status: {
+                in: [
+                  ArtworkStatusEnum.PUBLISHED,
+                  ArtworkStatusEnum.HASMINTEDOBJECTS,
+                ],
+              },
+            },
+            {
+              heroImage: true,
+            },
+            {},
+            0,
+            1000
+          ),
         };
       },
     });
