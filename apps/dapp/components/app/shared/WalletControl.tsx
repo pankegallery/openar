@@ -46,16 +46,17 @@ export const WalletControl = () => {
       <Box>
         {!account && (
           <Button
-            variant="openarBlackAndWhite"
+            variant="menuLink"
             onClick={walletDisclosure.onOpen}
+
           >
-            Connect to a wallet
+            Login
           </Button>
         )}
 
         {account && (
           <Button
-            variant="openarBlackAndWhite"
+            variant="link"
             onClick={async () => {
               await walletDisconnect();
             }}

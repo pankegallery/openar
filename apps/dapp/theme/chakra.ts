@@ -32,7 +32,7 @@ const themeConfig = {
   styles: {
     global: {
       ":root": {
-        "--openar-header-height-mobile": "33vw",
+        "66.66vw": "33vw",
         "--openar-header-height-desktop": "22vh"
       },
       "html, body": {
@@ -173,23 +173,31 @@ const themeConfig = {
     backdropDark: {
       bg: "rgba(0,0,0,0.6)"
     },
+    backdropLight: {
+      bg: "#F7F7F7"
+    },
     backdropExtraDark: {
       bg: "rgba(0,0,0,0.5)"
     },
     backdropBlurred: {
       position: "relative",
       "&:before": {
+        content: '""',
         display: "block",
         position:"absolute", 
         width: "100%",
         height: "100%",
         top: 0,
         left: 0,
-        filter: "blur(10px)",
+//        filter: "blur(10px)",
+        bg: "rgba(100,100,100,0.5)",
+        backdropFilter: "blur(20px)",
+        backgroundBlendMode: "lighten",
+        zIndex: "-50"
       }
     },
     backdropGradient: {
-      bg: "linear-gradient(256deg, rgba(0,0,0,0), rgba(0,0,0,0.4));"
+      bg: "linear-gradient(-256deg, rgba(0,0,0,0), rgba(0,0,0,0.4));"
     },
     pageContainerGray: {
       bg: "gray.100",
@@ -217,6 +225,51 @@ const themeConfig = {
       lineHeight: "110%",
       letterSpacing: "-1%",
     },
+    worktitle: {
+      fontSize: {
+        base: "26px",
+        t: "42px",
+        d: "42px"
+      },
+      fontWeight: "bold",
+      lineHeight: "130%",
+    },
+    subtitle: {
+      fontSize: {
+        base: "16px",
+        t: "22px",
+        d: "22px"
+      },
+      fontWeight: "semibold",
+      lineHeight: "130%",
+    },
+    workmeta: {
+      fontSize: {
+        base: "16px",
+        t: "18px",
+        d: "18px"
+      },
+      fontWeight: "light",
+      lineHeight: "110%",
+    },
+    bigLabel: {
+      textTransform: "uppercase",
+      letterSpacing: "0.02em",
+      fontWeight: "bold",
+      fontSize: {
+        base: "18px",
+        t: "24px",
+        d: "24px"
+      },
+    },
+    small: {
+      fontSize: {
+        base: "12px",
+        d: "14px"
+      },
+      fontWeight: "light",
+      lineHeight: "120%",
+    }
   },
 };
 
@@ -227,7 +280,7 @@ const defaultPropsForFormComponentents = (components: string[]): object => {
         ...options,
         [key]: {
           defaultProps: {
-            focusBorderColor: "gray.400",
+            focusBorderColor: "transparent",
             errorBorderColor: "red.400",
           },
         },

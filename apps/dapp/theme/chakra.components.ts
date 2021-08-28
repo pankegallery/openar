@@ -10,6 +10,9 @@ export const components = {
       },
       _disabled: {
         color: "white !important"        
+      },
+      _active: {
+        bg: "transparent"
       }
     },
     variants: {
@@ -54,6 +57,41 @@ export const components = {
         },
         
       },
+      link: {
+        boder: "none",
+        borderRadius: "0",
+        bg: "transparent",
+        transition: "all 0.3s",
+        color: "white",
+        p: "0",
+        _hover: {
+          color: "gray.300",
+        },
+
+      },
+      menuLink: {
+        boder: "none",
+        borderRadius: "0",
+        bg: "transparent",
+        transition: "all 0.3s",
+        color: "white",
+        p: "0",
+        fontSize: {
+          base: "26px",
+          d: "42px"
+        },
+        fontWeight: "bold",
+        lineHeight: "130%",
+        _hover: {
+          opacity: 0.6,
+        },
+
+      },
+      functional:{
+        boder: "none",
+        borderRadius: "0",
+        bg: "transparent",
+      }
     },
   },
   Checkbox: {
