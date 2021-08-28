@@ -6,7 +6,7 @@ export const Menu = ({pages}) => {
   console.log("pages: ", pages)
   return(
     <>
-      {
+      {pages && 
         pages.map(menuItem =>
           <ActiveLink
               key={menuItem.slug}
