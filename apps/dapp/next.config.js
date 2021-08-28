@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
-  distDir: 'build',
+  // distDir: 'build', TODO: better build management
   reactStrictMode: true,
   images: {
     domains: ['localhost'], //TODO: add Api
