@@ -484,6 +484,7 @@ export const ArObjectUpsertInput = inputObjectType({
     t.float("lng");
     t.float("askPrice");
     t.string("ownerEthAddress");
+    t.string("key");
 
     t.json("creator");
     t.json("collector");

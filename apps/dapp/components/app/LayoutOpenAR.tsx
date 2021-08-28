@@ -30,11 +30,10 @@ export const LayoutOpenAR = ({ children }: { children: ReactNode }) => {
           >
             <Grid
               className="main"
-              templateRows={isMobile ? "100%" : "1fr 4rem"}
+              templateRows={isMobile ? "100%" : "calc(1fr - 4rem) 4rem"}
               minH="100vh"
             >
               <Box>{children}</Box>
-              <Footer />
             </Grid>
             <Sidebar />
           </Grid>

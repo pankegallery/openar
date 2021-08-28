@@ -65,8 +65,6 @@ const UserBaseNode = interfaceType({
       type: "Image",
 
       async resolve(...[parent]) {
-        console.log(parent);
-
         if (parent?.profileImageId)
           return daoImageGetById(parent.profileImageId);
 
@@ -379,7 +377,6 @@ export const UserMutations = extendType({
       },
 
       authorize: async (...[, args, ctx]) => {
-        console.log(1, ctx?.appUser);
         const user = await daoUserFindFirst({ profileImageId: args.id });
 
         if (user) {
@@ -393,7 +390,6 @@ export const UserMutations = extendType({
       },
 
       async resolve(...[, args, ctx]) {
-        console.log(2, ctx?.appUser);
         const user = await daoUserProfileImageDelete(
           args.id,
           ctx?.appUser?.id ?? 0

@@ -16,8 +16,6 @@ export const useAuthPreLoginMutation = () => {
 
         if (payload) {
 
-          console.log("login 1(payload.user)", payload.user);
-
           authentication.setAuthToken(tokens.access);
           authentication.setRefreshCookie(tokens.refresh);
           login(payload.user);

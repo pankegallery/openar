@@ -76,7 +76,7 @@ export const ModuleArtworkArObjectForm = ({
     <Grid
       templateColumns={columns}
       templateRows={rows}
-      minH="calc(100vh - 8rem)"
+      minH="calc(100vh - 4rem)"
     >
       <Box>
         <FieldRow>
@@ -92,7 +92,7 @@ export const ModuleArtworkArObjectForm = ({
             }}
           />
         </FieldRow>
-        <FieldRow>
+        {action === "update" && <FieldRow>
           <FieldInput
             name="key"
             id="key"
@@ -104,7 +104,7 @@ export const ModuleArtworkArObjectForm = ({
               placeholder: "What is the url key of your objec?",
             }}
           />
-        </FieldRow>
+        </FieldRow>}
         {action === "update" && <FieldRow>
           <FieldStatusSelect
             statusEnum={ArObjectStatusEnum}

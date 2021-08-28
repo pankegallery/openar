@@ -10,8 +10,6 @@ export const ArrowLink = ({ children, type = "to", href } : {
   type?: string;
   href?: string;
 }) => {
-  console.log(children, type, href)
-
   if (type === "to"){
     return(
       <Link href={href} passHref>

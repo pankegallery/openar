@@ -44,7 +44,6 @@ export const WalletControl = () => {
     }    
   }, [stateUser.authenticated, stateCrypto.signatureRequired, walletDisclosure, library])
   
-  console.log("Account", account, active);
   return (
     <Box>
       {/* ------- Buttons ------- */}

@@ -34,8 +34,6 @@ export const ModuleArtworkArObjectsList = ({
   const columns = { base: "100%", t: "50% 50%" };
   const rows = { base: "auto 1fr", t: "1fr" };
 
-  console.log(data);
-
   return (
     <>  
       <Text mt="3">Objects</Text>

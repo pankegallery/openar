@@ -105,6 +105,7 @@ const Update = () => {
         "editionOf",
         "askPrice",
         "status",
+        "key",
       ]),
     });
   }, [reset, data]);
@@ -114,8 +115,6 @@ const Update = () => {
   ) => {
     setIsFormError(false);
     try {
-      console.log(newData);
-
       if (appUser) {
         const { data, errors } = await firstMutation(
           parseInt(router.query.oid as string, 10),

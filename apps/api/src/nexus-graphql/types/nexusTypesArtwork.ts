@@ -495,6 +495,7 @@ export const ArtworkUpsertInput = inputObjectType({
     t.int("status");
     t.nonNull.string("description");
     t.string("url");
+    t.string("key");
     t.string("video");
     t.float("lat");
     t.float("lng");

@@ -34,7 +34,7 @@ export const ModuleProfileUpdateForm = ({
     <Grid
       templateColumns={columns}
       templateRows={rows}
-      minH="calc(100vh - 8rem)"
+      minH="calc(100vh - 4rem)"
     >
       <Box>
         <FieldRow>

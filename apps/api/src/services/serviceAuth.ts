@@ -64,11 +64,11 @@ export const authAuthenticateUserByToken = (
 
         return createAuthenticatedAppUser(
           tokenPayload.user.id,
-          tokenPayload.user.pseudonym,
-          tokenPayload.user.ethAddress,
           tokenPayload.user.role,
           tokenPayload.user.roles,
-          tokenPayload.user.permissions
+          tokenPayload.user.permissions,
+          tokenPayload.user.pseudonym,
+          tokenPayload.user.ethAddress
         );
       }
     }
@@ -152,7 +152,7 @@ export const authPreLoginUserWithEthAddress = async (
 
   if (user.isBanned)
     throw new ApiError(httpStatus.UNAUTHORIZED, "[auth] Access denied");
-  
+
   if (ctx.appUser && ctx.tokenInfo.validRefreshTokenProvided) {
     const tokenPayload: JwtPayload | null = await tokenVerifyInDB(
       ctx.req?.cookies?.refreshToken,

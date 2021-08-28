@@ -51,7 +51,6 @@ export const ApiArModel = ({
 
       await import("@google/model-viewer")
 
-      console.log(1);
       let props: any = {};
 
       if (urlUsdz)
@@ -82,9 +81,8 @@ export const ApiArModel = ({
 
       let renderNotice = <></>;
 
-        console.log(urlGlb, urlUsdz, isIos, primaryInput);
       if (!urlGlb && urlUsdz && !isIos)
-        renderNotice = <Box position="absolute" p="3" top="50%" transform="translateY(-50%)" textAlign="center" color="#666">.usdz file uploaed<br/>This file will be viewable on ios devices</Box>
+        renderNotice = <Box position="absolute" p="3" top="50%" transform="translateY(-50%)" textAlign="center" w="100%" color="#666">.usdz file uploaded<br/>This file will be viewable on ios devices</Box>
 
       if (urlGlb || urlUsdz)
       setContent(

@@ -51,7 +51,7 @@ export const ModuleArtworkForm = ({
     <Grid
       templateColumns={columns}
       templateRows={rows}
-      minH="calc(100vh - 8rem)"
+      minH="calc(100vh - 4rem)"
     >
       <Box>
         <FieldRow>
@@ -68,7 +68,7 @@ export const ModuleArtworkForm = ({
           />
         </FieldRow>
         
-        <FieldRow>
+        {action === "update" && <FieldRow>
           <FieldInput
             name="key"
             id="key"
@@ -80,7 +80,7 @@ export const ModuleArtworkForm = ({
               placeholder: "What is the url key of your?",
             }}
           />
-        </FieldRow>
+        </FieldRow>}
         {action === "update" && <FieldRow>
           <FieldStatusSelect
             statusEnum={ArtworkStatusEnum}

@@ -68,9 +68,6 @@ const Index = () => {
   ];
 
   const { totalCount, artworks } = data?.artworksReadOwn ?? {};
-
-
-  console.log(data?.artworksReadOwn);
   
   return (
     <>
