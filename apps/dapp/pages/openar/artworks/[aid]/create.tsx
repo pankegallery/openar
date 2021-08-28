@@ -38,7 +38,7 @@ const Create = () => {
   const [appUser] = useAuthentication();
   const successToast = useSuccessfullySavedToast();
   const [disableNavigation, setDisableNavigation] = useState(false);
-
+  const [isNavigatingAway, setIsNavigatingAway] = useState(false)
   const [firstMutation, firstMutationResults] = useArObjectCreateMutation();
   const [isFormError, setIsFormError] = useState(false);
 
@@ -69,6 +69,7 @@ const Create = () => {
     newData: yup.InferType<typeof ModuleArObjectCreateSchema>
   ) => {
     setIsFormError(false);
+    setIsNavigatingAway(false);
     try {
       if (appUser) {
         const { data, errors } = await firstMutation({
@@ -92,7 +93,7 @@ const Create = () => {
 
         if (!errors) {
           successToast();
-
+          setIsNavigatingAway(true);
           router.push(`${moduleConfig.rootPath}/${parseInt(router.query.aid as string, 10)}/${data?.arObjectCreate?.id}/update`);
         } else {
           setIsFormError(true);
@@ -144,7 +145,7 @@ const Create = () => {
 
   return (
     <>
-      <FormNavigationBlock shouldBlock={isDirty && !isSubmitting} />
+      <FormNavigationBlock shouldBlock={!isNavigatingAway && isDirty && !isSubmitting} />
       <FormProvider {...formMethods}>
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={disableForm}>

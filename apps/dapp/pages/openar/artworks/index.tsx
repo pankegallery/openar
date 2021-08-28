@@ -16,7 +16,7 @@ import { moduleArtworksConfig } from "~/components/modules/config";
 import { useAuthentication } from "~/hooks";
 import { ApiImage } from "~/components/ui";
 import { LayoutOpenAR } from "~/components/app";
-import { ArtworkListItem } from "~/components/frontend";
+import { ArtworkListItem, EmbededVideoPlayer } from "~/components/frontend";
 
 const GET_OWN_ARTWORKS_LIST = gql`
   query artworksReadOwn {
@@ -79,13 +79,16 @@ const Index = () => {
               {artworks.length === 0 && (
                 <Text p="4">You haven&#39;t created any artworks yet</Text>
               )}
-
+              <EmbededVideoPlayer url="https://vimeo.com/channels/staffpicks/242573626" />
+              <EmbededVideoPlayer url="https://www.vimeo.com/19706846" />
+              <EmbededVideoPlayer url="https://www.youtube.com/watch?v=A2OGa_7_7As" />
               {artworks.length > 0 && (
                 <Flex width="100%" flexWrap="wrap" className="adminArtworksListing">
                   {" "}
                   {artworks.map((artwork) => (
                     <ArtworkListItem key={`aw-${artwork.id}`}
                       isAdmin={true}
+                      urlKey={artwork.key}
                       {...pick(artwork, [
                         "id",
                         "status",

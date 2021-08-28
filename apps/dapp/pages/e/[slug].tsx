@@ -233,7 +233,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
             borderBottom="1px solid #fff"
             layerStyle="backdropBlurred"
             order={{
-              base: "3",
+              base: 3,
               t: "inherit",
             }}
             
@@ -326,9 +326,9 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
                 <ArtworkListItem
                   isAdmin={false}
                   urlKey={artwork.key}
+                  key={artwork.key}
                   {...pick(artwork, [
                     "id",
-                    "key",
                     "status",
                     "heroImage",
                     "title",
