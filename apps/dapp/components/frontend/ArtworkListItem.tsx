@@ -42,12 +42,12 @@ export const ArtworkListItem = ({
       key={`artwork-${id}`}
     >
       <Box className="info">
-        <Heading as="h2" className="title">
+        <chakra.h2 className="title" textStyle="subtitle">
           <Link href={href} passHref>
             <LinkOverlay>{title}</LinkOverlay>
           </Link>
-        </Heading>
-        <chakra.span className="artist">{artist}</chakra.span>
+        </chakra.h2>
+        <chakra.span className="artist" textStyle="meta">{artist}</chakra.span>
       </Box>
       <Box
         className={`${

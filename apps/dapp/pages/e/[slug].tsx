@@ -98,7 +98,14 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
         />
       </Head>
       {/* --------- Background image --------- */}
-      <Box position="fixed" zIndex="100" h="100vh" w="100%" overflow="hidden">
+      <Box
+        position="relative"
+        zIndex="100"
+        h="100vh"
+        w="100%"
+        overflow="hidden"
+        mb="-100vh"
+      >
         <Image
           src={openingBg}
           layout="fill"
@@ -111,7 +118,10 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
 
       {/* --------- Grid --------- */}
       <Grid
-        position="fixed"
+        position={{
+          base: "relative",
+          d: "fixed"
+        }}
         backgroundImage="url(/image/opening-bg.png)"
         className="exhibition"
         top="0"
@@ -121,14 +131,14 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
         h="100vh"
         zIndex="200"
         templateRows={{
-          base: "66.66vw 66.66vw auto",
-          t: "var(--openar-header-height-desktop) 50vw auto",
-          d: "var(--openar-header-height-desktop) 33.33vw auto",
+          base: "33.33vw auto",
+          t: "var(--openar-header-height-desktop) auto",
+          d: "var(--openar-header-height-desktop) auto",
         }}
         color="white"
         overflow="hidden"
       >
-        {/* --------- Header row --------- */}
+        {/* --------- ROW: Header row --------- */}
         <Flex
           w="100%"
           direction="row"
@@ -143,10 +153,13 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
             </a>
           </Link>
         </Flex>
-        {/* --------- Exhibition title and arrows --------- */}
+        {/* --------- GRID: Exhibition title, description, and artwork arrow --------- */}
         <Flex
           className="main"
-          w="100%"
+          w={{
+            base: "100%",
+            d: "66.66vw"
+          }}
           ml={{
             base: "0",
             t: "0",
@@ -160,6 +173,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
           {/* --------- Exhibition title  --------- */}
           <Flex
             borderTop="1px solid #fff"
+            borderBottom="1px solid #fff"
             borderRight="1px solid #fff"
             borderLeft={{
               base: "none",
@@ -179,9 +193,9 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
               d: "calc(33.33vw + 1px)",
             }}
             h={{
-              base: "calc(66.66vw - 1px)",
-              t: "calc(50vw - 1px)",
-              d: "calc(33.33vw - 1px)",
+              base: "66.66vw",
+              t: "50vw",
+              d: "33.33vw",
             }}
             layerStyle="backdropDark"
             flexDirection="column"
@@ -205,93 +219,121 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
           {/* --------- Description  --------- */}
           <Flex
             w={{
-              base: "calc(33.33vw - 2px)",
+              base: "100%",
               t: "calc(50vw - 2px)",
               d: "calc(33.33vw - 2px)",
             }}
             p="6"
             h={{
-              base: "66.66vw",
+              base: "calc(66.66vw + 2px)",
               t: "50vw",
               d: "33.33vw",
             }}
             borderTop="1px solid #fff"
             borderBottom="1px solid #fff"
             layerStyle="backdropBlurred"
+            order={{
+              base: "3",
+              t: "inherit",
+            }}
+            overflow="scroll"
           >
             <chakra.p my="auto !important" fontWeight="normal">
               {exhibition.description}
             </chakra.p>
           </Flex>
+          {/* --------- Footer  --------- */}
+          <Flex
+            className="footer"
+            p="6"
+            pr="10"
+            layerStyle="backdropGradient"
+            w={{
+              base: "33.33vw",
+              t: "50vw",
+              d: "33.33vw",
+            }}
+            borderX={{
+              base: "0",
+              t: "1px solid #fff",
+            }}
+            borderY={{
+              base: "1px solid #fff",
+              t: "none",
+            }}
+            justifySelf={{
+              base: "start",
+              t: "end",
+              d: "end",
+            }}
+            textAlign="right"
+            h={{
+              base: "66.66vw",
+              t: "100%"
+            }}
+            ml={{
+              base: "0",
+              d: "auto"
+            }}
+          >
+            <chakra.p textStyle="bigLabel" ml="auto">
+              Artworks
+            </chakra.p>
+            <Arrow className="arrow down" />
+          </Flex>
         </Flex>
-        {/* --------- Footer  --------- */}
-        <Flex
-          className="footer"
-          p="6"
-          pr="10"
-          layerStyle="backdropGradient"
-          w={{
-            base: "66.66vw",
-            t: "50vw",
-            d: "33.33vw",
-          }}
-          borderRight="1px solid #fff"
-          borderLeft={{
-            t: "1px solid #fff",
-          }}
-          justifySelf={{
-            base: "start",
-            t: "start",
-            d: "center",
-          }}
-          textAlign="right"
-        >
-          <chakra.p textStyle="bigLabel" ml="auto">
-            Artworks
-          </chakra.p>
-          <Arrow className="arrow down" />
-        </Flex>
+
+
       </Grid>
+      {/* --------- Artworks  --------- */}
       <Flex
         className="artworks"
         layerStyle="backdropLight"
-        position="absolute"
+        position={{
+          base: "relative",
+          d:"fixed",
+        }}
+        overflow={{
+          base: "show",
+          d: "scroll"
+        }}
         zIndex="210"
-        top="var(--openar-header-height-desktop)"
+        top={{
+          base: "auto",
+          d: "var(--openar-header-height-desktop)",
+        }}
         left={{
           base: "0",
           d: "66.66vw",
         }}
         w={{
-          base: "calc(33.33vw - 2px)",
-          t: "calc(50vw - 2px)",
+          base: "100%",
           d: "calc(33.33vw - 2px)",
         }}
         h={{
           base: "auto",
-          d: "calc(100vh - var(--openar-header-height-desktop)",
+          d: "calc(100vh - var(--openar-header-height-desktop))",
         }}
-        p="6"
         flexDirection="column"
       >
         <Box>
-        {exhibition.artworks.length > 0 && (
-                <Flex width="100%" flexWrap="wrap">
-                  {" "}
-                  {exhibition.artworks.map((artwork) => (
-                    <ArtworkListItem key={`aw-${artwork.id}`}
-                      isAdmin={true}
-                      {...pick(artwork, [
-                        "id",
-                        "status",
-                        "heroImage",
-                        "title",
-                        "creator",
-                      ])}
-                    />
-                  ))}
-                </Flex>
-              )}
+          {exhibition.artworks.length > 0 && (
+            <Flex width="100%" flexWrap="wrap">
+              {" "}
+              {exhibition.artworks.map((artwork) => (
+                <ArtworkListItem key={`aw-${artwork.id}`}
+                  isAdmin={false}
+                  {...pick(artwork, [
+                    "id",
+                    "status",
+                    "heroImage",
+                    "title",
+                    "creator",
+                  ])}
+                />
+              ))}
+            </Flex>
+          )}
         </Box>
       </Flex>
     </>
@@ -329,6 +371,10 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           key
           title
           description
+          creator{
+            pseudonym
+            ethAddress
+          }
           heroImage {
             id
             meta
