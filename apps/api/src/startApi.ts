@@ -44,7 +44,8 @@ export const startApi = async () => {
         );
       });
 
-      const codeFolderLocation = process.env.NODE_ENV === "production" ? "live" : "build";
+      const codeFolderLocation =
+        process.env.NODE_ENV === "production" ? "live" : "build";
       const bree = new Bree({
         logger,
         root: join(apiConfig.packageBaseDir, codeFolderLocation, "workers"),
