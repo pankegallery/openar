@@ -41,6 +41,7 @@ const themeConfig = {
         margin: 0,
         padding: 0,
         height: "100%",
+        overscrollBehavior: "none",
       },
       "#root": {
         height: "100%",
@@ -64,7 +65,11 @@ const themeConfig = {
           color: "wine.800",
         },
         _focus: {
+<<<<<<< HEAD
           boxShadow: false,
+=======
+          boxShadow: "none",
+>>>>>>> a3fd5241d044a6adfab5308e54ce2a9713666f7a
         },
       },
       "p a": {
@@ -100,6 +105,8 @@ const themeConfig = {
     openar: {
       error: "#c93030",
       muddygreen: "#bab79f",
+      light: "#F7F7F7",
+      dark: "#555555",
     },
     openarGray: {
       50: "#f8f8f8",
@@ -181,7 +188,7 @@ const themeConfig = {
       bg: "rgba(0,0,0,0.6)"
     },
     backdropLight: {
-      bg: "#F7F7F7"
+      bg: "var(--chakra-colors-openar-light)"
     },
     backdropExtraDark: {
       bg: "rgba(0,0,0,0.5)"
@@ -227,7 +234,11 @@ const themeConfig = {
       letterSpacing: "-2%",
     },
     h2: {
-      fontSize: ["36px", "48px"],
+      fontSize: {
+        base: "14px",
+        t: "22px",
+        d: "22px"
+      },
       fontWeight: "semibold",
       lineHeight: "110%",
       letterSpacing: "-1%",

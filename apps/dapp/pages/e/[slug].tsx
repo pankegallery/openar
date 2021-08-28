@@ -19,10 +19,13 @@ import Image from 'next/image'
 import openingBg from "~/assets/img/opening-bg.png";
 import Arrow from "~/assets/img/arrow.svg";
 
-
-export const Home = () => {
+export const Exhibition = (props) => {
   return (
     <>
+      <Head>
+        <title>{props.title} · OpenAR</title>
+        <meta property="og:title" content={`${props.title} · OpenAR`} key="title" />
+      </Head>
       {/* --------- Background image --------- */}
       <Box
         position="fixed"
@@ -63,9 +66,11 @@ export const Home = () => {
               t: "10"
             }}
         >
-          <Arrow
-            class="arrow"
-          />
+          <Link href="/">
+            <a>
+              <Arrow class="arrow" />
+            </a>
+          </Link>
         </Flex>
         {/* --------- Exhibition title and arrows --------- */}
         <Flex
@@ -113,10 +118,9 @@ export const Home = () => {
           >
             <Link href="/e/openar-art" passHref>
               <chakra.a display="block" mt="auto">
-                <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">OpenAR.art</chakra.h1>
-                <chakra.p textStyle="subtitle" mb="1rem">Platform launch and groupshow
-    curated by Sakrowski and Jeremy Bailey </chakra.p>
-                <chakra.p textStyle="workmeta">29 August 2021 – 4 October 2021 </chakra.p>
+                <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">{props.title}</chakra.h1>
+                <chakra.p textStyle="subtitle" mb="1rem">{props.subtitle}</chakra.p>
+                <chakra.p textStyle="workmeta">{props.meta}</chakra.p>
               </chakra.a>
             </Link>
           </Flex>
@@ -137,7 +141,10 @@ export const Home = () => {
             borderBottom="1px solid #fff"
             layerStyle="backdropBlurred"
           >
-            <chakra.p my="auto">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. </chakra.p>
+            <chakra.p
+              my="auto !important"
+              fontWeight="normal"
+            >{props.description}</chakra.p>
           </Flex>
         </Flex>
         {/* --------- Footer  --------- */}
@@ -198,8 +205,18 @@ export const Home = () => {
   );
 };
 
-Home.getLayout = function getLayout(page: ReactElement) {
+Exhibition.getInitialProps = () => {
+  return {
+    title: "OpenAR.art",
+    subtitle: "Platform launch and groupshow curated by Sakrowski and Jeremy Bailey",
+    meta: "29 August 2021 – 4 October 2021",
+    description: "On the occasion of the launch of the new platform “openar.art”, panke.gallery presents a hybrid group exhibition with experimental Augmented Reality works. The open platform makes it easy to exhibit, collect and discuss Augmented Reality works and allows artists to sell their works as NFTs. Since the platform is organized as a cooperative, profits will be shared among the artists. As part of the project openAR, the exhibition and platform have been developed in collaboration between workshop participants and digital artists Jeremy Bailey, Sarah Buser and Tamás Páll. The works examine the possibilities of AR technology in artistic applications. Visual, acoustic and performative Augmented Reality formats can be experienced in the exhibition.",
+    image: {openingBg}
+  }
+}
+
+Exhibition.getLayout = function getLayout(page: ReactElement) {
   return <LayoutBlank>{page}</LayoutBlank>;
 };
 
-export default Home;
+export default Exhibition;
