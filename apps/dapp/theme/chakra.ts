@@ -65,11 +65,7 @@ const themeConfig = {
           color: "wine.800",
         },
         _focus: {
-<<<<<<< HEAD
           boxShadow: false,
-=======
-          boxShadow: "none",
->>>>>>> a3fd5241d044a6adfab5308e54ce2a9713666f7a
         },
       },
       "p a": {
