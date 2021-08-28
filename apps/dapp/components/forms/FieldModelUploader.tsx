@@ -29,6 +29,7 @@ import { authentication } from "~/services";
 import { appConfig } from "~/config";
 import { ArModelStatusEnum } from "~/utils";
 import type { ApiArModelMetaInformation } from "~/types";
+import { ApiArModel } from "~/components/ui/ApiArModel";
 
 export type ApiArModelProps = {
   id: number | undefined;
@@ -37,20 +38,6 @@ export type ApiArModelProps = {
   placeholder?: string;
 };
 
-interface ModelViewerJSX {
-  src: string
-  poster?: string
-  // ... others
-}
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'model-viewer': ModelViewerJSX &
-        React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
-    }
-  }
-}
 
 const humanFileSize = (
   size: number | undefined,
@@ -171,13 +158,14 @@ export const FieldModelUploader = ({
   const [isUploadError, setIsUploadError] = useState(false);
   const [uploadedModelId, setUploadedImgId] = useState();
   const [arModelIsDeleted, setArModelIsDeleted] = useState(false);
-
+  const [uploadedModelUrl, setUploadedModelUrl] = useState("");
   const [showFileDropError, setShowFileDropError] = useState(false);
   const [fileDropError, setFileDropError] = useState("");
 
   const {
     formState: { errors },
     register,
+    clearErrors,
     setValue,
   } = useFormContext();
 
@@ -206,6 +194,7 @@ export const FieldModelUploader = ({
         if (appUser) {
           setIsUploading(true);
           setIsUploadError(false);
+          setUploadedModelUrl("");
 
           const formData = new FormData();
           formData.append("model", files[0]);
@@ -243,12 +232,14 @@ export const FieldModelUploader = ({
             .then(({ data }) => {
               if (getCancelToken()) {
                 setIsUploading(false);
-
+                
                 if (setActiveUploadCounter)
                   setActiveUploadCounter((state: number) => state - 1);
-
+                
                 if (data?.id) {
+                  clearErrors(name);
                   setUploadedImgId(data?.id ?? undefined);
+                  setUploadedModelUrl(data?.meta?.originalFileUrl)
                   setValue(name, data?.id, {
                     shouldDirty: shouldSetFormDirtyOnDelete,
                   });
@@ -290,6 +281,7 @@ export const FieldModelUploader = ({
     useDeleteByIdButton(
       deleteButtonGQL,
       () => {
+        setUploadedModelUrl("");
         setUploadedImgId(undefined);
         setArModelIsDeleted(true);
         setIsUploading(false);
@@ -305,12 +297,8 @@ export const FieldModelUploader = ({
     settings?.model && settings?.model?.id ? settings.model : {};
 
   if (arModelIsDeleted) currentModel = {};
-
-
-  console.log(currentModel);
-  console.log(231123);
   
-  const showModel = (currentModel && currentModel?.id) || !!uploadedModelId;
+  const showModel = (currentModel && currentModel?.id) || uploadedModelUrl !== "";
 
   const hasMin = settings?.minFileSize && settings?.minFileSize > 0;
   const hasMax = settings?.maxFileSize && settings?.maxFileSize > 0;
@@ -353,8 +341,15 @@ export const FieldModelUploader = ({
       fileDropErrorMessage = "Type of chosen file is not accepted";
       break;
   }
- 
 
+  let urlGlb;
+  if (type === "glb") 
+  urlGlb = uploadedModelUrl || currentModel?.meta?.originalFileUrl;
+
+  let urlUsdz;
+  if (type === "usdz") 
+    urlUsdz = uploadedModelUrl || currentModel?.meta?.originalFileUrl;
+  
   return (
     <>
       <FormControl
@@ -365,20 +360,15 @@ export const FieldModelUploader = ({
         <FormLabel htmlFor={id} mb="0.5">
           {label}
         </FormLabel>
-
         {showModel && (
           <Box position="relative">
 
-            <model-viewer src="images/wooden_chair.gltf"></model-viewer>
+            <ApiArModel 
+              urlGlb={(type === "glb" && urlGlb) ? urlGlb : undefined}
+              urlUsdz={(type === "usdz" && urlUsdz) ? urlUsdz  : undefined}
+              alt={`AR Model ${type}`}
+            />
 
-            {/* <ApiImage
-              id={uploadedModelId ?? currentImage?.id ?? undefined}
-              status={currentImage?.status ?? 0}
-              meta={currentImage?.meta}
-              forceAspectRatioPB={settings?.image?.forceAspectRatioPB}
-              alt={settings?.image?.alt ?? ""}
-              sizes={settings?.image?.sizes}
-            /> */}
             <IconButton
               position="absolute"
               top="3"

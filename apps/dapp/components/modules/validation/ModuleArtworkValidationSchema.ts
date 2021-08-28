@@ -27,7 +27,9 @@ export const ModuleArObjectCreateSchema = object().shape({
 export const ModuleArObjectUpdateSchema = ModuleArObjectCreateSchema.concat(
   object().shape(
     {
-      modelGlb: number().required(),
+      heroImage: number().required().nullable().typeError('Please upload an image'),
+      modelGlb: number().required().nullable().typeError('Please upload your .gbl or .gltf model'),
+      modelUsdz: number().required().nullable().typeError('Please upload your .usdz file'),
     }
     
   )

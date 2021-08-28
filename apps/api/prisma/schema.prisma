@@ -33,7 +33,7 @@ model User {
   
   tokens      Token[]
   images      Image[]
-  models      ArModel[]
+  arModels    ArModel[]
   files       File[]
 
   profileImageId Int?
@@ -108,7 +108,7 @@ model ArObject {
   heroImage   Image? @relation(fields: [heroImageId], references: [id], name: "arObjectHeroImage")
 
   images Image[] @relation("imagesObject")
-  models ArModel[]
+  arModels ArModel[]
 }
 
 model ArObject2Collector {

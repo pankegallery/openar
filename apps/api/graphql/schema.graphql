@@ -9,6 +9,7 @@ type ArModel {
   nanoid: String
   orderNumber: Int
   status: Int
+  type: String
   updatedAt: DateTime
 }
 
@@ -19,6 +20,7 @@ type ArModelStatus {
 }
 
 type ArObject {
+  arModels: [ArModel]
   askPrice: Float
   collector: User
   createdAt: DateTime
@@ -50,6 +52,7 @@ type ArObjectQueryResult {
 }
 
 input ArObjectUpsertInput {
+  arModels: JSON
   artwork: JSON
   askPrice: Float
   collector: JSON
@@ -61,7 +64,6 @@ input ArObjectUpsertInput {
   images: JSON
   lat: Float
   lng: Float
-  models: JSON
   orderNumber: Int
   ownerEthAddress: String
   status: Int

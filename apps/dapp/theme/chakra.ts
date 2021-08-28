@@ -87,6 +87,13 @@ const themeConfig = {
         bg: "var(--chakra-colors-openar-muddygreen)",
         color: "#fff",
       },
+      "model-viewer": {
+        width: "100%",
+        height: "100%",
+        margin: 0,
+        "--poster-color": "#ccc", // 
+        border: 0,
+      },
     },
   },
   colors: {

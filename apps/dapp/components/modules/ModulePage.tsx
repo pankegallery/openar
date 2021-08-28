@@ -14,7 +14,7 @@ export const ModulePage = ({
   children: React.ReactNode;
 }) => {
   const err = (
-    <Text>
+    <Text p="3">
       <b>We are sorry</b>
       <br />
       Something went wrong and the needed information could not be loaded.

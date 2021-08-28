@@ -180,8 +180,9 @@ export const ModuleSubNav = ({
                     {element?.path ? (
                       <Link href={element?.path} passHref>
                         <chakra.a
-                          color="var(--chakra-colors-gray-600) !important"
-                          _hover={{ color: "#000 !important" }}
+                          color="var(--chakra-colors-gray-ff) !important"
+                          transition="all 0.3s"
+                          _hover={{ opacity: 0.6 }}
                         >
                           {element?.title}
                         </chakra.a>

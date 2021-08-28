@@ -40,10 +40,12 @@ export const arObjectReadOwnQueryGQL = gql`
       lng
       # images {
       # }
-      # objects {
-      # }
-      # files {
-      # }
+      arModels {
+        id
+        type
+        meta
+        status
+      }
       heroImage {
         id
         meta
@@ -90,30 +92,9 @@ const Update = () => {
       aid: parseInt(router.query.aid as string, 10),
     },
   });
-
-  // const parseIncomingDates = (dates: any) => {
-  //   if (!dates) return [];
-
-  //   if (Array.isArray(dates))
-  //     return dates.reduce((acc, date) => {
-  //       try {
-  //         acc.push({
-  //           id: date.id,
-  //           date: new Date(date.date),
-  //           begin: new Date(date.begin),
-  //           end: new Date(date.end),
-  //         });
-  //       } catch (err) {}
-  //       return acc;
-  //     }, []);
-
-  //   return [];
-  // };
-
+  
   useEffect(() => {
     if (!data || !data.arObjectReadOwn) return;
-
-    console.log(data.arObjectReadOwn);
 
     reset({
       ...filteredOutputByWhitelist(data.arObjectReadOwn, [
@@ -214,13 +195,13 @@ const Update = () => {
 
   return (
     <>
-      <Head>
+      {/* <Head>
         <script
           type="module"
           async
           src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
         ></script>
-      </Head>
+      </Head> */}
       <FormNavigationBlock
         shouldBlock={(isDirty && !isSubmitting) || activeUploadCounter > 0}
       />
@@ -228,7 +209,12 @@ const Update = () => {
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={disableForm}>
             <ModuleSubNav breadcrumb={breadcrumb} buttonList={buttonList} />
-            <ModulePage isLoading={loading} isError={!!error}>
+            <ModulePage
+              isLoading={loading}
+              isError={
+                !!error || (!error && !loading && !data?.arObjectReadOwn)
+              }
+            >
               {isFormError && (
                 <Text
                   width="100%"

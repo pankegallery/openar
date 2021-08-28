@@ -210,7 +210,12 @@ const Update = () => {
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={disableForm}>
             <ModuleSubNav breadcrumb={breadcrumb} buttonList={buttonList} />
-            <ModulePage isLoading={loading} isError={!!error}>
+            <ModulePage
+              isLoading={loading}
+              isError={
+                !!error || (!error && !loading && !data?.artworkReadOwn)
+              }
+            >
               {isFormError && (
                 <Text
                   width="100%"

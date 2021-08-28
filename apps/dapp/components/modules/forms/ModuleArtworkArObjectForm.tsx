@@ -1,6 +1,7 @@
 import { arModelDeleteMutationGQL, imageDeleteMutationGQL } from "~/graphql/mutations";
 
-import { AspectRatio, Box, Grid, Text } from "@chakra-ui/react";
+import { AspectRatio, Box, Grid } from "@chakra-ui/react";
+import pick from "lodash/pick";
 
 import {
   FieldInput,
@@ -32,6 +33,15 @@ export const ModuleArtworkArObjectForm = ({
 
   const columns = { base: "100%", t: "50% 50%" };
   const rows = { base: "auto 1fr", t: "1fr" };
+
+  console.log("22", arObjectReadOwn);
+
+  const uploadedFiles = arObjectReadOwn?.arModels.reduce((acc, model) => ({
+    ...acc,
+    [model.type]: pick(model, ["status", "meta", "id"])
+  }), {});
+
+  console.log(uploadedFiles);
 
   return (
     <Grid
@@ -127,7 +137,7 @@ export const ModuleArtworkArObjectForm = ({
         )}
         {action === "update" && (
           <>
-            <FieldImageUploader
+            <FieldRow><FieldImageUploader
               route="image"
               id="heroImage"
               name="heroImage"
@@ -141,7 +151,7 @@ export const ModuleArtworkArObjectForm = ({
               connectWith={{
                 heroImageArObjects: {
                   connect: {
-                    id: arObjectReadOwn.id,
+                    id: arObjectReadOwn?.id,
                   },
                 },
               }}
@@ -161,8 +171,16 @@ export const ModuleArtworkArObjectForm = ({
                 },
               }}
             />
-
-            <FieldModelUploader
+            </FieldRow>
+            <FieldRow>
+              <Grid w="100%" mt="3"
+                templateColumns={{
+                  base: "100%",
+                  t: "1fr 1fr"
+                }}
+                gap="4"
+              >
+                <FieldModelUploader
               route="model"
               id="modelGlb"
               type="glb"
@@ -177,7 +195,7 @@ export const ModuleArtworkArObjectForm = ({
               connectWith={{
                 arObject: {
                   connect: {
-                    id: arObjectReadOwn.id,
+                    id: arObjectReadOwn?.id,
                   },
                 },
               }}
@@ -185,14 +203,46 @@ export const ModuleArtworkArObjectForm = ({
                 minFileSize: 1024 * 1024 * 0.0488,
                 maxFileSize: 1024 * 1024 * 50,
                 accept: ".glb",
-                // model: {
-                //   // status: arObjectReadOwn?.heroImage?.status,
-                //   // id: arObjectReadOwn?.heroImage?.id,
-                //   // meta: arObjectReadOwn?.heroImage?.meta,
-                //   showPlaceholder: true,
-                // },
+                model: {
+                  status: uploadedFiles?.glb?.status,
+                  id: uploadedFiles?.glb?.id,
+                  meta: uploadedFiles?.glb?.meta,
+                },
               }}
             />
+              <FieldModelUploader
+              route="model"
+              id="modelUsdz"
+              type="usdz"
+              name="modelUsdz"
+              label="Ar Model (.usdz)"
+              isRequired={yupIsFieldRequired(
+                "modelUsdz",
+                validationSchema
+              )}
+              setActiveUploadCounter={setActiveUploadCounter}
+              deleteButtonGQL={arModelDeleteMutationGQL}
+              connectWith={{
+                arObject: {
+                  connect: {
+                    id: arObjectReadOwn?.id,
+                  },
+                },
+              }}
+              settings={{
+                minFileSize: 1024 * 1024 * 0.0488,
+                maxFileSize: 1024 * 1024 * 50,
+                accept: ".usdz",
+                model: {
+                  status: uploadedFiles?.usdz?.status,
+                  id: uploadedFiles?.usdz?.id,
+                  meta: uploadedFiles?.usdz?.meta,
+                },
+              }}
+            />
+              </Grid>
+           
+            </FieldRow>
           </>
         )}
       </Box>

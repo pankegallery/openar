@@ -156,6 +156,7 @@ export const FieldImageUploader = ({
     formState: { errors },
     register,
     setValue,
+    clearErrors,
   } = useFormContext();
 
   const {
@@ -219,11 +220,12 @@ export const FieldImageUploader = ({
             .then(({ data }) => {
               if (getCancelToken()) {
                 setIsUploading(false);
-                
+
                 if (setActiveUploadCounter)
                   setActiveUploadCounter((state: number) => state - 1);
                 
-                  if (data?.id) {
+                if (data?.id) {
+                  clearErrors(name);
                   setUploadedImgId(data?.id ?? undefined);
                   setValue(name, data?.id, { shouldDirty: shouldSetFormDirtyOnDelete });
                   if (typeof onUpload === "function")

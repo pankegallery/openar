@@ -180,6 +180,7 @@ logs/*
 !logs/.keep
 public/
 !public/.keep
-
+!public/ar/.keep
+!public/img/.keep
 # editors
 .brackets.json
