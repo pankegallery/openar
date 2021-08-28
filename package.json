@@ -21,7 +21,7 @@
     "app:api:dev:watch:nodemon": "NODE_ENV=development env-cmd -f ./.env nodemon --watch ./apps/api/build ./apps/api/build/index.js",
     "app:api:dev:watch:typings": "NODE_ENV=development tsc ./apps/api/src/*.ts --target 'es2018' --moduleResolution 'node' --watch --declaration --esModuleInterop --noEmit --preserveWatchOutput",
     "app:api:build": "NODE_ENV=production rimraf ./apps/api/build && npm run app:api:babel",
-    "app:api:deploy": "NODE_ENV=production rimraf ./apps/api/build && npm run app:api:babel && mv ./apps/api/live ./apps/api/x && mv ./apps/api/build ./app/api/live && rimraf ./apps/api/x && openar_api_restart",
+    "app:api:deploy": "NODE_ENV=production rimraf ./apps/api/build && npm run app:api:babel && mv ./apps/api/live ./apps/api/x && mv ./apps/api/build ./apps/api/live && rimraf ./apps/api/x && openar_api_restart",
     "app:api:start:live": "node ./apps/api/build/index.js",
     "app:api:start": "node ./apps/api/live/index.js",
     "app:api:babel": "NODE_ENV=production babel ./apps/api/src --out-dir ./apps/api/build --extensions .ts",
