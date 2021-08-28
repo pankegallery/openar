@@ -26,6 +26,7 @@ export const useAuthTabWideLogInOutReload = () => {
         if (event.newValue === "logged-out") {
           document.location.reload();
         } else {
+          console.log("window.addEventListener(storage) push to /");
           router.push("/");
         }
       }

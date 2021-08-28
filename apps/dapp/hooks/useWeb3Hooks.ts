@@ -33,49 +33,46 @@ export function useEagerConnect() {
 }
 
 export function useInactiveListener(suppress: boolean = false) {
-  const { active, error, activate } = useWeb3React();
+  const { active, error, activate, deactivate } = useWeb3React();
 
   useEffect((): any => {
     const { ethereum } = window as any;
     if (ethereum && ethereum.on && !active && !error && !suppress) {
       const handleConnect = () => {
-        // TODO: remove ... 
         console.log("Handling 'connect' event");
         activate(injectedConnector);
+        // TODO: this one should also ensure that the login flow is happeing
       };
       const handleChainChanged = (chainId: string | number) => {
-        // TODO: remove ... 
         console.log("Handling 'chainChanged' event with payload", chainId);
         activate(injectedConnector);
       };
       const handleAccountsChanged = (accounts: string[]) => {
-        // TODO: remove ... 
-        console.log("Handling 'accountsChanged' event with payload", accounts);
-        if (accounts.length > 0) {
-          activate(injectedConnector);
-        }
+        console.log("Handling 'accountsChanged' event with payload (logout)", accounts);
+        deactivate();
       };
-      const handleNetworkChanged = (networkId: string | number) => {
+      const handleDisconnect = () => {
         // TODO: remove ... 
-        console.log("Handling 'networkChanged' event with payload", networkId);
-        activate(injectedConnector);
+        console.log("Handling 'disconnect' event");
+        deactivate();
       };
-
+     
       ethereum.on("connect", handleConnect);
       ethereum.on("chainChanged", handleChainChanged);
       ethereum.on("accountsChanged", handleAccountsChanged);
-      ethereum.on("networkChanged", handleNetworkChanged);
+      ethereum.on("disconnect", handleConnect);
 
       return () => {
         if (ethereum.removeListener) {
           ethereum.removeListener("connect", handleConnect);
           ethereum.removeListener("chainChanged", handleChainChanged);
+          
           ethereum.removeListener("accountsChanged", handleAccountsChanged);
-          ethereum.removeListener("networkChanged", handleNetworkChanged);
+          ethereum.removeListener("disconnect", handleDisconnect);
         }
       };
     }
-  }, [active, error, suppress, activate]);
+  }, [active, error, suppress, activate, deactivate]);
 }
 
 export function useDisconnectListener() {
