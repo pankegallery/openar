@@ -119,6 +119,7 @@ export function useWalletLogin() {
 
       deactivate();
 
+      console.log("PUSH /");
       Router.push("/");
 
     } catch (error) {

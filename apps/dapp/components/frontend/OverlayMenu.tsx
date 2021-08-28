@@ -21,7 +21,7 @@ import Logo from "~/assets/img/logo-white.svg";
 import MenuCornerWhite from "~/assets/img/menu-corner-light.svg";
 
 export const OverlayMenu = () => {
-  const { account} = useWalletLogin();
+  const { account } = useWalletLogin();
   const { isOpen, onToggle } = useDisclosure();
   const [isClosing, setIsClosing] = useState(false);
   const isTablet = useSSRSaveMediaQuery(
@@ -212,10 +212,10 @@ export const OverlayMenu = () => {
                   className="main"
                   textStyle="worktitle"
                   sx={{
-                    "a": {
+                    a: {
                       display: "block",
                       mb: "2",
-                    }
+                    },
                   }}
                 >
                   {account && (

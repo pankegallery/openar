@@ -31,13 +31,18 @@ export const WalletControl = () => {
     connectWalletConnect,
     account,
     isLoggingIn,
+    library
   } = useWalletLogin();
 
   const walletDisclosure = useDisclosure();
 
+  console.log(account, isLoggingIn, library);
   useEffect(() => {
-    if ((stateUser.authenticated || stateCrypto.signatureRequired) && walletDisclosure.isOpen)
+    if ((stateUser.authenticated || stateCrypto.signatureRequired) && walletDisclosure.isOpen) {
+      console.log(stateUser.authenticated, stateCrypto.signatureRequired);
       walletDisclosure.onClose();
+    }
+      
     
   }, [stateUser.authenticated, stateCrypto.signatureRequired, walletDisclosure])
   

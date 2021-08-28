@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { ReactElement } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -9,7 +9,7 @@ import { useConfigContext } from "~/providers";
 import { useAuthentication, useTypedSelector, useWalletLogin} from "~/hooks";
 
 const OpenARLogin = () => {
-  const { account, walletLoginRequestSignature, walletLoginError } = useWalletLogin();
+  const { account, walletLoginRequestSignature, walletLoginError, walletDisconnect, library } = useWalletLogin();
 
   const [appUser ] = useAuthentication();
   const stateUser = useTypedSelector(({ user }) => user);
@@ -23,6 +23,18 @@ const OpenARLogin = () => {
     router.push("/openar/");
     navigating = true;
   }
+
+  useEffect(() => {
+    if (!library || !library?.provider) {
+
+      if (stateCrypto.signatureRequired) {
+        walletDisconnect();
+
+      }
+    }
+      
+
+  }, [library, walletDisconnect, stateCrypto.signatureRequired])
     
   return (
     <Box p="6">
