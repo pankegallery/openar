@@ -11,8 +11,11 @@ import { getApolloClient } from "~/services/apolloClient";
 
 import openingBg from "~/assets/img/opening-bg.png";
 import Arrow from "~/assets/img/arrow.svg";
+import {ArtworkListItem} from "~/components/frontend";
+import pick from "lodash/pick";
 
 export const Exhibition = ({ exhibition }: { exhibition: any }) => {
+  //TODO: was passiert beim live rendern und nicht bekannten slugs? 
   // {
   //   {
   //     "id": 1,
@@ -271,7 +274,25 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
         p="6"
         flexDirection="column"
       >
-        <Box>ARTWORKS HERE</Box>
+        <Box>
+        {exhibition.artworks.length > 0 && (
+                <Flex width="100%" flexWrap="wrap">
+                  {" "}
+                  {exhibition.artworks.map((artwork) => (
+                    <ArtworkListItem key={`aw-${artwork.id}`}
+                      isAdmin={true}
+                      {...pick(artwork, [
+                        "id",
+                        "status",
+                        "heroImage",
+                        "title",
+                        "creator",
+                      ])}
+                    />
+                  ))}
+                </Flex>
+              )}
+        </Box>
       </Flex>
     </>
   );
