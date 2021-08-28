@@ -56,7 +56,7 @@ export const WalletControl = () => {
 
         {account && (
           <Button
-            variant="link"
+            variant="menuLink"
             onClick={async () => {
               await walletDisconnect();
             }}

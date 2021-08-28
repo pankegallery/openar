@@ -35,13 +35,12 @@ const OpenARLogin = () => {
       {!appUser && stateUser.justConnected && !stateUser.authenticated && stateCrypto.loginMessage && (
         <Box>
           <Text mb="4">
-            Welcome, you&#39;re using a mobile browser that request a second manual step. Please click the button below to request the signature required to finish loging in.
+          Hello, you&#39;re now connected with your wallet, to fully login please sign the login request using the button below.
           </Text>
 
           {walletLoginError && <Text color="red.400">{walletLoginError}</Text>}
           <Button
             mt="4"
-            variant="openarWhite"
             isLoading={isLoggingIn && !walletLoginError}
             onClick={async () => {
               setIsLoggingIn(true);
