@@ -31,6 +31,7 @@ export const artworkReadOwnQueryGQL = gql`
     artworkReadOwn(id: $id) {
       id
       type
+      key
       status
       title
       description
@@ -109,7 +110,7 @@ const Update = () => {
     reset({
       ...filteredOutputByWhitelist(
         data.artworkReadOwn,
-        ["title", "description", "url", "video", "status"]
+        ["title", "description", "url", "video", "status", "key"]
       )
     });
   }, [reset, data]);
