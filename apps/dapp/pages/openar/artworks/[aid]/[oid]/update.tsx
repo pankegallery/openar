@@ -35,6 +35,7 @@ export const arObjectReadOwnQueryGQL = gql`
       editionOf
       orderNumber
       askPrice
+      key
       # isBanned TODO: make good use of this
       lat
       lng
@@ -125,6 +126,7 @@ const Update = () => {
             orderNumber: newData.orderNumber ?? null,
             askPrice: newData.editionOf ?? null,
             status: newData.status ?? null,
+            key: newData.key ?? "",
             creator: {
               connect: {
                 id: appUser.id,

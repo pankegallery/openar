@@ -30,22 +30,21 @@ export const WalletControl = () => {
     connectInjected,
     connectWalletConnect,
     account,
+    active,
     isLoggingIn,
     library
   } = useWalletLogin();
 
   const walletDisclosure = useDisclosure();
 
-  console.log(account, isLoggingIn, library);
+  // TODO: change this to keep the disclosure open until 
   useEffect(() => {
-    if ((stateUser.authenticated || stateCrypto.signatureRequired) && walletDisclosure.isOpen) {
-      console.log(stateUser.authenticated, stateCrypto.signatureRequired);
+    if ((stateUser.authenticated || stateCrypto.signatureRequired) && walletDisclosure.isOpen && library) {
       walletDisclosure.onClose();
-    }
-      
-    
-  }, [stateUser.authenticated, stateCrypto.signatureRequired, walletDisclosure])
+    }    
+  }, [stateUser.authenticated, stateCrypto.signatureRequired, walletDisclosure, library])
   
+  console.log("Account", account, active);
   return (
     <Box>
       {/* ------- Buttons ------- */}

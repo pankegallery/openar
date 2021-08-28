@@ -7,7 +7,7 @@ import { Divider, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
 import { LayoutOpenAR } from "~/components/app";
-import { TextErrorMessage, FormNavigationBlock } from "~/components/forms";
+import { FormNavigationBlock } from "~/components/forms";
 import { moduleProfileConfig as moduleConfig } from "~/components/modules/config";
 import { ModuleProfileUpdateForm } from "~/components/modules/forms";
 import { UserProfileUpdateValidationSchema } from "~/components/modules/validation";
@@ -88,6 +88,7 @@ const Update = () => {
             email: newData.email ?? "",
             bio: newData.bio ?? "",
             url: newData.url ?? "",
+            key: newData.key ?? "",
           }
         );
 

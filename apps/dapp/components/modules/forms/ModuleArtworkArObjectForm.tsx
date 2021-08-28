@@ -92,6 +92,19 @@ export const ModuleArtworkArObjectForm = ({
             }}
           />
         </FieldRow>
+        <FieldRow>
+          <FieldInput
+            name="key"
+            id="key"
+            type="key"
+            label="Url key"
+            isRequired={yupIsFieldRequired("key", validationSchema)}
+            settings={{
+              // defaultValue: data.abc.key
+              placeholder: "What is the url key of your objec?",
+            }}
+          />
+        </FieldRow>
         {action === "update" && <FieldRow>
           <FieldStatusSelect
             statusEnum={ArObjectStatusEnum}

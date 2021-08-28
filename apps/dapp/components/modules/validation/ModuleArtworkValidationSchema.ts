@@ -9,6 +9,7 @@ export const ModuleArtworkCreateSchema = object().shape({
 
 export const ModuleArtworkUpdateSchema = ModuleArtworkCreateSchema.concat(
   object().shape({
+    key: string(),
     status: number().required().typeError("Please select the publish state"),
   })
 );
@@ -34,6 +35,7 @@ export const ModuleArObjectCreateSchema = object().shape({
 
 export const ModuleArObjectUpdateSchema = ModuleArObjectCreateSchema.concat(
   object().shape({
+    key: string(),
     status: number().required().typeError("Please select the publish state"),
     heroImage: number()
       .required()
