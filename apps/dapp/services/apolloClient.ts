@@ -14,6 +14,9 @@ import { authentication, user } from ".";
 
 import type { AppConfig } from "~/types";
 
+import { appConfig } from "~/config";
+
+
 export let client: ApolloClient<any> | null = null;
 
 const authLink = new ApolloLink((operation, forward) => {
@@ -221,6 +224,8 @@ export const initializeClient = (appConfig: AppConfig) => {
 
   return aClient;
 };
+
+export const getApolloClient = () => initializeClient(appConfig)
 
 const defaults = {
   client,

@@ -19,10 +19,11 @@ export const ArrowLink = ({ children, type = "to", href } : {
           _hover={{
             opacity: 0.6
           }}
+          className="arrowLink"
           transition="all 0.1s"
           className="arrowLink to"
         >
-          <Arrow class="arrow" />
+          <Arrow className="arrow" />
           {children}
         </chakra.a>
       </Link>
@@ -36,11 +37,12 @@ export const ArrowLink = ({ children, type = "to", href } : {
           _hover={{
             opacity: 0.6
           }}
+          className="arrowLink"
           transition="all 0.1s"
           textStyle="label"
           className="arrowLink back"
         >
-          <Arrow class="arrow back" />
+          <Arrow className="arrow back" />
           {children}
         </chakra.a>
       </Link>

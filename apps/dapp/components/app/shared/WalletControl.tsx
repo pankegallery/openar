@@ -62,7 +62,7 @@ export const WalletControl = () => {
               await walletDisconnect();
             }}
           >
-            Disconnect
+            Logout
           </Button>
         )}
       </Box>

@@ -230,6 +230,20 @@ export interface NexusGenObjects {
   BooleanResult: { // root type
     result: boolean; // Boolean!
   }
+  Exhibition: { // root type
+    artworks?: Array<NexusGenRootTypes['Artwork'] | null> | null; // [Artwork]
+    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    curators?: NexusGenRootTypes['User'] | null; // User
+    dateBegin?: NexusGenScalars['DateTime'] | null; // DateTime
+    dateEnd?: NexusGenScalars['DateTime'] | null; // DateTime
+    description?: string | null; // String
+    id: number; // Int!
+    slug?: NexusGenScalars['JSON'] | null; // JSON
+    status: number; // Int!
+    subtitle?: string | null; // String
+    title?: NexusGenScalars['JSON'] | null; // JSON
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+  }
   GeoPoint: { // root type
     lat?: number | null; // Float
     lng?: number | null; // Float
@@ -389,6 +403,20 @@ export interface NexusGenFieldTypes {
   BooleanResult: { // field return type
     result: boolean; // Boolean!
   }
+  Exhibition: { // field return type
+    artworks: Array<NexusGenRootTypes['Artwork'] | null> | null; // [Artwork]
+    createdAt: NexusGenScalars['DateTime'] | null; // DateTime
+    curators: NexusGenRootTypes['User'] | null; // User
+    dateBegin: NexusGenScalars['DateTime'] | null; // DateTime
+    dateEnd: NexusGenScalars['DateTime'] | null; // DateTime
+    description: string | null; // String
+    id: number; // Int!
+    slug: NexusGenScalars['JSON'] | null; // JSON
+    status: number; // Int!
+    subtitle: string | null; // String
+    title: NexusGenScalars['JSON'] | null; // JSON
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+  }
   GeoPoint: { // field return type
     lat: number | null; // Float
     lng: number | null; // Float
@@ -456,6 +484,7 @@ export interface NexusGenFieldTypes {
     artworkReadOwn: NexusGenRootTypes['Artwork']; // Artwork!
     artworks: NexusGenRootTypes['ArtworkQueryResult'] | null; // ArtworkQueryResult
     artworksReadOwn: NexusGenRootTypes['ArtworkQueryResult'] | null; // ArtworkQueryResult
+    exhibition: NexusGenRootTypes['Exhibition']; // Exhibition!
     imageRead: NexusGenRootTypes['Image']; // Image!
     imageStatus: NexusGenRootTypes['ImageStatus']; // ImageStatus!
     images: NexusGenRootTypes['ImageQueryResult'] | null; // ImageQueryResult
@@ -590,6 +619,20 @@ export interface NexusGenFieldTypeNames {
   BooleanResult: { // field return type name
     result: 'Boolean'
   }
+  Exhibition: { // field return type name
+    artworks: 'Artwork'
+    createdAt: 'DateTime'
+    curators: 'User'
+    dateBegin: 'DateTime'
+    dateEnd: 'DateTime'
+    description: 'String'
+    id: 'Int'
+    slug: 'JSON'
+    status: 'Int'
+    subtitle: 'String'
+    title: 'JSON'
+    updatedAt: 'DateTime'
+  }
   GeoPoint: { // field return type name
     lat: 'Float'
     lng: 'Float'
@@ -657,6 +700,7 @@ export interface NexusGenFieldTypeNames {
     artworkReadOwn: 'Artwork'
     artworks: 'ArtworkQueryResult'
     artworksReadOwn: 'ArtworkQueryResult'
+    exhibition: 'Exhibition'
     imageRead: 'Image'
     imageStatus: 'ImageStatus'
     images: 'ImageQueryResult'
@@ -806,6 +850,9 @@ export interface NexusGenArgTypes {
       pageIndex?: number | null; // Int
       pageSize: number | null; // Int
       where?: NexusGenScalars['JSON'] | null; // JSON
+    }
+    exhibition: { // args
+      slug: string; // String!
     }
     imageRead: { // args
       id: number; // Int!

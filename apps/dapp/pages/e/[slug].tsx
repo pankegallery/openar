@@ -1,41 +1,109 @@
 import type { ReactElement } from "react";
 import Head from "next/head";
+import { gql } from "@apollo/client";
 
 import { LayoutBlank } from "~/components/app";
-import {
-  useDisclosure,
-  Portal,
-  Button,
-  Box,
-  Grid,
-  Flex,
-  Fade,
-  chakra
-} from "@chakra-ui/react";
+import { Box, Grid, Flex, chakra } from "@chakra-ui/react";
 import Link from "next/link";
-import { WalletControl } from "~/components/app/shared"
-import Image from 'next/image'
+import Image from "next/image";
+
+import { getApolloClient } from "~/services/apolloClient";
 
 import openingBg from "~/assets/img/opening-bg.png";
 import Arrow from "~/assets/img/arrow.svg";
 
-export const Exhibition = (props) => {
+export const Exhibition = ({ exhibition }: { exhibition: any }) => {
+  // {
+  //   {
+  //     "id": 1,
+  //     "slug": null,
+  //     "title": "OpenAR.art",
+  //     "description": "Lorem ipsim",
+  //     "subtitle": "Platform launch and groupshow curated by Sakrowski and Jeremy Bailey",
+  //     "dateBegin": "2021-08-29T10:00:00.000Z",
+  //     "dateEnd": "2021-10-04T10:00:00.000Z",
+  //     "status": 2,
+  //     "curators": null,
+  //     "artworks": [
+  //       {
+  //         "id": 22,
+  //         "key": "RWEOzHzMPehrpgyn",
+  //         "title": "TEWS",
+  //         "description": "<p>TEST</p>",
+  //         "heroImage": {
+  //           "id": 42,
+  //           "meta": {
+  //             "size": 93976,
+  //             "mimeType": "image/jpeg",
+  //             "imageType": "square",
+  //             "uploadFolder": "/img/2021/8",
+  //             "availableSizes": {
+  //               "original": {
+  //                 "url": "http://localhost:4401/img/2021/8/kmsFu-TgGVy6Kp1Lkrug3.jpg",
+  //                 "isJpg": true,
+  //                 "width": 1280,
+  //                 "height": 1279,
+  //                 "isWebP": false
+  //               },
+  //               "720-720-jpg": {
+  //                 "url": "http://localhost:4401//img/2021/8/kmsFu-TgGVy6Kp1Lkrug3-720-720.jpg",
+  //                 "isJpg": true,
+  //                 "width": 720,
+  //                 "height": 720,
+  //                 "isWebP": false
+  //               },
+  //               "480-480-webp": {
+  //                 "url": "http://localhost:4401//img/2021/8/kmsFu-TgGVy6Kp1Lkrug3-480-480.webp",
+  //                 "isJpg": false,
+  //                 "width": 480,
+  //                 "height": 480,
+  //                 "isWebP": true
+  //               },
+  //               "720-720-webp": {
+  //                 "url": "http://localhost:4401//img/2021/8/kmsFu-TgGVy6Kp1Lkrug3-720-720.webp",
+  //                 "isJpg": false,
+  //                 "width": 720,
+  //                 "height": 720,
+  //                 "isWebP": true
+  //               },
+  //               "1080-1080-webp": {
+  //                 "url": "http://localhost:4401//img/2021/8/kmsFu-TgGVy6Kp1Lkrug3-1080-1080.webp",
+  //                 "isJpg": false,
+  //                 "width": 1080,
+  //                 "height": 1080,
+  //                 "isWebP": true
+  //               }
+  //             },
+  //             "originalFileUrl": "http://localhost:4401/img/2021/8/kmsFu-TgGVy6Kp1Lkrug3.jpg",
+  //             "originalFileName": "fa-pnk-195.jpg",
+  //             "originalFilePath": "/Users/fluxed/Dropbox/www/fluxed/openar/openar-monorepo/public/img/2021/8/kmsFu-TgGVy6Kp1Lkrug3.jpg"
+  //           },
+  //           "status": 4
+  //         }
+  //       }
+  //     ]
+  //   }
+  // }
   return (
     <>
       <Head>
-        <title>{props.title} · OpenAR</title>
-        <meta property="og:title" content={`${props.title} · OpenAR`} key="title" />
+        <title>{exhibition.title} · OpenAR</title>
+        <meta
+          property="og:title"
+          content={`${exhibition.title} · OpenAR`}
+          key="title"
+        />
       </Head>
       {/* --------- Background image --------- */}
-      <Box
-        position="fixed"
-        zIndex="100"
-        h="100vh"
-        w="100%"
-        overflow="hidden"
-
-      >
-        <Image src={openingBg} layout="fill" objectFit="cover" objectPosition="50% 100%" alt="" role="presentation" />
+      <Box position="fixed" zIndex="100" h="100vh" w="100%" overflow="hidden">
+        <Image
+          src={openingBg}
+          layout="fill"
+          objectFit="cover"
+          objectPosition="50% 100%"
+          alt=""
+          role="presentation"
+        />
       </Box>
 
       {/* --------- Grid --------- */}
@@ -62,13 +130,13 @@ export const Exhibition = (props) => {
           w="100%"
           direction="row"
           p={{
-              base: "6",
-              t: "10"
-            }}
+            base: "6",
+            t: "10",
+          }}
         >
           <Link href="/">
             <a>
-              <Arrow class="arrow" />
+              <Arrow className="arrow" />
             </a>
           </Link>
         </Flex>
@@ -96,11 +164,11 @@ export const Exhibition = (props) => {
             }}
             p={{
               base: "6",
-              t: "10"
+              t: "10",
             }}
             pb={{
               base: "6",
-              t: "20"
+              t: "20",
             }}
             w={{
               base: "66.66vw",
@@ -118,9 +186,16 @@ export const Exhibition = (props) => {
           >
             <Link href="/e/openar-art" passHref>
               <chakra.a display="block" mt="auto">
-                <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">{props.title}</chakra.h1>
-                <chakra.p textStyle="subtitle" mb="1rem">{props.subtitle}</chakra.p>
-                <chakra.p textStyle="workmeta">{props.meta}</chakra.p>
+                <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">
+                  {exhibition.title}
+                </chakra.h1>
+                <chakra.p textStyle="subtitle" mb="1rem">
+                  {exhibition.subtitle}
+                </chakra.p>
+                <chakra.p textStyle="workmeta">
+                  {new Date(exhibition.dateBegin).toLocaleDateString("de")}{" - "}
+                  {new Date(exhibition.dateEnd).toLocaleDateString("de")}
+                </chakra.p>
               </chakra.a>
             </Link>
           </Flex>
@@ -141,10 +216,9 @@ export const Exhibition = (props) => {
             borderBottom="1px solid #fff"
             layerStyle="backdropBlurred"
           >
-            <chakra.p
-              my="auto !important"
-              fontWeight="normal"
-            >{props.description}</chakra.p>
+            <chakra.p my="auto !important" fontWeight="normal">
+              {exhibition.description}
+            </chakra.p>
           </Flex>
         </Flex>
         {/* --------- Footer  --------- */}
@@ -170,10 +244,9 @@ export const Exhibition = (props) => {
           textAlign="right"
         >
           <chakra.p textStyle="bigLabel" ml="auto">
-            Artworks</chakra.p>
-          <Arrow
-            class="arrow down"
-          />
+            Artworks
+          </chakra.p>
+          <Arrow className="arrow down" />
         </Flex>
       </Grid>
       <Flex
@@ -184,7 +257,7 @@ export const Exhibition = (props) => {
         top="var(--openar-header-height-desktop)"
         left={{
           base: "0",
-          d: "66.66vw"
+          d: "66.66vw",
         }}
         w={{
           base: "calc(33.33vw - 2px)",
@@ -197,7 +270,6 @@ export const Exhibition = (props) => {
         }}
         p="6"
         flexDirection="column"
-
       >
         <Box>ARTWORKS HERE</Box>
       </Flex>
@@ -205,15 +277,66 @@ export const Exhibition = (props) => {
   );
 };
 
-Exhibition.getInitialProps = () => {
-  return {
-    title: "OpenAR.art",
-    subtitle: "Platform launch and groupshow curated by Sakrowski and Jeremy Bailey",
-    meta: "29 August 2021 – 4 October 2021",
-    description: "On the occasion of the launch of the new platform “openar.art”, panke.gallery presents a hybrid group exhibition with experimental Augmented Reality works. The open platform makes it easy to exhibit, collect and discuss Augmented Reality works and allows artists to sell their works as NFTs. Since the platform is organized as a cooperative, profits will be shared among the artists. As part of the project openAR, the exhibition and platform have been developed in collaboration between workshop participants and digital artists Jeremy Bailey, Sarah Buser and Tamás Páll. The works examine the possibilities of AR technology in artistic applications. Visual, acoustic and performative Augmented Reality formats can be experienced in the exhibition.",
-    image: {openingBg}
-  }
+// This function gets called at build time
+export async function getStaticPaths() {
+  return { paths: [], fallback: "blocking" }; // TODO: probably we need somehow configure the refresh timeout.
 }
+
+export const getStaticProps = async ({ params }: { params: any }) => {
+  const client = getApolloClient();
+
+  const exhibitionQuery = gql`
+    query ($slug: String!) {
+      exhibition(slug: $slug) {
+        id
+        slug
+        title
+        subtitle
+        description
+        dateBegin
+        dateEnd
+        status
+        curators {
+          pseudonym
+          id
+          ethAddress
+          bio
+        }
+
+        artworks {
+          id
+          key
+          title
+          description
+          heroImage {
+            id
+            meta
+            status
+          }
+        }
+      }
+    }
+  `;
+
+  const { data } = await client.query({
+    query: exhibitionQuery,
+    variables: {
+      slug: params.slug,
+    },
+  });
+
+  if (!data?.exhibition) {
+    return {
+      notFound: true,
+    };
+  }
+
+  return {
+    props: {
+      exhibition: data?.exhibition,
+    },
+  };
+};
 
 Exhibition.getLayout = function getLayout(page: ReactElement) {
   return <LayoutBlank>{page}</LayoutBlank>;
