@@ -112,7 +112,7 @@ export const WalletControl = () => {
                 <Image
                   width="30px"
                   height="30px"
-                  src="/images/logo-metamask.svg"
+                  src="/images/metamask.svg"
                   alt="MetaMask"
                 />
               }
