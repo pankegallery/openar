@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {ReactElement} from 'react'
 import { LayoutSite } from "~/components/app";
 import { Menu } from "~/components/frontend";
 import { ArrowLink } from "~/components/ui";

@@ -1,7 +1,7 @@
 export default {};
 
 // /// <reference path="../../types/nexus-typegen.ts" />
-// import { parseResolveInfo } from "graphql-parse-resolve-info";
+import { parseResolveInfo } from "graphql-parse-resolve-info";
 // import { filteredOutputByWhitelist } from "../../utils";
 
 // import dedent from "dedent";
@@ -88,316 +88,84 @@ export const Exhibition = objectType({
   },
 });
 
-// export const EventQueryResult = objectType({
-//   name: "EventQueryResult",
-//   description: dedent`
-//     List all the events in the database.
-//   `,
-//   definition: (t) => {
-//     t.int("totalCount");
-//     t.field("events", {
-//       type: list("Event"),
-//     });
-//   },
-// });
+export const EventQueries = extendType({
+  type: "Query",
+  definition(t) {
+    t.nonNull.field("exhibition", {
+      type: "Exhibition",
 
-// export const EventQueries = extendType({
-//   type: "Query",
-//   definition(t) {
-//     t.field("events", {
-//       type: EventQueryResult,
+      args: {
+        slug: nonNull(stringArg()),
+      },
 
-//       args: {
-//         pageIndex: intArg({
-//           default: 0,
-//         }),
-//         pageSize: intArg({
-//           default: apiConfig.db.defaultPageSize,
-//         }),
-//         orderBy: arg({
-//           type: GQLJson,
-//           default: undefined,
-//         }),
-//         where: arg({
-//           type: GQLJson,
-//           default: undefined,
-//         }),
-//       },
+      // resolve(root, args, ctx, info)
+      async resolve(...[, args, , info]) {
+        const pRI = parseResolveInfo(info);
 
-//       // TODO: enable! authorize: (...[, , ctx]) => authorizeApiUser(ctx, "eventRead"),
+        let include = {};
 
-//       async resolve(...[, args, , info]) {
-//         const pRI = parseResolveInfo(info);
+        if ((pRI?.fieldsByTypeName?.Event as any)?.terms)
+          include = {
+            ...include,
+            terms: {
+              select: {
+                id: true,
+                name: true,
+                slug: true,
+              },
+            },
+          };
 
-//         let totalCount;
-//         let events;
-//         let include = {};
+        if ((pRI?.fieldsByTypeName?.Event as any)?.dates)
+          include = {
+            ...include,
+            dates: {
+              select: {
+                id: true,
+                date: true,
+                begin: true,
+                end: true,
+              },
+              orderBy: {
+                date: "asc",
+              },
+            },
+          };
 
-//         if ((pRI?.fieldsByTypeName?.EventQueryResult as any)?.totalCount) {
-//           totalCount = await daoEventQueryCount(args.where);
+        if ((pRI?.fieldsByTypeName?.Event as any)?.locations)
+          include = {
+            ...include,
+            locations: {
+              select: {
+                id: true,
+                title: true,
+                description: true,
+                lat: true,
+                lng: true,
+              },
+              orderBy: {
+                title: "asc",
+              },
+            },
+          };
 
-//           if (totalCount === 0)
-//             return {
-//               totalCount,
-//               events: [],
-//             };
-//         }
+        if ((pRI?.fieldsByTypeName?.Event as any)?.heroImage)
+          include = {
+            ...include,
+            heroImage: {
+              include: {
+                translations: true,
+              },
+            },
+          };
 
-//         if (
-//           (pRI?.fieldsByTypeName?.EventQueryResult as any)?.events
-//             ?.fieldsByTypeName?.Event?.terms
-//         ) {
-//           include = {
-//             ...include,
-//             terms: {
-//               select: {
-//                 id: true,
-//                 name: true,
-//                 slug: true,
-//               },
-//             },
-//           };
-//         }
-
-//         if (
-//           (pRI?.fieldsByTypeName?.EventQueryResult as any)?.events
-//             ?.fieldsByTypeName?.Event?.dates
-//         ) {
-//           include = {
-//             ...include,
-//             dates: {
-//               select: {
-//                 id: true,
-//                 date: true,
-//                 begin: true,
-//                 end: true,
-//               },
-//             },
-//           };
-//         }
-
-//         if (
-//           (pRI?.fieldsByTypeName?.EventQueryResult as any)?.events
-//             ?.fieldsByTypeName?.Event?.locations
-//         ) {
-//           include = {
-//             ...include,
-//             locations: {
-//               select: {
-//                 id: true,
-//                 title: true,
-//                 description: true,
-//                 lat: true,
-//                 lng: true,
-//               },
-//             },
-//           };
-//         }
-
-//         if ((pRI?.fieldsByTypeName?.EventQueryResult as any)?.events)
-//           events = await daoEventQuery(
-//             args.where,
-//             Object.keys(include).length > 0 ? include : undefined,
-//             args.orderBy,
-//             args.pageIndex as number,
-//             args.pageSize as number
-//           );
-
-//         return {
-//           totalCount,
-//           events,
-//         };
-//       },
-//     });
-
-//     t.nonNull.field("event", {
-//       type: "Event",
-
-//       args: {
-//         slug: nonNull(stringArg()),
-//       },
-
-//       // resolve(root, args, ctx, info)
-//       async resolve(...[, args, , info]) {
-//         const pRI = parseResolveInfo(info);
-
-//         let include = {};
-
-//         if ((pRI?.fieldsByTypeName?.Event as any)?.heroImage)
-//           include = {
-//             ...include,
-//             heroImage: {
-//               include: {
-//                 translations: true,
-//               },
-//             },
-//           };
-
-//         return daoEventGetBySlug(args.slug, include);
-//       },
-//     });
-
-//     t.nonNull.field("eventRead", {
-//       type: "Event",
-
-//       args: {
-//         id: nonNull(intArg()),
-//       },
-
-//       authorize: (...[, , ctx]) => authorizeApiUser(ctx, "eventRead"),
-
-//       // resolve(root, args, ctx, info)
-//       async resolve(...[, args, , info]) {
-//         const pRI = parseResolveInfo(info);
-
-//         let include = {};
-
-//         if ((pRI?.fieldsByTypeName?.Event as any)?.terms)
-//           include = {
-//             ...include,
-//             terms: {
-//               select: {
-//                 id: true,
-//                 name: true,
-//                 slug: true,
-//               },
-//             },
-//           };
-
-//         if ((pRI?.fieldsByTypeName?.Event as any)?.dates)
-//           include = {
-//             ...include,
-//             dates: {
-//               select: {
-//                 id: true,
-//                 date: true,
-//                 begin: true,
-//                 end: true,
-//               },
-//               orderBy: {
-//                 date: "asc",
-//               },
-//             },
-//           };
-
-//         if ((pRI?.fieldsByTypeName?.Event as any)?.locations)
-//           include = {
-//             ...include,
-//             locations: {
-//               select: {
-//                 id: true,
-//                 title: true,
-//                 description: true,
-//                 lat: true,
-//                 lng: true,
-//               },
-//               orderBy: {
-//                 title: "asc",
-//               },
-//             },
-//           };
-
-//         if ((pRI?.fieldsByTypeName?.Event as any)?.heroImage)
-//           include = {
-//             ...include,
-//             heroImage: {
-//               include: {
-//                 translations: true,
-//               },
-//             },
-//           };
-
-//         return daoEventQueryFirst(
-//           {
-//             id: args.id,
-//           },
-//           Object.keys(include).length > 0 ? include : undefined
-//         );
-//       },
-//     });
-//   },
-// });
-
-// export const EventUpsertInput = inputObjectType({
-//   name: "EventUpsertInput",
-//   definition(t) {
-//     t.nonNull.json("title");
-//     t.nonNull.json("slug");
-//     t.nonNull.int("status");
-//     t.json("description");
-//     t.json("descriptionLocation");
-//     t.nonNull.json("owner");
-//     t.json("terms");
-//     t.json("dates");
-//     t.json("locations");
-//     t.json("heroImage");
-//   },
-// });
-
-// export const EventMutations = extendType({
-//   type: "Mutation",
-
-//   definition(t) {
-//     t.nonNull.field("eventCreate", {
-//       type: "Event",
-
-//       args: {
-//         data: nonNull("EventUpsertInput"),
-//       },
-
-//       authorize: (...[, , ctx]) => authorizeApiUser(ctx, "eventCreate"),
-
-//       async resolve(...[, args]) {
-//         const event = await daoEventCreate(args.data);
-
-//         if (!event)
-//           throw new ApiError(
-//             httpStatus.INTERNAL_SERVER_ERROR,
-//             "Creation failed"
-//           );
-
-//         return event;
-//       },
-//     });
-
-//     t.nonNull.field("eventUpdate", {
-//       type: "Event",
-
-//       args: {
-//         id: nonNull(intArg()),
-//         data: nonNull("EventUpsertInput"),
-//       },
-
-//       authorize: (...[, , ctx]) => authorizeApiUser(ctx, "eventUpdate"),
-
-//       async resolve(...[, args]) {
-//         const event = await eventUpdate(args.id, args.data);
-
-//         if (!event)
-//           throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Update failed");
-
-
-//         return event;
-//       },
-//     });
-
-//     t.nonNull.field("eventDelete", {
-//       type: "BooleanResult",
-
-//       args: {
-//         id: nonNull(intArg()),
-//       },
-
-//       authorize: (...[, , ctx]) => authorizeApiUser(ctx, "eventDelete"),
-
-//       async resolve(...[, args]) {
-//         const event = await daoEventDelete(args.id);
-
-//         if (!event)
-//           throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Delete failed");
-
-//         return { result: true };
-//       },
-//     });
-//   },
-// });
+        return daoEventQueryFirst(
+          {
+            id: args.id,
+          },
+          Object.keys(include).length > 0 ? include : undefined
+        );
+      },
+    });
+  },
+});

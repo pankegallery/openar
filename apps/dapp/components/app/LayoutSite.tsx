@@ -8,15 +8,7 @@ import { WalletConnectGate } from "./shared";
 import { LoadingBar } from "~/components/app/shared";
 import { OverlayMenu } from "../frontend";
 
-export const LayoutSite = ({
-  children,
-  title,
-  subPages,
-}: {
-  children: ReactNode;
-  title: string;
-  subPages: any[]
-}) => {
+export const LayoutSite = ({ children }: { children?: ReactNode }) => {
   return (
     <WalletConnectGate>
       <LoadingBar color="#000" />
@@ -25,10 +17,11 @@ export const LayoutSite = ({
         w="100vw"
         h="100%"
         layerStyle="backdropLight"
-        overflow="hidden">
-          <Header />
-          {children}
-          <Footer />
+        overflow="hidden"
+      >
+        <Header />
+        {children}
+        <Footer />
       </Box>
       <OverlayMenu />
     </WalletConnectGate>
