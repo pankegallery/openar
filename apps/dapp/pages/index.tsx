@@ -13,11 +13,9 @@ import {
   chakra
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { WalletControl } from "~/components/app/shared"
 import Image from 'next/image'
 
 import openingBg from "~/assets/img/opening-bg.png";
-
 
 export const Home = () => {
   return (

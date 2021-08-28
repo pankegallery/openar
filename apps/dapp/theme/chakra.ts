@@ -220,7 +220,11 @@ const themeConfig = {
       letterSpacing: "-2%",
     },
     h2: {
-      fontSize: ["36px", "48px"],
+      fontSize: {
+        base: "14px",
+        t: "22px",
+        d: "22px"
+      },
       fontWeight: "semibold",
       lineHeight: "110%",
       letterSpacing: "-1%",
