@@ -83,7 +83,39 @@ const themeConfig = {
       "select,option": {
         fontFamily: "\"Source Code Pro\", monospace",
       },
-
+      ".text h2":{
+        fontSize: {
+          base: "18px",
+          t: "22px",
+          d: "22px"
+        },
+        fontWeight: "semibold",
+        lineHeight: "110%",
+        letterSpacing: "-1%",
+        marginBottom: "1rem",
+        marginTop: "2rem",
+        _first: {
+           marginTop: "0rem",
+        }
+      },
+      ".text h3":{
+        fontWeight: "semibold",
+        lineHeight: "110%",
+        letterSpacing: "-1%",
+        marginBottom: "0.5rem",
+        marginTop: "2rem",
+      },
+      ".text ul li":{
+        paddingLeft: "2em",
+        listStyle: "none",
+        position: "relative",
+        marginBottom: "0.5rem",
+        _before:{
+          content: "'—'",
+          position: "absolute",
+          left: "0.5em",
+        }
+      },
       ".openar.content": {
         bg: "var(--chakra-colors-openar-muddygreen)",
         color: "#fff",
@@ -265,6 +297,16 @@ const themeConfig = {
       },
       fontWeight: "light",
       lineHeight: "110%",
+    },
+    label: {
+      textTransform: "uppercase",
+      letterSpacing: "0.02em",
+      fontWeight: "bold",
+      fontSize: {
+        base: "14px",
+        t: "16px",
+        d: "16px"
+      },
     },
     bigLabel: {
       textTransform: "uppercase",

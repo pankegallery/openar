@@ -37,18 +37,18 @@ export const OverlayMenu = () => {
   const mainMenu = [
     { slug: "exhibitions", label: "Exhibitions", url: "" },
     { slug: "artworks", label: "Artworks", url: "artworks" },
-    { slug: "about", label: "About", url: "pages/about" },
-    { slug: "blog", label: "Blog", url: "pages/blog" },
+    { slug: "about", label: "About", url: "p/about" },
+    { slug: "blog", label: "Blog", url: "p/blog" },
   ];
 
   const secondaryMenu = [
-    { slug: "help", label: "Help", url: "pages/help" },
-    { slug: "badges", label: "Roles and Badges", url: "pages/tandc" },
-    { slug: "wallets", label: "Wallets", url: "pages/wallets" },
-    { slug: "tandc", label: "Terms and Conditions", url: "pages/tandc" },
-    { slug: "funding", label: "Platform funding", url: "pages/funding" },
-    { slug: "privpol", label: "Privacy policy", url: "pages/privpol" },
-    { slug: "imprint", label: "Imprint", url: "pages/imprint" },
+    { slug: "help", label: "Help", url: "p/help" },
+    { slug: "badges", label: "Roles and Badges", url: "p/tandc" },
+    { slug: "wallets", label: "Wallets", url: "p/wallets" },
+    { slug: "tandc", label: "Terms and Conditions", url: "p/tandc" },
+    { slug: "funding", label: "Platform funding", url: "p/funding" },
+    { slug: "privpol", label: "Privacy policy", url: "p/privpol" },
+    { slug: "imprint", label: "Imprint", url: "p/imprint" },
   ];
 
   return (
@@ -86,7 +86,7 @@ export const OverlayMenu = () => {
             }}
             color="white"
           >
-            {/* --------- Logo and Clo  se --------- */}
+            {/* --------- ROW: Logo and Close --------- */}
             <Flex
               className="Header"
               w="100vw"

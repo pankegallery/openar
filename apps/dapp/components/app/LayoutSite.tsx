@@ -25,7 +25,9 @@ export const LayoutSite = ({
         w="100vw"
         h="100%"
         layerStyle="backdropLight"
-        overflow="hidden">
+        overflow={{
+          d: "hidden"
+        }}>
           <Header />
           {children}
           <Footer />

@@ -4,6 +4,7 @@ import { Menu } from "~/components/frontend";
 import { ArrowLink } from "~/components/ui";
 import matter from "gray-matter";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from 'remark-gfm'
 import {
   Box,
   Flex,
@@ -20,34 +21,72 @@ function PageTemplate({content, data}) {
     <>
       { /* --------- Title and Submenu --------- */}
       <Flex
-        position="fixed"
+        position={{
+          base: "relative",
+          t: "fixed"
+        }}
         flexDirection="column"
         bg="white"
-        top="var(--openar-header-height-desktop)"
+        top={{
+          base: "0",
+          t: "var(--openar-header-height-desktop)",
+        }}
         left="0"
         w={{
           base: "100%",
-          t: "33.33vw"
+          t: "33.33vw",
         }}
-        h="calc(100vh - var(--openar-header-height-desktop))"
+        h={{
+          base: "100vw",
+          t: "calc(100% - var(--openar-header-height-desktop))",
+          d: "33vw"
+        }}
         zIndex="200"
         color="black"
-        overflow="hidden"
+        overflow={{
+          base: "show",
+          t: "hidden"
+        }}
         p="6"
         borderRight="1px solid black"
+        borderBottom={{
+          base: "1px solid black",
+          t: "none"
+        }}
+        pb={{
+          base: "10",
+          t: "var(--openar-header-height-desktop)",
+          d: "0"
+        }}
       >
+
         {frontmatter.parentPage&&
-          <ArrowLink type="back" href={frontmatter.parentPage[0].url}>{frontmatter.parentPage[0].label}</ArrowLink>
+          <Box className="parentPage" mb="4">
+            <ArrowLink type="back" href={`/${frontmatter.parentPage[0].url}`}>{frontmatter.parentPage[0].label}</ArrowLink>
+          </Box>
         }
 
-        <chakra.h1 textStyle="worktitle">{frontmatter.title}</chakra.h1>
 
-        <Box className="subPages">
+        <chakra.h1 textStyle="worktitle" mt={{base: "auto", t: "0"}}>{frontmatter.title}</chakra.h1>
+
+        <Box
+          className="subPages"
+          mt="auto"
+          sx={{
+            "a": {
+              display: "block",
+              mt: "4",
+            },
+            "a svg": {
+              mr: "1"
+            }
+          }}
+        >
           {frontmatter.subPages&&
 
 
             frontmatter.subPages.map((pageItem) => (
-              <ArrowLink type="to" href={pageItem.url}>{pageItem.label}</ArrowLink>
+              <ArrowLink type="to" href={`/${pageItem.url}`}>{pageItem.label}</ArrowLink>
             ))
 
           }
@@ -60,20 +99,32 @@ function PageTemplate({content, data}) {
           base: "relative",
           t: "fixed"
         }}
-        top="var(--openar-header-height-desktop)"
+        top={{
+          base: "0",
+          t: "var(--openar-header-height-desktop)"
+        }}
         left={{
-          base: "100%",
+          base: "0",
           t: "33.33vw"
         }}
         p="6"
+        pr={{
+          base: "6",
+          d: "40"
+        }}
         h={{
           base: "auto",
           t: "calc(100vh - var(--openar-header-height-desktop))"
         }}
         overflow="scroll"
+        pb={{
+          base: "10",
+          t: "var(--openar-header-height-desktop)",
+          d: "0"
+        }}
       >
 
-      <ReactMarkdown>{content}</ReactMarkdown>
+      <ReactMarkdown children={content} remarkPlugins={[remarkGfm]} />
       </Box>
     </>
   )

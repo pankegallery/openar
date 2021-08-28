@@ -10,11 +10,10 @@ export const Header = (/* props */) => {
   const headerMenu = [
     {slug: "exhibitions", label:"Exhibitions"      , url:""},
     {slug: "artworks",    label:"Artworks"         , url:"artworks"},
-    {slug: "about",       label:"About"            , url:"pages/about"},
-    {slug: "blog",        label:"Blog"             , url:"pages/blog"},
-    {slug: "help",        label:"Help"             , url:"pages/help"},
-    {slug: "badges",      label:"Roles and Badges" , url:"pages/tandc"},
-    {slug: "wallets",     label:"Wallets"          , url:"pages/wallets"},
+    {slug: "about",       label:"About"            , url:"p/about"},
+    {slug: "blog",        label:"Blog"             , url:"p/blog"},
+    {slug: "help",        label:"Help"             , url:"p/help"},
+    {slug: "badges",      label:"Roles and Badges" , url:"p/tandc"},
   ]
 
   return (
@@ -27,6 +26,10 @@ export const Header = (/* props */) => {
       zIndex="201"
       p="6"
       layerStyle="backdropLight"
+      display={{
+        base: "none",
+        t: "block",
+      }}
     >
       <chakra.nav
         className="main"
