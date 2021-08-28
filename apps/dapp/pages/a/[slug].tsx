@@ -13,80 +13,15 @@ import openingBg from "~/assets/img/opening-bg.png";
 import Arrow from "~/assets/img/arrow.svg";
 import {ArtworkListItem} from "~/components/frontend";
 import pick from "lodash/pick";
+import { useSSRSaveMediaQuery } from "~/hooks";
+
 
 export const Artwork = ({ artwork }: { artwork: any }) => {
-  //TODO: was passiert beim live rendern und nicht bekannten slugs?
-  // {
-  //   {
-  //     "id": 1,
-  //     "slug": null,
-  //     "title": "OpenAR.art",
-  //     "description": "Lorem ipsim",
-  //     "subtitle": "Platform launch and groupshow curated by Sakrowski and Jeremy Bailey",
-  //     "dateBegin": "2021-08-29T10:00:00.000Z",
-  //     "dateEnd": "2021-10-04T10:00:00.000Z",
-  //     "status": 2,
-  //     "curators": null,
-  //     "artworks": [
-  //       {
-  //         "id": 22,
-  //         "key": "RWEOzHzMPehrpgyn",
-  //         "title": "TEWS",
-  //         "description": "<p>TEST</p>",
-  //         "heroImage": {
-  //           "id": 42,
-  //           "meta": {
-  //             "size": 93976,
-  //             "mimeType": "image/jpeg",
-  //             "imageType": "square",
-  //             "uploadFolder": "/img/2021/8",
-  //             "availableSizes": {
-  //               "original": {
-  //                 "url": "http://localhost:4401/img/2021/8/kmsFu-TgGVy6Kp1Lkrug3.jpg",
-  //                 "isJpg": true,
-  //                 "width": 1280,
-  //                 "height": 1279,
-  //                 "isWebP": false
-  //               },
-  //               "720-720-jpg": {
-  //                 "url": "http://localhost:4401//img/2021/8/kmsFu-TgGVy6Kp1Lkrug3-720-720.jpg",
-  //                 "isJpg": true,
-  //                 "width": 720,
-  //                 "height": 720,
-  //                 "isWebP": false
-  //               },
-  //               "480-480-webp": {
-  //                 "url": "http://localhost:4401//img/2021/8/kmsFu-TgGVy6Kp1Lkrug3-480-480.webp",
-  //                 "isJpg": false,
-  //                 "width": 480,
-  //                 "height": 480,
-  //                 "isWebP": true
-  //               },
-  //               "720-720-webp": {
-  //                 "url": "http://localhost:4401//img/2021/8/kmsFu-TgGVy6Kp1Lkrug3-720-720.webp",
-  //                 "isJpg": false,
-  //                 "width": 720,
-  //                 "height": 720,
-  //                 "isWebP": true
-  //               },
-  //               "1080-1080-webp": {
-  //                 "url": "http://localhost:4401//img/2021/8/kmsFu-TgGVy6Kp1Lkrug3-1080-1080.webp",
-  //                 "isJpg": false,
-  //                 "width": 1080,
-  //                 "height": 1080,
-  //                 "isWebP": true
-  //               }
-  //             },
-  //             "originalFileUrl": "http://localhost:4401/img/2021/8/kmsFu-TgGVy6Kp1Lkrug3.jpg",
-  //             "originalFileName": "fa-pnk-195.jpg",
-  //             "originalFilePath": "/Users/fluxed/Dropbox/www/fluxed/openar/openar-monorepo/public/img/2021/8/kmsFu-TgGVy6Kp1Lkrug3.jpg"
-  //           },
-  //           "status": 4
-  //         }
-  //       }
-  //     ]
-  //   }
-  // }
+
+  const isDesktop = useSSRSaveMediaQuery(
+    "(min-width: 75rem)"
+  );
+
   return (
     <>
       <Head>
@@ -107,7 +42,7 @@ export const Artwork = ({ artwork }: { artwork: any }) => {
         mb="-100vh"
       >
         <Image
-          src={openingBg}
+          src={exhibition.openingBg}
           layout="fill"
           objectFit="cover"
           objectPosition="50% 100%"
@@ -116,226 +51,89 @@ export const Artwork = ({ artwork }: { artwork: any }) => {
         />
       </Box>
 
-      {/* --------- Grid --------- */}
-      <Grid
+      {/* --------- Column Layout --------- */}
+      <Flex
         position={{
           base: "relative",
-          d: "fixed"
+          t: "fixed"
         }}
-        backgroundImage="url(/image/opening-bg.png)"
-        className="exhibition"
+        className="artwork"
         top="0"
         left="0"
         w="100%"
         p=""
-        h="100vh"
-        zIndex="200"
-        templateRows={{
-          base: "33.33vw auto",
-          t: "var(--openar-header-height-desktop) auto",
-          d: "var(--openar-header-height-desktop) auto",
-        }}
-        color="white"
-        overflow="hidden"
-      >
-        {/* --------- ROW: Header row --------- */}
-        <Flex
-          w="100%"
-          direction="row"
-          p={{
-            base: "6",
-            t: "10",
-          }}
-        >
-          <Link href="/">
-            <a>
-              <Arrow className="arrow" />
-            </a>
-          </Link>
-        </Flex>
-        {/* --------- GRID: Exhibition title, description, and artwork arrow --------- */}
-        <Flex
-          className="main"
-          w={{
-            base: "100%",
-            d: "66.66vw"
-          }}
-          ml={{
-            base: "0",
-            t: "0",
-            d: "0",
-          }}
-          borderBottom="1px solid #fff"
-          flexWrap="wrap"
-          direction="row"
-          zIndex="302"
-        >
-          {/* --------- Exhibition title  --------- */}
-          <Flex
-            borderTop="1px solid #fff"
-            borderBottom="1px solid #fff"
-            borderRight="1px solid #fff"
-            borderLeft={{
-              base: "none",
-              d: "1px solid #fff",
-            }}
-            p={{
-              base: "6",
-              t: "10",
-            }}
-            pb={{
-              base: "6",
-              t: "20",
-            }}
-            w={{
-              base: "66.66vw",
-              t: "50vw",
-              d: "calc(33.33vw + 1px)",
-            }}
-            h={{
-              base: "66.66vw",
-              t: "50vw",
-              d: "33.33vw",
-            }}
-            layerStyle="backdropDark"
-            flexDirection="column"
-            alignContent="flex-end"
-          >
-            <Link href="/e/openar-art" passHref>
-              <chakra.a display="block" mt="auto">
-                <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">
-                  {exhibition.title}
-                </chakra.h1>
-                <chakra.p textStyle="subtitle" mb="1rem">
-                  {exhibition.subtitle}
-                </chakra.p>
-                <chakra.p textStyle="workmeta">
-                  {new Date(exhibition.dateBegin).toLocaleDateString("de")}{" - "}
-                  {new Date(exhibition.dateEnd).toLocaleDateString("de")}
-                </chakra.p>
-              </chakra.a>
-            </Link>
-          </Flex>
-          {/* --------- Description  --------- */}
-          <Flex
-            w={{
-              base: "100%",
-              t: "calc(50vw - 2px)",
-              d: "calc(33.33vw - 2px)",
-            }}
-            p="6"
-            h={{
-              base: "calc(66.66vw + 2px)",
-              t: "50vw",
-              d: "33.33vw",
-            }}
-            borderTop="1px solid #fff"
-            borderBottom="1px solid #fff"
-            layerStyle="backdropBlurred"
-            order={{
-              base: "3",
-              t: "inherit",
-            }}
-            overflow="scroll"
-          >
-            <chakra.p my="auto !important" fontWeight="normal">
-              {exhibition.description}
-            </chakra.p>
-          </Flex>
-          {/* --------- Footer  --------- */}
-          <Flex
-            className="footer"
-            p="6"
-            pr="10"
-            layerStyle="backdropGradient"
-            w={{
-              base: "33.33vw",
-              t: "50vw",
-              d: "33.33vw",
-            }}
-            borderX={{
-              base: "0",
-              t: "1px solid #fff",
-            }}
-            borderY={{
-              base: "1px solid #fff",
-              t: "none",
-            }}
-            justifySelf={{
-              base: "start",
-              t: "end",
-              d: "end",
-            }}
-            textAlign="right"
-            h={{
-              base: "66.66vw",
-              t: "100%"
-            }}
-            ml={{
-              base: "0",
-              d: "auto"
-            }}
-          >
-            <chakra.p textStyle="bigLabel" ml="auto">
-              Artworks
-            </chakra.p>
-            <Arrow className="arrow down" />
-          </Flex>
-        </Flex>
-
-
-      </Grid>
-      {/* --------- Artworks  --------- */}
-      <Flex
-        className="artworks"
-        layerStyle="backdropLight"
-        position={{
-          base: "relative",
-          d:"fixed",
-        }}
-        overflow={{
-          base: "show",
-          d: "scroll"
-        }}
-        zIndex="210"
-        top={{
-          base: "auto",
-          d: "var(--openar-header-height-desktop)",
-        }}
-        left={{
-          base: "0",
-          d: "66.66vw",
-        }}
-        w={{
-          base: "100%",
-          d: "calc(33.33vw - 2px)",
-        }}
         h={{
           base: "auto",
-          d: "calc(100vh - var(--openar-header-height-desktop))",
+          t: "100vh"
         }}
-        flexDirection="column"
+        zIndex="200"
+        color="white"
+        overflow={{
+          base: "show",
+          t: "hidden",
+        }}
       >
-        <Box>
-          {exhibition.artworks.length > 0 && (
-            <Flex width="100%" flexWrap="wrap">
-              {" "}
-              {exhibition.artworks.map((artwork) => (
-                <ArtworkListItem key={`aw-${artwork.id}`}
-                  isAdmin={false}
-                  {...pick(artwork, [
-                    "id",
-                    "status",
-                    "heroImage",
-                    "title",
-                    "creator",
-                  ])}
-                />
-              ))}
+        {/* --------- COL: Exhibition (desktop only) --------- */}
+        {isDesktop&&
+          <Flex
+            direction="column"
+            className="exhibitionColumn"
+          >
+            {/* --------- ROW: Header row --------- */}
+            <Flex
+              w="33.33vw"
+              h="var(--openar-header-height-desktop)"
+              p="10"
+            >
+              <Link href="/">
+                <a>
+                  <Arrow className="arrow" />
+                </a>
+              </Link>
             </Flex>
-          )}
-        </Box>
+
+            {/* --------- Exhibition title  --------- */}
+            <Flex
+              borderY="1px solid #fff"
+              p="10"
+              pb="20"
+              w="33.33vw"
+              h="33.33vw"
+              layerStyle="backdropDark"
+              flexDirection="column"
+              alignContent="flex-end"
+            >
+              <Link href="/e/openar-art" passHref>
+                <chakra.a display="block" mt="auto">
+                  <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">
+                    {exhibition.title}
+                  </chakra.h1>
+                  <chakra.p textStyle="subtitle" mb="1rem">
+                    {exhibition.subtitle}
+                  </chakra.p>
+                  <chakra.p textStyle="workmeta">
+                    {new Date(exhibition.dateBegin).toLocaleDateString("de")}{" - "}
+                    {new Date(exhibition.dateEnd).toLocaleDateString("de")}
+                  </chakra.p>
+                </chakra.a>
+              </Link>
+            </Flex>
+          </Flex>
+        }
+        {/* --------- COL: Artwork images --------- */}
+        <Flex
+          direction="column"
+        >
+        </Flex>
+
+        {/* --------- COL: Artwork details) --------- */}
+        <Flex
+          direction="column"
+        >
       </Flex>
+
+      </Flex> {/* Column Layout close*/}
+
     </>
   );
 };
@@ -348,9 +146,9 @@ export async function getStaticPaths() {
 export const getStaticProps = async ({ params }: { params: any }) => {
   const client = getApolloClient();
 
-  const exhibitionQuery = gql`
+  const artworkQuery = gql`
     query ($slug: String!) {
-      exhibition(slug: $slug) {
+      artwork(key: $slug) {
         id
         slug
         title
@@ -386,13 +184,13 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   `;
 
   const { data } = await client.query({
-    query: exhibitionQuery,
+    query: artworkQuery,
     variables: {
       slug: params.slug,
     },
   });
 
-  if (!data?.exhibition) {
+  if (!data?.artwork) {
     return {
       notFound: true,
     };
@@ -400,7 +198,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 
   return {
     props: {
-      exhibition: data?.exhibition,
+      artwork: data?.artwork,
     },
   };
 };

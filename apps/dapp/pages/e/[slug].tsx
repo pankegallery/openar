@@ -122,7 +122,6 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
           base: "relative",
           d: "fixed"
         }}
-        backgroundImage="url(/image/opening-bg.png)"
         className="exhibition"
         top="0"
         left="0"
