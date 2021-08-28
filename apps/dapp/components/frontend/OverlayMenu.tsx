@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   useDisclosure,
   Portal,
@@ -19,10 +19,13 @@ import { useWalletLogin } from "~/hooks";
 import Close from "~/assets/img/close.svg";
 import Logo from "~/assets/img/logo-white.svg";
 import MenuCornerWhite from "~/assets/img/menu-corner-light.svg";
+import { useRouter } from "next/router";
 
 export const OverlayMenu = () => {
+  const router = useRouter();
+
   const { account } = useWalletLogin();
-  const { isOpen, onToggle } = useDisclosure();
+  const { isOpen, onToggle, onClose } = useDisclosure();
   const [isClosing, setIsClosing] = useState(false);
   const isTablet = useSSRSaveMediaQuery(
     "(min-width: 45rem) and (max-width: 74em)"
@@ -50,6 +53,22 @@ export const OverlayMenu = () => {
     { slug: "privpol", label: "Privacy policy", url: "p/privpol" },
     { slug: "imprint", label: "Imprint", url: "p/imprint" },
   ];
+
+  useEffect(() => {
+    const handleRouteChange = (url, { shallow }) => {
+      onClose();
+    }
+
+    router.events.on('routeChangeStart', handleRouteChange)
+
+    // If the component is unmounted, unsubscribe
+    // from the event with the `off` method:
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange)
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>

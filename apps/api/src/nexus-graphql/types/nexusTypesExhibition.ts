@@ -107,6 +107,7 @@ export const EventQueries = extendType({
             },
             {
               heroImage: true,
+              creator: true,
             },
             {},
             0,
