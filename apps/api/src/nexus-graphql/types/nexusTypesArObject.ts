@@ -164,6 +164,22 @@ export const ArObjectQueries = extendType({
             };
           }
 
+          if (
+            (pRI as any).fieldsByTypeName?.ArObjectQueryResult?.arObjects
+              ?.fieldsByTypeName.ArObject?.arModels
+          ) {
+            include = {
+              ...include,
+              arModels: {
+                select: {
+                  meta: true,
+                  status: true,
+                  id: true,
+                },
+              },
+            };
+          }
+
           if ((pRI?.fieldsByTypeName?.ArObject as any)?.creator)
             include = {
               ...include,

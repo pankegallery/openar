@@ -22,7 +22,7 @@ const storage = multer.diskStorage({
       date.getUTCMonth() + 1
     }`;
     const uploadPath = `${apiConfig.baseDir}/${apiConfig.publicDir}/${uploadFolder}`;
-
+    
     try {
       // TODO: how to make this non blocking?
       mkdirSync(uploadPath, { recursive: true });

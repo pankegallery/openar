@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
     const uploadFolder = `ar/${date.getUTCFullYear()}/${
       date.getUTCMonth() + 1
     }`;
-    const uploadPath = `${apiConfig.baseDir}${apiConfig.publicDir}/${uploadFolder}`;
+    const uploadPath = `${apiConfig.baseDir}/${apiConfig.publicDir}/${uploadFolder}`;
 
     try {
       // TODO: how to make this non blocking?

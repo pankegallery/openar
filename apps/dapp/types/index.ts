@@ -26,7 +26,7 @@ export type AppConfigSettings = {
   ankrXDaiRPCURL?: string | undefined;
   defaultPageSize?: number;
 };
-
+ 
 export type AppConfig = Complete<AppConfigSettings>;
 
 export type AppScopes = "api" | "dapp";

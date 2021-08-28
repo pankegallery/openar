@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/router";
 import { Text } from "@chakra-ui/react";
 import { useQuery, gql } from "@apollo/client";
-
+import Head from "next/head";
 import { LayoutOpenAR } from "~/components/app";
 import { FormNavigationBlock } from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
@@ -22,9 +22,7 @@ import {
   ButtonListElement,
 } from "~/components/modules";
 
-import {
-  filteredOutputByWhitelist
-} from "~/utils";
+import { filteredOutputByWhitelist } from "~/utils";
 
 // TODO
 export const arObjectReadOwnQueryGQL = gql`
@@ -54,11 +52,10 @@ export const arObjectReadOwnQueryGQL = gql`
     }
     artworkReadOwn(id: $aid) {
       id
-      title      
+      title
     }
   }
 `;
-
 
 const Update = () => {
   const router = useRouter();
@@ -87,15 +84,12 @@ const Update = () => {
     formState: { isSubmitting, isDirty },
   } = formMethods;
 
-  const { data, loading, error } = useQuery(
-    arObjectReadOwnQueryGQL,
-    {
-      variables: {
-        id: parseInt(router.query.oid as string, 10),
-        aid: parseInt(router.query.aid as string, 10),
-      },
-    }
-  );
+  const { data, loading, error } = useQuery(arObjectReadOwnQueryGQL, {
+    variables: {
+      id: parseInt(router.query.oid as string, 10),
+      aid: parseInt(router.query.aid as string, 10),
+    },
+  });
 
   // const parseIncomingDates = (dates: any) => {
   //   if (!dates) return [];
@@ -119,14 +113,16 @@ const Update = () => {
   useEffect(() => {
     if (!data || !data.arObjectReadOwn) return;
 
-
     console.log(data.arObjectReadOwn);
 
     reset({
-      ...filteredOutputByWhitelist(
-        data.arObjectReadOwn,
-        ["title", "description", "orderNumber", "editionOf", "askPrice"]        
-      )
+      ...filteredOutputByWhitelist(data.arObjectReadOwn, [
+        "title",
+        "description",
+        "orderNumber",
+        "editionOf",
+        "askPrice",
+      ]),
     });
   }, [reset, data]);
 
@@ -135,24 +131,24 @@ const Update = () => {
   ) => {
     setIsFormError(false);
     try {
-
       console.log(newData);
 
       if (appUser) {
         const { data, errors } = await firstMutation(
           parseInt(router.query.oid as string, 10),
           {
-          title: newData.title,
-          description: newData.description,
-          editionOf: newData.editionOf ?? null,
-          orderNumber: newData.orderNumber ?? null,
-          askPrice: newData.editionOf ?? null,
-          creator: {
-            connect: {
-              id: appUser.id,
+            title: newData.title,
+            description: newData.description,
+            editionOf: newData.editionOf ?? null,
+            orderNumber: newData.orderNumber ?? null,
+            askPrice: newData.editionOf ?? null,
+            creator: {
+              connect: {
+                id: appUser.id,
+              },
             },
-          },
-        });
+          }
+        );
 
         if (!errors) {
           successToast();
@@ -169,8 +165,9 @@ const Update = () => {
     }
   };
 
-  // TODO: make more general 
-  const trimTitle = (str: string) => (str.length > 13) ? `${str.substr(0,10)}...` : str; 
+  // TODO: make more general
+  const trimTitle = (str: string) =>
+    str.length > 13 ? `${str.substr(0, 10)}...` : str;
 
   const breadcrumb = [
     {
@@ -179,15 +176,21 @@ const Update = () => {
     },
     {
       path: `${moduleConfig.rootPath}/${router.query.aid}/update`,
-      title: data && (data.artworkReadOwn?.title ? trimTitle(data.artworkReadOwn?.title) : <BeatLoader size="10px" color="#fff"/>),
+      title:
+        data &&
+        (data.artworkReadOwn?.title ? (
+          trimTitle(data.artworkReadOwn?.title)
+        ) : (
+          <BeatLoader size="10px" color="#fff" />
+        )),
     },
     {
       title: "Update object",
     },
   ];
 
-  // TODO: this makes some trouble on SSR as the buttons look differently 
-  // as the user can't do thing on the server 
+  // TODO: this makes some trouble on SSR as the buttons look differently
+  // as the user can't do thing on the server
   const buttonList: ButtonListElement[] = [
     {
       type: "back",
@@ -211,7 +214,16 @@ const Update = () => {
 
   return (
     <>
-      <FormNavigationBlock shouldBlock={(isDirty && !isSubmitting) || activeUploadCounter > 0} />
+      <Head>
+        <script
+          type="module"
+          async
+          src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
+        ></script>
+      </Head>
+      <FormNavigationBlock
+        shouldBlock={(isDirty && !isSubmitting) || activeUploadCounter > 0}
+      />
       <FormProvider {...formMethods}>
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={disableForm}>
@@ -225,8 +237,8 @@ const Update = () => {
                   borderBottom="1px solid #fff"
                   color="red.400"
                 >
-                  Unfortunately, we could not save your object. Please try
-                  again in a little bit.
+                  Unfortunately, we could not save your object. Please try again
+                  in a little bit.
                 </Text>
               )}
               <ModuleArtworkArObjectForm

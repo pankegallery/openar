@@ -37,6 +37,21 @@ export type ApiArModelProps = {
   placeholder?: string;
 };
 
+interface ModelViewerJSX {
+  src: string
+  poster?: string
+  // ... others
+}
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'model-viewer': ModelViewerJSX &
+        React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
+    }
+  }
+}
+
 const humanFileSize = (
   size: number | undefined,
   decimalPlaces: number = 0
@@ -338,6 +353,7 @@ export const FieldModelUploader = ({
       fileDropErrorMessage = "Type of chosen file is not accepted";
       break;
   }
+ 
 
   return (
     <>
@@ -352,6 +368,9 @@ export const FieldModelUploader = ({
 
         {showModel && (
           <Box position="relative">
+
+            <model-viewer src="images/wooden_chair.gltf"></model-viewer>
+
             {/* <ApiImage
               id={uploadedModelId ?? currentImage?.id ?? undefined}
               status={currentImage?.status ?? 0}
