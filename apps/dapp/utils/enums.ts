@@ -37,3 +37,13 @@ export enum ObjectStatusEnum {
   TRASHED,
   DELETED,
 }
+
+export enum ArModelStatusEnum {
+  UPLOADED,
+  PROCESSING,
+  FAILEDRETRY,
+  ERROR,
+  READY,
+  TRASHED,
+  DELETED,
+}

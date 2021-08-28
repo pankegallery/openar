@@ -10,5 +10,6 @@ export * from "./nexusTypesArObject";
 // export * from "./nexusTypesPage";
 // export * from "./nexusTypesLocation";
 export * from "./nexusTypesImage";
+export * from "./nexusTypesArModel";
 // export * from "./nexusTypesSearch";
 // export * from "./nexusTypesEvent";

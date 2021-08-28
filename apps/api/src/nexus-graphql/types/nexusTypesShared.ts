@@ -1,23 +1,12 @@
 /// <reference path="../../types/nexus-typegen.ts" />
 
-import {
-  objectType,
-  asNexusMethod,
-  inputObjectType,
-  extendType,
-  stringArg,
-  intArg,
-  arg,
-  nonNull,
-} from "nexus";
+import { objectType, asNexusMethod } from "nexus";
 import {
   GraphQLDateTime,
   GraphQLJSON,
   GraphQLJWT,
   GraphQLEmailAddress,
 } from "graphql-scalars";
-import { PermissionName } from "../../apiuser";
-import { authorizeApiUser } from "../helpers";
 
 export const GQLDateTime = asNexusMethod(GraphQLDateTime, "date");
 export const GQLJson = asNexusMethod(GraphQLJSON, "json");

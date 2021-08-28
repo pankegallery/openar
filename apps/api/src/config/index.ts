@@ -30,6 +30,7 @@ export type ApiModelScopes =
   | "all"
   | "artwork"
   | "arobject"
+  | "armodel"
   | "exhibition"
   | "user"
   | "review"
@@ -133,6 +134,7 @@ const db: ApiConfigDB = {
     arobject: ["createdAt", "updatedAt"],
     exhibition: ["createdAt", "updatedAt"],
     image: [],
+    armodel: [],
     user: ["password"],
   },
 };

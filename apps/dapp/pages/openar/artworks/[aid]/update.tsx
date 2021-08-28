@@ -41,8 +41,21 @@ export const artworkReadOwnQueryGQL = gql`
       lng
       # images {
       # }
-      # objects {
-      # }
+      arObjects {
+        id
+        key
+        title
+        orderNumber
+        status
+        askPrice
+        editionOf
+        heroImage {
+          id
+          meta
+          status
+        }
+
+      }
       # files {
       # }
       heroImage {

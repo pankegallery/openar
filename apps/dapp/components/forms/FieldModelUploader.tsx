@@ -24,10 +24,33 @@ import {
 import { useFormContext } from "react-hook-form";
 
 import { FieldErrorMessage } from ".";
-import { ApiImage, ApiImageProps } from "~/components/ui";
 
 import { authentication } from "~/services";
 import { appConfig } from "~/config";
+import { ArModelStatusEnum } from "~/utils";
+import type { ApiArModelMetaInformation } from "~/types";
+
+export type ApiArModelProps = {
+  id: number | undefined;
+  status: ArModelStatusEnum;
+  meta?: ApiArModelMetaInformation;
+  placeholder?: string;
+};
+
+interface ModelViewerJSX {
+  src: string
+  poster?: string
+  // ... others
+}
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'model-viewer': ModelViewerJSX &
+        React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
+    }
+  }
+}
 
 const humanFileSize = (
   size: number | undefined,
@@ -80,50 +103,49 @@ const rejectStyle = {
   },
 };
 
-export interface FieldImageUploaderSettings {
+export interface FieldModelUploaderSettings {
   onChange?: ChangeEventHandler;
   required?: boolean;
   className?: string;
   placeholder?: string;
-  currentImage?: any;
   imageIdAsFieldValue?: boolean;
   valid?: boolean;
   accept?: string;
   minFileSize?: number; // in bytes 1024 * 1024 = 1MB
   maxFileSize?: number; // in bytes 1024 * 1024 = 1MB
-  aspectRatioPB: number; // the aspect ratios padding bottom
-  image?: ApiImageProps;
+  model?: ApiArModelProps;
 }
 
-export type FieldImageUploaderProgessInfo = {
+export type FieldModelUploaderProgessInfo = {
   loaded: number;
   total: number;
   percent: number;
 };
 
-const initialProgressInfo: FieldImageUploaderProgessInfo = {
+const initialProgressInfo: FieldModelUploaderProgessInfo = {
   loaded: 0,
   total: 0,
   percent: 0,
 };
 
-export const FieldImageUploader = ({
+export const FieldModelUploader = ({
   settings,
   id,
   label,
   name,
+  type,
   isRequired,
   isDisabled,
   deleteButtonGQL,
   onDelete,
   onUpload,
   connectWith,
-  route = "image",
+  route = "model",
   setActiveUploadCounter,
   shouldSetFormDirtyOnUpload = false,
   shouldSetFormDirtyOnDelete = false,
 }: {
-  settings?: FieldImageUploaderSettings;
+  settings?: FieldModelUploaderSettings;
   id: string;
   isRequired?: boolean;
   isDisabled?: boolean;
@@ -131,6 +153,7 @@ export const FieldImageUploader = ({
   shouldSetFormDirtyOnDelete?: boolean;
   label: string;
   name: string;
+  type: string;
   deleteButtonGQL: DocumentNode;
   onDelete?: (id?: number) => void;
   onUpload?: (id?: number) => void;
@@ -139,15 +162,15 @@ export const FieldImageUploader = ({
   route?: string;
 }) => {
   const [appUser] = useAuthentication();
-  
+
   const { createNewCancelToken, isCancel, getCancelToken, getCanceler } =
     useAxiosCancelToken();
   const [progressInfo, setProgressInfo] =
-    useState<FieldImageUploaderProgessInfo>(initialProgressInfo);
+    useState<FieldModelUploaderProgessInfo>(initialProgressInfo);
   const [isUploading, setIsUploading] = useState(false);
   const [isUploadError, setIsUploadError] = useState(false);
-  const [uploadedImgId, setUploadedImgId] = useState();
-  const [imageIsDeleted, setimageIsDeleted] = useState(false);
+  const [uploadedModelId, setUploadedImgId] = useState();
+  const [arModelIsDeleted, setArModelIsDeleted] = useState(false);
 
   const [showFileDropError, setShowFileDropError] = useState(false);
   const [fileDropError, setFileDropError] = useState("");
@@ -169,7 +192,7 @@ export const FieldImageUploader = ({
     minSize: settings?.minFileSize ?? undefined,
     disabled: isDisabled,
     multiple: false,
-    accept: settings?.accept ?? "image/*",
+    accept: settings?.accept ?? undefined,
     onDropRejected: async (files) => {
       const file = files.shift();
 
@@ -185,8 +208,9 @@ export const FieldImageUploader = ({
           setIsUploadError(false);
 
           const formData = new FormData();
-          formData.append("image", files[0]);
+          formData.append("model", files[0]);
           formData.append("ownerId", `${appUser.id}`);
+          formData.append("type", type);
           formData.append("connectWith", JSON.stringify(connectWith));
 
           const cancelToken = createNewCancelToken();
@@ -219,13 +243,15 @@ export const FieldImageUploader = ({
             .then(({ data }) => {
               if (getCancelToken()) {
                 setIsUploading(false);
-                
+
                 if (setActiveUploadCounter)
                   setActiveUploadCounter((state: number) => state - 1);
-                
-                  if (data?.id) {
+
+                if (data?.id) {
                   setUploadedImgId(data?.id ?? undefined);
-                  setValue(name, data?.id, { shouldDirty: shouldSetFormDirtyOnDelete });
+                  setValue(name, data?.id, {
+                    shouldDirty: shouldSetFormDirtyOnDelete,
+                  });
                   if (typeof onUpload === "function")
                     onUpload.call(this, data?.id);
                 }
@@ -265,7 +291,7 @@ export const FieldImageUploader = ({
       deleteButtonGQL,
       () => {
         setUploadedImgId(undefined);
-        setimageIsDeleted(true);
+        setArModelIsDeleted(true);
         setIsUploading(false);
         setValue(name, undefined, { shouldDirty: shouldSetFormDirtyOnUpload });
         if (typeof onDelete === "function") onDelete.call(null);
@@ -275,12 +301,16 @@ export const FieldImageUploader = ({
       }
     );
 
-  let currentImage: any =
-    settings?.image && settings?.image?.id ? settings.image : {};
+  let currentModel: any =
+    settings?.model && settings?.model?.id ? settings.model : {};
 
-  if (imageIsDeleted) currentImage = {};
+  if (arModelIsDeleted) currentModel = {};
 
-  const showImage = (currentImage && currentImage?.id) || !!uploadedImgId;
+
+  console.log(currentModel);
+  console.log(231123);
+  
+  const showModel = (currentModel && currentModel?.id) || !!uploadedModelId;
 
   const hasMin = settings?.minFileSize && settings?.minFileSize > 0;
   const hasMax = settings?.maxFileSize && settings?.maxFileSize > 0;
@@ -323,6 +353,7 @@ export const FieldImageUploader = ({
       fileDropErrorMessage = "Type of chosen file is not accepted";
       break;
   }
+ 
 
   return (
     <>
@@ -335,17 +366,19 @@ export const FieldImageUploader = ({
           {label}
         </FormLabel>
 
-        {showImage && (
+        {showModel && (
           <Box position="relative">
-            <ApiImage
-              id={uploadedImgId ?? currentImage?.id ?? undefined}
+
+            <model-viewer src="images/wooden_chair.gltf"></model-viewer>
+
+            {/* <ApiImage
+              id={uploadedModelId ?? currentImage?.id ?? undefined}
               status={currentImage?.status ?? 0}
               meta={currentImage?.meta}
               forceAspectRatioPB={settings?.image?.forceAspectRatioPB}
-              showPlaceholder={settings?.image?.showPlaceholder}
               alt={settings?.image?.alt ?? ""}
               sizes={settings?.image?.sizes}
-            />
+            /> */}
             <IconButton
               position="absolute"
               top="3"
@@ -353,10 +386,10 @@ export const FieldImageUploader = ({
               fontSize="xl"
               icon={<HiOutlineTrash />}
               onClick={() => {
-                deleteButtonOnClick(uploadedImgId ?? currentImage?.id);
+                deleteButtonOnClick(uploadedModelId ?? currentModel?.id);
               }}
-              aria-label="Delete image"
-              title="Delete image"
+              aria-label="Delete model"
+              title="Delete model"
             />
           </Box>
         )}
@@ -368,13 +401,13 @@ export const FieldImageUploader = ({
         )}
         {DeleteAlertDialog}
 
-        {!showImage && (
+        {!showModel && (
           <>
             <input name={`${name}_dropzone`} {...getInputProps()} />
 
             <Box
               position="relative"
-              pb={`${settings?.aspectRatioPB ?? 66.66}%`}
+              pb="100%"
               h="0"
               w="100%"
             >
@@ -395,7 +428,7 @@ export const FieldImageUploader = ({
                     )}
                     {!showFileDropError && (
                       <Text w="90%">
-                        {"Drag & drop an image here, or click to select one"}
+                        {"Drag & drop your model here, or click to select one"}
                       </Text>
                     )}
 
@@ -453,7 +486,7 @@ export const FieldImageUploader = ({
         <input
           {...{ valid: !errors[name]?.message ? "valid" : undefined }}
           type="hidden"
-          defaultValue={currentImage?.id}
+          defaultValue={currentModel?.id}
           {...register(name, {
             required: isRequired,
           })}
@@ -465,4 +498,4 @@ export const FieldImageUploader = ({
   );
 };
 
-export default FieldImageUploader;
+export default FieldModelUploader;

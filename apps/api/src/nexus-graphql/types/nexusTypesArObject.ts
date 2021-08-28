@@ -44,9 +44,11 @@ export const ArObject = objectType({
     t.string("description");
     t.nonNull.int("status");
 
+    t.float("askPrice");
+    t.boolean("public");
+
     t.int("orderNumber");
     t.int("editionOf");
-    t.int("editionNumber");
 
     t.field("creator", {
       type: "User",
@@ -59,10 +61,6 @@ export const ArObject = objectType({
     t.list.field("images", {
       type: "Image",
     });
-
-    // t.field("models", {
-    //   type: "Model",
-    // });
 
     t.string("ownerEthAddress");
 
@@ -77,6 +75,11 @@ export const ArObject = objectType({
     t.field("heroImage", {
       type: "Image",
     });
+
+    // t.list.field("models", {
+    //   type: "Model",
+    // });
+
     t.date("createdAt");
     t.date("updatedAt");
   },
@@ -157,6 +160,22 @@ export const ArObjectQueries = extendType({
               ...where,
               heroImage: {
                 status: ImageStatusEnum.READY,
+              },
+            };
+          }
+
+          if (
+            (pRI as any).fieldsByTypeName?.ArObjectQueryResult?.arObjects
+              ?.fieldsByTypeName.ArObject?.arModels
+          ) {
+            include = {
+              ...include,
+              arModels: {
+                select: {
+                  meta: true,
+                  status: true,
+                  id: true,
+                },
               },
             };
           }
@@ -342,7 +361,7 @@ export const ArObjectQueries = extendType({
       },
     });
 
-    t.nonNull.field("artworkReadOwn", {
+    t.nonNull.field("arObjectReadOwn", {
       type: "ArObject",
 
       args: {
@@ -389,15 +408,15 @@ export const ArObjectUpsertInput = inputObjectType({
     t.int("status");
     t.int("orderNumber");
     t.int("editionOf");
-    t.int("editionNumber");
     t.float("lat");
     t.float("lng");
+    t.float("askPrice");
     t.string("ownerEthAddress");
 
     t.json("creator");
     t.json("collector");
     t.json("heroImage");
-
+    t.json("artwork");
     t.json("models");
     t.json("images");
   },

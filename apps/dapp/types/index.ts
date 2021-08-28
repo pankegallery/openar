@@ -26,7 +26,7 @@ export type AppConfigSettings = {
   ankrXDaiRPCURL?: string | undefined;
   defaultPageSize?: number;
 };
-
+ 
 export type AppConfig = Complete<AppConfigSettings>;
 
 export type AppScopes = "api" | "dapp";
@@ -50,6 +50,15 @@ export type ApiImageMetaInformation = {
   imageType: ApiImageFormats;
   size: number;
   availableSizes?: Record<string, ApiImageSizeInfo>;
+};
+
+export type ApiArModelMetaInformation = {
+  uploadFolder: string;
+  originalFileName: string;
+  originalFileUrl: string;
+  originalFilePath: string;
+  mimeType: any;
+  size: number;
 };
 
 export interface ModuleAccessRules {

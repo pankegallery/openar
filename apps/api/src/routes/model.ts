@@ -4,10 +4,10 @@ import path from "path";
 import multer from "multer";
 import { mkdirSync } from "fs";
 import { nanoid } from "nanoid";
-import type { ApiImageMetaInformation } from "../types";
+import type { ApiArModelMetaInformation } from "../types";
 
 import { logger } from "../services/serviceLogging";
-import { imageCreate } from "../services/serviceImage";
+import { arModelCreate } from "../services/serviceArModel";
 
 import { getApiConfig } from "../config";
 import { ApiError } from "../utils";
@@ -18,11 +18,11 @@ const storage = multer.diskStorage({
   destination: async (req: Request, file, cb) => {
     const date = new Date();
 
-    const uploadFolder = `${apiConfig.uploadDir}/${date.getUTCFullYear()}/${
+    const uploadFolder = `ar/${date.getUTCFullYear()}/${
       date.getUTCMonth() + 1
     }`;
     const uploadPath = `${apiConfig.baseDir}/${apiConfig.publicDir}/${uploadFolder}`;
-    
+
     try {
       // TODO: how to make this non blocking?
       mkdirSync(uploadPath, { recursive: true });
@@ -30,7 +30,7 @@ const storage = multer.diskStorage({
       logger.error(e);
       throw new ApiError(
         httpStatus.INTERNAL_SERVER_ERROR,
-        "[image] upload failed #1"
+        "[arModel] upload failed #1"
       );
     }
 
@@ -42,13 +42,13 @@ const storage = multer.diskStorage({
   },
 });
 
-export const postImageUpload = multer({ storage });
+export const arModelUpload = multer({ storage });
 
-const createImageMetaInfo = (
+const createArModelMetaInfo = (
   file: Express.Multer.File
 ): {
   fileNanoId: string;
-  metainfo: ApiImageMetaInformation;
+  metainfo: ApiArModelMetaInformation;
 } => {
   const extension = path.extname(file.originalname);
 
@@ -60,20 +60,19 @@ const createImageMetaInfo = (
   const fileNanoId = file.filename.replace(extension, "");
 
   // TODO: what to do about the image type?
-  const metainfo: ApiImageMetaInformation = {
+  const metainfo: ApiArModelMetaInformation = {
     uploadFolder,
     originalFileName: file.originalname,
     originalFileUrl: `${apiConfig.baseUrl.api}${uploadFolder}/${file.filename}`,
     originalFilePath: file.path,
     mimeType: file.mimetype,
-    imageType: "square",
     size: file.size,
   };
 
   return { fileNanoId, metainfo };
 };
 
-export const postImage = async (req: Request, res: Response) => {
+export const postArModel = async (req: Request, res: Response) => {
   // TODO: access protection
   // TODO: howto trigger refresh?
   // Maybe autosend auth token
@@ -81,7 +80,7 @@ export const postImage = async (req: Request, res: Response) => {
   try {
     if (req.body.ownerId && !Number.isNaN(req.body.ownerId)) {
       if (req.file) {
-        const { fileNanoId, metainfo } = createImageMetaInfo(req.file);
+        const { fileNanoId, metainfo } = createArModelMetaInfo(req.file);
 
         let connectWith;
         try {
@@ -92,67 +91,28 @@ export const postImage = async (req: Request, res: Response) => {
           // nothing to be done ...
         }
 
-        const image = await imageCreate(
+        const model = await arModelCreate(
           parseInt(req.body.ownerId, 10),
           fileNanoId,
           metainfo,
-          "image",
+          req.body.type,
           connectWith
         );
 
-        res.json(image);
+        res.json(model);
       } else {
-        throw new ApiError(httpStatus.BAD_REQUEST, "Image upload failed #1");
+        throw new ApiError(httpStatus.BAD_REQUEST, "ArModel upload failed #1");
       }
     } else {
-      throw new ApiError(httpStatus.BAD_REQUEST, "Image upload failed #2");
+      throw new ApiError(httpStatus.BAD_REQUEST, "ArModel upload failed #2");
     }
   } catch (err) {
     logger.error(err);
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,
-      "Image upload failed #3"
+      "ArModel upload failed #3"
     );
   }
 };
 
-export const postProfileImage = async (req: Request, res: Response) => {
-  // TODO: access protection
-  // TODO: howto trigger refresh?
-  // Maybe autosend auth token
-
-  try {
-    if (req.body.ownerId && !Number.isNaN(req.body.ownerId)) {
-      if (req.file) {
-        const { fileNanoId, metainfo } = createImageMetaInfo(req.file);
-
-        const image = await imageCreate(
-          parseInt(req.body.ownerId, 10),
-          fileNanoId,
-          metainfo,
-          "profile"
-        );
-
-        res.json(image);
-      } else {
-        throw new ApiError(
-          httpStatus.BAD_REQUEST,
-          "Profile image upload failed #1"
-        );
-      }
-    } else {
-      throw new ApiError(
-        httpStatus.BAD_REQUEST,
-        "Profile image upload failed #2"
-      );
-    }
-  } catch (err) {
-    logger.error(err);
-    throw new ApiError(
-      httpStatus.INTERNAL_SERVER_ERROR,
-      "Profile image upload failed #3"
-    );
-  }
-};
-
-export default postImage;
+export default postArModel;

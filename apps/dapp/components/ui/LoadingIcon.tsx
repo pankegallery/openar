@@ -10,7 +10,7 @@ export const LoadingIcon = ({
   size?: number;
   type: "full" | "light" | "inline";
 }) => {
-  const [wine400] = useToken("colors", ["wine.400"]);
+  const [gray400] = useToken("colors", ["gray.400"]);
   const h =
     type === "full"
       ? {
@@ -37,7 +37,7 @@ export const LoadingIcon = ({
       alignItems="center"
       {...inlineProps}
     >
-      <BounceLoader color={wine400} {...size} />
+      <BounceLoader color={gray400} {...size} />
     </Flex>
   );
 };

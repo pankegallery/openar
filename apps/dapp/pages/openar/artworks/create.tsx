@@ -9,7 +9,7 @@ import { LayoutOpenAR } from "~/components/app";
 import { FormNavigationBlock } from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
 import { ModuleArtworkForm } from "~/components/modules/forms";
-import { ModuelArtworkCreateSchema } from "~/components/modules/validation";
+import { ModuleArtworkCreateSchema } from "~/components/modules/validation";
 import { RestrictPageAccess } from "~/components/utils";
 
 import { useAuthentication, useSuccessfullySavedToast } from "~/hooks";
@@ -34,7 +34,7 @@ const Create = () => {
 
   const formMethods = useForm({
     mode: "onTouched",
-    resolver: yupResolver(ModuelArtworkCreateSchema),
+    resolver: yupResolver(ModuleArtworkCreateSchema),
   });
 
   const {
@@ -43,7 +43,7 @@ const Create = () => {
   } = formMethods;
 
   const onSubmit = async (
-    newData: yup.InferType<typeof ModuelArtworkCreateSchema>
+    newData: yup.InferType<typeof ModuleArtworkCreateSchema>
   ) => {
     setIsFormError(false);
     try {
@@ -130,7 +130,7 @@ const Create = () => {
               <ModuleArtworkForm
                 action="create"
                 disableNavigation={setDisableNavigation}
-                validationSchema={ModuelArtworkCreateSchema}
+                validationSchema={ModuleArtworkCreateSchema}
               />
             </ModulePage>
           </fieldset>

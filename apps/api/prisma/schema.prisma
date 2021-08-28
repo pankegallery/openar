@@ -33,7 +33,7 @@ model User {
   
   tokens      Token[]
   images      Image[]
-  models      Model[]
+  models      ArModel[]
   files       File[]
 
   profileImageId Int?
@@ -87,15 +87,12 @@ model ArObject {
   description   String?
   orderNumber     Int? @default(0)
   editionOf     Int?
-  sold          Int?
-
+  
   lat           Float?
   lng           Float?
 
-  askPrice    Decimal? @default(0.0)
+  askPrice    Float? @default(0.0)
   public        Boolean @default(true)
-
-  ownerEthAddress String?   @db.VarChar(42)
 
   isBanned      Boolean @default(false)
 
@@ -103,6 +100,7 @@ model ArObject {
   creator   User? @relation(fields: [creatorId], references: [id], name: "arObjects")
 
   collectors  ArObject2Collector[] 
+  
   artworkId Int
   artwork   Artwork? @relation(fields: [artworkId], references: [id])
 
@@ -110,7 +108,7 @@ model ArObject {
   heroImage   Image? @relation(fields: [heroImageId], references: [id], name: "arObjectHeroImage")
 
   images Image[] @relation("imagesObject")
-  models Model[]
+  models ArModel[]
 }
 
 model ArObject2Collector {
@@ -121,6 +119,7 @@ model ArObject2Collector {
   tokenId         String
   editonNumber    Int
   ownerEthAddress String? 
+  sold            Boolean?
   
   collector User? @relation(fields: [userId], references: [id])
   arObject  ArObject? @relation(fields: [arObjectId], references: [id])
@@ -144,13 +143,12 @@ model Image {
   heroImageArObjects  ArObject[]  @relation("arObjectHeroImage")
 }
 
-model Model {
+model ArModel {
   id         Int    @id @default(autoincrement())
   nanoid       String @unique @db.VarChar(21)
   meta       Json
   status     Int    @default(0)
   retryCount Int    @default(0)
-  format     String @db.VarChar(8)
   type       String @db.VarChar(8)
   arObjectId   Int
   arObject     ArObject @relation(fields: [arObjectId], references: [id])
