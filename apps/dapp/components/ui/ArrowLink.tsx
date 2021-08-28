@@ -19,7 +19,6 @@ export const ArrowLink = ({ children, type = "to", href } : {
           _hover={{
             opacity: 0.6
           }}
-          className="arrowLink"
           transition="all 0.1s"
           className="arrowLink to"
         >
@@ -37,7 +36,6 @@ export const ArrowLink = ({ children, type = "to", href } : {
           _hover={{
             opacity: 0.6
           }}
-          className="arrowLink"
           transition="all 0.1s"
           textStyle="label"
           className="arrowLink back"

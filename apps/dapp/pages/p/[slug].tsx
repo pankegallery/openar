@@ -86,7 +86,7 @@ function PageTemplate({content, data}) {
 
 
             frontmatter.subPages.map((pageItem) => (
-              <ArrowLink type="to" href={`/${pageItem.url}`}>{pageItem.label}</ArrowLink>
+              <ArrowLink type="to" href={`/${pageItem.url}`} key={pageItem.slug}>{pageItem.label}</ArrowLink>
             ))
 
           }
@@ -124,7 +124,7 @@ function PageTemplate({content, data}) {
         }}
       >
 
-      <ReactMarkdown children={content} remarkPlugins={[remarkGfm]} />
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
       </Box>
     </>
   )
