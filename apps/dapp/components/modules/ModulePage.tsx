@@ -27,7 +27,7 @@ export const ModulePage = ({
     <>
       <Box
         position="relative"
-        height="100%"
+        height="calc(100vh - 8rem)"
         minH="calc(100vh - 8rem)"
       >
         {isLoading && <LoadingIcon type="inline" />}
