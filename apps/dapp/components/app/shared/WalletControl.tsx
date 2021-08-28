@@ -17,7 +17,6 @@ import Image from "next/image";
 
 import { useOpenARDappWeb3InjectedContext } from "~/providers";
 import { useTypedSelector, useWalletLogin } from "~/hooks";
-import MetamaskSvg from "~/assets/img/metamask.svg";
 
 export const WalletControl = () => {
   const stateUser = useTypedSelector(({ user }) => user);
@@ -113,7 +112,7 @@ export const WalletControl = () => {
                 <Image
                   width="30px"
                   height="30px"
-                  src={MetamaskSvg}
+                  src="/images/logo-metamask.svg"
                   alt="MetaMask"
                 />
               }
