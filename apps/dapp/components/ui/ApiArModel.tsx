@@ -42,8 +42,8 @@ export const ApiArModel = ({
   bg = "#ccc"
 }: ApiArModelProps) => {
   const [content, setContent] = useState(<></>)
-  
-  
+
+
   useEffect(() => {
     const run = async () => {
       if (typeof window === "undefined")
@@ -79,13 +79,13 @@ export const ApiArModel = ({
         };
 
       const isIos = primaryInput === "touch" &&  (navigator.userAgent.indexOf('Safari') != -1 || navigator.userAgent.indexOf('CrIos') != -1)
-      
+
       let renderNotice = <></>;
 
         console.log(urlGlb, urlUsdz, isIos, primaryInput);
       if (!urlGlb && urlUsdz && !isIos)
         renderNotice = <Box position="absolute" p="3" top="50%" transform="translateY(-50%)" textAlign="center" color="#666">.usdz file uploaed<br/>This file will be viewable on ios devices</Box>
-      
+
       if (urlGlb || urlUsdz)
       setContent(
           <model-viewer
@@ -101,10 +101,10 @@ export const ApiArModel = ({
             {...props}
           >{renderNotice}</model-viewer>
         );
-      
+
     }
     run();
-    
+
   }, [urlGlb, urlUsdz, setContent, urlPoster, alt])
 
   return <AspectRatio ratio={1} bg={bg}>{content}</AspectRatio>;

@@ -24,7 +24,7 @@ export const FieldStatusSelect = ({
 
   const label = "Publish status";
 
-  
+
   const {
     formState: { errors },
     control,

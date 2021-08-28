@@ -232,10 +232,10 @@ export const FieldModelUploader = ({
             .then(({ data }) => {
               if (getCancelToken()) {
                 setIsUploading(false);
-                
+
                 if (setActiveUploadCounter)
                   setActiveUploadCounter((state: number) => state - 1);
-                
+
                 if (data?.id) {
                   clearErrors(name);
                   setUploadedImgId(data?.id ?? undefined);
@@ -343,13 +343,13 @@ export const FieldModelUploader = ({
   }
 
   let urlGlb;
-  if (type === "glb") 
+  if (type === "glb")
   urlGlb = uploadedModelUrl || currentModel?.meta?.originalFileUrl;
 
   let urlUsdz;
-  if (type === "usdz") 
+  if (type === "usdz")
     urlUsdz = uploadedModelUrl || currentModel?.meta?.originalFileUrl;
-  
+
   return (
     <>
       <FormControl
@@ -363,7 +363,7 @@ export const FieldModelUploader = ({
         {showModel && (
           <Box position="relative">
 
-            <ApiArModel 
+            <ApiArModel
               urlGlb={(type === "glb" && urlGlb) ? urlGlb : undefined}
               urlUsdz={(type === "usdz" && urlUsdz) ? urlUsdz  : undefined}
               alt={`AR Model ${type}`}

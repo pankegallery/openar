@@ -24,7 +24,7 @@ const OpenARDashboard = () => {
     <Box p="3">
       <Heading as="h1">Welcome</Heading>
       Please update your profile and upload artworks and objects via the navigation at the right.
-      
+
     </Box>
     </>
   );

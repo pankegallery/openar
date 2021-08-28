@@ -42,7 +42,7 @@ export const ModuleArtworkForm = ({
     },
     {
       value: ArtworkStatusEnum.PUBLISHED,
-      label: "Published",      
+      label: "Published",
     },
   ];
 

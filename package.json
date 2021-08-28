@@ -78,7 +78,10 @@
     "apps/*"
   ],
   "dependencies": {
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "gray-matter": "^4.0.3",
+    "raw-loader": "^4.0.2",
+    "react-markdown": "^7.0.1"
   },
   "prisma": {
     "schema": "./apps/api/prisma/schema.prisma"
