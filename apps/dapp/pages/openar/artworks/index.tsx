@@ -81,7 +81,7 @@ const Index = () => {
               )}
 
               {artworks.length > 0 && (
-                <Flex width="100%" flexWrap="wrap">
+                <Flex width="100%" flexWrap="wrap" className="adminArtworksListing">
                   {" "}
                   {artworks.map((artwork) => (
                     <ArtworkListItem key={`aw-${artwork.id}`}

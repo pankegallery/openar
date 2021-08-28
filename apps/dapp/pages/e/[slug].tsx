@@ -223,7 +223,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
               t: "calc(50vw - 2px)",
               d: "calc(33.33vw - 2px)",
             }}
-            p="6"
+            
             h={{
               base: "calc(66.66vw + 2px)",
               t: "50vw",
@@ -236,12 +236,15 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
               base: "3",
               t: "inherit",
             }}
-            overflowX="hidden"
-            overflowY="auto"
+            
           >
+            <Flex p="6" overflowX="hidden"
+            overflowY="auto" height="100%">
             <chakra.p my="auto !important" fontWeight="normal">
               {exhibition.description}
             </chakra.p>
+            </Flex>
+            
           </Flex>
           {/* --------- Footer  --------- */}
           <Flex
