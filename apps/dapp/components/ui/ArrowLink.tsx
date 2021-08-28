@@ -14,12 +14,13 @@ export const ArrowLink = ({ children, type = "to", href } : {
 
   if (type === "to"){
     return(
-      <Link href={href} passHref className="arrowLink">
+      <Link href={href} passHref>
         <chakra.a
           _hover={{
             opacity: 0.6
           }}
           transition="all 0.1s"
+          className="arrowLink to"
         >
           <Arrow class="arrow" />
           {children}
@@ -30,13 +31,14 @@ export const ArrowLink = ({ children, type = "to", href } : {
 
   if (type === "back"){
     return(
-      <Link href={href} passHref className="arrowLink">
+      <Link href={href} passHref>
         <chakra.a
           _hover={{
             opacity: 0.6
           }}
           transition="all 0.1s"
           textStyle="label"
+          className="arrowLink back"
         >
           <Arrow class="arrow back" />
           {children}

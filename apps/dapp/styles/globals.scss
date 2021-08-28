@@ -22,7 +22,16 @@ a {
 .arrow{
     transition: transform 0.5s ease;
     transform: translateX(0);
+    fill: inherit;
 
+    .light & g{
+        fill: #000;
+        stroke: #000;
+    }
+
+    .arrowLink &{
+        display: inline;
+    }
 
     g path{
         transition: transform 0.5s ease;
@@ -39,6 +48,11 @@ a {
 
     &.down{
         transform: rotate(-90deg);
+        transform-origin: center right;
+    }
+
+    .arrowLink.to &{
+        transform: rotate(-180deg);
         transform-origin: center right;
     }
 }

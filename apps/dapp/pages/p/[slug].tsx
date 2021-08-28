@@ -42,9 +42,17 @@ function PageTemplate({content, data}) {
 
         <chakra.h1 textStyle="worktitle">{frontmatter.title}</chakra.h1>
 
-        {frontmatter.subPages&&
-          <Menu pages={frontmatter.subPages} />
-        }
+        <Box className="subPages">
+          {frontmatter.subPages&&
+
+
+            frontmatter.subPages.map((pageItem) => (
+              <ArrowLink type="to" href={pageItem.url}>{pageItem.label}</ArrowLink>
+            ))
+
+          }
+        </Box>
+
       </Flex>
       {/* --------- Page content --------- */}
       <Box
@@ -71,19 +79,40 @@ function PageTemplate({content, data}) {
   )
 }
 
-PageTemplate.getInitialProps = async (context) => {
-  const { slug } = context.query
+export const getStaticProps = async (context) => {
 
+  const { slug } = context.params
+  let fileContent;
 
-//  // Import our .md file using the `slug` from the URL
-  const content = await import(`~/content/${slug}.md`)
-  console.log("Content:", content)
-//  // Parse .md data through `matter`
-  const pageData = matter(content.default)
-  console.log("Data:", pageData)
-//  //   Pass data to our component props
-  return { slug, ...pageData }
+  try {
+    // Import our .md file using the `slug` from the URL
+     fileContent = await import(`~/content/${slug}.md`)
+  } catch(err) {
+    return { notFound: true };
+  }
+
+  // Parse .md data through matter
+  const pageData = matter(fileContent.default)
+
+  //   Pass data to our component props
+  return {
+    props: {
+      content: pageData.content,
+      data: pageData.data
+    }
+  }
+
 }
+
+
+export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
+
+    return {
+        paths: [], //indicates that no page needs be created at build time
+        fallback: 'blocking' //indicates the type of fallback
+    }
+}
+
 
 PageTemplate.getLayout = function getLayout(page: ReactElement) {
 
