@@ -2,20 +2,21 @@ import React from "react";
 import { ActiveLink } from "~/components/ui";
 
 export const Menu = ({pages}) => {
-
-  console.log("pages: ", pages)
-  return(
-    <>
-      {
-        pages.map(menuItem =>
-          <ActiveLink
+  if(pages){
+    return(
+      <>
+        {
+          pages.map(menuItem =>
+            <ActiveLink
               key={menuItem.slug}
-            href={`/${menuItem.url}`}
-          >
-            {menuItem.label}
-          </ActiveLink>
-        )
-      }
-    </>
-  );
+              href={`/${menuItem.url}`}
+            >
+              {menuItem.label}
+            </ActiveLink>
+          )
+        }
+      </>
+    );
+  }
+  else return null;
 }

@@ -8,7 +8,7 @@ import { styledComponentsTheme } from "~/theme";
 import { WalletConnectGate } from "./shared";
 import { LoadingBar } from "~/components/app/shared";
 import "@fontsource/source-code-pro";
-import { Menu} from "../frontend";
+import { OverlayMenu } from "../frontend";
 
 export const LayoutOpenAR = ({ children }: { children: ReactNode }) => {
   const isMobile = useSSRSaveMediaQuery("(max-width: 55em)");
@@ -38,7 +38,7 @@ export const LayoutOpenAR = ({ children }: { children: ReactNode }) => {
             </Grid>
             <Sidebar />
           </Grid>
-          <Menu/>
+          <OverlayMenu/>
         </AuthenticationSessionActiveGate>
       </WalletConnectGate>
       <style jsx global>{`
