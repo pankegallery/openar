@@ -22,7 +22,7 @@ export const ArrowLink = ({ children, type = "to", href } : {
           className="arrowLink"
           transition="all 0.1s"
         >
-          <Arrow class="arrow" />
+          <Arrow className="arrow" />
           {children}
         </chakra.a>
       </Link>
@@ -40,7 +40,7 @@ export const ArrowLink = ({ children, type = "to", href } : {
           transition="all 0.1s"
           textStyle="label"
         >
-          <Arrow class="arrow back" />
+          <Arrow className="arrow back" />
           {children}
         </chakra.a>
       </Link>

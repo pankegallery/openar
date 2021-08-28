@@ -136,7 +136,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
         >
           <Link href="/">
             <a>
-              <Arrow class="arrow" />
+              <Arrow className="arrow" />
             </a>
           </Link>
         </Flex>
@@ -246,7 +246,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
           <chakra.p textStyle="bigLabel" ml="auto">
             Artworks
           </chakra.p>
-          <Arrow class="arrow down" />
+          <Arrow className="arrow down" />
         </Flex>
       </Grid>
       <Flex
