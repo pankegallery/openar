@@ -7,12 +7,12 @@ import {
   Grid,
   Flex,
   Fade,
-  chakra
+  chakra,
 } from "@chakra-ui/react";
 import { ActiveLink } from "~/components/ui";
 import { WalletControl } from "~/components/app/shared";
 import { useSSRSaveMediaQuery } from "~/hooks";
-import { Menu } from "~/components/frontend"
+import { Menu } from "~/components/frontend";
 
 import Close from "~/assets/img/close.svg";
 import Logo from "~/assets/img/logo-white.svg";
@@ -24,29 +24,29 @@ export const OverlayMenu = () => {
   const isTablet = useSSRSaveMediaQuery(
     "(min-width: 45rem) and (max-width: 74em)"
   );
-  const aboutText =
+  const aboutText = (
     <Box textStyle="subtitle">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse a sodales nulla, sed semper nisi.
-    </Box>;
-
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse a
+      sodales nulla, sed semper nisi.
+    </Box>
+  );
 
   const mainMenu = [
-    {slug: "exhibitions", label:"Exhibitions" , url:""},
-    {slug: "artworks",    label:"Artworks"    , url:"artworks"},
-    {slug: "about",       label:"About"       , url:"pages/about"},
-    {slug: "blog",        label:"Blog"        , url:"pages/blog"},
-  ]
+    { slug: "exhibitions", label: "Exhibitions", url: "" },
+    { slug: "artworks", label: "Artworks", url: "artworks" },
+    { slug: "about", label: "About", url: "pages/about" },
+    { slug: "blog", label: "Blog", url: "pages/blog" },
+  ];
 
   const secondaryMenu = [
-    {slug: "help",     label:"Help"                , url:"pages/help"},
-    {slug: "badges",   label:"Roles and Badges"    , url:"pages/tandc"},
-    {slug: "wallets",  label:"Wallets"             , url:"pages/wallets"},
-    {slug: "tandc",    label:"Terms and Conditions", url:"pages/tandc"},
-    {slug: "funding",  label:"Platform funding"    , url:"pages/funding"},
-    {slug: "privpol",  label:"Privacy policy"      , url:"pages/privpol"},
-    {slug: "imprint",  label:"Imprint"             , url:"pages/imprint"},
-  ]
-
+    { slug: "help", label: "Help", url: "pages/help" },
+    { slug: "badges", label: "Roles and Badges", url: "pages/tandc" },
+    { slug: "wallets", label: "Wallets", url: "pages/wallets" },
+    { slug: "tandc", label: "Terms and Conditions", url: "pages/tandc" },
+    { slug: "funding", label: "Platform funding", url: "pages/funding" },
+    { slug: "privpol", label: "Privacy policy", url: "pages/privpol" },
+    { slug: "imprint", label: "Imprint", url: "pages/imprint" },
+  ];
 
   return (
     <>
@@ -62,11 +62,7 @@ export const OverlayMenu = () => {
         border="0"
         variant="functional"
       >
-        <MenuCornerWhite
-          viewBox="0 0 120 120"
-          width="120px"
-          height="120px"
-        />
+        <MenuCornerWhite viewBox="0 0 120 120" width="120px" height="120px" />
       </Button>
 
       <Portal>
@@ -100,11 +96,7 @@ export const OverlayMenu = () => {
               justifyContent="space-between"
               alignItems="flex-start"
             >
-              <Logo
-                  viewBox="4 8 70 70"
-                  width="120px"
-                  height="120px"
-                />
+              <Logo viewBox="4 8 70 70" width="120px" height="120px" />
               {isTablet && (
                 <Box
                   className="about"
@@ -128,9 +120,7 @@ export const OverlayMenu = () => {
                 }}
                 variant="functional"
               >
-              <Close
-                viewBox="-40 -8 80 80"
-              />
+                <Close viewBox="-40 -8 80 80" />
               </Button>
             </Flex>
             {/* --------- About, main nav, login nav --------- */}
@@ -191,10 +181,10 @@ export const OverlayMenu = () => {
                   className="main"
                   textStyle="worktitle"
                   sx={{
-                    "a": {
+                    a: {
                       display: "block",
                       mb: "2",
-                    }
+                    },
                   }}
                 >
                   <Menu pages={mainMenu} />
@@ -241,17 +231,16 @@ export const OverlayMenu = () => {
                 d: "center",
               }}
             >
-
               <chakra.nav
                 className="secondary"
                 display="flex"
                 flexWrap="wrap"
                 textStyle="small"
                 sx={{
-                  "a": {
+                  a: {
                     flex: "50% 0 0",
                     mb: "2",
-                  }
+                  },
                 }}
               >
                 <Menu pages={secondaryMenu} />

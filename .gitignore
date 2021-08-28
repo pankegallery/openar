@@ -180,6 +180,7 @@ logs/*
 !logs/.keep
 public/
 !public/.keep
+!/apps/dapp/public/
 !public/ar/.keep
 !public/img/.keep
 # editors

@@ -92,13 +92,13 @@ export const ModuleArtworkArObjectForm = ({
             }}
           />
         </FieldRow>
-        <FieldRow>
+        {action === "update" && <FieldRow>
           <FieldStatusSelect
             statusEnum={ArObjectStatusEnum}
             status={currentStatus}
             options={statusOptions}
           />
-        </FieldRow>
+        </FieldRow>}
         <FieldRow>
           <FieldTextEditor
             id="description"
