@@ -5,15 +5,19 @@ module.exports = {
     domains: ['localhost'], //TODO: add Api
   },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
-    config.module.rules.push({
-      test: /\.svg$/,
-      issuer: {
-        and: [/\.(js|ts)x?$/]
+    config.module.rules.concat([
+      {
+        test: /\.svg$/,
+        issuer: {
+          and: [/\.(js|ts)x?$/]
+        },
+        use: ['@svgr/webpack'],
       },
-      
-      use: ['@svgr/webpack'],
-    });
-
+      {
+        test: /\.md$/,
+        use: 'raw-loader',
+      }
+    ]);
     return config
   },
 }

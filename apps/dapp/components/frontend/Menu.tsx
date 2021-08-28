@@ -3,7 +3,6 @@ import { ActiveLink } from "~/components/ui";
 
 export const Menu = ({pages}) => {
 
-  console.log("pages: ", pages)
   return(
     <>
       {
