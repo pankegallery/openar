@@ -17,9 +17,14 @@ import Image from 'next/image'
 
 import openingBg from "~/assets/img/opening-bg.png";
 
-export const Home = () => {
+export const Home = (props) => {
   return (
     <>
+      <Head>
+        <meta property="og:title" content={`${props.pageTitle} · ${props.pageSlogan}`} key="title" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <meta name="description" content={props.pageDescription} />
+      </Head>
       {/* --------- Background image --------- */}
       <Box
         position="fixed"
@@ -32,7 +37,7 @@ export const Home = () => {
         <Image src={openingBg} layout="fill" objectFit="cover" objectPosition="50% 100%" />
       </Box>
 
-      {/* --------- Grid --------- */}
+      {/* --------- GRID --------- */}
       <Grid
         position="fixed"
         backgroundImage="url(/image/opening-bg.png)"
@@ -50,7 +55,7 @@ export const Home = () => {
         color="white"
         overflow="hidden"
       >
-        {/* --------- Exhibition title and arrows --------- */}
+        {/* --------- ROW: Exhibition title and arrows --------- */}
         <Flex
           className="main"
           w="100%"
@@ -69,7 +74,7 @@ export const Home = () => {
           direction="row"
           zIndex="302"
         >
-          {/* --------- Exhibition title  --------- */}
+          {/* --------- TILE: Exhibition title  --------- */}
           <Flex
             borderTop="1px solid #fff"
             borderRight="1px solid #fff"
@@ -108,7 +113,7 @@ export const Home = () => {
               </chakra.a>
             </Link>
           </Flex>
-          {/* --------- Arrows  --------- */}
+          {/* --------- TILE: Arrows  --------- */}
           <Flex
             w={{
               base: "calc(33.33vw - 2px)",
@@ -128,7 +133,7 @@ export const Home = () => {
             {/* TODO: Arrows up and down*/}
           </Flex>
         </Flex>
-        {/* --------- Footer  --------- */}
+        {/* --------- TILE: Footer  --------- */}
         <Box
           className="footer"
           p="6"
@@ -154,6 +159,14 @@ export const Home = () => {
     </>
   );
 };
+
+Home.getInitialProps = () => {
+  return {
+    pageTitle: "OpenAR",
+    pageSlogan: "The cooperative and crypto platform for AR artworks",
+    pageDescription: "OpenAR makes it easy to exhibit, collect and discuss Augmented Reality (AR) works and allows artists to sell their works as NFTs. The open platform is organised as a cooperative, profits will be shared among the artists."
+  }
+}
 
 Home.getLayout = function getLayout(page: ReactElement) {
   return <LayoutBlank>{page}</LayoutBlank>;

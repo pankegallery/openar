@@ -30,7 +30,7 @@ export const ActiveLink = ({ children, activeClassName = "active", href, ...prop
           }}
           sx={{
             "&.active": {
-              color: "var(--chakra-colors-gray-600) !important"
+              opacity: "0.6"
             }
           }}
           transition="all 0.1s"

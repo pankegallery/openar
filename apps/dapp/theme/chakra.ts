@@ -41,6 +41,7 @@ const themeConfig = {
         margin: 0,
         padding: 0,
         height: "100%",
+        overscrollBehavior: "none",
       },
       "#root": {
         height: "100%",
@@ -64,7 +65,7 @@ const themeConfig = {
           color: "wine.800",
         },
         _focus: {
-          boxShadow: "outline",
+          boxShadow: "none",
         },
       },
       "p a": {
@@ -93,6 +94,8 @@ const themeConfig = {
     openar: {
       error: "#c93030",
       muddygreen: "#bab79f",
+      light: "#F7F7F7",
+      dark: "#555555",
     },
     openarGray: {
       50: "#f8f8f8",
@@ -174,7 +177,7 @@ const themeConfig = {
       bg: "rgba(0,0,0,0.6)"
     },
     backdropLight: {
-      bg: "#F7F7F7"
+      bg: "var(--chakra-colors-openar-light)"
     },
     backdropExtraDark: {
       bg: "rgba(0,0,0,0.5)"

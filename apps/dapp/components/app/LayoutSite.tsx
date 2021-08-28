@@ -10,7 +10,7 @@ import { ActiveLink } from "~/components/ui";
 import { Footer, Header } from "./site";
 import { WalletConnectGate } from "./shared";
 import {LoadingBar} from "~/components/app/shared";
-import { Menu} from "../frontend";
+import { OverlayMenu} from "../frontend";
 
 export const LayoutSite = ({ children, title, subPages }: { children: ReactNode }) => {
   return (
@@ -77,7 +77,7 @@ export const LayoutSite = ({ children, title, subPages }: { children: ReactNode 
             </Box>
           <Footer />
         </Box>
-      <Menu/>
+      <OverlayMenu/>
     </WalletConnectGate>
   );
 };

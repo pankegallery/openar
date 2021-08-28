@@ -1,4 +1,5 @@
 import { ActiveLink } from "~/components/ui";
+import { Menu } from "~/components/frontend";
 import {
   Box,
   chakra
@@ -7,7 +8,7 @@ import {
 export const Header = (/* props */) => {
 
   const headerMenu = [
-    {slug: "exhibitions", label:"Exhibitions"      , url:"exhibitions"},
+    {slug: "exhibitions", label:"Exhibitions"      , url:""},
     {slug: "artworks",    label:"Artworks"         , url:"artworks"},
     {slug: "about",       label:"About"            , url:"pages/about"},
     {slug: "blog",        label:"Blog"             , url:"pages/blog"},
@@ -44,16 +45,7 @@ export const Header = (/* props */) => {
           }
         }}
       >
-        {
-          headerMenu.map(menuItem => (
-            <ActiveLink
-              key={menuItem.slug}
-              href={`/${menuItem.url}`}
-            >
-              {menuItem.label}
-            </ActiveLink>
-          ))
-        }
+        <Menu pages={headerMenu} />
       </chakra.nav>
     </Box>
     );
