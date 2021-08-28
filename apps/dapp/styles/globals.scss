@@ -21,25 +21,47 @@ a {
 
 .arrow{
     transition: transform 0.5s ease;
-    transform: translateX(0);
+    transform: translate(0, 0);
+    fill: inherit;
 
+    .light & g{
+        fill: #000;
+        stroke: #000;
+    }
+
+    .arrowLink &{
+        display: inline;
+    }
 
     g path{
         transition: transform 0.5s ease;
-        transform: scaleX(100%);
+        transform: scale(80%, 80%);
     }
 
-    &:hover{
-        transform: translateX(-5px);
+    &:hover, a:hover > &{
+        transform: translate(-5px, 0);
 
         g path:first-child {
-            transform: scaleX(140%);
+            transform: scale(140%, 80%);
         }
     }
 
     &.down{
         transform: rotate(-90deg);
         transform-origin: center right;
+
+        &:hover{
+            transform: rotate(-90deg) translateX(-5px);
+        }
+    }
+
+    .arrowLink.to &{
+        transform: rotate(-180deg) translate(5px, 3px);
+        transform-origin: center center;
+    }
+
+    .arrowLink.to:hover > &{
+        transform: rotate(-180deg) translate(0px, 3px);
     }
 }
 

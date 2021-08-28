@@ -8,20 +8,28 @@ export const Footer = (/* props */) => {
 
   const footerMenu = [
     {slug: "discord",     label:"Discord"              , url:"discord"},
-    {slug: "imprint",     label:"Imprint"              , url:"pages/imprint"},
-    {slug: "tandc",       label:"Terms and Conditions" , url:"pages/tandc"},
-    {slug: "funding",     label:"Platform funding"     , url:"pages/funding"},
+    {slug: "imprint",     label:"Imprint"              , url:"p/imprint"},
+    {slug: "tandc",       label:"Terms and Conditions" , url:"p/tandc"},
+    {slug: "funding",     label:"Platform funding"     , url:"p/funding"},
   ]
 
   return (
     <Box
       w={{
-        base: "0",
-        d: "calc(33.33vw - 1px)"
+        base: "100%",
+        d: "calc(33.33vw + 0px)"
+      }}
+      h={{
+        base: "auto",
+        d: "calc(100vh - 33.33vw + 4px - var(--openar-header-height-desktop))"
       }}
       borderTop="1px solid black"
+      borderRight="1px solid black"
       color="#555555"
-      position="fixed"
+      position={{
+        base: "relative",
+        d: "fixed"
+      }}
       bottom="0"
       left="0"
       zIndex="201"

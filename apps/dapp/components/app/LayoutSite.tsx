@@ -17,8 +17,9 @@ export const LayoutSite = ({ children }: { children?: ReactNode }) => {
         w="100vw"
         h="100%"
         layerStyle="backdropLight"
-        overflow="hidden"
-      >
+        overflow={{
+          d: "hidden"
+        }}>
         <Header />
         {children}
         <Footer />
