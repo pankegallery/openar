@@ -74,6 +74,7 @@ const Update = () => {
   const [appUser] = useAuthentication();
   const successToast = useSuccessfullySavedToast();
   const [disableNavigation, setDisableNavigation] = useState(false);
+  const [isNavigatingAway, setIsNavigatingAway] = useState(false)
   const [activeUploadCounter, setActiveUploadCounter] = useState<number>(0);
 
   const [firstMutation, firstMutationResults] = useArtworkUpdateMutation();
@@ -91,7 +92,7 @@ const Update = () => {
   const {
     handleSubmit,
     reset,
-    setError,
+    clearErrors,
     formState: { isSubmitting, isDirty },
   } = formMethods;
 
@@ -119,6 +120,7 @@ const Update = () => {
     newData: yup.InferType<typeof ModuleArtworkUpdateSchema>
   ) => {
     setIsFormError(false);
+    setIsNavigatingAway(false);
     try {
       if (appUser) {
         const { data, errors } = await firstMutation(
@@ -139,9 +141,10 @@ const Update = () => {
         });
 
         if (!errors) {
+          clearErrors();
           successToast();
-
-          router.push(`${moduleConfig.rootPath}/${data?.artworkUpdate?.id}/update`);
+          setIsNavigatingAway(true);
+          router.push(`${moduleConfig.rootPath}/${data?.artworkUpdate?.id}/update`);          
         } else {
           setIsFormError(true);
         }
@@ -183,13 +186,9 @@ const Update = () => {
     },
   ];
 
-  const errorMessage = firstMutationResults.error
-    ? firstMutationResults?.error?.message
-    : "";
-
   return (
     <>
-      <FormNavigationBlock shouldBlock={(isDirty && !isSubmitting) || activeUploadCounter > 0} />
+      <FormNavigationBlock shouldBlock={!isNavigatingAway && ((isDirty && !isSubmitting) || activeUploadCounter > 0)} />
       <FormProvider {...formMethods}>
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={disableForm}>
