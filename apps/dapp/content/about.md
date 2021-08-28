@@ -1,13 +1,17 @@
 ---
 title: "About OpenAR"
 date: "2020-10-01"
+parentPage: 
+  - slug: "about"
+    label: "About"
+    url: "p/about"
 subPages: 
   - slug: "getStarted"
-    label:"Get started"
-    url:"pages/getStarted"}
+    label: "Get started"
+    url: "pages/getStarted"
   - slug: "roles"
-    label:"Roles and Badges"
-    url:"pages/roles"}
+    label: "Roles and Badges"
+    url: "pages/roles"
 ---
 
 ## About OpenAR

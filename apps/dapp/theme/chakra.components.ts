@@ -6,7 +6,7 @@ export const components = {
     baseStyle: {
       borderRadius: "md",
       _focus: {
-        boxShadow: "none",
+        boxShadow: false,
       },
       _disabled: {
         color: "white !important"        
@@ -55,7 +55,9 @@ export const components = {
           borderColor: "gray.300",
           color: "gray.300",
         },
-        
+        _focus: {
+          boxShadow: false,
+        }
       },
       link: {
         boder: "none",
@@ -67,7 +69,9 @@ export const components = {
         _hover: {
           color: "gray.300",
         },
-
+        _focus: {
+          boxShadow: false,
+        }
       },
       menuLink: {
         boder: "none",
@@ -154,10 +158,14 @@ export const components = {
     variants: {
       outline: {
         field: {
-          bg: "#fff",
-          borderColor: "gray.400",
+          bg: "transparent",
+          borderRadius: 0,
+          borderColor: "white",
           _hover: {
-            borderColor: "gray.500",
+            borderColor: "white",
+          },
+          _focus: {
+            borderColor: "white",
           },
           _autofill: {
             bg: "wine.300",

@@ -1,22 +1,25 @@
 import { ReactNode } from "react";
 import Head from "next/head";
-import {
-  Box,
-  Flex,
-  chakra
-} from "@chakra-ui/react";
+import { Box, Flex, chakra } from "@chakra-ui/react";
 import { ActiveLink } from "~/components/ui";
 
 import { Footer, Header } from "./site";
 import { WalletConnectGate } from "./shared";
-import {LoadingBar} from "~/components/app/shared";
-import { OverlayMenu} from "../frontend";
+import { LoadingBar } from "~/components/app/shared";
+import { OverlayMenu } from "../frontend";
 
-export const LayoutSite = ({ children, title, subPages }: { children: ReactNode }) => {
+export const LayoutSite = ({
+  children,
+  title,
+  subPages,
+}: {
+  children: ReactNode;
+  title: string;
+  subPages: any[]
+}) => {
   return (
     <WalletConnectGate>
-      
-      <LoadingBar color="#000"/>
+      <LoadingBar color="#000" />
       <Box
         className="site content text light"
         w="100vw"
@@ -26,8 +29,8 @@ export const LayoutSite = ({ children, title, subPages }: { children: ReactNode 
           <Header />
           {children}
           <Footer />
-        </Box>
-      <OverlayMenu/>
+      </Box>
+      <OverlayMenu />
     </WalletConnectGate>
   );
 };

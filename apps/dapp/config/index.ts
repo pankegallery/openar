@@ -9,7 +9,7 @@ const apiDomain = domain.host ? domain.host.split(":")[0] : "localhost";
 
 export const appConfig: AppConfig = {
   apiDomain,
-  contactEmail: "info@culturemap.test",
+  contactEmail: "contact@openar.art",
   restrictedAccessRedirectUrl: "/",
   apiUrl: `${process.env.NEXT_PUBLIC_API_URL}`,
   apiGraphQLUrl: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,

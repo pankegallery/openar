@@ -14,7 +14,12 @@ import {
 } from "nexus";
 import httpStatus from "http-status";
 
-import { ImageStatusEnum, ArObjectStatusEnum, ApiError } from "../../utils";
+import {
+  ImageStatusEnum,
+  ArObjectStatusEnum,
+  ArModelStatusEnum,
+  ApiError,
+} from "../../utils";
 import { GQLJson } from "./nexusTypesShared";
 
 import { authorizeApiUser } from "../helpers";
@@ -76,9 +81,9 @@ export const ArObject = objectType({
       type: "Image",
     });
 
-    // t.list.field("models", {
-    //   type: "Model",
-    // });
+    t.list.field("arModels", {
+      type: "ArModel",
+    });
 
     t.date("createdAt");
     t.date("updatedAt");
@@ -172,9 +177,15 @@ export const ArObjectQueries = extendType({
               ...include,
               arModels: {
                 select: {
+                  type: true,
                   meta: true,
                   status: true,
                   id: true,
+                },
+                where: {
+                  status: {
+                    not: ArModelStatusEnum.DELETED,
+                  },
                 },
               },
             };
@@ -239,6 +250,25 @@ export const ArObjectQueries = extendType({
             ...where,
             heroImage: {
               status: ImageStatusEnum.READY,
+            },
+          };
+        }
+
+        if ((pRI?.fieldsByTypeName?.ArObject as any)?.arModels) {
+          include = {
+            ...include,
+            arModels: {
+              select: {
+                type: true,
+                meta: true,
+                status: true,
+                id: true,
+              },
+              where: {
+                status: {
+                  not: ArModelStatusEnum.DELETED,
+                },
+              },
             },
           };
         }
@@ -315,6 +345,28 @@ export const ArObjectQueries = extendType({
 
           if (
             (pRI as any).fieldsByTypeName?.ArObjectQueryResult?.arObjects
+              ?.fieldsByTypeName.ArObject?.arModels
+          ) {
+            include = {
+              ...include,
+              arModels: {
+                select: {
+                  type: true,
+                  meta: true,
+                  status: true,
+                  id: true,
+                },
+                where: {
+                  status: {
+                    not: ArModelStatusEnum.DELETED,
+                  },
+                },
+              },
+            };
+          }
+
+          if (
+            (pRI as any).fieldsByTypeName?.ArObjectQueryResult?.arObjects
               ?.fieldsByTypeName.ArObject?.heroImage
           ) {
             include = {
@@ -377,6 +429,26 @@ export const ArObjectQueries = extendType({
         const pRI = parseResolveInfo(info);
 
         let include = {};
+
+        if ((pRI?.fieldsByTypeName?.ArObject as any)?.arModels) {
+          include = {
+            ...include,
+            arModels: {
+              select: {
+                type: true,
+                meta: true,
+                status: true,
+                id: true,
+              },
+              where: {
+                status: {
+                  not: ArModelStatusEnum.DELETED,
+                },
+              },
+            },
+          };
+        }
+
         if ((pRI?.fieldsByTypeName?.ArObject as any)?.heroImage)
           include = {
             ...include,
@@ -417,7 +489,7 @@ export const ArObjectUpsertInput = inputObjectType({
     t.json("collector");
     t.json("heroImage");
     t.json("artwork");
-    t.json("models");
+    t.json("arModels");
     t.json("images");
   },
 });

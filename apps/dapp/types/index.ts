@@ -65,3 +65,8 @@ export interface ModuleAccessRules {
   userIs?: RoleName | RoleName[] | undefined;
   userCan?: PermissionName | PermissionName[] | undefined;
 }
+
+
+interface ModelViewerJSX {
+  src: string
+}

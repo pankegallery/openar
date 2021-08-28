@@ -48,8 +48,11 @@ export const ModuleArtworkArObjectsList = ({
           }} lineHeight="2rem">
             <Link
               href={`${moduleConfig.rootPath}/${router.query.aid}/${arObject.id}/update`}
+              passHref
             >
-              <a>{arObject.title}</a>
+              <chakra.a display="flex" justifyContent="space-between" transform="all 0.3s"_hover={{
+                opacity: 0.6
+              }}>{arObject.title}<chakra.span>update</chakra.span></chakra.a>
             </Link>
           </chakra.li>
         ))}

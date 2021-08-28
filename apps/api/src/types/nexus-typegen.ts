@@ -55,6 +55,7 @@ declare global {
 
 export interface NexusGenInputs {
   ArObjectUpsertInput: { // input type
+    arModels?: NexusGenScalars['JSON'] | null; // JSON
     artwork?: NexusGenScalars['JSON'] | null; // JSON
     askPrice?: number | null; // Float
     collector?: NexusGenScalars['JSON'] | null; // JSON
@@ -66,7 +67,6 @@ export interface NexusGenInputs {
     images?: NexusGenScalars['JSON'] | null; // JSON
     lat?: number | null; // Float
     lng?: number | null; // Float
-    models?: NexusGenScalars['JSON'] | null; // JSON
     orderNumber?: number | null; // Int
     ownerEthAddress?: string | null; // String
     status?: number | null; // Int
@@ -145,6 +145,7 @@ export interface NexusGenObjects {
     nanoid?: string | null; // String
     orderNumber?: number | null; // Int
     status?: number | null; // Int
+    type?: string | null; // String
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
   }
   ArModelStatus: { // root type
@@ -153,6 +154,7 @@ export interface NexusGenObjects {
     status: number; // Int!
   }
   ArObject: { // root type
+    arModels?: Array<NexusGenRootTypes['ArModel'] | null> | null; // [ArModel]
     askPrice?: number | null; // Float
     collector?: NexusGenRootTypes['User'] | null; // User
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -302,6 +304,7 @@ export interface NexusGenFieldTypes {
     nanoid: string | null; // String
     orderNumber: number | null; // Int
     status: number | null; // Int
+    type: string | null; // String
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
   ArModelStatus: { // field return type
@@ -310,6 +313,7 @@ export interface NexusGenFieldTypes {
     status: number; // Int!
   }
   ArObject: { // field return type
+    arModels: Array<NexusGenRootTypes['ArModel'] | null> | null; // [ArModel]
     askPrice: number | null; // Float
     collector: NexusGenRootTypes['User'] | null; // User
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -501,6 +505,7 @@ export interface NexusGenFieldTypeNames {
     nanoid: 'String'
     orderNumber: 'Int'
     status: 'Int'
+    type: 'String'
     updatedAt: 'DateTime'
   }
   ArModelStatus: { // field return type name
@@ -509,6 +514,7 @@ export interface NexusGenFieldTypeNames {
     status: 'Int'
   }
   ArObject: { // field return type name
+    arModels: 'ArModel'
     askPrice: 'Float'
     collector: 'User'
     createdAt: 'DateTime'

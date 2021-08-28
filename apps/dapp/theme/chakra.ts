@@ -65,7 +65,7 @@ const themeConfig = {
           color: "wine.800",
         },
         _focus: {
-          boxShadow: "none",
+          boxShadow: false,
         },
       },
       "p a": {
@@ -87,6 +87,13 @@ const themeConfig = {
       ".openar.content": {
         bg: "var(--chakra-colors-openar-muddygreen)",
         color: "#fff",
+      },
+      "model-viewer": {
+        width: "100%",
+        height: "100%",
+        margin: 0,
+        "--poster-color": "#ccc", //
+        border: 0,
       },
     },
   },
@@ -111,7 +118,7 @@ const themeConfig = {
     },
     openarWhite: {
       50: "#f8f8f8",
-      100: "#d9d9d9",
+      100: "transparent",
       200: "#bfbfbf",
       300: "#a6a6a6",
       400: "#8c8c8c",
@@ -154,7 +161,7 @@ const themeConfig = {
     lg: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
     xl: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
     "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-    outline: "0 0 0 3px rgba(255, 153, 225, 0.6)",
+    outline: "none", // disabled focus ouline for nearly everything
     "button-wine": "0 0 0 3px rgba(178, 72, 187, 0.6)",
     inner: "inset 0 2px 4px 0 rgba(0,0,0,0.06)",
     none: "none",
@@ -287,6 +294,7 @@ const defaultPropsForFormComponentents = (components: string[]): object => {
         ...options,
         [key]: {
           defaultProps: {
+            focusBoxShadow: false,
             focusBorderColor: "transparent",
             errorBorderColor: "red.400",
           },

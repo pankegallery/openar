@@ -1,6 +1,7 @@
 import React from 'react'
 import { LayoutSite } from "~/components/app";
-import { Menu } from "~/components/frontent";
+import { Menu } from "~/components/frontend";
+import { ArrowLink } from "~/components/ui";
 import matter from "gray-matter";
 import ReactMarkdown from "react-markdown";
 import {
@@ -11,9 +12,8 @@ import {
 
 function PageTemplate({content, data}) {
 
-  const metadata = matter(content.default)
   console.log("content: ", content)
-  console.log("data: ", metadata)
+  console.log("data: ", data)
   const frontmatter = data
 
   return (
@@ -36,8 +36,15 @@ function PageTemplate({content, data}) {
         p="6"
         borderRight="1px solid black"
       >
+        {frontmatter.parentPage&&
+          <ArrowLink type="back" href={frontmatter.parentPage[0].url}>{frontmatter.parentPage[0].label}</ArrowLink>
+        }
+
         <chakra.h1 textStyle="worktitle">{frontmatter.title}</chakra.h1>
-        MENU {frontmatter.subPages}
+
+        {frontmatter.subPages&&
+          <Menu pages={frontmatter.subPages} />
+        }
       </Flex>
       {/* --------- Page content --------- */}
       <Box
@@ -57,8 +64,8 @@ function PageTemplate({content, data}) {
         }}
         overflow="scroll"
       >
-      {content}
-        <ReactMarkdown source={content} />
+
+      <ReactMarkdown>{content}</ReactMarkdown>
       </Box>
     </>
   )
@@ -67,13 +74,15 @@ function PageTemplate({content, data}) {
 PageTemplate.getInitialProps = async (context) => {
   const { slug } = context.query
 
+
 //  // Import our .md file using the `slug` from the URL
   const content = await import(`~/content/${slug}.md`)
+  console.log("Content:", content)
 //  // Parse .md data through `matter`
-  const data = matter(content.default)
-//
+  const pageData = matter(content.default)
+  console.log("Data:", pageData)
 //  //   Pass data to our component props
-  return { slug, ...data }
+  return { slug, ...pageData }
 }
 
 PageTemplate.getLayout = function getLayout(page: ReactElement) {

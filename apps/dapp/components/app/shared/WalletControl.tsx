@@ -43,6 +43,7 @@ export const WalletControl = () => {
   
   return (
     <Box>
+      {/* ------- Buttons ------- */}
       <Box>
         {!account && (
           <Button
@@ -56,7 +57,7 @@ export const WalletControl = () => {
 
         {account && (
           <Button
-            variant="link"
+            variant="menuLink"
             onClick={async () => {
               await walletDisconnect();
             }}
@@ -112,7 +113,7 @@ export const WalletControl = () => {
                 <Image
                   width="30px"
                   height="30px"
-                  src="/images/logo-metamask.png"
+                  src="/images/logo-metamask.svg"
                   alt="MetaMask"
                 />
               }

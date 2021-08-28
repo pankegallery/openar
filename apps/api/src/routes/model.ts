@@ -42,7 +42,13 @@ const storage = multer.diskStorage({
   },
 });
 
-export const arModelUpload = multer({ storage });
+export const arModelUpload = multer({
+  storage,
+  limits: {
+    files: 1,
+    fileSize: 51200000,
+  },
+});
 
 const createArModelMetaInfo = (
   file: Express.Multer.File
@@ -76,6 +82,11 @@ export const postArModel = async (req: Request, res: Response) => {
   // TODO: access protection
   // TODO: howto trigger refresh?
   // Maybe autosend auth token
+  // Userland fix attempt for https://github.com/expressjs/multer/pull/971
+  (req.connection || req.socket).on("error", (error) => {
+    console.log("Connection Error Detected", error.message || error);
+    req.emit("end");
+  });
 
   try {
     if (req.body.ownerId && !Number.isNaN(req.body.ownerId)) {

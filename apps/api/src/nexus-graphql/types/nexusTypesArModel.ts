@@ -19,6 +19,7 @@ export const ArModel = objectType({
     t.string("nanoid");
     t.int("status");
     t.json("meta");
+    t.string("type");
     t.int("orderNumber");
     t.date("createdAt");
     t.date("updatedAt");
