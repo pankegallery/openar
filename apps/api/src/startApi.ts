@@ -43,6 +43,7 @@ export const startApi = async () => {
           `🚀 Server ready at ${apiConfig.baseUrl.api}${server?.graphqlPath}`
         );
       });
+      expressServer.timeout = 240000 * 5;
 
       const codeFolderLocation = process.env.NODE_ENV === "production" ? "live" : "build";
       const bree = new Bree({
