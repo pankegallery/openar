@@ -13,80 +13,15 @@ import openingBg from "~/assets/img/opening-bg.png";
 import Arrow from "~/assets/img/arrow.svg";
 import { ArtworkListItem } from "~/components/frontend";
 import pick from "lodash/pick";
+import { useSSRSaveMediaQuery } from "~/hooks";
+
 
 export const Artwork = ({ artwork }: { artwork: any }) => {
-  //TODO: was passiert beim live rendern und nicht bekannten slugs?
-  // {
-  //   {
-  //     "id": 1,
-  //     "slug": null,
-  //     "title": "OpenAR.art",
-  //     "description": "Lorem ipsim",
-  //     "subtitle": "Platform launch and groupshow curated by Sakrowski and Jeremy Bailey",
-  //     "dateBegin": "2021-08-29T10:00:00.000Z",
-  //     "dateEnd": "2021-10-04T10:00:00.000Z",
-  //     "status": 2,
-  //     "curators": null,
-  //     "artworks": [
-  //       {
-  //         "id": 22,
-  //         "key": "RWEOzHzMPehrpgyn",
-  //         "title": "TEWS",
-  //         "description": "<p>TEST</p>",
-  //         "heroImage": {
-  //           "id": 42,
-  //           "meta": {
-  //             "size": 93976,
-  //             "mimeType": "image/jpeg",
-  //             "imageType": "square",
-  //             "uploadFolder": "/img/2021/8",
-  //             "availableSizes": {
-  //               "original": {
-  //                 "url": "http://localhost:4401/img/2021/8/kmsFu-TgGVy6Kp1Lkrug3.jpg",
-  //                 "isJpg": true,
-  //                 "width": 1280,
-  //                 "height": 1279,
-  //                 "isWebP": false
-  //               },
-  //               "720-720-jpg": {
-  //                 "url": "http://localhost:4401//img/2021/8/kmsFu-TgGVy6Kp1Lkrug3-720-720.jpg",
-  //                 "isJpg": true,
-  //                 "width": 720,
-  //                 "height": 720,
-  //                 "isWebP": false
-  //               },
-  //               "480-480-webp": {
-  //                 "url": "http://localhost:4401//img/2021/8/kmsFu-TgGVy6Kp1Lkrug3-480-480.webp",
-  //                 "isJpg": false,
-  //                 "width": 480,
-  //                 "height": 480,
-  //                 "isWebP": true
-  //               },
-  //               "720-720-webp": {
-  //                 "url": "http://localhost:4401//img/2021/8/kmsFu-TgGVy6Kp1Lkrug3-720-720.webp",
-  //                 "isJpg": false,
-  //                 "width": 720,
-  //                 "height": 720,
-  //                 "isWebP": true
-  //               },
-  //               "1080-1080-webp": {
-  //                 "url": "http://localhost:4401//img/2021/8/kmsFu-TgGVy6Kp1Lkrug3-1080-1080.webp",
-  //                 "isJpg": false,
-  //                 "width": 1080,
-  //                 "height": 1080,
-  //                 "isWebP": true
-  //               }
-  //             },
-  //             "originalFileUrl": "http://localhost:4401/img/2021/8/kmsFu-TgGVy6Kp1Lkrug3.jpg",
-  //             "originalFileName": "fa-pnk-195.jpg",
-  //             "originalFilePath": "/Users/fluxed/Dropbox/www/fluxed/openar/openar-monorepo/public/img/2021/8/kmsFu-TgGVy6Kp1Lkrug3.jpg"
-  //           },
-  //           "status": 4
-  //         }
-  //       }
-  //     ]
-  //   }
-  // }
+
+  const isDesktop = useSSRSaveMediaQuery(
+    "(min-width: 75rem)"
+  );
+
   return (
     <>
       <Head>
@@ -107,7 +42,7 @@ export const Artwork = ({ artwork }: { artwork: any }) => {
         mb="-100vh"
       >
         <Image
-          src={openingBg}
+          src={exhibition.openingBg}
           layout="fill"
           objectFit="cover"
           objectPosition="50% 100%"
@@ -116,45 +51,88 @@ export const Artwork = ({ artwork }: { artwork: any }) => {
         />
       </Box>
 
-      {/* --------- Grid --------- */}
-      <Grid
+      {/* --------- Column Layout --------- */}
+      <Flex
         position={{
           base: "relative",
+<<<<<<< HEAD
           d: "fixed",
+=======
+          t: "fixed"
+>>>>>>> 1db5b7df67ec8bfa1823085cf3e1be78fb4e3bd7
         }}
-        backgroundImage="url(/image/opening-bg.png)"
-        className="exhibition"
+        className="artwork"
         top="0"
         left="0"
         w="100%"
         p=""
-        h="100vh"
-        zIndex="200"
-        templateRows={{
-          base: "33.33vw auto",
-          t: "var(--openar-header-height-desktop) auto",
-          d: "var(--openar-header-height-desktop) auto",
+        h={{
+          base: "auto",
+          t: "100vh"
         }}
+        zIndex="200"
         color="white"
-        overflow="hidden"
+        overflow={{
+          base: "show",
+          t: "hidden",
+        }}
       >
-        {/* --------- ROW: Header row --------- */}
+        {/* --------- COL: Exhibition (desktop only) --------- */}
+        {isDesktop&&
+          <Flex
+            direction="column"
+            className="exhibitionColumn"
+          >
+            {/* --------- ROW: Header row --------- */}
+            <Flex
+              w="33.33vw"
+              h="var(--openar-header-height-desktop)"
+              p="10"
+            >
+              <Link href="/">
+                <a>
+                  <Arrow className="arrow" />
+                </a>
+              </Link>
+            </Flex>
+
+            {/* --------- Exhibition title  --------- */}
+            <Flex
+              borderY="1px solid #fff"
+              p="10"
+              pb="20"
+              w="33.33vw"
+              h="33.33vw"
+              layerStyle="backdropDark"
+              flexDirection="column"
+              alignContent="flex-end"
+            >
+              <Link href="/e/openar-art" passHref>
+                <chakra.a display="block" mt="auto">
+                  <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">
+                    {exhibition.title}
+                  </chakra.h1>
+                  <chakra.p textStyle="subtitle" mb="1rem">
+                    {exhibition.subtitle}
+                  </chakra.p>
+                  <chakra.p textStyle="workmeta">
+                    {new Date(exhibition.dateBegin).toLocaleDateString("de")}{" - "}
+                    {new Date(exhibition.dateEnd).toLocaleDateString("de")}
+                  </chakra.p>
+                </chakra.a>
+              </Link>
+            </Flex>
+          </Flex>
+        }
+        {/* --------- COL: Artwork images --------- */}
         <Flex
-          w="100%"
-          direction="row"
-          p={{
-            base: "6",
-            t: "10",
-          }}
+          direction="column"
         >
-          <Link href="/">
-            <a>
-              <Arrow className="arrow" />
-            </a>
-          </Link>
         </Flex>
-        {/* --------- GRID: Exhibition title, description, and artwork arrow --------- */}
+
+        {/* --------- COL: Artwork details) --------- */}
         <Flex
+<<<<<<< HEAD
           className="main"
           w={{
             base: "100%",
@@ -336,6 +314,14 @@ export const Artwork = ({ artwork }: { artwork: any }) => {
           )}
         </Box>
       </Flex>
+=======
+          direction="column"
+        >
+      </Flex>
+
+      </Flex> {/* Column Layout close*/}
+
+>>>>>>> 1db5b7df67ec8bfa1823085cf3e1be78fb4e3bd7
     </>
   );
 };
@@ -348,6 +334,7 @@ export async function getStaticPaths() {
 export const getStaticProps = async ({ params }: { params: any }) => {
   const client = getApolloClient();
 
+<<<<<<< HEAD
   const exhibitionQuery = gql`
     query ($key: String!, $slug: String!) {
       artwork(key: $key) {
@@ -386,6 +373,11 @@ export const getStaticProps = async ({ params }: { params: any }) => {
         }
       }
       exhibition(slug:  $slug) {
+=======
+  const artworkQuery = gql`
+    query ($slug: String!) {
+      artwork(key: $slug) {
+>>>>>>> 1db5b7df67ec8bfa1823085cf3e1be78fb4e3bd7
         id
         slug
         title
@@ -419,14 +411,14 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     }`;
 
   const { data } = await client.query({
-    query: exhibitionQuery,
+    query: artworkQuery,
     variables: {
       key: params.key,
       slug: params.slug,
     },
   });
 
-  if (!data?.exhibition) {
+  if (!data?.artwork) {
     return {
       notFound: true,
     };
@@ -434,7 +426,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 
   return {
     props: {
-      exhibition: data?.exhibition,
+      artwork: data?.artwork,
     },
   };
 };
