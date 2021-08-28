@@ -176,6 +176,7 @@ type Exhibition {
   curators: User
   dateBegin: DateTime
   dateEnd: DateTime
+  description: String
   id: Int!
   slug: JSON
   status: Int!

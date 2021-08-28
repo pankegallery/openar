@@ -236,6 +236,7 @@ export interface NexusGenObjects {
     curators?: NexusGenRootTypes['User'] | null; // User
     dateBegin?: NexusGenScalars['DateTime'] | null; // DateTime
     dateEnd?: NexusGenScalars['DateTime'] | null; // DateTime
+    description?: string | null; // String
     id: number; // Int!
     slug?: NexusGenScalars['JSON'] | null; // JSON
     status: number; // Int!
@@ -408,6 +409,7 @@ export interface NexusGenFieldTypes {
     curators: NexusGenRootTypes['User'] | null; // User
     dateBegin: NexusGenScalars['DateTime'] | null; // DateTime
     dateEnd: NexusGenScalars['DateTime'] | null; // DateTime
+    description: string | null; // String
     id: number; // Int!
     slug: NexusGenScalars['JSON'] | null; // JSON
     status: number; // Int!
@@ -623,6 +625,7 @@ export interface NexusGenFieldTypeNames {
     curators: 'User'
     dateBegin: 'DateTime'
     dateEnd: 'DateTime'
+    description: 'String'
     id: 'Int'
     slug: 'JSON'
     status: 'Int'

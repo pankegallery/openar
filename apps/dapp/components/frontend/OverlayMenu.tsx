@@ -219,7 +219,7 @@ export const OverlayMenu = () => {
                   }}
                 >
                   {account && (
-                    <ActiveLink href="/openar">Dashboard</ActiveLink>
+                    <ActiveLink href="/openar/">Dashboard</ActiveLink>
                   )}
                   <WalletControl />
                 </chakra.nav>

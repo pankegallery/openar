@@ -37,8 +37,8 @@ export const Sidebar = () => {
 
   const mainNavLinks = [
     {
-      title: "Overview",
-      path: "/openar",
+      title: "Dashboard",
+      path: "/openar/",
       exact: true,
     },
     {

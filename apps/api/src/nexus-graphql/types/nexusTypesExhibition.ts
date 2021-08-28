@@ -42,6 +42,7 @@ export const Exhibition = objectType({
     t.json("title");
     t.json("slug");
     t.string("subtitle");
+    t.string("description");
     t.date("dateBegin");
     t.date("dateEnd");
     t.nonNull.int("status");
