@@ -10,7 +10,6 @@ import {
 import { ApiImage } from "../ui";
 import { ArtworkStatusEnum } from "~/utils";
 import Link from "next/link";
-import Blockies from 'react-blockies';
 
 export const ArtworkListItem = ({
   id,
@@ -19,8 +18,8 @@ export const ArtworkListItem = ({
   creator,
   heroImage,
   status,
-  isWhite = false, 
-  isAdmin = false
+  isWhite = false,
+  isAdmin = false,
 }: {
   id: number;
   title: string;
@@ -34,10 +33,14 @@ export const ArtworkListItem = ({
   let artist = creator?.pseudonym ? `${creator?.pseudonym}` : "";
   if (artist.trim().length === 0) artist = creator?.ethAddress;
 
-  const href = (isAdmin)? `/openar/artworks/${id}/update` : `/a/${key}/`;
+  const href = isAdmin ? `/openar/artworks/${id}/update` : `/a/${key}/`;
 
   return (
-    <LinkBox as="article" className={`${isWhite ? "white":""} artwork list item`} key={`artwork-${id}`}>
+    <LinkBox
+      as="article"
+      className={`${isWhite ? "white" : ""} artwork list item`}
+      key={`artwork-${id}`}
+    >
       <Box className="info">
         <Heading as="h2" className="title">
           <Link href={href} passHref>
@@ -58,6 +61,8 @@ export const ArtworkListItem = ({
             status={heroImage?.status}
             alt={title}
             sizes="(min-width: 45rem) 33vw, 66vw"
+            showPlaceholder={isAdmin}
+            placeholder={isAdmin ? "Please upload an image" : ""}
           />
         </AspectRatio>
       </Box>

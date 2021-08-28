@@ -14,7 +14,12 @@ import {
 } from "nexus";
 import httpStatus from "http-status";
 
-import { ImageStatusEnum, ArObjectStatusEnum, ApiError } from "../../utils";
+import {
+  ImageStatusEnum,
+  ArObjectStatusEnum,
+  ArModelStatusEnum,
+  ApiError,
+} from "../../utils";
 import { GQLJson } from "./nexusTypesShared";
 
 import { authorizeApiUser } from "../helpers";
@@ -177,6 +182,11 @@ export const ArObjectQueries = extendType({
                   status: true,
                   id: true,
                 },
+                where: {
+                  status: {
+                    not: ArModelStatusEnum.DELETED,
+                  },
+                },
               },
             };
           }
@@ -253,6 +263,11 @@ export const ArObjectQueries = extendType({
                 meta: true,
                 status: true,
                 id: true,
+              },
+              where: {
+                status: {
+                  not: ArModelStatusEnum.DELETED,
+                },
               },
             },
           };
@@ -341,6 +356,11 @@ export const ArObjectQueries = extendType({
                   status: true,
                   id: true,
                 },
+                where: {
+                  status: {
+                    not: ArModelStatusEnum.DELETED,
+                  },
+                },
               },
             };
           }
@@ -419,6 +439,11 @@ export const ArObjectQueries = extendType({
                 meta: true,
                 status: true,
                 id: true,
+              },
+              where: {
+                status: {
+                  not: ArModelStatusEnum.DELETED,
+                },
               },
             },
           };

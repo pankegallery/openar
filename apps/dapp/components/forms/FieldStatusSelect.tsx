@@ -1,66 +1,38 @@
 import { useFormContext, Controller } from "react-hook-form";
-import { PublishStatus } from "~/utils";
-import { PermissionName } from "~/appuser";
 
-import { FormControl, FormLabel, Select } from "@chakra-ui/react";
+import { FormControl, FormLabel, Select, Box } from "@chakra-ui/react";
 
 import FieldErrorMessage from "./FieldErrorMessage";
-import { useAuthentication } from "~/hooks";
 
-export const FieldPublishStatusSelect = ({
+type StatusOption = {
+  value: number;
+  label: string;
+  isDisabled?: boolean;
+}
+
+export const FieldStatusSelect = ({
   status,
-  module,
-  ownerId,
+  options,
+  statusEnum,
 }: {
-  status: PublishStatus;
-  module: string;
-  ownerId: number;
+  status: any;
+  options: StatusOption[],
+  statusEnum: any;
 }) => {
-  const [appUser] = useAuthentication();
-
   const name = "status";
   const id = "status";
 
   const label = "Publish status";
 
+  
   const {
     formState: { errors },
     control,
   } = useFormContext();
 
-  const options = [
-    {
-      value: PublishStatus.DRAFT,
-      label: "Draft",
-    },
-    {
-      value: PublishStatus.FORREVIEW,
-      label: "For review",
-    },
-    {
-      value: PublishStatus.REJECTED,
-      label: "Rejected",
-      disabled: !appUser?.has("administrator"),
-    },
-    {
-      value: PublishStatus.PUBLISHED,
-      label: "Published",
-      disabled: !appUser?.has("administrator"),
-    },
-    {
-      value: PublishStatus.TRASHED,
-      label: "Trashed",
-      disabled: !(
-        appUser?.has("administrator") ||
-        (appUser?.is("administrator") &&
-          appUser?.can(`${module}DeleteOwn` as PermissionName) &&
-          ownerId === appUser.id)
-      ),
-    },
-  ];
-
   return (
     <FormControl id={id} isInvalid={errors[name]?.message} isRequired>
+      <Box alignItems="center" p="3" borderBottom="1px solid #fff">
       <FormLabel htmlFor={id} mb="0.5">
         {label}
       </FormLabel>
@@ -75,10 +47,11 @@ export const FieldPublishStatusSelect = ({
         }) => (
           <Select
             onBlur={onBlur}
+            variant="outline"
             onChange={onChange}
             isRequired
             defaultValue={
-              status === PublishStatus.AUTODRAFT ? PublishStatus.DRAFT : status
+              status === statusEnum.AUTODRAFT ? statusEnum.DRAFT : status
             }
             valid={!errors[name]?.message ? "valid" : undefined}
             placeholder="Please choose a publish status"
@@ -90,7 +63,7 @@ export const FieldPublishStatusSelect = ({
                 <option
                   key={`${id}-o-${i}`}
                   value={option.value}
-                  disabled={option.disabled}
+                  disabled={option.isDisabled}
                 >
                   {option.label}
                 </option>
@@ -100,8 +73,9 @@ export const FieldPublishStatusSelect = ({
       />
 
       <FieldErrorMessage error={errors[name]?.message} />
+      </Box>
     </FormControl>
   );
 };
 
-export default FieldPublishStatusSelect;
+export default FieldStatusSelect;

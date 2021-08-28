@@ -103,32 +103,13 @@ const Update = () => {
     }
   );
 
-  // const parseIncomingDates = (dates: any) => {
-  //   if (!dates) return [];
-
-  //   if (Array.isArray(dates))
-  //     return dates.reduce((acc, date) => {
-  //       try {
-  //         acc.push({
-  //           id: date.id,
-  //           date: new Date(date.date),
-  //           begin: new Date(date.begin),
-  //           end: new Date(date.end),
-  //         });
-  //       } catch (err) {}
-  //       return acc;
-  //     }, []);
-
-  //   return [];
-  // };
-
   useEffect(() => {
     if (!data || !data.artworkReadOwn) return;
 
     reset({
       ...filteredOutputByWhitelist(
         data.artworkReadOwn,
-        ["title", "description", "url", "video"]        
+        ["title", "description", "url", "video", "status"]        
       )
     });
   }, [reset, data]);
@@ -146,6 +127,7 @@ const Update = () => {
           description: newData.description,
           video: newData.video ?? "",
           url: newData.url ?? "",
+          status: newData.status ?? "",
 
           creator: {
             connect: {

@@ -154,10 +154,14 @@ export const components = {
     variants: {
       outline: {
         field: {
-          bg: "#fff",
-          borderColor: "gray.400",
+          bg: "transparent",
+          borderRadius: 0,
+          borderColor: "white",
           _hover: {
-            borderColor: "gray.500",
+            borderColor: "white",
+          },
+          _focus: {
+            borderColor: "white",
           },
           _autofill: {
             bg: "wine.300",

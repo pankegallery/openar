@@ -20,7 +20,7 @@ export const Footer = ({ type = "full" }: { type?: string }) => {
     >
       <HStack spacing="8">
         <Link href={`mailto:${config.contactEmail}`}>Contact</Link>
-        <ActiveLink href="/page/impressum/">Imprint</ActiveLink>
+        <ActiveLink href="/pages/impressum/">Imprint</ActiveLink>
       </HStack>
     </Flex>
   );

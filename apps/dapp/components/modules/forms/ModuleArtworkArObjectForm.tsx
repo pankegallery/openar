@@ -1,4 +1,7 @@
-import { arModelDeleteMutationGQL, imageDeleteMutationGQL } from "~/graphql/mutations";
+import {
+  arModelDeleteMutationGQL,
+  imageDeleteMutationGQL,
+} from "~/graphql/mutations";
 
 import { AspectRatio, Box, Grid } from "@chakra-ui/react";
 import pick from "lodash/pick";
@@ -9,8 +12,10 @@ import {
   FieldTextEditor,
   FieldImageUploader,
   FieldModelUploader,
+  FieldStatusSelect,
 } from "~/components/forms";
 
+import { ArObjectStatusEnum } from "~/utils";
 
 import { yupIsFieldRequired } from "../validation";
 
@@ -34,14 +39,38 @@ export const ModuleArtworkArObjectForm = ({
   const columns = { base: "100%", t: "50% 50%" };
   const rows = { base: "auto 1fr", t: "1fr" };
 
-  console.log("22", arObjectReadOwn);
+  const uploadedFiles = arObjectReadOwn?.arModels.reduce(
+    (acc, model) => ({
+      ...acc,
+      [model.type]: pick(model, ["status", "meta", "id"]),
+    }),
+    {}
+  );
 
-  const uploadedFiles = arObjectReadOwn?.arModels.reduce((acc, model) => ({
-    ...acc,
-    [model.type]: pick(model, ["status", "meta", "id"])
-  }), {});
+  const currentStatus = data?.arObjectReadOwn?.status;
 
-  console.log(uploadedFiles);
+  const statusOptions = [
+    {
+      value: ArObjectStatusEnum.DRAFT,
+      label: "Draft",
+      isDisabled:
+        (currentStatus === ArObjectStatusEnum.MINT) ||
+        (currentStatus === ArObjectStatusEnum.MINTING) ||
+        (currentStatus === ArObjectStatusEnum.MINTED),
+    },
+    {
+      value: ArObjectStatusEnum.PUBLISHED,
+      label: "Published",
+      isDisabled:
+        (currentStatus === ArObjectStatusEnum.MINT) ||
+        (currentStatus === ArObjectStatusEnum.MINTING) ||
+        (currentStatus === ArObjectStatusEnum.MINTED),
+    },
+    {
+      value: ArObjectStatusEnum.MINT,
+      label: "Mint",
+    },
+  ];
 
   return (
     <Grid
@@ -61,6 +90,13 @@ export const ModuleArtworkArObjectForm = ({
               // defaultValue: data.abc.key
               placeholder: "What is the title of your artwork?",
             }}
+          />
+        </FieldRow>
+        <FieldRow>
+          <FieldStatusSelect
+            statusEnum={ArObjectStatusEnum}
+            status={currentStatus}
+            options={statusOptions}
           />
         </FieldRow>
         <FieldRow>
@@ -137,111 +173,104 @@ export const ModuleArtworkArObjectForm = ({
         )}
         {action === "update" && (
           <>
-            <FieldRow><FieldImageUploader
-              route="image"
-              id="heroImage"
-              name="heroImage"
-              label="Featured Image"
-              isRequired={yupIsFieldRequired(
-                "heroImage",
-                validationSchema
-              )}
-              setActiveUploadCounter={setActiveUploadCounter}
-              deleteButtonGQL={imageDeleteMutationGQL}
-              connectWith={{
-                heroImageArObjects: {
-                  connect: {
-                    id: arObjectReadOwn?.id,
+            <FieldRow>
+              <FieldImageUploader
+                route="image"
+                id="heroImage"
+                name="heroImage"
+                label="Poster"
+                isRequired={yupIsFieldRequired("heroImage", validationSchema)}
+                setActiveUploadCounter={setActiveUploadCounter}
+                deleteButtonGQL={imageDeleteMutationGQL}
+                connectWith={{
+                  heroImageArObjects: {
+                    connect: {
+                      id: arObjectReadOwn?.id,
+                    },
                   },
-                },
-              }}
-              settings={{
-                minFileSize: 1024 * 1024 * 0.0488,
-                maxFileSize: 1024 * 1024 * 2,
-                aspectRatioPB: 100, // % bottom padding
+                }}
+                settings={{
+                  minFileSize: 1024 * 1024 * 0.0488,
+                  maxFileSize: 1024 * 1024 * 2,
+                  aspectRatioPB: 100, // % bottom padding
 
-                image: {
-                  status: arObjectReadOwn?.heroImage?.status,
-                  id: arObjectReadOwn?.heroImage?.id,
-                  meta: arObjectReadOwn?.heroImage?.meta,
-                  alt: `Featured Image`,
-                  forceAspectRatioPB: 100,
-                  showPlaceholder: true,
-                  sizes: "(min-width: 45em) 20v, 95vw",
-                },
-              }}
-            />
+                  image: {
+                    status: arObjectReadOwn?.heroImage?.status,
+                    id: arObjectReadOwn?.heroImage?.id,
+                    meta: arObjectReadOwn?.heroImage?.meta,
+                    alt: `Featured Image`,
+                    forceAspectRatioPB: 100,
+                    showPlaceholder: true,
+                    sizes: "(min-width: 45em) 20v, 95vw",
+                  },
+                }}
+              />
             </FieldRow>
             <FieldRow>
-              <Grid w="100%" mt="3"
+              <Grid
+                w="100%"
+                mt="3"
                 templateColumns={{
                   base: "100%",
-                  t: "1fr 1fr"
+                  t: "1fr 1fr",
                 }}
                 gap="4"
               >
                 <FieldModelUploader
-              route="model"
-              id="modelGlb"
-              type="glb"
-              name="modelGlb"
-              label="Ar Model (.glb/.gltf)"
-              isRequired={yupIsFieldRequired(
-                "modelGlb",
-                validationSchema
-              )}
-              setActiveUploadCounter={setActiveUploadCounter}
-              deleteButtonGQL={arModelDeleteMutationGQL}
-              connectWith={{
-                arObject: {
-                  connect: {
-                    id: arObjectReadOwn?.id,
-                  },
-                },
-              }}
-              settings={{
-                minFileSize: 1024 * 1024 * 0.0488,
-                maxFileSize: 1024 * 1024 * 50,
-                accept: ".glb",
-                model: {
-                  status: uploadedFiles?.glb?.status,
-                  id: uploadedFiles?.glb?.id,
-                  meta: uploadedFiles?.glb?.meta,
-                },
-              }}
-            />
-              <FieldModelUploader
-              route="model"
-              id="modelUsdz"
-              type="usdz"
-              name="modelUsdz"
-              label="Ar Model (.usdz)"
-              isRequired={yupIsFieldRequired(
-                "modelUsdz",
-                validationSchema
-              )}
-              setActiveUploadCounter={setActiveUploadCounter}
-              deleteButtonGQL={arModelDeleteMutationGQL}
-              connectWith={{
-                arObject: {
-                  connect: {
-                    id: arObjectReadOwn?.id,
-                  },
-                },
-              }}
-              settings={{
-                minFileSize: 1024 * 1024 * 0.0488,
-                maxFileSize: 1024 * 1024 * 50,
-                accept: ".usdz",
-                model: {
-                  status: uploadedFiles?.usdz?.status,
-                  id: uploadedFiles?.usdz?.id,
-                  meta: uploadedFiles?.usdz?.meta,
-                },
-              }}
-            />
+                  route="model"
+                  id="modelGlb"
+                  type="glb"
+                  name="modelGlb"
+                  label="Ar Model (.glb/.gltf)"
+                  isRequired={yupIsFieldRequired("modelGlb", validationSchema)}
+                  setActiveUploadCounter={setActiveUploadCounter}
+                  deleteButtonGQL={arModelDeleteMutationGQL}
+                  connectWith={{
+                    arObject: {
+                      connect: {
+                        id: arObjectReadOwn?.id,
+                      },
+                    },
+                  }}
+                  settings={{
+                    minFileSize: 1024 * 1024 * 0.0488,
+                    maxFileSize: 1024 * 1024 * 50,
+                    accept: ".glb",
+                    model: {
+                      status: uploadedFiles?.glb?.status,
+                      id: uploadedFiles?.glb?.id,
+                      meta: uploadedFiles?.glb?.meta,
+                    },
+                  }}
+                />
+                <FieldModelUploader
+                  route="model"
+                  id="modelUsdz"
+                  type="usdz"
+                  name="modelUsdz"
+                  label="Ar Model (.usdz)"
+                  isRequired={yupIsFieldRequired("modelUsdz", validationSchema)}
+                  setActiveUploadCounter={setActiveUploadCounter}
+                  deleteButtonGQL={arModelDeleteMutationGQL}
+                  connectWith={{
+                    arObject: {
+                      connect: {
+                        id: arObjectReadOwn?.id,
+                      },
+                    },
+                  }}
+                  settings={{
+                    minFileSize: 1024 * 1024 * 0.0488,
+                    maxFileSize: 1024 * 1024 * 50,
+                    accept: ".usdz",
+                    model: {
+                      status: uploadedFiles?.usdz?.status,
+                      id: uploadedFiles?.usdz?.id,
+                      meta: uploadedFiles?.usdz?.meta,
+                    },
+                  }}
+                />
               </Grid>
-           
             </FieldRow>
           </>
         )}

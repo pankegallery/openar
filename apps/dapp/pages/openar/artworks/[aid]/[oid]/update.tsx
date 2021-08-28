@@ -92,7 +92,7 @@ const Update = () => {
       aid: parseInt(router.query.aid as string, 10),
     },
   });
-  
+
   useEffect(() => {
     if (!data || !data.arObjectReadOwn) return;
 
@@ -103,6 +103,7 @@ const Update = () => {
         "orderNumber",
         "editionOf",
         "askPrice",
+        "status",
       ]),
     });
   }, [reset, data]);
@@ -123,6 +124,7 @@ const Update = () => {
             editionOf: newData.editionOf ?? null,
             orderNumber: newData.orderNumber ?? null,
             askPrice: newData.editionOf ?? null,
+            status: newData.status ?? null,
             creator: {
               connect: {
                 id: appUser.id,
@@ -195,13 +197,6 @@ const Update = () => {
 
   return (
     <>
-      {/* <Head>
-        <script
-          type="module"
-          async
-          src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
-        ></script>
-      </Head> */}
       <FormNavigationBlock
         shouldBlock={(isDirty && !isSubmitting) || activeUploadCounter > 0}
       />

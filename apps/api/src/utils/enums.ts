@@ -23,6 +23,8 @@ export enum ArtworkStatusEnum {
   MINTED,
   TRASHED,
   DELETED,
+  HASMINTEDOBJECTS,
+  AUTODRAFT,
 }
 
 export enum ArObjectStatusEnum {
@@ -33,6 +35,8 @@ export enum ArObjectStatusEnum {
   MINTED,
   TRASHED,
   DELETED,
+  AUTODRAFT,
+  MINT,
 }
 
 export enum ArModelStatusEnum {
@@ -43,14 +47,7 @@ export enum ArModelStatusEnum {
   READY,
   TRASHED,
   DELETED,
-}
-
-export enum PublishStatus {
   AUTODRAFT,
-  DRAFT,
-  FORREVIEW,
-  REJECTED,
-  PUBLISHED,
-  TRASHED,
-  DELETED,
+  MINTING,
+  MINTED,
 }

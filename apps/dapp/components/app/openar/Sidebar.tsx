@@ -3,13 +3,7 @@ import React from "react";
 import { HiMenu } from "react-icons/hi";
 import { MdClose } from "react-icons/md";
 
-import {
-  Box,
-  Link,
-  useDisclosure,
-  IconButton,
-  chakra,
-} from "@chakra-ui/react";
+import { Box, Link, useDisclosure, IconButton, chakra } from "@chakra-ui/react";
 import { ActiveLink } from "~/components/ui";
 
 import { useSSRSaveMediaQuery } from "~/hooks";
@@ -27,12 +21,7 @@ const NavItem = ({
 }) => {
   return (
     <Box>
-      <ActiveLink
-        href={path}
-        activeClassName="active"
-        
-        onClick={onClick as any}
-      >
+      <ActiveLink href={path} activeClassName="active" onClick={onClick as any}>
         <chakra.span>{title}</chakra.span>
       </ActiveLink>
     </Box>
@@ -41,14 +30,14 @@ const NavItem = ({
 
 export const Sidebar = () => {
   const tw = useSSRSaveMediaQuery("(min-width: 55em)");
-  
+
   const isMobile = tw ? false : true;
-  
+
   const menuDisclosure = useDisclosure();
 
   const mainNavLinks = [
     {
-      title: "Dashboard",
+      title: "Overview",
       path: "/openar",
       exact: true,
     },
@@ -62,17 +51,12 @@ export const Sidebar = () => {
       path: "/openar/artworks",
       exact: false,
     },
-    {
-      title: "Collection",
-      path: "/openar/collection",
-      exact: false,
-    },
+    // {
+    //   title: "Collection",
+    //   path: "/openar/collection",
+    //   exact: false,
+    // },
   ];
-
-  const x=  <Box>jaklsjdflksdlkjf</Box>
-
-
-
 
   return (
     <>
@@ -96,7 +80,7 @@ export const Sidebar = () => {
           }}
         />
       )}
-      {isMobile && x}
+
       <Box
         w="100%"
         h="100vh"
@@ -116,7 +100,7 @@ export const Sidebar = () => {
             transform: "translateX(-100%)",
             zIndex: 1310,
             bg: "white",
-            pt:"10",
+            pt: "10",
             top: 0,
             height: "100%",
             overflow: "auto",
@@ -129,13 +113,8 @@ export const Sidebar = () => {
             transform: "translateX(0%)",
           },
         }}
-      >{isMobile && x}
-        <Box
-          w="100%"
-          p="4"
-          minH="100%"
-          borderLeft="1px solid #fff"
-        >
+      >
+        <Box w="100%" p="4" minH="100%" borderLeft="1px solid #fff">
           {mainNavLinks.map((link) => {
             return (
               <NavItem
@@ -146,7 +125,7 @@ export const Sidebar = () => {
             );
           })}
 
-          <WalletControl/>
+          {/* We have the l<WalletControl /> */}
         </Box>
       </Box>
     </>

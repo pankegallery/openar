@@ -64,7 +64,7 @@ const themeConfig = {
           color: "wine.800",
         },
         _focus: {
-          boxShadow: "outline",
+          boxShadow: false,
         },
       },
       "p a": {
