@@ -132,6 +132,16 @@ export const ArObjectQueries = extendType({
         let totalCount;
         let arObjects;
         let where: Prisma.ArObjectWhereInput = args.where ?? {};
+        where = {
+          ...where,
+          status: {
+            in: [
+              ArObjectStatusEnum.PUBLISHED,
+              ArObjectStatusEnum.MINTING,
+              ArObjectStatusEnum.MINTED,
+            ],
+          },
+        };
 
         if ((pRI?.fieldsByTypeName?.ArObjectQueryResult as any)?.totalCount) {
           totalCount = await daoArObjectQueryCount(args.where);
@@ -233,6 +243,13 @@ export const ArObjectQueries = extendType({
         let include = {};
         let where: Prisma.ArObjectWhereInput = {
           key: args.key,
+          status: {
+            in: [
+              ArObjectStatusEnum.PUBLISHED,
+              ArObjectStatusEnum.MINTING,
+              ArObjectStatusEnum.MINTED,
+            ],
+          },
         };
         if ((pRI?.fieldsByTypeName?.ArObject as any)?.heroImage) {
           include = {

@@ -169,7 +169,6 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     };
   }
 
-  console.log(data?.artwork);
   return {
     props: {
       artwork: data?.artwork,
