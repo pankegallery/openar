@@ -215,31 +215,16 @@ export const Home = (props) => {
         }}
       >
         {!beta && (
-          <Image
-            src={betaPic}
-            layout="fill"
-            objectFit="cover"
-            objectPosition="50% 100%"
-            alt=""
-            role="presentation"
-          />
+          <AspectRatio ratio={1}>
+            <chakra.img src="images/beta.svg" width="100%" height="100%" alt="We are in beta" />
+          </AspectRatio>
         )}
         {beta && (
           <chakra.span cursor="pointer">
             <Link href="/beta" passHref>
               <AspectRatio ratio={1}>
                 <chakra.img src="images/beta.svg" width="100%" height="100%" alt="We are in beta" />
-                
               </AspectRatio>
-              
-              {/* <Image
-                src={betaPic}
-                layout="fill"
-                objectFit="cover"
-                objectPosition="50% 100%"
-                alt=""
-                role="presentation"
-              /> */}
             </Link>
           </chakra.span>
         )}
