@@ -24,7 +24,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-export const Artwork = ({ artwork }: { artwork: any }) => {
+export const ArObject = ({ arObject }: { arObject: any }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   let content = (
@@ -35,16 +35,15 @@ export const Artwork = ({ artwork }: { artwork: any }) => {
       alignItems="center"
       color="#000"
     >
-      <Text>No published artwork found</Text>
+      <Text>No published object found</Text>
     </Flex>
   );
 
   let urlPoster = "";
   let urlUsdz = "";
   let urlGlb = "";
-  if (artwork?.arObjects && artwork?.arObjects.length > 0) {
-    const arObject = artwork?.arObjects[0];
-
+  if (arObject?.arModels && arObject?.arModels?.length > 0) {
+    
     const [urlGlb, urlUsdz] = arObject?.arModels.reduce(
       (acc: string[], model: any) => {
         if (model.type === "glb") return [model?.meta?.originalFileUrl, acc[1]];
@@ -59,7 +58,7 @@ export const Artwork = ({ artwork }: { artwork: any }) => {
       content = <ApiArModel
         urlGlb={urlGlb}
         urlUsdz={urlUsdz}
-        alt={artwork?.title}
+        alt={arObject?.title}
         loading="auto"
         reveal="auto"
       />;
@@ -69,28 +68,16 @@ export const Artwork = ({ artwork }: { artwork: any }) => {
   return (
     <>
       <Head>
-        <title>{artwork.title} · OpenAR</title>
+        <title>{arObject.title} · OpenAR</title>
         <meta
           property="og:title"
-          content={`${artwork.title} · OpenAR`}
+          content={`${arObject.title} · OpenAR`}
           key="title"
         />
       </Head>
 
       <Box w="100%" h="100vh" bg="#ccc">
         {content}
-        {/* {artwork?.arObjects.length > 0 && 
-        
-          if (!arObject?.arModels?.length) return <></>;
-
-          
-
-          return (
-            <SwiperSlide key={`arObjct${i}`}>
-              
-            </SwiperSlide>
-          );
-        })} */}
       </Box>
     </>
   );
@@ -105,9 +92,9 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   const client = getApolloClient();
 
   // TODO: enable read protection of non published artworks
-  const artworkQuery = gql`
+  const query = gql`
     query ($key: String!) {
-      artwork(key: $key) {
+      arObject(key: $key) {
         id
         key
         title
@@ -132,38 +119,24 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 
           status
         }
-        arObjects {
+        arModels {
           id
-          key
-          title
-          orderNumber
-          status
-          askPrice
-          editionOf
-          heroImage {
-            id
-            meta
-            status
-          }
-          arModels {
-            id
-            meta
-            type
-          }
+          meta
+          type
         }
       }
     }
   `;
-
+  
   const { data } = await client.query({
-    query: artworkQuery,
+    query: query,
     variables: {
-      key: params.akey,
+      key: params.okey,
     },
   });
 
   // TODO: access protect artwork here
-  if (!data?.artwork) {
+  if (!data?.arObject) {
     return {
       notFound: true,
     };
@@ -171,13 +144,13 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 
   return {
     props: {
-      artwork: data?.artwork,
+      arObject: data?.arObject,
     },
   };
 };
 
-Artwork.getLayout = function getLayout(page: ReactElement) {
+ArObject.getLayout = function getLayout(page: ReactElement) {
   return <LayoutDeepLink>{page}</LayoutDeepLink>;
 };
 
-export default Artwork;
+export default ArObject;
