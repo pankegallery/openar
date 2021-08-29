@@ -10,35 +10,38 @@ import {
   Grid,
   Flex,
   Fade,
-  chakra
+  chakra,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import Image from 'next/image'
+import Image from "next/image";
 
 import openingBg from "~/assets/img/opening-bg.png";
-import betaPic from "~/assets/img/beta-corner.png";
+import betaPic from "~/assets/img/beta-corner3.png";
 
 const beta = true;
 
 export const Home = (props) => {
-
   return (
     <>
       <Head>
-        <meta property="og:title" content={`${props.pageTitle} · ${props.pageSlogan}`} key="title" />
+        <meta
+          property="og:title"
+          content={`${props.pageTitle} · ${props.pageSlogan}`}
+          key="title"
+        />
         <link rel="shortcut icon" href="/favicon.ico" />
         <meta name="description" content={props.pageDescription} />
       </Head>
       {/* --------- Background image --------- */}
-      <Box
-        position="fixed"
-        zIndex="100"
-        h="100vh"
-        w="100%"
-        overflow="hidden"
-
-      >
-        <Image src={openingBg} layout="fill" objectFit="cover" objectPosition="50% 100%"  alt="" role="presentation"/>
+      <Box position="fixed" zIndex="100" h="100vh" w="100%" overflow="hidden">
+        <Image
+          src={openingBg}
+          layout="fill"
+          objectFit="cover"
+          objectPosition="50% 100%"
+          alt=""
+          role="presentation"
+        />
       </Box>
 
       {/* --------- GRID --------- */}
@@ -89,11 +92,11 @@ export const Home = (props) => {
             }}
             p={{
               base: "6",
-              t: "10"
+              t: "10",
             }}
             pb={{
               base: "6",
-              t: "20"
+              t: "20",
             }}
             w={{
               base: "66.66vw",
@@ -109,27 +112,37 @@ export const Home = (props) => {
             flexDirection="column"
             alignContent="flex-end"
           >
-            {!beta&&
+            {!beta && (
               <Link href="/e/openar-art" passHref>
                 <chakra.a display="block" mt="auto">
-                  <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">OpenAR.art</chakra.h1>
-                  <chakra.p textStyle="subtitle" mb="1rem">Platform launch and groupshow
-      curated by Sakrowski and Jeremy Bailey </chakra.p>
-                  <chakra.p textStyle="workmeta">29 August 2021 – 4 October 2021 </chakra.p>
+                  <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">
+                    OpenAR.art
+                  </chakra.h1>
+                  <chakra.p textStyle="subtitle" mb="1rem">
+                    Platform launch and groupshow curated by Sakrowski and
+                    Jeremy Bailey{" "}
+                  </chakra.p>
+                  <chakra.p textStyle="workmeta">
+                    29 August 2021 – 4 October 2021{" "}
+                  </chakra.p>
                 </chakra.a>
               </Link>
-            }
-            {beta&&
+            )}
+            {beta && (
               <Link href="/beta" passHref>
                 <chakra.a display="block" mt="auto">
-                  <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">OpenAR.art</chakra.h1>
-                  <chakra.p textStyle="subtitle" mb="1rem">Groupshow
-      curated by Sakrowski and Jeremy Bailey </chakra.p>
-                  <chakra.p textStyle="workmeta">29 August 2021 – 4 October 2021 </chakra.p>
+                  <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">
+                    OpenAR.art
+                  </chakra.h1>
+                  <chakra.p textStyle="subtitle" mb="1rem">
+                    Groupshow curated by Sakrowski and Jeremy Bailey{" "}
+                  </chakra.p>
+                  <chakra.p textStyle="workmeta">
+                    29 August 2021 – 4 October 2021{" "}
+                  </chakra.p>
                 </chakra.a>
               </Link>
-            }
-
+            )}
           </Flex>
           {/* --------- TILE: Arrows  --------- */}
           <Flex
@@ -170,25 +183,58 @@ export const Home = (props) => {
             t: "start",
             d: "center",
           }}
-        >
-        </Box>
+        ></Box>
       </Grid>
       <Box
         className="betaVersion"
-        position="absolute"
-        left="="
+        position="fixed"
+        left={{
+          base: "auto",
+          d: 0,
+        }}
+        right={{
+          base: 0,
+          d: "auto",
+        }}
+        transform={{
+          base: "rotate(-90deg)",
+          d: "none",
+        }}
         bottom="0"
         zIndex="220"
         width={{
           base: "66.66vw",
-          t: "33.33vw"
+          t: "33.33vw",
         }}
         height={{
           base: "66.66vw",
-          t: "33.33vw"
+          t: "33.33vw",
         }}
       >
-        {/* <Image src={betaPic} layout="fill" objectFit="cover" objectPosition="50% 100%"  alt="" role="presentation"/> */}
+        {!beta && (
+          <Image
+            src={betaPic}
+            layout="fill"
+            objectFit="cover"
+            objectPosition="50% 100%"
+            alt=""
+            role="presentation"
+          />
+        )}
+        {beta && (
+          <chakra.span cursor="pointer">
+            <Link href="/beta" passHref>
+              <Image
+                src={betaPic}
+                layout="fill"
+                objectFit="cover"
+                objectPosition="50% 100%"
+                alt=""
+                role="presentation"
+              />
+            </Link>
+          </chakra.span>
+        )}
       </Box>
     </>
   );
@@ -198,9 +244,10 @@ Home.getInitialProps = () => {
   return {
     pageTitle: "OpenAR",
     pageSlogan: "The cooperative and crypto platform for AR artworks",
-    pageDescription: "OpenAR makes it easy to exhibit, collect and discuss Augmented Reality (AR) works and allows artists to sell their works as NFTs. The open platform is organised as a cooperative, profits will be shared among the artists."
-  }
-}
+    pageDescription:
+      "OpenAR makes it easy to exhibit, collect and discuss Augmented Reality (AR) works and allows artists to sell their works as NFTs. The open platform is organised as a cooperative, profits will be shared among the artists.",
+  };
+};
 
 Home.getLayout = function getLayout(page: ReactElement) {
   return <LayoutBlank beta={beta}>{page}</LayoutBlank>;
