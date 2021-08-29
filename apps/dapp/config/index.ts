@@ -11,6 +11,7 @@ export const appConfig: AppConfig = {
   apiDomain,
   contactEmail: "contact@openar.art",
   restrictedAccessRedirectUrl: "/",
+  reauthenticateRedirectUrl: "/openar/connect",
   apiUrl: `${process.env.NEXT_PUBLIC_API_URL}`,
   apiGraphQLUrl: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
   infuraApiKey: `${process.env.NEXT_PUBLIC_INFURA_ID}`,

@@ -24,6 +24,7 @@ export type AppConfigSettings = {
   contactEmail?: string | undefined;
   infuraApiKey?: string | undefined;
   ankrXDaiRPCURL?: string | undefined;
+  reauthenticateRedirectUrl?: string | undefined;
   defaultPageSize?: number;
 };
  

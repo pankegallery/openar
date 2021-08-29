@@ -29,6 +29,7 @@ import {
 import user from "~/services/user";
 import { getAppUser } from "~/services/authentication";
 import { store } from "~/redux";
+import { appConfig } from "~/config";
 
 export function useWalletLogin() {
   const [, setIsConnected] = useLocalStorage("connected", false);
@@ -119,8 +120,8 @@ export function useWalletLogin() {
 
       deactivate();
 
-      console.log("PUSH /");
-      Router.push("/");
+      console.log(`PUSH ${appConfig.reauthenticateRedirectUrl}`);
+      Router.push(appConfig.reauthenticateRedirectUrl);
 
     } catch (error) {
       setIsConnected(false);
@@ -181,7 +182,7 @@ export function useWalletLogin() {
     setIsConnected(true);
     Router.push("/openar/");
 
-  }, [triggerToast, setIsLoggingIn, setWalletLoginError]);
+  }, [triggerToast, setIsLoggingIn, setWalletLoginError, setIsConnected]);
 
   const walletLoginLogin = useCallback(
     async (signedMessage) => {
@@ -317,13 +318,13 @@ export function useWalletLogin() {
     },
     [
       handleError,
-      connector,
+      // connector,
       library,
       walletLoginFinalize,
       preloginMutation,
-      web3Injected,
+      // web3Injected,
       setWalletLoginError,
-      walletLoginRequestSignature,
+      // walletLoginRequestSignature,
     ]
   );
 
