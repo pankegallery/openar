@@ -30,7 +30,7 @@ export const Artwork = ({ artwork }: { artwork: any }) => {
   let content = (
     <Flex
       w="100vw"
-      h="100vh"
+      h="100%"
       justifyContent="center"
       alignItems="center"
       color="#000"
@@ -77,7 +77,7 @@ export const Artwork = ({ artwork }: { artwork: any }) => {
         />
       </Head>
 
-      <Box w="100%" h="100vh" bg="#ccc">
+      <Box w="100%" h="100%" bg="#ccc">
         {content}
         {/* {artwork?.arObjects.length > 0 && 
         

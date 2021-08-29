@@ -23,7 +23,7 @@ const themeConfig = {
     md: "30rem", // ~480px < Chakra requirement don't use
     mw: "30rem", // ~480px - aka "Mobile wide"
     lg: "45rem", // 720px < Chakra requirement don't use
-    t: "45rem", // 720px - aka "Tablet"
+    t: "38rem", // 720px - aka "Tablet"
     xl: "55rem", // 880px < Chakra requirement don't use
     tw: "55rem", // 880px - aka "Tablet Wide"
     d: "75rem", // 1200px - aka "Desktop"
@@ -43,7 +43,7 @@ const themeConfig = {
         height: "100%",
         overscrollBehavior: "none",
       },
-      "#root": {
+      "#root, #__next": {
         height: "100%",
       },
       body: {

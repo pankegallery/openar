@@ -11,12 +11,15 @@ import {
   Flex,
   Fade,
   chakra,
+  AspectRatio,
+  Image as ChakraImg
 } from "@chakra-ui/react";
 import Link from "next/link";
 import Image from "next/image";
 
 import openingBg from "~/assets/img/opening-bg.png";
-import betaPic from "~/assets/img/beta-corner2.png";
+//import betaPic from "~/assets/img/beta.svg";
+import BetaSVG from "~/assets/img/beta.svg";
 
 const beta = true;
 
@@ -203,12 +206,12 @@ export const Home = (props) => {
         bottom="0"
         zIndex="220"
         width={{
-          base: "66.66vw",
-          t: "33.33vw",
+          base: "50vw",
+          t: "25vw",
         }}
         height={{
-          base: "66.66vw",
-          t: "33.33vw",
+          base: "50vw",
+          t: "25vw",
         }}
       >
         {!beta && (
@@ -224,14 +227,19 @@ export const Home = (props) => {
         {beta && (
           <chakra.span cursor="pointer">
             <Link href="/beta" passHref>
-              <Image
+              <AspectRatio ratio={1}>
+                <chakra.img src="images/beta.svg" width="100%" height="100%" alt="We are in beta" />
+                
+              </AspectRatio>
+              
+              {/* <Image
                 src={betaPic}
                 layout="fill"
                 objectFit="cover"
                 objectPosition="50% 100%"
                 alt=""
                 role="presentation"
-              />
+              /> */}
             </Link>
           </chakra.span>
         )}
