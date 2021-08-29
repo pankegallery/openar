@@ -16,6 +16,7 @@ import Link from "next/link";
 import Image from 'next/image'
 
 import openingBg from "~/assets/img/opening-bg.png";
+import betaPic from "~/assets/img/beta.png";
 
 export const Home = (props) => {
   return (
@@ -153,9 +154,25 @@ export const Home = (props) => {
             d: "center",
           }}
         >
-
         </Box>
       </Grid>
+      <Box
+        className="betaVersion"
+        position="absolute"
+        left="="
+        bottom="0"
+        zIndex="220"
+        width={{
+          base: "66.66vw",
+          t: "33.33vw"
+        }}
+        height={{
+          base: "66.66vw",
+          t: "33.33vw"
+        }}
+      >
+        <Image src={betaPic} layout="fill" objectFit="cover" objectPosition="50% 100%"  alt="" role="presentation"/>
+      </Box>
     </>
   );
 };
