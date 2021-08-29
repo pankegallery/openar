@@ -88,7 +88,6 @@ const Update = () => {
             email: newData.email ?? "",
             bio: newData.bio ?? "",
             url: newData.url ?? "",
-            key: newData.key ?? "",
           }
         );
 
