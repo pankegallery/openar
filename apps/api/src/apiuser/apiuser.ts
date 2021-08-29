@@ -8,7 +8,6 @@ export interface AuthenticatedAppUserFunctions {
 
 export interface AuthenticatedAppUserData {
   id: number;
-  role: RoleName;
   roles: RoleName[];
   permissions: PermissionName[];
   pseudonym: string;
