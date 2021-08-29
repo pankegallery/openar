@@ -145,6 +145,7 @@ export const Artwork = ({ artwork, exhibition }: { artwork: any, exhibition: any
           bg="white"
           color="var(--chakra-colors-openar-dark)"
           p="6"
+          pt="10"
         >
           <Flex
             w="auto"

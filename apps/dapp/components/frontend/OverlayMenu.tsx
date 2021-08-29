@@ -46,11 +46,11 @@ export const OverlayMenu = ({mode = "dark"} : {mode?: any}) => {
   ];
 
   const secondaryMenu = [
-    { slug: "help", label: "Help", url: "p/help" },
+    { slug: "discord", label: "Discord", url: "https://discord.gg/efGHVEKM" },
     { slug: "badges", label: "Roles and Badges", url: "p/badges" },
-    { slug: "funding", label: "Platform funding", url: "p/funding" },
+//    { slug: "funding", label: "Platform funding", url: "p/funding" },
     { slug: "privpol", label: "Privacy policy", url: "p/privpol" },
-    { slug: "tandc", label: "Terms and Conditions", url: "p/tandc" },
+//    { slug: "tandc", label: "Terms and Conditions", url: "p/tandc" },
     { slug: "imprint", label: "Imprint", url: "p/imprint" },
   ];
 

@@ -14,8 +14,11 @@ import {
 } from "~/providers";
 import { chakraTheme } from "~/theme";
 
+import "@fontsource/manrope/300.css";
 import "@fontsource/manrope/400.css";
+import "@fontsource/manrope/500.css";
 import "@fontsource/manrope/600.css";
+import "@fontsource/manrope/800.css";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;

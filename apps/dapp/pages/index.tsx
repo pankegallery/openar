@@ -16,9 +16,12 @@ import Link from "next/link";
 import Image from 'next/image'
 
 import openingBg from "~/assets/img/opening-bg.png";
-import betaPic from "~/assets/img/beta.png";
+import betaPic from "~/assets/img/beta-corner.png";
+
+const beta = true;
 
 export const Home = (props) => {
+
   return (
     <>
       <Head>
@@ -77,6 +80,7 @@ export const Home = (props) => {
         >
           {/* --------- TILE: Exhibition title  --------- */}
           <Flex
+            className="exhibitionTile"
             borderTop="1px solid #fff"
             borderRight="1px solid #fff"
             borderLeft={{
@@ -105,14 +109,27 @@ export const Home = (props) => {
             flexDirection="column"
             alignContent="flex-end"
           >
-            <Link href="/e/openar-art" passHref>
-              <chakra.a display="block" mt="auto">
-                <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">OpenAR.art</chakra.h1>
-                <chakra.p textStyle="subtitle" mb="1rem">Platform launch and groupshow
-    curated by Sakrowski and Jeremy Bailey </chakra.p>
-                <chakra.p textStyle="workmeta">29 August 2021 – 4 October 2021 </chakra.p>
-              </chakra.a>
-            </Link>
+            {!beta&&
+              <Link href="/e/openar-art" passHref>
+                <chakra.a display="block" mt="auto">
+                  <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">OpenAR.art</chakra.h1>
+                  <chakra.p textStyle="subtitle" mb="1rem">Platform launch and groupshow
+      curated by Sakrowski and Jeremy Bailey </chakra.p>
+                  <chakra.p textStyle="workmeta">29 August 2021 – 4 October 2021 </chakra.p>
+                </chakra.a>
+              </Link>
+            }
+            {beta&&
+              <Link href="/beta" passHref>
+                <chakra.a display="block" mt="auto">
+                  <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">OpenAR.art</chakra.h1>
+                  <chakra.p textStyle="subtitle" mb="1rem">Groupshow
+      curated by Sakrowski and Jeremy Bailey </chakra.p>
+                  <chakra.p textStyle="workmeta">29 August 2021 – 4 October 2021 </chakra.p>
+                </chakra.a>
+              </Link>
+            }
+
           </Flex>
           {/* --------- TILE: Arrows  --------- */}
           <Flex
@@ -186,7 +203,7 @@ Home.getInitialProps = () => {
 }
 
 Home.getLayout = function getLayout(page: ReactElement) {
-  return <LayoutBlank>{page}</LayoutBlank>;
+  return <LayoutBlank beta={beta}>{page}</LayoutBlank>;
 };
 
 export default Home;
