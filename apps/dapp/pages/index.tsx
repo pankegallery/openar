@@ -119,12 +119,14 @@ export const Home = (props) => {
               </Link>
             }
             {beta&&
-              <>
-                <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">OpenAR.art</chakra.h1>
-                <chakra.p textStyle="subtitle" mb="1rem">Platform launch and groupshow
-    curated by Sakrowski and Jeremy Bailey </chakra.p>
-                <chakra.p textStyle="workmeta">29 August 2021 – 4 October 2021 </chakra.p>
-              </>
+              <Link href="/beta" passHref>
+                <chakra.a display="block" mt="auto">
+                  <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">OpenAR.art</chakra.h1>
+                  <chakra.p textStyle="subtitle" mb="1rem">Groupshow
+      curated by Sakrowski and Jeremy Bailey </chakra.p>
+                  <chakra.p textStyle="workmeta">29 August 2021 – 4 October 2021 </chakra.p>
+                </chakra.a>
+              </Link>
             }
 
           </Flex>

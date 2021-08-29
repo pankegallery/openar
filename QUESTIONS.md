@@ -2,6 +2,7 @@
 
 - Währung, Icon?
 
+– Es werden nicht alle Schriften geladen
 
 
 
