@@ -18,7 +18,7 @@ import Image from "next/image";
 import openingBg from "~/assets/img/opening-bg.png";
 import betaPic from "~/assets/img/beta-corner3.png";
 
-const beta = true;
+const beta = false;
 
 export const Home = (props) => {
   return (
@@ -52,7 +52,7 @@ export const Home = (props) => {
         top="0"
         left="0"
         w="100%"
-        h="100vh"
+        h="100%"
         zIndex="200"
         templateRows={{
           base: "calc(66.66vw * 2) auto",
