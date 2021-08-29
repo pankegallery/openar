@@ -251,6 +251,14 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
             className="footer"
             p="6"
             pr="10"
+            pl={{
+              base: "2",
+              t: "6"
+            }}
+            pt={{
+              base: "10",
+              t: "6"
+            }}
             layerStyle="backdropGradient"
             w={{
               base: "33.33vw",
@@ -278,6 +286,10 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
             ml={{
               base: "0",
               d: "auto",
+            }}
+            flexDirection={{
+              base: "column",
+              t: "row"
             }}
           >
             <chakra.p textStyle="bigLabel" ml="auto">
