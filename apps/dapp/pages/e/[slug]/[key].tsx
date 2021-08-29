@@ -155,7 +155,7 @@ export const Artwork = ({ artwork, exhibition }: { artwork: any, exhibition: any
                 <Arrow className="arrow" />
               </a>
             </Link>
-            <Link href="/next">
+            <Link href="/next" passHref>
               <chakra.a ml="6">
                 <Arrow className="arrow right" />
               </chakra.a>

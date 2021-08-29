@@ -8,8 +8,7 @@ import remarkGfm from "remark-gfm";
 import { Box, Flex, chakra } from "@chakra-ui/react";
 
 function PageTemplate({ content, data }) {
-  console.log("content: ", content);
-  console.log("data: ", data);
+
   const frontmatter = data;
 
   return (

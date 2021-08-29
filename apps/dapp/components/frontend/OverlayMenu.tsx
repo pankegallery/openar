@@ -47,7 +47,7 @@ export const OverlayMenu = ({mode = "dark"} : {mode?: any}) => {
 
   const secondaryMenu = [
     { slug: "help", label: "Help", url: "p/help" },
-    { slug: "badges", label: "Roles and Badges", url: "p/tandc" },
+    { slug: "badges", label: "Roles and Badges", url: "p/badges" },
     { slug: "funding", label: "Platform funding", url: "p/funding" },
     { slug: "privpol", label: "Privacy policy", url: "p/privpol" },
     { slug: "tandc", label: "Terms and Conditions", url: "p/tandc" },
