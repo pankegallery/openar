@@ -29,7 +29,7 @@ import { authentication } from "~/services";
 import { appConfig } from "~/config";
 import { ArModelStatusEnum } from "~/utils";
 import type { ApiArModelMetaInformation } from "~/types";
-import { ApiArModel } from "~/components/ui/ApiArModel";
+import { ApiArModel } from "~/components/ui";
 
 export type ApiArModelProps = {
   id: number | undefined;
@@ -367,6 +367,9 @@ export const FieldModelUploader = ({
               urlGlb={(type === "glb" && urlGlb) ? urlGlb : undefined}
               urlUsdz={(type === "usdz" && urlUsdz) ? urlUsdz  : undefined}
               alt={`AR Model ${type}`}
+              loading="eager"
+              reveal="auto"
+              autoplay={true}
             />
 
             <IconButton

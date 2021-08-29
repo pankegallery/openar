@@ -117,7 +117,7 @@ const themeConfig = {
         }
       },
       ".openar.content": {
-        bg: "var(s)",
+        bg: "var(--chakra-colors-openar-muddygreen)",
         color: "#fff",
       },
       "model-viewer": {

@@ -125,8 +125,8 @@ const Create = () => {
   const buttonList: ButtonListElement[] = [
     {
       type: "back",
-      to: moduleConfig.rootPath,
-      label: "Cancel",
+      to: `${moduleConfig.rootPath}/${router.query.aid}/update`,
+      label: "Back to artwork",
       userCan: "artworkReadOwn",
       isDisabled: disableNavigation,
     },

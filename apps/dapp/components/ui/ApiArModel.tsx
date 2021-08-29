@@ -9,6 +9,9 @@ export type ApiArModelProps = {
   urlUsdz?: string;
   urlGlb?: string;
   urlPoster?: string;
+  autoplay?: boolean;
+  loading?: string;
+  reveal?: string;
 };
 
 export interface ModelViewerJSX {
@@ -22,7 +25,7 @@ export interface ModelViewerJSX {
   "camera-controls"?: any;
   "auto-rotate"?: any;
   alt?: string;
-  "ios-src"?: string;
+  "ios-src"?: string;  
 }
 
 declare global {
@@ -39,7 +42,10 @@ export const ApiArModel = ({
   urlUsdz,
   urlGlb,
   urlPoster,
-  bg = "#ccc"
+  autoplay = false,
+  bg = "#ccc",
+  loading = "interaction",
+  reveal = "auto",
 }: ApiArModelProps) => {
   const [content, setContent] = useState(<></>)
 
@@ -87,14 +93,15 @@ export const ApiArModel = ({
       if (urlGlb || urlUsdz)
       setContent(
           <model-viewer
-            loading="eager"
+            loading={loading}
+            reveal={reveal}
             exposure="0.6"
             ar=""
             ar-modes="webxr scene-viewer quick-look"
             ar-scale="auto"
             camera-controls=""
             auto-rotate=""
-            autoplay
+            autoplay={autoplay}
             alt={alt}
             {...props}
           >{renderNotice}</model-viewer>

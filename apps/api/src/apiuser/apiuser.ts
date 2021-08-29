@@ -25,7 +25,6 @@ export interface JwtPayloadAuthenticatedAppUser {
   pseudonym?: string | null;
   email?: string | null;
   ethAddress: string;
-  role?: string;
   roles?: RoleName[];
   permissions?: PermissionName[];
 }
@@ -45,7 +44,6 @@ const can = (
 
 export const createAuthenticatedAppUser = (
   id: number,
-  role: RoleName,
   roles: RoleName[],
   permissions: PermissionName[],
   pseudonym: string,
@@ -53,7 +51,6 @@ export const createAuthenticatedAppUser = (
 ): AuthenticatedAppUser => {
   const user: AuthenticatedAppUser = {
     id,
-    role,
     roles,
     permissions,
     pseudonym,
