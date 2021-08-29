@@ -19,10 +19,7 @@ import { ApiImage, ApiArModel } from "~/components/ui";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Thumbs } from "swiper";
-
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+import MenuCornerDark from "~/assets/img/menu-corner-dark.svg";
 
 export const Artwork = ({ artwork }: { artwork: any }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -56,16 +53,18 @@ export const Artwork = ({ artwork }: { artwork: any }) => {
     );
 
     if (urlGlb || urlUsdz) {
-      content = <ApiArModel
-        urlGlb={urlGlb}
-        urlUsdz={urlUsdz}
-        alt={artwork?.title}
-        loading="auto"
-        reveal="auto"
-      />;
+      content = (
+        <ApiArModel
+          urlGlb={urlGlb}
+          urlUsdz={urlUsdz}
+          alt={artwork?.title}
+          loading="auto"
+          reveal="auto"
+        />
+      );
     }
   }
-   
+
   return (
     <>
       <Head>
@@ -78,19 +77,29 @@ export const Artwork = ({ artwork }: { artwork: any }) => {
       </Head>
 
       <Box w="100%" h="100%" bg="#ccc">
+        <Box
+          className="openOverlayMenu"
+          w="100px"
+          h="100"
+          position="fixed"
+          top="0"
+          right="0"
+          zIndex="300"
+          p="0"
+          border="0"
+          variant="functional"
+        >
+          {" "}
+          <MenuCornerDark
+            viewBox="0 0 120 120"
+            width="120px"
+            height="120px"
+            className="menuCorner"
+          />
+        </Box>
+
         {content}
-        {/* {artwork?.arObjects.length > 0 && 
-        
-          if (!arObject?.arModels?.length) return <></>;
 
-          
-
-          return (
-            <SwiperSlide key={`arObjct${i}`}>
-              
-            </SwiperSlide>
-          );
-        })} */}
       </Box>
     </>
   );
@@ -173,6 +182,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     props: {
       artwork: data?.artwork,
     },
+    revalidate: 60, 
   };
 };
 
