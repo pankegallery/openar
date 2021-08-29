@@ -23,13 +23,12 @@ export const Beta = (props) => {
       </Head>
 
       <Flex
-        position="fixed"
         zIndex="100"
-        h="100vh"
+        h="100%"
         w="100%"
-        overflow="hidden"
         bg="#EEEF01"
         p="10"
+        minHeight="100vh"
       >
         {/* --------- Text box --------- */}
         <Box m="auto" maxWidth="800px">

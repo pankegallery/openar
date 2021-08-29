@@ -8,6 +8,8 @@ import { OverlayMenu} from "../frontend";
 
 export const LayoutBlank = ({mode = "dark", beta = "false", children} : {mode?: any, beta?: boolean, children: ReactNode}) => {
 
+  console.log(beta)
+
   return (
     <WalletConnectGate>
       <Head>
