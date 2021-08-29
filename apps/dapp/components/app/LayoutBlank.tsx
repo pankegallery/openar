@@ -6,7 +6,7 @@ import { WalletConnectGate } from "./shared";
 import {LoadingBar} from "~/components/app/shared";
 import { OverlayMenu} from "../frontend";
 
-export const LayoutBlank = ({  children }: { children: ReactNode }) => {
+export const LayoutBlank = ({mode = "dark", children} : {mode?: any, children: ReactNode}) => {
 
   return (
     <WalletConnectGate>
@@ -15,10 +15,10 @@ export const LayoutBlank = ({  children }: { children: ReactNode }) => {
         <meta property="og:title" content="OpenAR · A cooperative and crypto platform for AR artworks" key="title" />
       </Head>
       <LoadingBar color="#000"/>
-      <Box className="site content">
+      <Box className={`site content corner-${mode}`}>
         {children}
       </Box>
-      <OverlayMenu/>
+      <OverlayMenu mode={mode} />
     </WalletConnectGate>
   );
 };

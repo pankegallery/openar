@@ -33,7 +33,7 @@ export const ArtworkListItem = ({
   let artist = creator?.pseudonym ? `${creator?.pseudonym}` : "";
   if (artist.trim().length === 0) artist = creator?.ethAddress;
 
-  const href = isAdmin ? `/openar/artworks/${id}/update` : `/a/${urlKey}/`;
+  const href = isAdmin ? `/openar/artworks/${id}/update` : `/e/openar-art/${urlKey}/`;
 
   return (
     <LinkBox

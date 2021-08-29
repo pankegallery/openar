@@ -82,7 +82,7 @@ export const components = {
         p: "0",
         fontSize: {
           base: "26px",
-          d: "42px"
+          t: "42px"
         },
         fontWeight: "bold",
         lineHeight: "130%",

@@ -19,16 +19,17 @@ import { useWalletLogin } from "~/hooks";
 import Close from "~/assets/img/close.svg";
 import Logo from "~/assets/img/logo-white.svg";
 import MenuCornerWhite from "~/assets/img/menu-corner-light.svg";
+import MenuCornerDark from "~/assets/img/menu-corner-dark.svg";
 import { useRouter } from "next/router";
 
-export const OverlayMenu = () => {
+export const OverlayMenu = ({mode = "dark"} : {mode?: any}) => {
   const router = useRouter();
 
   const { account } = useWalletLogin();
   const { isOpen, onToggle, onClose } = useDisclosure();
   const [isClosing, setIsClosing] = useState(false);
-  const isTablet = useSSRSaveMediaQuery(
-    "(min-width: 45rem) and (max-width: 74em)"
+  const isDesktop = useSSRSaveMediaQuery(
+    "(min-width: 75rem)"
   );
   const aboutText = (
     <Box textStyle="subtitle">
@@ -47,10 +48,9 @@ export const OverlayMenu = () => {
   const secondaryMenu = [
     { slug: "help", label: "Help", url: "p/help" },
     { slug: "badges", label: "Roles and Badges", url: "p/tandc" },
-    { slug: "wallets", label: "Wallets", url: "p/wallets" },
-    { slug: "tandc", label: "Terms and Conditions", url: "p/tandc" },
     { slug: "funding", label: "Platform funding", url: "p/funding" },
     { slug: "privpol", label: "Privacy policy", url: "p/privpol" },
+    { slug: "tandc", label: "Terms and Conditions", url: "p/tandc" },
     { slug: "imprint", label: "Imprint", url: "p/imprint" },
   ];
 
@@ -74,6 +74,7 @@ export const OverlayMenu = () => {
     <>
       <Button
         onClick={onToggle}
+        className="openOverlayMenu"
         w="100px"
         h="100"
         position="fixed"
@@ -84,7 +85,13 @@ export const OverlayMenu = () => {
         border="0"
         variant="functional"
       >
-        <MenuCornerWhite viewBox="0 0 120 120" width="120px" height="120px" />
+        {(mode==="light")&&
+          <MenuCornerDark viewBox="0 0 120 120" width="120px" height="120px" className="menuCorner"/>
+        }
+        {(mode==="dark")&&
+          <MenuCornerWhite viewBox="0 0 120 120" width="120px" height="120px" className="menuCorner"/>
+        }
+
       </Button>
 
       <Portal>
@@ -99,7 +106,7 @@ export const OverlayMenu = () => {
             layerStyle="backdropDark"
             zIndex="301"
             templateRows={{
-              base: "var(--openar-header-height-mobile) 100vw auto",
+              base: "66.66vw 66.66vw auto",
               t: "var(--openar-header-height-desktop) 50vw auto",
               d: "var(--openar-header-height-desktop) 33.33vw auto",
             }}
@@ -117,16 +124,24 @@ export const OverlayMenu = () => {
               pr="2"
               justifyContent="space-between"
               alignItems="flex-start"
+              flexWrap="wrap"
             >
               <Logo viewBox="4 8 70 70" width="120px" height="120px" />
-              {isTablet && (
+              {!isDesktop && (
                 <Box
                   className="about"
                   p="0"
-                  w="66.66vw"
+                  w={{
+                    base: "85vw",
+                    t: "66.66vw"
+                  }}
                   h={{
                     base: "var(--openar-header-height-mobile)",
                     t: "33.33vw",
+                  }}
+                  order={{
+                    base: "3",
+                    t: "inherit"
                   }}
                 >
                   {aboutText}
@@ -154,7 +169,7 @@ export const OverlayMenu = () => {
               direction="row"
               zIndex="302"
             >
-              {!isTablet && (
+              {isDesktop && (
                 <Flex
                   className="about"
                   p={{
@@ -247,6 +262,7 @@ export const OverlayMenu = () => {
             <Box
               className="footer"
               p="6"
+              pb="2"
               layerStyle="backdropGradient"
               w={{
                 base: "66.66vw",
@@ -266,16 +282,20 @@ export const OverlayMenu = () => {
                 t: "end",
                 d: "center",
               }}
+              minHeight="100px"
             >
               <chakra.nav
                 className="secondary"
                 display="flex"
                 flexWrap="wrap"
                 textStyle="small"
+                flexDirection="column"
+                maxHeight="110%"
                 sx={{
                   a: {
                     flex: "50% 0 0",
                     mb: "2",
+                    mr: "4",
                   },
                 }}
               >

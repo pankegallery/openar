@@ -55,13 +55,14 @@ a {
         }
     }
 
-    .arrowLink.to &{
-        transform: rotate(-180deg) translate(5px, 3px);
+    .arrowLink.to &, &.right{
+        transform: rotate(-180deg) translate(5px, 3.7px);
         transform-origin: center center;
     }
 
-    .arrowLink.to:hover > &{
-        transform: rotate(-180deg) translate(0px, 3px);
+    .arrowLink.to:hover > &,
+    &.right:hover {
+        transform: rotate(-180deg) translate(0px, 3.7px);
     }
 }
 
@@ -242,19 +243,35 @@ a {
 
     &:nth-child(4n + 1),
     &:nth-child(4n + 2) {
-      flex-direction: row;
-      .info {
-        a::before {
-          left: auto;
-          right: 0;
+          flex-direction: row;
+          .info {
+            a::before {
+              left: auto;
+              right: 0;
+            }
+          }
         }
-      } 
     }
-  }
+
+    .corner-light + .openOverlayMenu {
+        right: 50vw;
+    }
 }
 
 @media (min-width: 75rem){
     .artwork.item {
         width: 100%;
     }
+
+    .corner-light + .openOverlayMenu {
+        right: 33.33vw;
+    }
+
 }
+
+.artworkDetails{
+    .label{
+        margin-bottom: 0.5em;
+    }
+}
+
