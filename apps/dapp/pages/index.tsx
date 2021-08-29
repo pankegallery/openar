@@ -171,7 +171,7 @@ export const Home = (props) => {
           t: "33.33vw"
         }}
       >
-        <Image src={betaPic} layout="fill" objectFit="cover" objectPosition="50% 100%"  alt="" role="presentation"/>
+        {/* <Image src={betaPic} layout="fill" objectFit="cover" objectPosition="50% 100%"  alt="" role="presentation"/> */}
       </Box>
     </>
   );
