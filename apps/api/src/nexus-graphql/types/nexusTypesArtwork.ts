@@ -209,6 +209,7 @@ export const ArtworkQueries = extendType({
       },
     });
 
+    // TODO: properly enable read protection of non published artworks
     t.nonNull.field("artwork", {
       type: "Artwork",
 
@@ -275,6 +276,14 @@ export const ArtworkQueries = extendType({
                 title: true,
                 askPrice: true,
                 editionOf: true,
+                heroImage: {
+                  select: {
+                    id: true,
+                    meta: true,
+                    status: true,
+                  },
+                },
+                arModels: true,
               },
               where: {
                 status: {
@@ -286,8 +295,8 @@ export const ArtworkQueries = extendType({
                 },
               },
               orderBy: {
-                orderNumber: "asc"
-              }
+                orderNumber: "asc",
+              },
             },
           };
         }
@@ -576,11 +585,22 @@ export const ArtworkMutations = extendType({
       },
 
       async resolve(...[, args]) {
-        const artwork = await daoArtworkUpdate(args.id, {
+        // TODO: remove once all keys are set
+        let data: any = {
           ...args.data,
           type: 1,
+          key: undefined,
           status: args.data?.status ?? ArtworkStatusEnum.DRAFT,
-        });
+        };
+
+        if (args?.data?.key) {
+          data = {
+            ...data,
+            key: args?.data?.key,
+          };
+        }
+
+        const artwork = await daoArtworkUpdate(args.id, data);
 
         if (!artwork)
           throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Update failed");

@@ -140,7 +140,7 @@ export const OverlayMenu = ({mode = "dark"} : {mode?: any}) => {
                     t: "33.33vw",
                   }}
                   order={{
-                    base: "3",
+                    base: 3,
                     t: "inherit"
                   }}
                 >

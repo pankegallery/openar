@@ -43,7 +43,7 @@ export const ModuleArtworkArObjectsList = ({
         data?.artworkReadOwn?.arObjects.map((arObject) => (
           <chakra.li key={`arObj${arObject.key}`} borderTop="1px solid #fff" listStyleType="none" _last={{
             borderBottom: "1px solid #fff"
-          }} lineHeight="2rem">
+          }} lineHeight="2.5rem">
             <Link
               href={`${moduleConfig.rootPath}/${router.query.aid}/${arObject.id}/update`}
               passHref

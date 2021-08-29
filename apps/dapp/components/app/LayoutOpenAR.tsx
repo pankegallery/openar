@@ -14,39 +14,41 @@ export const LayoutOpenAR = ({ children }: { children: ReactNode }) => {
   const isMobile = useSSRSaveMediaQuery("(max-width: 55em)");
 
   return (
-    <ThemeProvider theme={styledComponentsTheme}>
-      <WalletConnectGate>
-        <AuthenticationSessionActiveGate>
-          <LoadingBar color="#fff" />
-          <Grid
-            templateColumns={
-              isMobile
-                ? "100%"
-                : "calc(100% - max(350px, 20vw)) max(350px, 20vw) "
-            }
-            alignItems="start"
-            className="openar content"
-            minH="100%"
-          >
-            <Grid
-              className="main"
-              templateRows={isMobile ? "100%" : "calc(1fr - 4rem) 4rem"}
-              minH="100vh"
-            >
-              <Box>{children}</Box>
-            </Grid>
-            <Sidebar />
-          </Grid>
-          <OverlayMenu />
-        </AuthenticationSessionActiveGate>
-      </WalletConnectGate>
+    <>
       <style jsx global>{`
         body {
           background-color: var(--chakra-colors-openar-muddygreen);
           color: #fff;
         }
       `}</style>
-    </ThemeProvider>
+      <ThemeProvider theme={styledComponentsTheme}>
+        <WalletConnectGate>
+          <AuthenticationSessionActiveGate>
+            <LoadingBar color="#fff" />
+            <Grid
+              templateColumns={
+                isMobile
+                  ? "100%"
+                  : "calc(100% - max(350px, 20vw)) max(350px, 20vw) "
+              }
+              alignItems="start"
+              className="openar content"
+              minH="100%"
+            >
+              <Grid
+                className="main"
+                templateRows={isMobile ? "100%" : "calc(1fr - 4rem) 4rem"}
+                minH="100vh"
+              >
+                <Box>{children}</Box>
+              </Grid>
+              <Sidebar />
+            </Grid>
+            <OverlayMenu />
+          </AuthenticationSessionActiveGate>
+        </WalletConnectGate>
+      </ThemeProvider>
+    </>
   );
 };
 export default LayoutOpenAR;

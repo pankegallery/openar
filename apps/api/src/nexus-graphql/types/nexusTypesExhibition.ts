@@ -33,7 +33,11 @@ import {
   //   daoImageSaveImageTranslations,
 } from "../../dao";
 
-import { ArtworkStatusEnum, ExhibitionStatusEnum } from "../../utils";
+import {
+  ArtworkStatusEnum,
+  ExhibitionStatusEnum,
+  ArObjectStatusEnum,
+} from "../../utils";
 
 export const Exhibition = objectType({
   name: "Exhibition",
@@ -108,6 +112,34 @@ export const EventQueries = extendType({
             {
               heroImage: true,
               creator: true,
+              arObjects: {
+                select: {
+                  id: true,
+                  status: true,
+                  key: true,
+                  orderNumber: true,
+                  title: true,
+                  askPrice: true,
+                  editionOf: true,
+                },
+                heroImage: {
+                  select: {
+                    meta: true,
+                    status: true,
+                    id: true,
+                  },
+                },
+                where: {
+                  status: [
+                    ArObjectStatusEnum.PUBLISHED,
+                    ArObjectStatusEnum.MINTING,
+                    ArObjectStatusEnum.MINTED,
+                  ],
+                },
+                orderby: {
+                  orderNumber: "asc",
+                },
+              },
             },
             {},
             0,

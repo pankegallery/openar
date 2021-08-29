@@ -14,6 +14,7 @@ import Arrow from "~/assets/img/arrow.svg";
 import {ArtworkListItem} from "~/components/frontend";
 import pick from "lodash/pick";
 import { useSSRSaveMediaQuery } from "~/hooks";
+import { ApiImage } from "~/components/ui";
 
 
 export const Artwork = ({ artwork, exhibition }: { artwork: any, exhibition: any }) => {
@@ -21,6 +22,8 @@ export const Artwork = ({ artwork, exhibition }: { artwork: any, exhibition: any
   const isDesktop = useSSRSaveMediaQuery(
     "(min-width: 75rem)"
   );
+
+  const startWith = artwork?.heroImage && artwork?.heroImage?.id ? "image" : "firstObject";
 
   return (
     <>
@@ -33,7 +36,7 @@ export const Artwork = ({ artwork, exhibition }: { artwork: any, exhibition: any
         />
       </Head>
       {/* --------- Background image --------- */}
-      <Box
+      {/* <Box
         position="relative"
         zIndex="100"
         h="100vh"
@@ -49,7 +52,7 @@ export const Artwork = ({ artwork, exhibition }: { artwork: any, exhibition: any
           alt=""
           role="presentation"
         />
-      </Box>
+      </Box> */}
 
       {/* --------- Column Layout --------- */}
       <Flex
@@ -74,12 +77,12 @@ export const Artwork = ({ artwork, exhibition }: { artwork: any, exhibition: any
         }}
       >
         {/* --------- COL: Exhibition (desktop only) --------- */}
-        {isDesktop&&
+        {/* {isDesktop&&
           <Flex
             direction="column"
             className="exhibitionColumn"
           >
-            {/* --------- ROW: Header row --------- */}
+            {/* --------- ROW: Header row --------- * /}
             <Flex
               w="33.33vw"
               h="var(--openar-header-height-desktop)"
@@ -92,7 +95,7 @@ export const Artwork = ({ artwork, exhibition }: { artwork: any, exhibition: any
               </Link>
             </Flex>
 
-            {/* --------- Exhibition title  --------- */}
+            {/* --------- Exhibition title  --------- * /}
             <Flex
               borderY="1px solid #fff"
               p="10"
@@ -119,11 +122,27 @@ export const Artwork = ({ artwork, exhibition }: { artwork: any, exhibition: any
               </Link>
             </Flex>
           </Flex>
-        }
+        } */}
         {/* --------- COL: Artwork images --------- */}
         <Flex
           direction="column"
+          height="100vh"
+          overflowY="auto"
+          w={{
+            base:"100vw",
+            t:"50vw",
+            d:"33.33vw"
+          }}
         >
+            {startWith === "image" && <ApiImage
+              id={artwork?.heroImage?.id}
+              meta={artwork?.heroImage?.meta}
+              status={artwork?.heroImage?.status}
+              alt={artwork?.title}
+              sizes="(min-width: 75rem) 33.33vw, (min-width: 45rem) 50vw, 100vw"
+              forceAspectRatioPB={100}
+            />}
+
         </Flex>
 
         {/* --------- COL: Artwork details) --------- */}
@@ -146,8 +165,9 @@ export async function getStaticPaths() {
 export const getStaticProps = async ({ params }: { params: any }) => {
   const client = getApolloClient();
 
+  // TODO: enable read protection of non published artworks
   const artworkQuery = gql`
-    query ($key: String!, $slug: String!) {
+    query ($key: String!) {
       artwork(key: $key) {
         id
         key
@@ -159,6 +179,11 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           ethAddress
           bio
           url
+          profileImage {
+            id
+            meta
+            status
+          }
         }
         url
         video
@@ -183,43 +208,12 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           }
         }
       }
-      exhibition(slug:  $slug) {
-        id
-        slug
-        title
-        subtitle
-        description
-        dateBegin
-        dateEnd
-        status
-        curators {
-          pseudonym
-          id
-          ethAddress
-        }
-        artworks {
-          id
-          key
-          title
-          description
-          creator {
-            id
-            pseudonym
-            ethAddress
-          }
-          heroImage {
-            id
-            meta
-            status
-          }
-        }
-      }
     }`;
 
   const { data } = await client.query({
     query: artworkQuery,
     variables: {
-      slug: params.slug,
+      key: params.key
     },
   });
 

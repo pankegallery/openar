@@ -181,7 +181,7 @@ const Update = () => {
     {
       type: "back",
       to: `${moduleConfig.rootPath}/${router.query.aid}/update`,
-      label: "Cancel",
+      label: "Back to artwork",
       isDisabled: disableNavigation || activeUploadCounter > 0,
       userCan: "artworkReadOwn",
     },

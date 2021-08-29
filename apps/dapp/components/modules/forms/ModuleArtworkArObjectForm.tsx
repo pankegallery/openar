@@ -203,7 +203,7 @@ export const ModuleArtworkArObjectForm = ({
                   },
                 }}
                 settings={{
-                  minFileSize: 1024 * 1024 * 0.0488,
+                  // minFileSize: 1024 * 1024 * 0.0488,
                   maxFileSize: 1024 * 1024 * 5,
                   aspectRatioPB: 100, // % bottom padding
 
@@ -246,7 +246,7 @@ export const ModuleArtworkArObjectForm = ({
                     },
                   }}
                   settings={{
-                    minFileSize: 1024 * 1024 * 0.0488,
+                    // minFileSize: 1024 * 1024 * 0.0488,
                     maxFileSize: 1024 * 1024 * 50,
                     accept: ".glb",
                     model: {
@@ -273,7 +273,7 @@ export const ModuleArtworkArObjectForm = ({
                     },
                   }}
                   settings={{
-                    minFileSize: 1024 * 1024 * 0.0488,
+                    // minFileSize: 1024 * 1024 * 0.0488,
                     maxFileSize: 1024 * 1024 * 50,
                     accept: ".usdz",
                     model: {

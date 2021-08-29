@@ -153,7 +153,7 @@ export const ModuleArtworkForm = ({
               route="image"
               id="heroImage"
               name="heroImage"
-              label="Featured Image"
+              label="Featured Image (leave empty to start with first object)"
               isRequired={yupIsFieldRequired("heroImage", validationSchema)}
               setActiveUploadCounter={setActiveUploadCounter}
               deleteButtonGQL={imageDeleteMutationGQL}
@@ -165,7 +165,7 @@ export const ModuleArtworkForm = ({
                 },
               }}
               settings={{
-                minFileSize: 1024 * 1024 * 0.0488,
+                // minFileSize: 1024 * 1024 * 0.0488,
                 maxFileSize: 1024 * 1024 * 5,
                 aspectRatioPB: 100, // % bottom padding
 

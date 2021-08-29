@@ -9,6 +9,10 @@ export type ApiArModelProps = {
   urlUsdz?: string;
   urlGlb?: string;
   urlPoster?: string;
+  enforceAspectRatio?: boolean;
+  autoplay?: boolean;
+  loading?: string;
+  reveal?: string;
 };
 
 export interface ModelViewerJSX {
@@ -22,7 +26,7 @@ export interface ModelViewerJSX {
   "camera-controls"?: any;
   "auto-rotate"?: any;
   alt?: string;
-  "ios-src"?: string;
+  "ios-src"?: string;  
 }
 
 declare global {
@@ -39,10 +43,23 @@ export const ApiArModel = ({
   urlUsdz,
   urlGlb,
   urlPoster,
-  bg = "#ccc"
+  autoplay = false,
+  bg = "#ccc",
+  loading = "interaction",
+  reveal = "auto",
+  enforceAspectRatio = false,
 }: ApiArModelProps) => {
   const [content, setContent] = useState(<></>)
 
+  useEffect(() => {
+    const run = async () => {
+      if (typeof window === "undefined")
+        return;
+
+      await import("@google/model-viewer")
+    }
+    run(); 
+  },[]);
 
   useEffect(() => {
     const run = async () => {
@@ -87,14 +104,15 @@ export const ApiArModel = ({
       if (urlGlb || urlUsdz)
       setContent(
           <model-viewer
-            loading="eager"
+            loading={loading}
+            reveal={reveal}
             exposure="0.6"
             ar=""
             ar-modes="webxr scene-viewer quick-look"
             ar-scale="auto"
             camera-controls=""
             auto-rotate=""
-            autoplay
+            autoplay={autoplay}
             alt={alt}
             {...props}
           >{renderNotice}</model-viewer>
@@ -103,7 +121,10 @@ export const ApiArModel = ({
     }
     run();
 
-  }, [urlGlb, urlUsdz, setContent, urlPoster, alt])
+  }, [urlGlb, urlUsdz, setContent, urlPoster, alt, autoplay, loading, reveal])
 
-  return <AspectRatio ratio={1} bg={bg}>{content}</AspectRatio>;
+  return <>
+    {enforceAspectRatio && <AspectRatio ratio={1} bg={bg}>{content}</AspectRatio>}
+    {!enforceAspectRatio && content}
+  </>;
 };

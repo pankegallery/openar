@@ -64,7 +64,6 @@ export const authAuthenticateUserByToken = (
 
         return createAuthenticatedAppUser(
           tokenPayload.user.id,
-          tokenPayload.user.role,
           tokenPayload.user.roles,
           tokenPayload.user.permissions,
           tokenPayload.user.pseudonym,

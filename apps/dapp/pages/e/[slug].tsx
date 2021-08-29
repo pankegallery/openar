@@ -146,7 +146,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
             t: "10",
           }}
         >
-          <Link href="/">
+          <Link href="/" passHref>
             <a>
               <Arrow className="arrow" />
             </a>
