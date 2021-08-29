@@ -6,7 +6,7 @@ import { WalletConnectGate } from "./shared";
 import {LoadingBar} from "~/components/app/shared";
 import { OverlayMenu} from "../frontend";
 
-export const LayoutBlank = ({mode = "dark", children} : {mode?: any, children: ReactNode}) => {
+export const LayoutBlank = ({mode = "dark", beta = "false", children} : {mode?: any, beta?: boolean, children: ReactNode}) => {
 
   return (
     <WalletConnectGate>
@@ -18,7 +18,9 @@ export const LayoutBlank = ({mode = "dark", children} : {mode?: any, children: R
       <Box className={`site content corner-${mode}`}>
         {children}
       </Box>
-      <OverlayMenu mode={mode} />
+      {!beta&&
+        <OverlayMenu mode={mode} />
+      }
     </WalletConnectGate>
   );
 };
