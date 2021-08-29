@@ -9,6 +9,7 @@ export type ApiArModelProps = {
   urlUsdz?: string;
   urlGlb?: string;
   urlPoster?: string;
+  enforceAspectRatio?: boolean;
   autoplay?: boolean;
   loading?: string;
   reveal?: string;
@@ -46,9 +47,19 @@ export const ApiArModel = ({
   bg = "#ccc",
   loading = "interaction",
   reveal = "auto",
+  enforceAspectRatio = false,
 }: ApiArModelProps) => {
   const [content, setContent] = useState(<></>)
 
+  useEffect(() => {
+    const run = async () => {
+      if (typeof window === "undefined")
+        return;
+
+      await import("@google/model-viewer")
+    }
+    run(); 
+  },[]);
 
   useEffect(() => {
     const run = async () => {
@@ -110,7 +121,10 @@ export const ApiArModel = ({
     }
     run();
 
-  }, [urlGlb, urlUsdz, setContent, urlPoster, alt])
+  }, [urlGlb, urlUsdz, setContent, urlPoster, alt, autoplay, loading, reveal])
 
-  return <AspectRatio ratio={1} bg={bg}>{content}</AspectRatio>;
+  return <>
+    {enforceAspectRatio && <AspectRatio ratio={1} bg={bg}>{content}</AspectRatio>}
+    {!enforceAspectRatio && content}
+  </>;
 };
