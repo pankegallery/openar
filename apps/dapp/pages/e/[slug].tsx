@@ -223,7 +223,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
               t: "calc(50vw - 2px)",
               d: "calc(33.33vw - 2px)",
             }}
-            p="6"
+            
             h={{
               base: "calc(66.66vw + 2px)",
               t: "50vw",
@@ -233,15 +233,18 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
             borderBottom="1px solid #fff"
             layerStyle="backdropBlurred"
             order={{
-              base: "3",
+              base: 3,
               t: "inherit",
             }}
-            overflowX="hidden"
-            overflowY="auto"
+            
           >
+            <Flex p="6" overflowX="hidden"
+            overflowY="auto" height="100%">
             <chakra.p my="auto !important" fontWeight="normal">
               {exhibition.description}
             </chakra.p>
+            </Flex>
+            
           </Flex>
           {/* --------- Footer  --------- */}
           <Flex
@@ -324,9 +327,9 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
                   isAdmin={false}
                   exSlug={exhibition.slug}
                   urlKey={artwork.key}
+                  key={artwork.key}
                   {...pick(artwork, [
                     "id",
-                    "key",
                     "status",
                     "heroImage",
                     "title",

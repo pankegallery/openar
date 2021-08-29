@@ -67,6 +67,7 @@ const Update = () => {
   const successToast = useSuccessfullySavedToast();
   const [disableNavigation, setDisableNavigation] = useState(false);
   const [activeUploadCounter, setActiveUploadCounter] = useState<number>(0);
+  const [isNavigatingAway, setIsNavigatingAway] = useState(false)
 
   const [firstMutation, firstMutationResults] = useArObjectUpdateMutation();
   const [isFormError, setIsFormError] = useState(false);
@@ -114,6 +115,7 @@ const Update = () => {
     newData: yup.InferType<typeof ModuleArObjectUpdateSchema>
   ) => {
     setIsFormError(false);
+    setIsNavigatingAway(false);
     try {
       if (appUser) {
         const { data, errors } = await firstMutation(
@@ -123,7 +125,7 @@ const Update = () => {
             description: newData.description,
             editionOf: newData.editionOf ?? null,
             orderNumber: newData.orderNumber ?? null,
-            askPrice: newData.editionOf ?? null,
+            askPrice: newData.askPrice ?? null,
             status: newData.status ?? null,
             key: newData.key ?? "",
             creator: {
@@ -136,7 +138,7 @@ const Update = () => {
 
         if (!errors) {
           successToast();
-
+          setIsNavigatingAway(true);
           router.push(`${moduleConfig.rootPath}/${router.query.aid}/update`);
         } else {
           setIsFormError(true);
@@ -199,7 +201,7 @@ const Update = () => {
   return (
     <>
       <FormNavigationBlock
-        shouldBlock={(isDirty && !isSubmitting) || activeUploadCounter > 0}
+        shouldBlock={!isNavigatingAway && ((isDirty && !isSubmitting) || activeUploadCounter > 0)}
       />
       <FormProvider {...formMethods}>
         <form noValidate onSubmit={handleSubmit(onSubmit)}>

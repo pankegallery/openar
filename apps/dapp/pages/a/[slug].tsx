@@ -16,7 +16,7 @@ import pick from "lodash/pick";
 import { useSSRSaveMediaQuery } from "~/hooks";
 
 
-export const Artwork = ({ artwork }: { artwork: any }) => {
+export const Artwork = ({ artwork, exhibition }: { artwork: any, exhibition: any }) => {
 
   const isDesktop = useSSRSaveMediaQuery(
     "(min-width: 75rem)"
