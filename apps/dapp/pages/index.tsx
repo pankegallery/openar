@@ -80,6 +80,7 @@ export const Home = (props) => {
         >
           {/* --------- TILE: Exhibition title  --------- */}
           <Flex
+            className="exhibitionTile"
             borderTop="1px solid #fff"
             borderRight="1px solid #fff"
             borderLeft={{

@@ -52,7 +52,7 @@ export const Beta = (props) => {
             fontWeight="semibold"
             lineHeight="1.3em"
           >
-            Thanks for checking out OpenAR. We are a small volunteer team working to create something special. During this initial beta period please be patient while we work through some initial bugs and growing pains. Building the world’s first and only cooperative platform for Augmented Reality art takes time. Email <a href="mailto:contact@openar.art">contact@openar.art</a> with your questions and feedback.<br /> <br /> Meanwhile, visit our exhibition in Berlin-Wedding and explore unique and brandnew AR artworks.<br />.<br />
+            Thanks for checking out OpenAR. We are a small volunteer team working to create something special. During this initial beta period please be patient while we work through some initial bugs and growing pains. Building the world’s first and only cooperative platform for Augmented Reality art takes time. Email <a href="mailto:contact@openar.art">contact@openar.art</a> with your questions and feedback.<br /> <br /> Meanwhile, visit our <a href="https://www.panke.gallery/exhibition/openarlaunch">exhibition in Berlin-Wedding</a> and explore brandnew and  unique AR artworks.<br />.<br />
             – The OpenAR team
           </chakra.p>
         </Box>
