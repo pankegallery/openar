@@ -225,7 +225,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
             }}
             
             h={{
-              base: "calc(66.66vw + 2px)",
+              base: "auto",
               t: "50vw",
               d: "33.33vw",
             }}
