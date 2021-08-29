@@ -1,7 +1,6 @@
 import type { RoleName, PermissionName } from "./roles";
 
 export interface AuthenticatedAppUserFunctions {
-  is(name: RoleName): boolean;
   has(names: RoleName | RoleName[]): boolean;
   can(permissions: PermissionName | PermissionName[]): boolean;
 }
@@ -28,8 +27,6 @@ export interface JwtPayloadAuthenticatedAppUser {
   permissions?: PermissionName[];
 }
 
-const is = (role: RoleName, name: RoleName): boolean => name === role;
-
 const has = (roles: RoleName[], names: RoleName | RoleName[]): boolean =>
   (Array.isArray(names) ? names : [names]).some((name) => roles.includes(name));
 
@@ -54,9 +51,6 @@ export const createAuthenticatedAppUser = (
     permissions,
     pseudonym,
     ethAddress,
-    is(name: RoleName) {
-      return is(this.role, name);
-    },
     has(names: RoleName | RoleName[]) {
       return has(this.roles, names);
     },
