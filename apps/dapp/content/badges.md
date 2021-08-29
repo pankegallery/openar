@@ -24,6 +24,11 @@ Signin to OpenAR is provided by crypto wallets. You can browse the platform inco
 
 ### Collector
 
+Each year you purchase an artwork, you will receive it's respective collector badge.
+
+### Collector
+
+The curator badge will be assigned to users, that have successfully curated an exhibition on OpenAR.
 
 ## Badges 2021
 
