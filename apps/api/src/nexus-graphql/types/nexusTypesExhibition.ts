@@ -121,22 +121,24 @@ export const EventQueries = extendType({
                   title: true,
                   askPrice: true,
                   editionOf: true,
-                },
-                heroImage: {
-                  select: {
-                    meta: true,
-                    status: true,
-                    id: true,
+                  heroImage: {
+                    select: {
+                      meta: true,
+                      status: true,
+                      id: true,
+                    },
                   },
                 },
                 where: {
-                  status: [
-                    ArObjectStatusEnum.PUBLISHED,
-                    ArObjectStatusEnum.MINTING,
-                    ArObjectStatusEnum.MINTED,
-                  ],
+                  status: {
+                    in: [
+                      ArObjectStatusEnum.PUBLISHED,
+                      ArObjectStatusEnum.MINTING,
+                      ArObjectStatusEnum.MINTED,
+                    ],
+                  },
                 },
-                orderby: {
+                orderBy: {
                   orderNumber: "asc",
                 },
               },
