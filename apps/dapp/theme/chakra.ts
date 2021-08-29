@@ -117,7 +117,7 @@ const themeConfig = {
         }
       },
       ".openar.content": {
-        bg: "var(--chakra-colors-openar-muddygreen)",
+        bg: "var(s)",
         color: "#fff",
       },
       "model-viewer": {
@@ -304,8 +304,8 @@ const themeConfig = {
       fontWeight: "bold",
       fontSize: {
         base: "14px",
-        t: "16px",
-        d: "16px"
+        t: "14px",
+        d: "14px"
       },
     },
     bigLabel: {

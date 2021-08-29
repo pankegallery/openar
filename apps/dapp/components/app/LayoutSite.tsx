@@ -24,7 +24,7 @@ export const LayoutSite = ({ children }: { children?: ReactNode }) => {
         {children}
         <Footer />
       </Box>
-      <OverlayMenu />
+      <OverlayMenu mode="light" />
     </WalletConnectGate>
   );
 };

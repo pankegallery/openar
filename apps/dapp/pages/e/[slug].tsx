@@ -325,6 +325,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
               {exhibition.artworks.map((artwork) => (
                 <ArtworkListItem
                   isAdmin={false}
+                  exSlug={exhibition.slug}
                   urlKey={artwork.key}
                   key={artwork.key}
                   {...pick(artwork, [

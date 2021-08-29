@@ -12,6 +12,7 @@ import { getApolloClient } from "~/services/apolloClient";
 import openingBg from "~/assets/img/opening-bg.png";
 import Arrow from "~/assets/img/arrow.svg";
 import {ArtworkListItem} from "~/components/frontend";
+import {ArrowLink} from "~/components/ui";
 import pick from "lodash/pick";
 import { useSSRSaveMediaQuery } from "~/hooks";
 
@@ -21,6 +22,14 @@ export const Artwork = ({ artwork, exhibition }: { artwork: any, exhibition: any
   const isDesktop = useSSRSaveMediaQuery(
     "(min-width: 75rem)"
   );
+
+  let hasMultipleObjects = artwork.arObjects.legth  > 1
+
+  let artist = artwork.creator?.pseudonym ? artwork.creator?.pseudonym : artwork.creator?.ethAddress;
+
+  console.log("Artwork:", artwork)
+  console.log("Exhibition:", exhibition)
+
 
   return (
     <>
@@ -33,26 +42,29 @@ export const Artwork = ({ artwork, exhibition }: { artwork: any, exhibition: any
         />
       </Head>
       {/* --------- Background image --------- */}
-      <Box
-        position="relative"
-        zIndex="100"
-        h="100vh"
-        w="100%"
-        overflow="hidden"
-        mb="-100vh"
-      >
-        <Image
-          src={openingBg}
-          layout="fill"
-          objectFit="cover"
-          objectPosition="50% 100%"
-          alt=""
-          role="presentation"
-        />
-      </Box>
+      {isDesktop&&
+        <Box
+          position="relative"
+          zIndex="100"
+          h="100vh"
+          w="100%"
+          overflow="hidden"
+          mb="-100vh"
+        >
+          <Image
+            src={openingBg}
+            layout="fill"
+            objectFit="cover"
+            objectPosition="50% 100%"
+            alt=""
+            role="presentation"
+          />
+        </Box>
+      }
 
       {/* --------- Column Layout --------- */}
       <Flex
+        flexWrap="wrap"
         position={{
           base: "relative",
           t: "fixed"
@@ -85,7 +97,7 @@ export const Artwork = ({ artwork, exhibition }: { artwork: any, exhibition: any
               h="var(--openar-header-height-desktop)"
               p="10"
             >
-              <Link href="/">
+              <Link href={`/e/openar-art`}>
                 <a>
                   <Arrow className="arrow" />
                 </a>
@@ -122,17 +134,144 @@ export const Artwork = ({ artwork, exhibition }: { artwork: any, exhibition: any
         }
         {/* --------- COL: Artwork images --------- */}
         <Flex
+          className="imageViewer light"
           direction="column"
+          w={{
+            base: "100vw",
+            t: "50vw",
+            d: "33.3vw"
+          }}
+          minHeight="70vh"
           bg="white"
-
+          color="var(--chakra-colors-openar-dark)"
+          p="6"
         >
+          <Flex
+            w="auto"
+            mb="10"
+          >
+            <Link href="/prev">
+              <a>
+                <Arrow className="arrow" />
+              </a>
+            </Link>
+            <Link href="/next">
+              <chakra.a ml="6">
+                <Arrow className="arrow right" />
+              </chakra.a>
+            </Link>
+          </Flex>
+          HIER KOMMEN BILDER
+
+          UND MODEL VIWER
+
         </Flex>
 
         {/* --------- COL: Artwork details) --------- */}
         <Flex
           direction="column"
+          className="artworkDetails"
+          w={{
+            base: "100vw",
+            t: "50vw",
+            d: "33.3vw"
+          }}
+          minHeight="100vh"
+          bg="var(--chakra-colors-openar-muddygreen)"
+          overflowY="auto"
         >
-      </Flex>
+          {/* ======== BOX: Artwork title  ======== */}
+          <Box
+            className="artworkTitle"
+            borderBottom="1px solid white"
+            p="6"
+          >
+            <chakra.h1 textStyle="subtitle">{artwork.title}</chakra.h1>
+            <chakra.p textStyle="meta">{artist}</chakra.p>
+
+            {artwork.arObjects[0].askPrice&&
+              <chakra.p textStyle="subtitle">{artwork.arObjects[0].askPrice}</chakra.p>
+            }
+
+          </Box>
+
+              {/* _____________________________
+
+                  TODO: BUY Button Corner
+              _______________________________*/}
+
+
+
+          {/* ======== BOX: Artwork objects  ======== */}
+          {hasMultipleObjects&&
+            <Box
+              className="artworkObjects"
+              borderBottom="1px solid white"
+              p="6"
+            >
+              ALLE OBJEKTE
+              {artwork.arObjects.map((obj)=>{
+                <p>obj.key</p>
+              })}
+
+
+            </Box>
+          }
+
+          {/* ======== BOX: Artwork description  ======== */}
+          <Box
+            className="artworkDescription"
+            borderBottom="1px solid white"
+            p="6"
+          >
+            <chakra.p textStyle="label" className="label">Artwork description</chakra.p>
+            <div dangerouslySetInnerHTML={{__html: artwork.description}} />
+          </Box>
+
+
+          {/* ======== BOX: Artist further link  ======== */}
+          {artwork.creator.bio&&
+            <Box
+              className="artistInfo"
+              borderBottom="1px solid white"
+              p="6"
+            >
+              <chakra.p textStyle="label" className="label">About the artist</chakra.p>
+              <div dangerouslySetInnerHTML={{__html: artwork.creator.bio}} />
+            </Box>
+          }
+
+
+            {/* _____________________________
+
+                  TODO: Artist Info Button Corner
+              _______________________________*/}
+
+
+          {/* ======== BOX: Artwork further link  ======== */}
+          {artwork.url&&
+            <Box
+              className="artworkURL"
+              borderBottom="1px solid white"
+              p="6"
+            >
+              <chakra.p textStyle="label" className="label">More information</chakra.p>
+              <ArrowLink href={artwork.url}>{artwork.url}</ArrowLink>
+            </Box>
+          }
+
+          {/* ======== BOX: Artwork video  ======== */}
+          {artwork.invalidIteratorState&&
+            <Box
+              className="artworkVideo"
+              borderBottom="1px solid white"
+              p="6"
+            >
+              VIDEO PLAYER HERE
+            </Box>
+          }
+
+        </Flex>
 
       </Flex> {/* Column Layout close*/}
 
@@ -167,7 +306,6 @@ export const getStaticProps = async ({ params }: { params: any }) => {
         heroImage {
           id
           meta
-
           status
         }
         arObjects {
@@ -243,7 +381,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 };
 
 Artwork.getLayout = function getLayout(page: ReactElement) {
-  return <LayoutBlank>{page}</LayoutBlank>;
+  return <LayoutBlank mode="light">{page}</LayoutBlank>;
 };
 
 export default Artwork;
