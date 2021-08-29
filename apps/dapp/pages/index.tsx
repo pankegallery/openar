@@ -3,25 +3,18 @@ import Head from "next/head";
 
 import { LayoutBlank } from "~/components/app";
 import {
-  useDisclosure,
-  Portal,
-  Button,
   Box,
   Grid,
   Flex,
-  Fade,
   chakra,
-  AspectRatio,
-  Image as ChakraImg
+  AspectRatio
 } from "@chakra-ui/react";
 import Link from "next/link";
 import Image from "next/image";
 
 import openingBg from "~/assets/img/opening-bg.png";
-//import betaPic from "~/assets/img/beta.svg";
-import BetaSVG from "~/assets/img/beta.svg";
 
-const beta = false;
+const beta = true;
 
 export const Home = (props) => {
   return (
