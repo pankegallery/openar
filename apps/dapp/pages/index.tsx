@@ -16,7 +16,7 @@ import Link from "next/link";
 import Image from 'next/image'
 
 import openingBg from "~/assets/img/opening-bg.png";
-import betaPic from "~/assets/img/beta.png";
+import betaPic from "~/assets/img/beta-corner.png";
 
 const beta = true;
 
