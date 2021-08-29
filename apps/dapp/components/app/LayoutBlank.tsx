@@ -6,7 +6,7 @@ import { WalletConnectGate } from "./shared";
 import {LoadingBar} from "~/components/app/shared";
 import { OverlayMenu} from "../frontend";
 
-export const LayoutBlank = ({mode = "dark", beta = "false", children} : {mode?: any, beta?: boolean, children: ReactNode}) => {
+export const LayoutBlank = ({mode = "dark", beta = false, children} : {mode?: any, beta?: boolean, children: ReactNode}) => {
 
   return (
     <WalletConnectGate>
