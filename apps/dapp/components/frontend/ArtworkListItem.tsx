@@ -15,6 +15,7 @@ export const ArtworkListItem = ({
   id,
   title,
   urlKey,
+  exSlug,
   creator,
   heroImage,
   status,
@@ -24,6 +25,7 @@ export const ArtworkListItem = ({
   id: number;
   title: string;
   urlKey: string;
+  exSlug: string;
   creator: any;
   heroImage: any;
   status: number;
