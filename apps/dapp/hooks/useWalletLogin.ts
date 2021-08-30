@@ -120,7 +120,7 @@ export function useWalletLogin() {
 
       deactivate();
 
-      console.log(`PUSH ${appConfig.reauthenticateRedirectUrl}`);
+      console.log(`walletDisconnect: PUSH ${appConfig.reauthenticateRedirectUrl}`);
       Router.push(appConfig.reauthenticateRedirectUrl);
 
     } catch (error) {
@@ -254,7 +254,7 @@ export function useWalletLogin() {
   const walletLoginPreLogin = useCallback(
     async (account: string) => {
       setWalletLoginError(null);
-
+      console.log("walletLoginPreLogin");
       const { data, errors } = await preloginMutation(account);
 
       try {
@@ -305,6 +305,7 @@ export function useWalletLogin() {
           // ) {
           //   await walletLoginRequestSignature(payload?.message, account);
           // } else {
+            console.log("walletLoginPreLogin push /openar/login");
             Router.push("/openar/login");
           //}
         } else if (errors) {

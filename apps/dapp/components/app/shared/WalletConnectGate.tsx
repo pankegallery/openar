@@ -28,6 +28,7 @@ export const WalletConnectGate = ({
   const stateCrypto = useTypedSelector(({ crypto }) => crypto);
 
   useEffect(() => {
+    console.log("WalletConnectGate account", account)
     const preLogin = async () => {
       await walletLoginPreLogin(account)
     }
