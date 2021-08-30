@@ -37,7 +37,9 @@ export function useInactiveListener(suppress: boolean = false) {
 
   useEffect((): any => {
     const { ethereum } = window as any;
+    console.log("useInactiveListener useEffect");
     if (ethereum && ethereum.on && !active && !error && !suppress) {
+      console.log("useInactiveListener attach events");
       const handleConnect = () => {
         console.log("Handling 'connect' event");
         activate(injectedConnector);
@@ -48,8 +50,8 @@ export function useInactiveListener(suppress: boolean = false) {
         activate(injectedConnector);
       };
       const handleAccountsChanged = (accounts: string[]) => {
-        console.log("Handling 'accountsChanged' event with payload (logout)", accounts, account);
-        deactivate();
+        console.log("Handling 'accountsChanged' event with payload (possibly logout?)", accounts, account);
+        activate(injectedConnector);
       };
       const handleDisconnect = () => {
         // TODO: remove ... 
@@ -64,6 +66,7 @@ export function useInactiveListener(suppress: boolean = false) {
 
       return () => {
         if (ethereum.removeListener) {
+          console.log("useInactiveListener: remove listener")
           ethereum.removeListener("connect", handleConnect);
           ethereum.removeListener("chainChanged", handleChainChanged);
           

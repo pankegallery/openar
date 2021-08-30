@@ -17,7 +17,6 @@ import openingBg from "~/assets/img/opening-bg.png";
 const beta = process && process.env.NODE_ENV !== "development";
 
 export const Home = (props) => {
-  console.log(process.env, beta);
   return (
     <>
       <Head>
