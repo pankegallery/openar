@@ -93,11 +93,11 @@ export const EventQueries = extendType({
         return {
           id: 1,
           title: "OpenAR.art",
-          subtitle:
-            "Platform launch and groupshow curated by Sakrowski and Jeremy Bailey",
+          subtitle: "A groupshow curated by Sakrowski and Jeremy Bailey",
           dateBegin: new Date("2021-08-29 12:00"),
           dateEnd: new Date("2021-10-04 12:00"),
-          description: "On the occasion of the launch of the new platform “openar.art”, panke.gallery presents a hybrid group exhibition with experimental Augmented Reality works. The exhibition and platform have been developed in collaboration between workshop participants and digital artists Jeremy Bailey, Sarah Buser and Tamás Páll. The works examine the possibilities of AR technology in artistic applications. Visual, acoustic and performative Augmented Reality formats can be experienced in the exhibition.",
+          description:
+            "On the occasion of the launch of the new platform “openar.art”, panke.gallery presents a hybrid group exhibition with experimental Augmented Reality works. The exhibition and platform have been developed in collaboration between workshop participants and digital artists Jeremy Bailey, Sarah Buser and Tamás Páll. The works examine the possibilities of AR technology in artistic applications. Visual, acoustic and performative Augmented Reality formats can be experienced in the exhibition.",
           status: ExhibitionStatusEnum.PUBLISHED,
           artworks: await daoArtworkQuery(
             {

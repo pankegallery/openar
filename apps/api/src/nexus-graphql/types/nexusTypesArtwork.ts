@@ -221,8 +221,6 @@ export const ArtworkQueries = extendType({
       async resolve(...[, args, , info]) {
         const pRI = parseResolveInfo(info);
 
-        console.log(args)
-
         let include = {};
         let where: Prisma.ArtworkWhereInput = {
           key: args.key,
@@ -233,6 +231,7 @@ export const ArtworkQueries = extendType({
             ],
           },
         };
+
         if ((pRI?.fieldsByTypeName?.Artwork as any)?.heroImage) {
           include = {
             ...include,
@@ -247,9 +246,16 @@ export const ArtworkQueries = extendType({
 
           where = {
             ...where,
-            heroImage: {
-              status: ImageStatusEnum.READY,
-            },
+            OR: [
+              {
+                heroImage: {
+                  status: ImageStatusEnum.READY,
+                },
+              },
+              {
+                heroImage: null,
+              },
+            ],
           };
         }
 
@@ -296,6 +302,7 @@ export const ArtworkQueries = extendType({
                   ],
                 },
               },
+            
               orderBy: {
                 orderNumber: "asc",
               },
@@ -407,22 +414,24 @@ export const ArtworkQueries = extendType({
                   title: true,
                   askPrice: true,
                   editionOf: true,
-                },
-                heroImage: {
-                  select: {
-                    meta: true,
-                    status: true,
-                    id: true,
+                  heroImage: {
+                    select: {
+                      meta: true,
+                      status: true,
+                      id: true,
+                    },
                   },
                 },
                 where: {
-                  status: [
-                    ArObjectStatusEnum.PUBLISHED,
-                    ArObjectStatusEnum.MINTING,
-                    ArObjectStatusEnum.MINTED,
-                  ],
+                  status: {
+                    in: [
+                      ArObjectStatusEnum.PUBLISHED,
+                      ArObjectStatusEnum.MINTING,
+                      ArObjectStatusEnum.MINTED,
+                    ],
+                  },
                 },
-                orderby: {
+                orderBy: {
                   orderNumber: "asc",
                 },
               },

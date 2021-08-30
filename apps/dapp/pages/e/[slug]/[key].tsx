@@ -348,7 +348,8 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     console.log({
       slug: params.slug,
       key: params.key,
-    });
+    }
+    );
 
   const { data } = await client.query({
     query: artworkQuery,

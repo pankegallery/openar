@@ -37,6 +37,16 @@ const GET_OWN_ARTWORKS_LIST = gql`
           status
           meta
         }
+        arObjects {
+          id
+          key
+          title
+          heroImage {
+            id
+            status
+            meta
+          }
+        }
       }
     }
   }
