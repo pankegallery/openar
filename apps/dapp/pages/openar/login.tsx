@@ -28,6 +28,7 @@ const OpenARLogin = () => {
     if (!library || !library?.provider) {
 
       if (stateCrypto.signatureRequired) {
+        console.log("Trigger walletDisconnect in OpenARLogin");
         walletDisconnect();
 
       }

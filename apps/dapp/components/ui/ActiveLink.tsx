@@ -1,16 +1,21 @@
-import { useRouter } from 'next/router'
-import PropTypes from 'prop-types'
-import Link from 'next/link'
-import React, { Children } from 'react'
-import { chakra, transition } from '@chakra-ui/react'
+import { useRouter } from "next/router";
+import PropTypes from "prop-types";
+import Link from "next/link";
+import React, { Children } from "react";
+import { chakra, transition } from "@chakra-ui/react";
 
-export const ActiveLink = ({ children, activeClassName = "active", href, ...props } : {
+export const ActiveLink = ({
+  children,
+  activeClassName = "active",
+  href,
+  ...props
+}: {
   children: React.ReactNode;
   activeClassName?: string;
   href: string;
-  onClick?: (event: any) => void
+  onClick?: (event: any) => void;
 }) => {
-  const { asPath } = useRouter()
+  const { asPath } = useRouter();
 
   // pages/index.js will be matched via props.href
   // pages/about.js will be matched via props.href
@@ -18,26 +23,47 @@ export const ActiveLink = ({ children, activeClassName = "active", href, ...prop
   const className =
     asPath === href || asPath === (props as any).as
       ? `${activeClassName}`.trim()
-      : ""
+      : "";
+
+  if (href.indexOf("http") !== -1) {
+    return (
+      <chakra.a
+        htmlref="nofollow"
+        {...{ className, href }}
+        _hover={{
+          opacity: 0.6,
+        }}
+        sx={{
+          "&.active": {
+            opacity: "0.6",
+          },
+        }}
+        transition="all 0.1s"
+      >
+        {children}
+      </chakra.a>
+    );
+  }
 
   return (
-    
-      <Link href={href} passHref>
-        <chakra.a {...{className}}
-          onClick={(props as any)?.onClick}
-          _hover={{
-            opacity: 0.6
-          }}
-          sx={{
-            "&.active": {
-              opacity: "0.6"
-            }
-          }}
-          transition="all 0.1s"
-        >{children}</chakra.a>
-      </Link>
-      
-  )
-}
+    <Link href={href} passHref>
+      <chakra.a
+        {...{ className }}
+        onClick={(props as any)?.onClick}
+        _hover={{
+          opacity: 0.6,
+        }}
+        sx={{
+          "&.active": {
+            opacity: "0.6",
+          },
+        }}
+        transition="all 0.1s"
+      >
+        {children}
+      </chakra.a>
+    </Link>
+  );
+};
 
-export default ActiveLink
+export default ActiveLink;

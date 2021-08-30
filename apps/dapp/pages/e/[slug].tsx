@@ -157,7 +157,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
           className="main"
           w={{
             base: "100%",
-            d: "66.66vw",
+            d: "calc(66.66vw - var(--sbw))",
           }}
           ml={{
             base: "0",
@@ -171,80 +171,96 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
         >
           {/* --------- Exhibition title  --------- */}
           <Flex
-            borderTop="1px solid #fff"
-            borderBottom="1px solid #fff"
-            borderRight="1px solid #fff"
-            borderLeft={{
-              base: "none",
-              d: "1px solid #fff",
-            }}
-            p={{
-              base: "6",
-              t: "10",
-            }}
-            pb={{
-              base: "6",
-              t: "20",
-            }}
+            
             w={{
-              base: "66.66vw",
-              t: "50vw",
-              d: "calc(33.33vw + 1px)",
+              base: "calc(66.66vw - var(--sbw))",
+              t: "calc(50vw - var(--sbw))",
+              d: "calc(33.33vw)",
             }}
             h={{
-              base: "66.66vw",
-              t: "50vw",
-              d: "33.33vw",
+              base: "calc(66.66vw - var(--sbw))",
+              t: "calc(50vw - var(--sbw))",
+              d: "calc(33.33vw - var(--sbw))",
             }}
             layerStyle="backdropDark"
             flexDirection="column"
             alignContent="flex-end"
           >
-            <Link href="/e/openar-art" passHref>
-              <chakra.a display="block" mt="auto">
-                <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">
-                  {exhibition.title}
-                </chakra.h1>
-                <chakra.p textStyle="subtitle" mb="1rem">
-                  {exhibition.subtitle}
-                </chakra.p>
-                <chakra.p textStyle="workmeta">
-                  {new Date(exhibition.dateBegin).toLocaleDateString("de")}
-                  {" - "}
-                  {new Date(exhibition.dateEnd).toLocaleDateString("de")}
-                </chakra.p>
-              </chakra.a>
-            </Link>
+            <Flex
+              w="100%"
+              h="100%"
+              borderTop="1px solid #fff"
+              borderBottom="1px solid #fff"
+              borderRight="1px solid #fff"
+              p={{
+                base: "6",
+                t: "10",
+              }}
+              pb={{
+                base: "6",
+                t: "20",
+              }}
+              alignContent="flex-end"
+            >
+              <Link href="/e/openar-art" passHref>
+                <chakra.a display="block" mt="auto">
+                  <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">
+                    {exhibition.title}
+                  </chakra.h1>
+                  <chakra.p textStyle="subtitle" mb="1rem">
+                    {exhibition.subtitle}
+                  </chakra.p>
+                  <chakra.p textStyle="workmeta">
+                    {new Date(exhibition.dateBegin).toLocaleDateString("de")}
+                    {" - "}
+                    {new Date(exhibition.dateEnd).toLocaleDateString("de")}
+                  </chakra.p>
+                </chakra.a>
+              </Link>
+            </Flex>
+            
           </Flex>
           {/* --------- Description  --------- */}
           <Flex
             w={{
               base: "100%",
-              t: "calc(50vw - 2px)",
-              d: "calc(33.33vw - 2px)",
+              t: "calc(50vw - var(--sbw))",
+              d: "calc(33.33vw - var(--sbw))",
             }}
-            
             h={{
               base: "auto",
-              t: "50vw",
-              d: "33.33vw",
+              t: "calc(50vw - var(--sbw))",
+              d: "calc(33.33vw - var(--sbw))",
             }}
-            borderTop="1px solid #fff"
-            borderBottom="1px solid #fff"
             layerStyle="backdropBlurred"
             order={{
               base: 3,
               t: "inherit",
             }}
-            
           >
-            <Flex p="6" overflowX="hidden"
-            overflowY="auto" height="100%">
-            <chakra.p my="auto !important" fontWeight="normal">
-              {exhibition.description}
-            </chakra.p>
+            <Flex
+              p="6"
+              overflowX="hidden"
+              overflowY={{
+                base:"visible",
+                t: "auto"
+              }}
+              minH="100%"
+              borderTop={{
+                base:"none",
+                t: "1px solid #fff"
+              }}
+              borderBottom="1px solid #fff"
+
+              borderRight={{
+                base:"none",
+                d:"1px solid #fff"
+              }}
+            >
+              <chakra.p my="auto !important" fontWeight="normal">
+                {exhibition.description}
+              </chakra.p>
             </Flex>
-            
           </Flex>
           {/* --------- Footer  --------- */}
           <Flex
@@ -253,17 +269,17 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
             pr="10"
             pl={{
               base: "2",
-              t: "6"
+              t: "6",
             }}
             pt={{
               base: "10",
-              t: "6"
+              t: "6",
             }}
             layerStyle="backdropGradient"
             w={{
-              base: "33.33vw",
-              t: "50vw",
-              d: "33.33vw",
+              base: "calc(33.33vw - var(--sbw))",
+              t: "calc(50vw - var(--sbw))",
+              d: "calc(33.33vw + 1px - var(--sbw))",
             }}
             borderX={{
               base: "0",
@@ -280,7 +296,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
             }}
             textAlign="right"
             h={{
-              base: "66.66vw",
+              base: "calc(66.66vw - var(--sbw))",
               t: "100%",
             }}
             ml={{
@@ -289,7 +305,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
             }}
             flexDirection={{
               base: "column",
-              t: "row"
+              t: "row",
             }}
           >
             <chakra.p textStyle="bigLabel" ml="auto">
@@ -318,11 +334,11 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
         }}
         left={{
           base: "0",
-          d: "66.66vw",
+          d: "calc(66.66vw - var(--sbw))",
         }}
         w={{
           base: "100%",
-          d: "calc(33.33vw - 2px)",
+          d: "calc(33.33vw - var(--sbw))",
         }}
         h={{
           base: "auto",

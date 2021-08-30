@@ -33,7 +33,7 @@ export function useEagerConnect() {
 }
 
 export function useInactiveListener(suppress: boolean = false) {
-  const { active, error, activate, deactivate } = useWeb3React();
+  const { active, error, activate, deactivate, account } = useWeb3React();
 
   useEffect((): any => {
     const { ethereum } = window as any;
@@ -48,7 +48,7 @@ export function useInactiveListener(suppress: boolean = false) {
         activate(injectedConnector);
       };
       const handleAccountsChanged = (accounts: string[]) => {
-        console.log("Handling 'accountsChanged' event with payload (logout)", accounts);
+        console.log("Handling 'accountsChanged' event with payload (logout)", accounts, account);
         deactivate();
       };
       const handleDisconnect = () => {
@@ -72,7 +72,7 @@ export function useInactiveListener(suppress: boolean = false) {
         }
       };
     }
-  }, [active, error, suppress, activate, deactivate]);
+  }, [active, error, suppress, activate, deactivate, account]);
 }
 
 export function useDisconnectListener() {

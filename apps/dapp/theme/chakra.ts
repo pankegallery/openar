@@ -5,6 +5,7 @@ import {
   withDefaultColorScheme,
 } from "@chakra-ui/react";
 import { createBreakpoints } from "@chakra-ui/theme-tools";
+import { pick } from "lodash";
 import { components } from "./chakra.components";
 
 // https://smart-swatch.netlify.app/#b248bb

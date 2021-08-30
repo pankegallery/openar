@@ -1,6 +1,6 @@
 import "../styles/globals.scss";
 import { Provider } from "react-redux";
-
+import { useLayoutEffect } from "react";
 import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
@@ -31,13 +31,45 @@ type AppPropsWithLayout = AppProps & {
 function OpenARApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
 
+  useLayoutEffect(() => {
+    const calculateScrollbarWidth = () => {
+      var outer = document.createElement("div");
+      outer.style.visibility = "hidden";
+      outer.style.width = "100px";
+
+      document.body.appendChild(outer);
+
+      var widthNoScroll = outer.offsetWidth;
+      // force scrollbars
+      outer.style.overflow = "scroll";
+
+      // add innerdiv
+      var inner = document.createElement("div");
+      inner.style.width = "100%";
+      outer.appendChild(inner);
+
+      var widthWithScroll = inner.offsetWidth;
+
+      // remove divs
+      outer.parentNode.removeChild(outer);
+
+      return widthNoScroll - widthWithScroll;
+    };
+
+    if (!document) return;
+
+    document.documentElement.style.setProperty(
+      "--sbw",
+      `${calculateScrollbarWidth()}px`
+    );
+  }, []);
+
   return (
     <ConfigContextProvider>
       <ChakraProvider theme={chakraTheme}>
         <Provider store={store}>
           <AppApolloProvider>
             <OpenARDappProvider>
-             
               {getLayout(<Component {...pageProps} />)}
             </OpenARDappProvider>
           </AppApolloProvider>
@@ -47,7 +79,6 @@ function OpenARApp({ Component, pageProps }: AppPropsWithLayout) {
   );
 }
 export default OpenARApp;
-
 
 /*
 TODO:  Warning: Expected server HTML to contain a matching <div> in <div>.

@@ -15,6 +15,7 @@ export const LayoutOpenAR = ({ children }: { children: ReactNode }) => {
 
   return (
     <>
+      <LoadingBar color="#fff" />
       <style jsx global>{`
         body {
           background-color: var(--chakra-colors-openar-muddygreen);
@@ -24,7 +25,6 @@ export const LayoutOpenAR = ({ children }: { children: ReactNode }) => {
       <ThemeProvider theme={styledComponentsTheme}>
         <WalletConnectGate>
           <AuthenticationSessionActiveGate>
-            <LoadingBar color="#fff" />
             <Grid
               templateColumns={
                 isMobile

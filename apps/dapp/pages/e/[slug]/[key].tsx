@@ -322,6 +322,9 @@ export const getStaticProps = async ({ params }: { params: any }) => {
             meta
             status
           }
+          arModels {
+
+          }
         }
       }
       exhibition(slug:  $slug) {
@@ -338,20 +341,23 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           id
           ethAddress
         }
-        artworks {
+        arObjects {
           id
           key
           title
-          description
-          creator {
-            id
-            pseudonym
-            ethAddress
-          }
+          orderNumber
+          status
+          askPrice
+          editionOf
           heroImage {
             id
             meta
             status
+          }
+          arModels {
+            id
+            meta
+            type
           }
         }
       }
