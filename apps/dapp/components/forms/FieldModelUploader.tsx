@@ -370,6 +370,7 @@ export const FieldModelUploader = ({
               loading="eager"
               reveal="auto"
               autoplay={true}
+              enforceAspectRatio={true}
             />
 
             <IconButton
