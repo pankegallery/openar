@@ -221,6 +221,8 @@ export const ArtworkQueries = extendType({
       async resolve(...[, args, , info]) {
         const pRI = parseResolveInfo(info);
 
+        console.log(args)
+
         let include = {};
         let where: Prisma.ArtworkWhereInput = {
           key: args.key,

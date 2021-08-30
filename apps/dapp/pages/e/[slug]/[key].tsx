@@ -30,7 +30,6 @@ export const Artwork = ({ artwork, exhibition }: { artwork: any, exhibition: any
   console.log("Artwork:", artwork)
   console.log("Exhibition:", exhibition)
 
-
   return (
     <>
       <Head>
@@ -323,7 +322,9 @@ export const getStaticProps = async ({ params }: { params: any }) => {
             status
           }
           arModels {
-
+            id
+            status
+            meta
           }
         }
       }
@@ -340,28 +341,14 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           pseudonym
           id
           ethAddress
-        }
-        arObjects {
-          id
-          key
-          title
-          orderNumber
-          status
-          askPrice
-          editionOf
-          heroImage {
-            id
-            meta
-            status
-          }
-          arModels {
-            id
-            meta
-            type
-          }
-        }
+        }        
       }
     }`;
+
+    console.log({
+      slug: params.slug,
+      key: params.key,
+    });
 
   const { data } = await client.query({
     query: artworkQuery,
