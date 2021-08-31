@@ -45,9 +45,7 @@ export const ArtworkListItem = ({
     >
       <Box className="info">
         <chakra.h2 className="title" textStyle="subtitle">
-          <Link href={href} passHref>
-            <LinkOverlay>{title}</LinkOverlay>
-          </Link>
+          <LinkOverlay href={href} passHref>{title}</LinkOverlay>
         </chakra.h2>
         <chakra.span className="artist" textStyle="meta">{artist}</chakra.span>
       </Box>

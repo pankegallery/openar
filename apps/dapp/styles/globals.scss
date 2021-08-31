@@ -236,19 +236,19 @@ a {
 
     .info {
       height: 33.33vw;
-      a::before {
-        width: 50vw;
-      }
+//      a::before {
+//        width: 50vw;
+//      }
     } 
 
     &:nth-child(4n + 1),
     &:nth-child(4n + 2) {
           flex-direction: row;
           .info {
-            a::before {
-              left: auto;
-              right: 0;
-            }
+//            a::before {
+//              left: auto;
+//              right: 0;
+//            }
           }
         }
     }
@@ -276,21 +276,10 @@ a {
         }
     }
 }
+
 .artworkDetails{
     .label{
         margin-bottom: 0.5em;
-    }
-}
-
-.exhibitionTile a{
-
-    &:before{
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
     }
 }
 
