@@ -10,6 +10,7 @@ export * from "./useWhyDidYouUpdate";
 export * from "./useTypedDispatch";
 export * from "./useTypedSelector";
 export * from "./useAuthTabWideLogInOutReload";
+export * from "./useStableCallback";
 export * from "./useWeb3Hooks";
 export * from "./useWalletLogin";
 
