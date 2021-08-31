@@ -302,7 +302,7 @@ export const ArtworkQueries = extendType({
                   ],
                 },
               },
-            
+
               orderBy: {
                 orderNumber: "asc",
               },

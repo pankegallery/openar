@@ -16,6 +16,7 @@
     "jsx": "preserve",
     "outDir": "./dist",
     "declaration": true,
+    "baseUrl": "."
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]

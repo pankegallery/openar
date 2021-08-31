@@ -1,0 +1,16 @@
+{
+  "name": "@openar/contracts",
+  "description": "Makes the openAR contract typechain build available for other packages/apps",
+  "version": "0.1.0",
+  "private": true,
+  "contributors": [
+    {
+      "name": "Vincent Van Uffelen"
+    }
+  ],
+  "type": "module",
+  "license": "MIT",
+  "source": "typechain/index.ts",
+  "main": "typechain/index.js",
+  "typings": "typechain/index.d.ts"
+}

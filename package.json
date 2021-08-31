@@ -9,7 +9,7 @@
   ],
   "license": "MIT",
   "scripts": {
-    "lint": "npm run app:api:lint && npm run app:dapp:lint",
+    "lint": "npm run package:crypto:lint & npm run app:api:lint & npm run app:dapp:lint",
     "start:api": "npm run app:api:start",
     "start:dapp": "npm run app:dapp:start",
     "dev": "concurrently -k -p \"[{name}]\" -n \"API,DAPP\" -c \"#f41788,#c8b320\" \"npm run app:api:dev\" \"npm run app:dapp:dev\"",
@@ -37,9 +37,9 @@
     "app:dapp:build": "NODE_END=production npm run build -w dapp && openar_dapp_restart",
     "app:dapp:dev": "PORT=$(grep DEV_DAPP_PORT .env | cut -d '=' -f2) NEXT_PUBLIC_API_URL=$(grep '^BASE_URL_API' .env | cut -d '=' -f2) npm run dev -w dapp",
     "app:dapp:lint": "npm run lint -w dapp",
-
     "package:crypto:lint": "eslint ./packages/crypto/src --ext .js,.ts",
-    "package:crypto:build": "NODE_ENV=production tsc ./packages/crypto/src/*.ts --target 'es2021' --moduleResolution 'node' --declaration --esModuleInterop"
+    "package:crypto:build2": "NODE_ENV=production tsc ./packages/crypto/src/*.ts --target 'es2021' --moduleResolution 'node' --declaration --esModuleInterop  --outDir ./packages/crypto/dist",
+    "package:crypto:build": "NODE_ENV=production tsc --project ./packages/crypto/tsconfig.json "
   },
   "lint-staged": {
     "packages/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
@@ -57,20 +57,18 @@
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
     "@babel/preset-typescript": "^7.15.0",
-    "@typescript-eslint/eslint-plugin": "^4.29.2",
+    "@typescript-eslint/parser": "^4.30.0",
     "babel-plugin-add-import-extension": "^1.6.0",
     "concurrently": "^6.2.0",
     "dotenv-cli": "^4.0.0",
     "env-cmd": "^10.1.0",
-    "eslint": "^7.29.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb-typescript": "^14.0.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-jest": "^24.4.0",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-security": "^1.4.0",
     "jest": "^27.0.6",
     "nodemon": "^2.0.9",

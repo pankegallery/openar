@@ -16,7 +16,6 @@ dotenv.config();
 // https://www.npmjs.com/package/cors#enabling-cors-pre-flight
 // Are pre flights needed? https://www.npmjs.com/package/cors#enabling-cors-pre-flight
 
-// eslint-disable-next-line import/no-mutable-exports
 const corsOptions: CorsOptions = {
   origin: true, // TODO: you might want to have a more complex origin, true for but requests from the requests to the admin tool ...
   credentials: true,

@@ -16,7 +16,15 @@
   "dependencies": {
     "@ethersproject/bignumber": "^5.4.1",
     "@ethersproject/bytes": "^5.4.0",
+    "@openar/contracts": "npm:contracts@^0.1.0",
+    "eth-sig-util": "^3.0.1",
+    "ethereumjs-util": "^7.1.0",
     "ethers": "^5.4.6",
+    "ipfs-http-client": "^52.0.2",
     "tiny-invariant": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/eth-sig-util": "^2.1.1",
+    "@types/ethereumjs-util": "^6.1.0"
   }
 }
