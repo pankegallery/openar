@@ -18,11 +18,11 @@ const storage = multer.diskStorage({
   destination: async (req: Request, file, cb) => {
     const date = new Date();
 
-    const uploadFolder = `${apiConfig.uploadDir}/${date.getUTCFullYear()}/${
+    const uploadFolder = `${apiConfig.imgUploadDir}/${date.getUTCFullYear()}/${
       date.getUTCMonth() + 1
     }`;
     const uploadPath = `${apiConfig.baseDir}/${apiConfig.publicDir}/${uploadFolder}`;
-    
+
     try {
       // TODO: how to make this non blocking?
       mkdirSync(uploadPath, { recursive: true });

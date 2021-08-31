@@ -14,12 +14,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "outDir": "./build",
+    "outDir": "./dist",
     "declaration": true,
-    "baseUrl": ".",
-    "paths": {
-      "~/*" : ["src/*"]
-    }
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]

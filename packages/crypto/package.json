@@ -1,0 +1,22 @@
+{
+  "name": "@openar/crypto",
+  "version": "0.1.0",
+  "private": true,
+  "contributors": [
+    {
+      "name": "Vincent Van Uffelen"
+    }
+  ],
+  "type": "module",
+  "license": "MIT",
+  "source": "src/index.ts",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {},
+  "dependencies": {
+    "@ethersproject/bignumber": "^5.4.1",
+    "@ethersproject/bytes": "^5.4.0",
+    "ethers": "^5.4.6",
+    "tiny-invariant": "^1.1.0"
+  }
+}

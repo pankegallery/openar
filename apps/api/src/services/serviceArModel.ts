@@ -19,9 +19,9 @@ export const arModelGetUploadInfo = async (): Promise<{
 }> => {
   const date = new Date();
 
-  const uploadFolder = `ar/${apiConfig.uploadDir}/${date.getUTCFullYear()}/${
-    date.getUTCMonth() + 1
-  }`;
+  const uploadFolder = `${apiConfig.modelUploadDir}/${
+    apiConfig.imgUploadDir
+  }/${date.getUTCFullYear()}/${date.getUTCMonth() + 1}`;
   const path =
     `${apiConfig.baseDir}/${apiConfig.publicDir}${uploadFolder}`.replace(
       /\/\//g,

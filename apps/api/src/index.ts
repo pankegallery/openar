@@ -1,11 +1,10 @@
 import { app, initializeExpressApp } from "./app";
 import { startApi } from "./startApi";
 import { initializeApolloServer } from "./server";
-// import { updateApiConfig } from "./config";
+import { updateApiConfig } from "./config";
 
-// TODO: make sure that the configs are properly
 // @ts-ignore (CMSetting is JS file)
-// import OpenARSettings from "../../../openar.config";
+import OpenARSettings from "../../../openar.config";
 
 const start = async () => {
   // The api makes use of the default prisma.schema found in
@@ -21,8 +20,7 @@ const start = async () => {
   // additional customization and plugin initialization that might
   // have been done in ./openar.config.js
   // This is all done by clalling config.update() and passing the imported settings
-
-  // updateApiConfig(OpenARSettings);
+  updateApiConfig(OpenARSettings);
 
   // cors settings do need to be set twice for the express app (serving everything)
   // but ../graphql served by the apollo server. Apropriate defaults are in place but

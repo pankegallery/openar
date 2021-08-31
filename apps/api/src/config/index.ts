@@ -85,7 +85,8 @@ export interface ApiConfig {
   enablePublicRegistration: boolean;
   baseDir: string;
   publicDir: string;
-  uploadDir: string;
+  imgUploadDir: string;
+  modelUploadDir: string;
   packageBaseDir: string;
   appName: string;
   baseUrl: PartialRecord<AppScopes, Array<string>>;
@@ -103,7 +104,8 @@ export interface ApiConfig {
 export interface ApiConfigOverwrite {
   enablePublicRegistration?: boolean;
   baseDir?: string;
-  uploadDir?: string;
+  imgUploadDir?: string;
+  modelUploadDir?: string;
   publicDir?: string;
   packageBaseDir?: string;
   appName?: string;
@@ -146,7 +148,8 @@ let apiConfig = {
   enablePublicRegistration: true,
   baseDir: resolve(dirname("")),
   publicDir: "public",
-  uploadDir: "img",
+  imgUploadDir: "img",
+  modelUploadDir: "ar",
   packageBaseDir: join(resolve(dirname(""), "apps/api")),
   db,
   env: process.env,
