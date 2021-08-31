@@ -134,6 +134,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
           t: "var(--openar-header-height-desktop) auto",
           d: "var(--openar-header-height-desktop) auto",
         }}
+        templateColumns="1fr"
         color="white"
         overflow="hidden"
       >

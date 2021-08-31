@@ -110,6 +110,7 @@ export const OverlayMenu = ({mode = "dark"} : {mode?: any}) => {
               t: "var(--openar-header-height-desktop) 50vw auto",
               d: "var(--openar-header-height-desktop) 33.33vw auto",
             }}
+            templateColumns="1fr"
             color="white"
           >
             {/* --------- ROW: Logo and Close --------- */}

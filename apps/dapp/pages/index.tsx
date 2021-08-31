@@ -55,6 +55,7 @@ export const Home = (props) => {
           t: "calc(50vw + var(--openar-header-height-desktop)) auto",
           d: "calc(33.33vw + var(--openar-header-height-desktop)) auto",
         }}
+        templateColumns="1fr"
         color="white"
         overflow="hidden"
       >

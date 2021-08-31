@@ -33,7 +33,6 @@ const themeConfig = {
   styles: {
     global: {
       ":root": {
-        "66.66vw": "33vw",
         "--openar-header-height-desktop": "22vh"
       },
       "html, body": {
@@ -46,9 +45,6 @@ const themeConfig = {
       },
       "#root, #__next": {
         height: "100%",
-      },
-      body: {
-        minHeight: "100%",
       },
       a: {
         transitionProperty: "common",

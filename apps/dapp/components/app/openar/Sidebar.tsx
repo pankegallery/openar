@@ -48,10 +48,12 @@ export const Sidebar = () => {
 
   return (
     <>
-      <Box w="100%" p="4" minH="100%" borderLeft="1px solid #fff">
-        {mainNavLinks.map((link) => {
-          return <NavItem key={link.path} {...link} />;
-        })}
+      <Box w="100%" minH="100%" borderLeft="1px solid #fff" position="relative">
+        <Box  position="sticky" top="0" p="4">
+          {mainNavLinks.map((link) => {
+            return <NavItem key={link.path} {...link} />;
+          })}
+        </Box>
       </Box>
     </>
   );

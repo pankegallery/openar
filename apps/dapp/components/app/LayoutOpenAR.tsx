@@ -17,7 +17,7 @@ export const LayoutOpenAR = ({ children }: { children: ReactNode }) => {
     <>
       <LoadingBar color="#fff" />
       <style jsx global>{`
-        body {
+        html,body {
           background-color: var(--chakra-colors-openar-muddygreen);
           color: #fff;
         }
@@ -31,17 +31,18 @@ export const LayoutOpenAR = ({ children }: { children: ReactNode }) => {
                   ? "100%"
                   : "calc(100% - max(350px, 20vw)) max(350px, 20vw) "
               }
+              templateRows="1fr"
               alignItems="start"
               className="openar content"
               minH="100%"
+              h="100%"
+              bg="var(--chakra-colors-openar-muddygreen)"
+              overflow="visible"
             >
-              <Grid
-                className="main"
-                templateRows={isMobile ? "100%" : "calc(1fr - 4rem) 4rem"}
-                minH="100vh"
-              >
-                <Box>{children}</Box>
-              </Grid>
+              <Box h="100%" bg="var(--chakra-colors-openar-muddygreen)">
+                {children}
+              </Box>
+
               <Sidebar />
             </Grid>
             <OverlayMenu />

@@ -52,6 +52,7 @@ export const AlertBox = ({
       top="0"
     >
       <Grid
+        templateRows="1fr"
         templateColumns={hasClose ? "32px 1fr 32px" : "32px 1fr"}
         alignItems={!tw || (tw && !twoCol) ? "start" : "center"}
         gap="2"
