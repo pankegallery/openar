@@ -13,7 +13,7 @@ import {
 } from "@web3-react/injected-connector";
 import { UserRejectedRequestError as UserRejectedRequestErrorWalletConnect } from "@web3-react/walletconnect-connector";
 
-import { useLocalStorage, useAppToast } from "~/hooks";
+import { useLocalStorage, useAppToast, useStableCallback } from "~/hooks";
 
 import { walletConntectConnector, injectedConnector } from "~/services/crypto";
 import { authSetJustConnected } from "~/redux/slices/user";
@@ -95,12 +95,12 @@ export function useWalletLogin() {
     setWalletLoginError(msg);
     setAwaitingUserInteraction(null);
   }, []);
-
+  
   const connected = useCallback(async () => {
     store.dispatch(authSetJustConnected());
   }, []);
 
-  const walletDisconnect = useCallback(async () => {
+  const walletDisconnect = useStableCallback(async () => {
     try {
 
       setWalletLoginError(null);
@@ -127,7 +127,8 @@ export function useWalletLogin() {
       setIsConnected(false);
       handleError(error);
     }
-  }, [setIsConnected, deactivate, handleError, logoutMutation]);
+  // }, []);
+  });
 
   const connectWalletConnect = useCallback(async () => {
     try {
@@ -147,7 +148,7 @@ export function useWalletLogin() {
     setIsConnected,
     handleError,
   ]);
-
+  
   const connectInjected = useCallback(async () => {
     try {
       setWalletLoginError(null);
@@ -167,7 +168,7 @@ export function useWalletLogin() {
     setIsConnected,
     handleError,
   ]);
-
+  
   const walletLoginFinalize = useCallback(async () => {
     store.dispatch(
       cryptoStateUpdate({
@@ -183,7 +184,7 @@ export function useWalletLogin() {
     Router.push("/openar/");
 
   }, [triggerToast, setIsLoggingIn, setWalletLoginError, setIsConnected]);
-
+  
   const walletLoginLogin = useCallback(
     async (signedMessage) => {
       const { data, errors } = await loginMutation(account, signedMessage);
@@ -200,7 +201,7 @@ export function useWalletLogin() {
         handleError(error);
       }
     },
-    [account, loginMutation, handleError, walletLoginFinalize]
+   [account, loginMutation, handleError, walletLoginFinalize] 
   );
 
   const walletLoginRequestSignature = useCallback(
