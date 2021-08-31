@@ -68,7 +68,7 @@ const OpenARLogin = () => {
       {!stateUser.justConnected &&
         (!appUser || !stateUser.authenticated) &&
         !navigating && (
-          <Box>
+          <Box mt="6">
             <WalletControl />
           </Box>
         )}
