@@ -3,15 +3,22 @@ import Head from "next/head";
 import { gql } from "@apollo/client";
 
 import { LayoutBlank } from "~/components/app";
-import { Box, Grid, Flex, chakra } from "@chakra-ui/react";
+import { Box,
+        Grid,
+        Flex,
+        LinkBox,
+        LinkOverlay,
+        chakra } from "@chakra-ui/react";
 import Link from "next/link";
 import Image from "next/image";
+import { useSSRSaveMediaQuery } from "~/hooks";
 
 import { getApolloClient } from "~/services/apolloClient";
 
 import openingBg from "~/assets/img/opening-bg.png";
 import Arrow from "~/assets/img/arrow.svg";
 import { ArtworkListItem } from "~/components/frontend";
+import { ExhibitionTitleTile } from "~/components/frontend";
 import pick from "lodash/pick";
 
 export const Exhibition = ({ exhibition }: { exhibition: any }) => {
@@ -87,6 +94,33 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
   //     ]
   //   }
   // }
+
+  const isDesktop = useSSRSaveMediaQuery(
+    "(min-width: 75rem)"
+  );
+
+  const scrollToArtworks = () => {
+    console.log("I'm here")
+
+    const artworksWrapper = document.querySelector("#artworks");
+    const thirdArtwork = document.querySelector("#artworks article:nth-of-type(3)");
+
+    if (isDesktop && thirdArtwork && artworksWrapper) {
+      const topPos = thirdArtwork.offsetTop;
+      artworksWrapper.scrollTop = {
+        top: topPos,
+        behavior: 'smooth'
+      };
+    }
+    else if(artworksWrapper) {
+      // Smooth scroll to that elment
+      artworksWrapper.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest',
+      });
+    }
+  }
   return (
     <>
       <Head>
@@ -126,7 +160,6 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
         top="0"
         left="0"
         w="100%"
-        p=""
         h="100vh"
         zIndex="200"
         templateRows={{
@@ -202,21 +235,15 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
               }}
               alignContent="flex-end"
             >
-              <Link href="/e/openar-art" passHref>
-                <chakra.a display="block" mt="auto">
-                  <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">
-                    {exhibition.title}
-                  </chakra.h1>
-                  <chakra.p textStyle="subtitle" mb="1rem">
-                    {exhibition.subtitle}
-                  </chakra.p>
-                  <chakra.p textStyle="workmeta">
-                    {new Date(exhibition.dateBegin).toLocaleDateString("de")}
-                    {" - "}
-                    {new Date(exhibition.dateEnd).toLocaleDateString("de")}
-                  </chakra.p>
-                </chakra.a>
-              </Link>
+              <ExhibitionTitleTile
+                title={exhibition.title}
+                subtitle={exhibition.subtitle}
+                exSlug="openar-art"
+                dateBegin={exhibition.dateBegin}
+                dateEnd={exhibition.dateEnd}
+                link={false}
+              />
+
             </Flex>
             
           </Flex>
@@ -307,6 +334,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
               base: "column",
               t: "row",
             }}
+            onClick={() => scrollToArtworks()}
           >
             <chakra.p textStyle="bigLabel" ml="auto">
               Artworks
@@ -317,6 +345,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
       </Grid>
       {/* --------- Artworks  --------- */}
       <Flex
+        id="artworks"
         className="artworks"
         layerStyle="backdropLight"
         position={{
