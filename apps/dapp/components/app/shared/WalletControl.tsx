@@ -48,7 +48,7 @@ export const WalletControl = () => {
     <Box>
       {/* ------- Buttons ------- */}
       <Box>
-        {!account && (
+        {!account || !stateUser.authenticated && (
           <Button
             variant="menuLink"
             onClick={walletDisclosure.onOpen}
@@ -58,7 +58,7 @@ export const WalletControl = () => {
           </Button>
         )}
 
-        {account && (
+        {account && stateUser.authenticated && (
           <Button
             variant="menuLink"
             onClick={async () => {

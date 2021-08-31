@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { ActiveLink } from "~/components/ui";
 import { WalletControl } from "~/components/app/shared";
-import { useSSRSaveMediaQuery } from "~/hooks";
+import { useAuthentication, useSSRSaveMediaQuery } from "~/hooks";
 import { Menu } from "~/components/frontend";
 
 import { useWalletLogin } from "~/hooks";
@@ -22,15 +22,15 @@ import MenuCornerWhite from "~/assets/img/menu-corner-light.svg";
 import MenuCornerDark from "~/assets/img/menu-corner-dark.svg";
 import { useRouter } from "next/router";
 
-export const OverlayMenu = ({mode = "dark"} : {mode?: any}) => {
+export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
   const router = useRouter();
+
+  const [appUser] = useAuthentication();
 
   const { account } = useWalletLogin();
   const { isOpen, onToggle, onClose } = useDisclosure();
   const [isClosing, setIsClosing] = useState(false);
-  const isDesktop = useSSRSaveMediaQuery(
-    "(min-width: 75rem)"
-  );
+  const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
   const aboutText = (
     <Box textStyle="subtitle">
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse a
@@ -48,27 +48,27 @@ export const OverlayMenu = ({mode = "dark"} : {mode?: any}) => {
   const secondaryMenu = [
     { slug: "discord", label: "Discord", url: "https://discord.gg/efGHVEKM" },
     { slug: "badges", label: "Roles and Badges", url: "p/badges" },
-//    { slug: "funding", label: "Platform funding", url: "p/funding" },
+    //    { slug: "funding", label: "Platform funding", url: "p/funding" },
     { slug: "privpol", label: "Privacy policy", url: "p/privpol" },
-//    { slug: "tandc", label: "Terms and Conditions", url: "p/tandc" },
+    //    { slug: "tandc", label: "Terms and Conditions", url: "p/tandc" },
     { slug: "imprint", label: "Imprint", url: "p/imprint" },
   ];
 
   useEffect(() => {
     const handleRouteChange = (url, { shallow }) => {
       onClose();
-    }
+    };
 
-    router.events.on('routeChangeStart', handleRouteChange)
+    router.events.on("routeChangeStart", handleRouteChange);
 
     // If the component is unmounted, unsubscribe
     // from the event with the `off` method:
     return () => {
-      router.events.off('routeChangeStart', handleRouteChange)
-    }
+      router.events.off("routeChangeStart", handleRouteChange);
+    };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   return (
     <>
@@ -85,13 +85,22 @@ export const OverlayMenu = ({mode = "dark"} : {mode?: any}) => {
         border="0"
         variant="functional"
       >
-        {(mode==="light")&&
-          <MenuCornerDark viewBox="0 0 120 120" width="120px" height="120px" className="menuCorner"/>
-        }
-        {(mode==="dark")&&
-          <MenuCornerWhite viewBox="0 0 120 120" width="120px" height="120px" className="menuCorner"/>
-        }
-
+        {mode === "light" && (
+          <MenuCornerDark
+            viewBox="0 0 120 120"
+            width="120px"
+            height="120px"
+            className="menuCorner"
+          />
+        )}
+        {mode === "dark" && (
+          <MenuCornerWhite
+            viewBox="0 0 120 120"
+            width="120px"
+            height="120px"
+            className="menuCorner"
+          />
+        )}
       </Button>
 
       <Portal>
@@ -134,7 +143,7 @@ export const OverlayMenu = ({mode = "dark"} : {mode?: any}) => {
                   p="0"
                   w={{
                     base: "85vw",
-                    t: "66.66vw"
+                    t: "66.66vw",
                   }}
                   h={{
                     base: "var(--openar-header-height-mobile)",
@@ -142,7 +151,7 @@ export const OverlayMenu = ({mode = "dark"} : {mode?: any}) => {
                   }}
                   order={{
                     base: 3,
-                    t: "inherit"
+                    t: "inherit",
                   }}
                 >
                   {aboutText}
@@ -253,7 +262,7 @@ export const OverlayMenu = ({mode = "dark"} : {mode?: any}) => {
                     },
                   }}
                 >
-                  {account && (
+                  {account && appUser && (
                     <ActiveLink href="/openar/">Dashboard</ActiveLink>
                   )}
                   <WalletControl />
