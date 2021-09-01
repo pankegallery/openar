@@ -160,7 +160,6 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
         top="0"
         left="0"
         w="100%"
-        h="100vh"
         zIndex="200"
         templateRows={{
           base: "33.33vw auto",
@@ -168,6 +167,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
           d: "var(--openar-header-height-desktop) auto",
         }}
         templateColumns="1fr"
+        minH="100%"
         color="white"
         overflow="hidden"
       >
@@ -191,14 +191,17 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
           className="main"
           w={{
             base: "100%",
-            d: "calc(66.66vw - var(--sbw))",
+            d: "66.66%",
           }}
           ml={{
             base: "0",
             t: "0",
             d: "0",
           }}
-          borderBottom="1px solid #fff"
+          borderBottom={{
+            base: "1px solid #fff",
+            d: "none"
+          }}
           flexWrap="wrap"
           direction="row"
           zIndex="302"
@@ -207,14 +210,14 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
           <Flex
             
             w={{
-              base: "calc(66.66vw - var(--sbw))",
-              t: "calc(50vw - var(--sbw))",
-              d: "calc(33.33vw)",
+              base: "66.666%",
+              t: "50%",
+              d: "50%",
             }}
             h={{
-              base: "calc(66.66vw - var(--sbw))",
-              t: "calc(50vw - var(--sbw))",
-              d: "calc(33.33vw - var(--sbw))",
+              base: "66.66vw",
+              t: "50vw",
+              d: "33.33vw",
             }}
             layerStyle="backdropDark"
             flexDirection="column"
@@ -252,13 +255,13 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
           <Flex
             w={{
               base: "100%",
-              t: "calc(50vw - var(--sbw))",
-              d: "calc(33.33vw - var(--sbw))",
+              t: "50%",
+              d: "50%",
             }}
             h={{
-              base: "auto",
-              t: "calc(50vw - var(--sbw))",
-              d: "calc(33.33vw - var(--sbw))",
+              base: "100vw",
+              t: "50vw",
+              d: "33.33vw",
             }}
             layerStyle="backdropBlurred"
             order={{
@@ -269,11 +272,8 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
             <Flex
               p="6"
               overflowX="hidden"
-              overflowY={{
-                base:"visible",
-                t: "auto"
-              }}
-              minH="100%"
+              overflowY="auto"
+              h="100%"
               borderTop={{
                 base:"none",
                 t: "1px solid #fff"
@@ -305,13 +305,14 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
             }}
             layerStyle="backdropGradient"
             w={{
-              base: "calc(33.33vw - var(--sbw))",
-              t: "calc(50vw - var(--sbw))",
-              d: "calc(33.33vw + 1px - var(--sbw))",
+              base: "33.333%",
+              t: "50%",
+              d: "calc(50% + 1px)",
             }}
-            borderX={{
+            borderRight="1px solid #fff"
+            borderLeft={{
               base: "0",
-              t: "1px solid #fff",
+              d: "1px solid #fff",
             }}
             borderY={{
               base: "1px solid #fff",
@@ -324,7 +325,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
             }}
             textAlign="right"
             h={{
-              base: "calc(66.66vw - var(--sbw))",
+              base: "66.66vw",
               t: "100%",
             }}
             ml={{
@@ -364,15 +365,18 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
         }}
         left={{
           base: "0",
-          d: "calc(66.66vw - var(--sbw))",
+          d: "66.66%",
         }}
         w={{
           base: "100%",
-          d: "calc(33.33vw - var(--sbw))",
+          d: "33.33%",
         }}
         h={{
           base: "auto",
           d: "calc(100vh - var(--openar-header-height-desktop))",
+        }}
+        borderTop={{
+          d: "1px solid #fff"
         }}
         flexDirection="column"
       >

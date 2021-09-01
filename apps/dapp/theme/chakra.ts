@@ -42,6 +42,7 @@ const themeConfig = {
         padding: 0,
         height: "100%",
         overscrollBehavior: "none",
+        "-webkit-overflow-scrolling":"touch",
       },
       "#root, #__next": {
         height: "100%",
@@ -209,6 +210,9 @@ const themeConfig = {
     full: "9999px",
   },
   layerStyles: {
+    backdropSuperDark: {
+      bg: "rgba(0,0,0,0.85)"
+    },
     backdropDark: {
       bg: "rgba(0,0,0,0.6)"
     },
