@@ -1,14 +1,18 @@
 import type { ReactElement } from "react";
+import { useRef } from "react";
+
 import Head from "next/head";
 import { gql } from "@apollo/client";
 
 import { LayoutBlank } from "~/components/app";
-import { Box,
-        Grid,
-        Flex,
-        LinkBox,
-        LinkOverlay,
-        chakra } from "@chakra-ui/react";
+import {
+  Box,
+  Grid,
+  Flex,
+  LinkBox,
+  LinkOverlay,
+  chakra,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSSRSaveMediaQuery } from "~/hooks";
@@ -22,7 +26,9 @@ import { ExhibitionTitleTile } from "~/components/frontend";
 import pick from "lodash/pick";
 
 export const Exhibition = ({ exhibition }: { exhibition: any }) => {
-  //TODO: was passiert beim live rendern und nicht bekannten slugs?
+  const inputEl = useRef(null);
+
+  //TODO: happens with client side rendering and accessing unknown slugs ... we need to redirct to 404 on the client side.
   // {
   //   {
   //     "id": 1,
@@ -95,32 +101,27 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
   //   }
   // }
 
-  const isDesktop = useSSRSaveMediaQuery(
-    "(min-width: 75rem)"
-  );
+  const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
+  const refArtworksWrapper = useRef(null);
 
   const scrollToArtworks = () => {
-    console.log("I'm here")
+    if (typeof window === "undefined") return;
 
-    const artworksWrapper = document.querySelector("#artworks");
-    const thirdArtwork = document.querySelector("#artworks article:nth-of-type(3)");
-
-    if (isDesktop && thirdArtwork && artworksWrapper) {
-      const topPos = thirdArtwork.offsetTop;
-      artworksWrapper.scrollTop = {
-        top: topPos,
-        behavior: 'smooth'
-      };
-    }
-    else if(artworksWrapper) {
-      // Smooth scroll to that elment
-      artworksWrapper.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-        inline: 'nearest',
+    if (isDesktop) {
+      // smooth scoll the arwork listing
+      refArtworksWrapper.current.scrollTo({
+        top: Math.min(window.innerHeight * 66.66, 600),
+        behavior: "smooth",
+      });
+    } else {
+      // smooth scoll the page to artwork listing
+      refArtworksWrapper.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        inline: "nearest",
       });
     }
-  }
+  };
   return (
     <>
       <Head>
@@ -200,7 +201,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
           }}
           borderBottom={{
             base: "1px solid #fff",
-            d: "none"
+            d: "none",
           }}
           flexWrap="wrap"
           direction="row"
@@ -208,7 +209,6 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
         >
           {/* --------- Exhibition title  --------- */}
           <Flex
-            
             w={{
               base: "66.666%",
               t: "50%",
@@ -247,9 +247,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
                 dateEnd={exhibition.dateEnd}
                 link={false}
               />
-
             </Flex>
-            
           </Flex>
           {/* --------- Description  --------- */}
           <Flex
@@ -275,14 +273,13 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
               overflowY="auto"
               h="100%"
               borderTop={{
-                base:"none",
-                t: "1px solid #fff"
+                base: "none",
+                t: "1px solid #fff",
               }}
               borderBottom="1px solid #fff"
-
               borderRight={{
-                base:"none",
-                d:"1px solid #fff"
+                base: "none",
+                d: "1px solid #fff",
               }}
             >
               <chakra.p my="auto !important" fontWeight="normal">
@@ -337,6 +334,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
               t: "row",
             }}
             onClick={() => scrollToArtworks()}
+            cursor="pointer"
           >
             <chakra.p textStyle="bigLabel" ml="auto">
               Artworks
@@ -347,6 +345,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
       </Grid>
       {/* --------- Artworks  --------- */}
       <Flex
+        ref={refArtworksWrapper} 
         id="artworks"
         className="artworks"
         layerStyle="backdropLight"
@@ -376,7 +375,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
           d: "calc(100vh - var(--openar-header-height-desktop))",
         }}
         borderTop={{
-          d: "1px solid #fff"
+          d: "1px solid #fff",
         }}
         flexDirection="column"
       >

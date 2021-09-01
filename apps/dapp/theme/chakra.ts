@@ -42,7 +42,7 @@ const themeConfig = {
         padding: 0,
         height: "100%",
         overscrollBehavior: "none",
-        "-webkit-overflow-scrolling":"touch",
+        "WebkitOverflowScrolling":"touch",
       },
       "#root, #__next": {
         height: "100%",
