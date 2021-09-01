@@ -12,9 +12,9 @@
     "lint": "npm run package:crypto:lint & npm run app:api:lint & npm run app:dapp:lint",
     "start:api": "npm run app:api:start",
     "start:dapp": "npm run app:dapp:start",
-    "dev": "concurrently -k -p \"[{name}]\" -n \"API,DAPP\" -c \"#f41788,#c8b320\" \"npm run app:api:dev\" \"npm run app:dapp:dev\"",
-    "dev:dapp": "npm run dev -w dapp",
-    "dev:api": "npm run app:api:dev",
+    "dev": "concurrently -k -p \"[{name}]\" -n \"CRYPTO,API,DAPP\" -c \"#86bce3,#f41788,#c8b320\" \"npm run package:crypto:dev\" \"npm run app:api:dev\" \"npm run app:dapp:dev\"",
+    "dev:dapp": "concurrently -k -p \"[{name}]\" -n \"CRYPTO,API,DAPP\" -c \"#86bce3,#c8b320\" \"npm run package:crypto:dev\" \"npm run app:dapp:dev\"",
+    "dev:api": "concurrently -k -p \"[{name}]\" -n \"CRYPTO,API,DAPP\" -c \"#86bce3,#f41788\" \"npm run package:crypto:dev\" \"npm run app:api:dev\"",
     "build:api": "NODE_ENV=production npm run app:api:build",
     "app:api:dev": "concurrently -k -p \"[{name}]\" -n \"BABEL,NODE,TS\" -c \"#d531f5,#4d5ffa,#09e3b4\" \"npm run app:api:dev:watch:babel\" \"sleep 5 && npm run app:api:dev:watch:nodemon\" \"sleep 5 && npm run app:api:dev:watch:typings\"",
     "app:api:dev:watch:babel": "NODE_ENV=development babel ./apps/api/src --watch --out-dir ./apps/api/build --extensions .ts",
@@ -39,7 +39,10 @@
     "app:dapp:lint": "npm run lint -w dapp",
     "package:crypto:lint": "eslint ./packages/crypto/src --ext .js,.ts",
     "package:crypto:build2": "NODE_ENV=production tsc ./packages/crypto/src/*.ts --target 'es2021' --moduleResolution 'node' --declaration --esModuleInterop  --outDir ./packages/crypto/dist",
-    "package:crypto:build": "NODE_ENV=production tsc --project ./packages/crypto/tsconfig.json "
+    "package:crypto:dev": "concurrently -k -p \"[{name}]\" -n \"BABEL,TS\" -c \"#d531f5,#4d5ffa\" \"npm run package:crypto:watch:babel\" \"sleep 5 && npm run package:crypto:watch:typings\"",
+    "package:crypto:watch:babel": "NODE_ENV=development babel ./packages/crypto/src  --watch --out-dir ./packages/crypto/dist --extensions .ts",
+    "package:crypto:watch:typings": "NODE_ENV=production tsc --project ./packages/crypto/tsconfig.json --watch --declaration --noEmit --preserveWatchOutput",
+    "package:crypto:build": "NODE_ENV=production rimraf ./packages/crypto/dist && babel ./packages/crypto/src --out-dir ./packages/crypto/dist --extensions .ts"
   },
   "lint-staged": {
     "packages/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
@@ -57,6 +60,7 @@
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
     "@babel/preset-typescript": "^7.15.0",
+    "@types/minimist": "^1.2.2",
     "@typescript-eslint/parser": "^4.30.0",
     "babel-plugin-add-import-extension": "^1.6.0",
     "concurrently": "^6.2.0",

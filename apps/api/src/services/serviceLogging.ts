@@ -49,25 +49,25 @@ const format = winston.format.combine(
 
 const transports: Array<winston.transport> = [new winston.transports.Console()];
 
-if (process.env.NODE_ENV && process.env.NODE_ENV !== "production") {
-  transports.push(
-    new winston.transports.File({
-      filename: `./logs/error.log`,
-      level: "error",
-      handleExceptions: true,
-      maxsize: 1048576, // 1MB
-      maxFiles: 2,
-    })
-  );
-  transports.push(
-    new winston.transports.File({
-      filename: `./logs/debug.log`,
-      level: "debug",
-      maxsize: 1048576, // 1MB
-      maxFiles: 1,
-    })
-  );
-}
+// TODO: One day have a better logging going on if (process.env.NODE_ENV && process.env.NODE_ENV !== "production") {
+transports.push(
+  new winston.transports.File({
+    filename: `./logs/error.log`,
+    level: "warn",
+    handleExceptions: true,
+    maxsize: 1024 * 1024, // 1MB
+    maxFiles: 14,
+  })
+);
+transports.push(
+  new winston.transports.File({
+    filename: `./logs/debug.log`,
+    level: "debug",
+    maxsize: 1024 * 1024, // 1MB
+    maxFiles: 2,
+  })
+);
+//}
 
 export const logger = winston.createLogger({
   level: getLogLevel(),

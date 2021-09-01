@@ -183,5 +183,6 @@ public/
 !/apps/dapp/public/
 !public/ar/.keep
 !public/img/.keep
+dist/
 # editors
 .brackets.json

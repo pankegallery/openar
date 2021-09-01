@@ -35,11 +35,7 @@ const doChores = async () => {
   }
 };
 
-const main = async () => {
-  await doChores();
-};
-
-main()
+doChores()
   .then(async () => {
     await prismaDisconnect();
     if (parentPort) postMessage("done");

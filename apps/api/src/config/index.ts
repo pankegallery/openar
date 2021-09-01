@@ -87,6 +87,7 @@ export interface ApiConfig {
   imgUploadDir: string;
   modelUploadDir: string;
   packageBaseDir: string;
+  ipfsApiUrl: string;
   appName: string;
   baseUrl: PartialRecord<AppScopes, Array<string>>;
   db: ApiConfigDB;
@@ -107,6 +108,7 @@ export interface ApiConfigOverwrite {
   modelUploadDir?: string;
   publicDir?: string;
   packageBaseDir?: string;
+  ipfsApiUrl?: string;
   appName?: string;
   baseUrl?: PartialRecord<AppScopes, Array<string>>;
   db?: Partial<ApiConfigDB>;
@@ -159,6 +161,15 @@ let apiConfig = {
     process.env.APP_NAME,
     "",
     "Error: missing/wrong .env config: APP_NAME"
+  ),
+  ipfsApiUrl: trimTrailingSlash(
+    safeGuardVariable(
+      logger,
+      "string",
+      process.env.BASE_URL_IPFS_API,
+      "",
+      "Error: missing/wrong .env config: BASE_URL_IPFS_API"
+    )
   ),
   baseUrl: {
     dapp: trimTrailingSlash(

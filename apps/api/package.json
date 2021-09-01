@@ -15,6 +15,8 @@
   "scripts": {},
   "dependencies": {
     "@ladjs/graceful": "^1.0.5",
+    "@openar/contracts": "^0.1.0",
+    "@openar/crypto": "^0.1.0",
     "@prisma/client": "^2.29.0",
     "apollo-server-core": "^3.0.0",
     "apollo-server-express": "^3.0.0",
@@ -42,6 +44,7 @@
     "is-plain-object": "^5.0.0",
     "jsonwebtoken": "^8.5.1",
     "lorem-ipsum": "^2.0.3",
+    "minimist": "^1.2.5",
     "morgan": "^1.10.0",
     "multer": "^1.4.3",
     "nanoid": "^3.1.25",
