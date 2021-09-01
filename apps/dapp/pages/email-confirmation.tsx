@@ -91,7 +91,7 @@ const EmailConfirmation = () => {
 
   let content = (
     <Flex height="220" alignItems="center" justify="center" position="relative">
-      <LoadingIcon type="inline" size={90} />
+      <LoadingIcon position="fixed" type="inline" size={90} />
     </Flex>
   );
 
