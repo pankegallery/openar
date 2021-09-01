@@ -43,6 +43,9 @@ const retryWithRefreshTokenLink = onError(
       const observables: Observable<any>[] = graphQLErrors.reduce(
         (observables, graphQLError) => {
           const { message, extensions } = graphQLError;
+
+          console.log(123, message, extensions, 123);
+
           if (message === "Access Denied" && extensions?.code === "FORBIDDEN") {
             const observableForbidden = new Observable((observer) => {
               new Promise(async (resolve) => {
@@ -59,71 +62,63 @@ const retryWithRefreshTokenLink = onError(
             extensions?.code === "UNAUTHENTICATED"
           ) {
             const observable = new Observable((observer) => {
-              if (
-                client &&
-                user.canRefresh() &&
-                authentication.getRefreshCookie()
-              ) {
-                user.setAllowRefresh(false);
-                user.setRefreshing(true);
-                client
-                  .mutate({
-                    fetchPolicy: "no-cache",
-                    mutation: authRefreshMutationGQL,
-                  }) // TODO: is there a way to get a typed query here?
-                  .then(({ data }: any) => {
-                    if (
-                      data?.authRefresh?.tokens?.access &&
-                      data?.authRefresh?.tokens?.refresh
-                    ) {
-                      const payload = authentication.getTokenPayload(
+              user.setAllowRefresh(false);
+              user.setRefreshing(true);
+              client
+                .mutate({
+                  fetchPolicy: "no-cache",
+                  mutation: authRefreshMutationGQL,
+                }) // TODO: is there a way to get a typed query here?
+                .then(({ data }: any) => {
+                  if (
+                    data?.authRefresh?.tokens?.access &&
+                    data?.authRefresh?.tokens?.refresh
+                  ) {
+                    const payload = authentication.getTokenPayload(
+                      data.authRefresh.tokens.access
+                    );
+
+                    if (payload) {
+                      authentication.setAuthToken(
                         data.authRefresh.tokens.access
                       );
+                      authentication.setRefreshCookie(
+                        data.authRefresh.tokens.refresh
+                      );
 
-                      if (payload) {
-                        authentication.setAuthToken(
-                          data.authRefresh.tokens.access
-                        );
-                        authentication.setRefreshCookie(
-                          data.authRefresh.tokens.refresh
-                        );
+                      user.setAllowRefresh(true);
+                      user.login(payload.user);
 
-                        user.setAllowRefresh(true);
-                        user.login(payload.user);
-
-                        operation.setContext(({ headers = {} }) => ({
-                          headers: {
-                            ...headers,
-                            authorization: `Bearer ${data.authRefresh.tokens.access.token}`,
-                          },
-                        }));
-                      } else {
-                        throw new Error("Unable to fetch new access token (1)");
-                      }
+                      operation.setContext(({ headers = {} }) => ({
+                        headers: {
+                          ...headers,
+                          authorization: `Bearer ${data.authRefresh.tokens.access.token}`,
+                        },
+                      }));
                     } else {
-                      throw new Error("Unable to fetch new access token (2)");
+                      throw new Error("Unable to fetch new access token (1)");
                     }
-                  })
-                  .then(() => {
-                    const subscriber = {
-                      next: observer.next.bind(observer),
-                      error: observer.error.bind(observer),
-                      complete: observer.complete.bind(observer),
-                    };
+                  } else {
+                    throw new Error("Unable to fetch new access token (2)");
+                  }
+                })
+                .then(() => {
+                  const subscriber = {
+                    next: observer.next.bind(observer),
+                    error: observer.error.bind(observer),
+                    complete: observer.complete.bind(observer),
+                  };
 
-                    forward(operation).subscribe(subscriber);
-                  })
-                  .catch(async (error) => {
-                    console.log(
-                      "logout() ApolloClient.retryWithRefreshTokenLink: refresh error"
-                    );
-                    await user.logout();
+                  forward(operation).subscribe(subscriber);
+                })
+                .catch(async (error) => {
+                  console.log(
+                    "logout() ApolloClient.retryWithRefreshTokenLink: refresh error"
+                  );
+                  await user.logout();
 
-                    observer.error(error);
-                  });
-              } else {
-                observer.error(Error("Can't refresh session"));
-              }
+                  observer.error(error);
+                });
             });
             observables.push(observable);
           }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Flex, Text } from "@chakra-ui/react";
+import { Flex, Text, Box } from "@chakra-ui/react";
 
 export const FieldRow = ({
   children,
@@ -26,9 +26,9 @@ export const FieldRow = ({
     );
 
   return (
-    <Flex _first={{ mt: 0 }} w="100%" className="fieldRow">
+    <Box _first={{ mt: 0 }} w="100%" className="fieldRow">
       {children}
-    </Flex>
+    </Box>
   );
 };
 

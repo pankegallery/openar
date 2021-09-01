@@ -1,4 +1,4 @@
-import { string, object, number, mixed } from "yup";
+import { string, object, number, mixed, boolean } from "yup";
 
 export const ModuleArtworkCreateSchema = object().shape({
   title: string().required(),
@@ -15,26 +15,48 @@ export const ModuleArtworkUpdateSchema = ModuleArtworkCreateSchema.concat(
 );
 
 export const ModuleArObjectCreateSchema = object().shape({
+  mintObject: boolean(),
   title: string().required(),
+
   description: string().html({ max: 500 }),
   orderNumber: number()
     .transform((v, o) => (o === "" ? null : v))
     .nullable()
     .typeError("should be a number > 0"),
-  askPrice: number()
-    .transform((v, o) => (o === "" ? null : v))
-    .nullable()
-    .typeError("should be a number > 0"),
-  editionOf: number()
-    .transform((v, o) => (o === "" ? null : v))
-    .nullable()
-    .typeError("should be a number > 0")
-    .min(1)
-    .max(100),
+    // TODO: ensure that this is a number that works with the contract
+  askPrice: number().when("mintObject", {
+    is: true, // alternatively: (isBig, isSpecial) => isBig && isSpecial
+    then: number()
+      .transform((v, o) => (o === "" ? null : v))
+      .nullable()
+      .typeError("should be a number > 0")
+      .required(),
+    otherwise: number()
+      .transform((v, o) => (o === "" ? null : v))
+      .nullable()
+      .typeError("should be a number > 0"),
+  }),
+  editionOf: number().when("mintObject", {
+    is: true, // alternatively: (isBig, isSpecial) => isBig && isSpecial
+    then: number()
+      .transform((v, o) => (o === "" ? null : v))
+      .nullable()
+      .typeError("should be a number > 0")
+      .min(1)
+      .max(100)
+      .required(),
+    otherwise: number()
+      .transform((v, o) => (o === "" ? null : v))
+      .nullable()
+      .typeError("should be a number > 0")
+      .min(1)
+      .max(100),
+  }),
 });
 
 export const ModuleArObjectUpdateSchema = ModuleArObjectCreateSchema.concat(
   object().shape({
+    mintSignature: string(),
     key: string().required().length(16),
     status: number().required().typeError("Please select the publish state"),
     heroImage: number()
