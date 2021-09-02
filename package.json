@@ -42,7 +42,7 @@
     "package:crypto:dev": "concurrently -k -p \"[{name}]\" -n \"BABEL,TS\" -c \"#d531f5,#4d5ffa\" \"npm run package:crypto:watch:babel\" \"sleep 5 && npm run package:crypto:watch:typings\"",
     "package:crypto:watch:babel": "NODE_ENV=development babel ./packages/crypto/src  --watch --out-dir ./packages/crypto/dist --extensions .ts",
     "package:crypto:watch:typings": "NODE_ENV=production tsc --project ./packages/crypto/tsconfig.json --watch --declaration --noEmit --preserveWatchOutput",
-    "package:crypto:build": "NODE_ENV=production rimraf ./packages/crypto/dist && babel ./packages/crypto/src --out-dir ./packages/crypto/dist --extensions .ts"
+    "package:crypto:build": "NODE_ENV=production rimraf ./packages/crypto/dist && babel ./packages/crypto/src --out-dir ./packages/crypto/dist --extensions .ts && tsc --project ./packages/crypto/tsconfig.json --declaration --emitDeclarationOnly"
   },
   "lint-staged": {
     "packages/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [

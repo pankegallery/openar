@@ -8,6 +8,7 @@ export const FieldSwitch = ({
   name,
   label,
   hint,
+  isChecked,
   isRequired = false,
   isReadOnly = false,
   isDisabled = false,
@@ -17,6 +18,7 @@ export const FieldSwitch = ({
   name: string;
   label: string | React.ReactNode;
   hint?: string;
+  isChecked?: boolean;
   isRequired?: boolean;
   isReadOnly?: boolean;
   isDisabled?: boolean;
@@ -26,6 +28,7 @@ export const FieldSwitch = ({
   const {
     register,
     formState: { errors },
+    getValues
   } = useFormContext();
 
   return (
@@ -41,12 +44,14 @@ export const FieldSwitch = ({
           mt="1"
           key={`key-${name}`}
           isInvalid={!!errors[name]?.message}
+          
           {...{
             isRequired,
             isDisabled,
             isReadOnly,
             defaultChecked,
             colorScheme,
+            isChecked: typeof isChecked !== "undefined" && !!isChecked ? true : false
           }}
           {...register(name, { required: isRequired })}
           display="flex"

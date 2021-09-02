@@ -5,29 +5,24 @@ import React, {
   createContext,
   useContext,
 } from "react";
-import { ChainId } from "@usedapp/core";
 import { useWeb3React, Web3ReactProvider } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
 import detectEthereumProvider from "@metamask/detect-provider";
 
-import { useWeb3EagerConnect, useWeb3InactiveListener, useWeb3ActiveListener, useWeb3ReactListener } from "~/hooks";
-import { readOnlyUrls } from "~/services/crypto";
-import { boolean } from "yup";
-
-const config = {
-  readOnlyChainId: ChainId.Mainnet,
-  readOnlyUrls: readOnlyUrls,
-};
+import {
+  useWeb3EagerConnect,
+  useWeb3InactiveListener,
+  useWeb3ActiveListener,
+  useWeb3ReactListener,
+} from "~/hooks";
 
 const OpenARDappEnsureDisConnect = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  
+  const { connector } = useWeb3React<Web3Provider>();
 
-  const { deactivate, connector} = useWeb3React<Web3Provider>();
-  
   // handle logic to recognize the connector currently being activated
   const [activatingConnector, setActivatingConnector] = useState<any>();
   useEffect(() => {
@@ -43,7 +38,7 @@ const OpenARDappEnsureDisConnect = ({
   useWeb3InactiveListener(!triedEager || !!activatingConnector);
   useWeb3ActiveListener(!triedEager || !!activatingConnector);
   useWeb3ReactListener();
-  
+
   return <>{children}</>;
 };
 
@@ -77,7 +72,6 @@ export const OpenARDappProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  
   const [isWeb3Injected, setIsWeb3Injected] = useState(false);
 
   useEffect(() => {

@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { useWeb3React, UnsupportedChainIdError } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
 
+import { OpenAR, addresses } from "@openar/crypto";
+import { MediaFactory } from "@openar/contracts";
+
 import {
   arModelDeleteMutationGQL,
   imageDeleteMutationGQL,
@@ -68,9 +71,12 @@ export const ModuleArtworkArObjectForm = ({
     }),
     {}
   );
-  const [signatureError, setSignatureError] = useState<string | undefined>(undefined);
+  const [signatureError, setSignatureError] = useState<string | undefined>(
+    undefined
+  );
 
-  const web3context = useWeb3React<Web3Provider>();
+  const { library, chainId, account, active, error, connector } =
+    useWeb3React<Web3Provider>();
 
   const { watch, register, setValue } = useFormContext();
 
@@ -99,6 +105,12 @@ export const ModuleArtworkArObjectForm = ({
     },
   ];
 
+  console.log("CHAIN ID", chainId, account);
+  console.log(addresses.development.media);
+  connector.getChainId().then((data) => {
+    console.log(data);
+  });
+
   const [mintObject, mintSignature] = watch(["mintObject", "mintSignature"]);
 
   const cancelMintSignature = () => {
@@ -110,11 +122,174 @@ export const ModuleArtworkArObjectForm = ({
     });
     mintDisclosure.onClose();
   };
-
+  // TODO: https://github.com/MetaMask/test-dapp/blob/main/src/index.js
+  // TODO: https://github.com/dmihal/eth-permit
+  // https://stackoverflow.com/questions/46611117/how-to-authenticate-and-send-contract-method-using-web3-js-1-0
   useEffect(() => {
-    if (mintObject && mintSignature.trim() === "") mintDisclosure.onOpen();
-  }, [mintObject, mintSignature, mintDisclosure]);
+    if (
+      mintObject &&
+      mintSignature.trim() === "" &&
+      account &&
+      active &&
+      library.provider
+    ) {
+      mintDisclosure.onOpen();
 
+      console.log(library.getSigner(account));
+      const openAR = new OpenAR(
+        library.getSigner(account),
+        chainId,
+        addresses.development.media,
+        addresses.development.market
+      );
+
+      console.log("network:", library.network);
+
+      const test = async () => {
+        try {
+          console.log("test");
+          const tx1 = await openAR.media.marketContract();
+          console.log("test2", tx1);
+          const tx2 = await openAR.fetchTotalMedia();
+          // console.log(tx);
+          console.log("test3", tx2);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+
+      test();
+
+      //   // library
+      //   //           .getSigner(account)
+      //   //           .signMessage('👋')
+      //   //           .then((signature: any) => {
+      //   //             window.alert(`Success!\n\n${signature}`)
+      //   //           })
+      //   //           .catch((error: any) => {
+      //   //             window.alert('Failure!' + (error && error.message ? `\n\n${error.message}` : ''))
+      //   //           })
+
+      //   // Market: 0x53b56c2dB09865a21B3242B8Bd5Fae00a0dFf119
+      //   // Media: 0x588352A251aAC2EC0e868fC13612Fa2edd604f23
+      //   const msgParams = JSON.stringify({
+      //     domain: {
+      //       // Defining the chain aka Rinkeby testnet or Ethereum Main Net
+      //       chainId: 50,
+      //       // Give a user friendly name to the specific contract you are signing for.
+      //       name: 'openAr',
+      //       // If name isn't enough add verifying contract to make sure you are establishing contracts with the proper entity
+      //       verifyingContract: '0x588352A251aAC2EC0e868fC13612Fa2edd604f23',
+      //       // Just let's you know the latest version. Definitely make sure the field name is correct.
+      //       version: '1',
+      //     },
+
+      //     // Defining the message signing data content.
+      //     message: {
+      //       /*
+      //        - Anything you want. Just a JSON Blob that encodes the data you want to send
+      //        - No required fields
+      //        - This is DApp Specific
+      //        - Be as explicit as possible when building out the message schema.
+      //       */
+      //       contents: 'Hello, Bob!',
+      //       attachedMoneyInEth: 4.2,
+      //       from: {
+      //         name: 'Cow',
+      //         wallets: [
+      //           '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
+      //           '0xDeaDbeefdEAdbeefdEadbEEFdeadbeEFdEaDbeeF',
+      //         ],
+      //       },
+      //       to: [
+      //         {
+      //           name: 'Bob',
+      //           wallets: [
+      //             '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
+      //             '0xB0BdaBea57B0BDABeA57b0bdABEA57b0BDabEa57',
+      //             '0xB0B0b0b0b0b0B000000000000000000000000000',
+      //           ],
+      //         },
+      //       ],
+      //     },
+      //     // Refers to the keys of the *types* object below.
+      //     primaryType: 'Mail',
+      //     types: {
+      //       // TODO: Clarify if EIP712Domain refers to the domain the contract is hosted on
+      //       EIP712Domain: [
+      //         { name: 'name', type: 'string' },
+      //         { name: 'version', type: 'string' },
+      //         { name: 'chainId', type: 'uint256' },
+      //         { name: 'verifyingContract', type: 'address' },
+      //       ],
+      //       // Not an EIP712Domain definition
+      //       Group: [
+      //         { name: 'name', type: 'string' },
+      //         { name: 'members', type: 'Person[]' },
+      //       ],
+      //       // Refer to PrimaryType
+      //       Mail: [
+      //         { name: 'from', type: 'Person' },
+      //         { name: 'to', type: 'Person[]' },
+      //         { name: 'contents', type: 'string' },
+      //       ],
+      //       // Not an EIP712Domain definition
+      //       Person: [
+      //         { name: 'name', type: 'string' },
+      //         { name: 'wallets', type: 'address[]' },
+      //       ],
+      //     },
+      //   });
+
+      //   library.provider.send({
+      //     method: "eth_signTypedData_v4",
+      //   });
+
+      //   const sign = await ethereum.request({
+      //     method: "eth_signTypedData_v4",
+      //     params: [from, JSON.stringify(msgParams)],
+      //   });
+
+      //   library.provider.sendAsync(
+      //     {
+      //       method: "eth_signTypedData_v4",
+      //       params: [
+      //         ethersUtils.hexlify(ethersUtils.toUtf8Bytes(toSign)),
+      //         account.toLowerCase(),
+      //       ],
+      //       from: account,
+      //     },
+      //     async (error, result) => {
+      //       if (!error && result?.result) {
+      //         await walletLoginLogin(result?.result);
+      //       } else {
+      //         if (error?.code && error?.code === 4001) {
+      //           // TODO: make better
+      //           setAwaitingUserInteraction(null);
+
+      //           triggerToast(
+      //             "Signature required",
+      //             "Please sign the requested signature to be able to logon to our plaform",
+      //             "error"
+      //           );
+      //           await walletDisconnect();
+      //         } else {
+      //           handleError(error);
+      //         }
+      //       }
+      //     }
+      //   );
+    }
+  }, [
+    mintObject,
+    mintSignature,
+    mintDisclosure,
+    account,
+    active,
+    library.provider,
+  ]);
+
+  console.log("web3 error", error, mintObject);
   return (
     <>
       <Grid
@@ -235,6 +410,7 @@ export const ModuleArtworkArObjectForm = ({
                   name="mintObject"
                   label="Mint object"
                   colorScheme="red"
+                  isChecked={mintObject}
                 ></FieldSwitch>
 
                 <input type="hidden" {...register("mintSignature")} />
@@ -396,8 +572,14 @@ export const ModuleArtworkArObjectForm = ({
             {signatureError && (
               <Text color="openar.error">{signatureError}</Text>
             )}
-            {!signatureError && <Flex my="6" justifyContent="center" ><BeatLoader color="#fff" /></Flex>}
-            <Box><Button onClick={cancelMintSignature}>Cancel mint</Button></Box>
+            {!signatureError && (
+              <Flex my="6" justifyContent="center">
+                <BeatLoader color="#fff" />
+              </Flex>
+            )}
+            <Box>
+              <Button onClick={cancelMintSignature}>Cancel</Button>
+            </Box>
           </ModalBody>
         </ModalContent>
       </Modal>

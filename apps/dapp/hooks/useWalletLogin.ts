@@ -52,14 +52,12 @@ export function useWalletLogin() {
   );
 
   const {
-    connector,
     library,
     chainId,
     account,
     activate,
     deactivate,
     active,
-    error,
   } = useWeb3React<Web3Provider>();
 
   const handleError = useCallback((error: any) => {
