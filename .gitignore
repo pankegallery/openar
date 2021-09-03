@@ -179,6 +179,7 @@ data/*
 logs/*
 !logs/.keep
 public/
+dist/
 !public/.keep
 !/apps/dapp/public/
 !public/ar/.keep
