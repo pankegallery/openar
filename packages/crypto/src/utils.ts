@@ -107,7 +107,7 @@ export const openARConstructBidShares = (
  * @param deadline
  * @param domain
  */
-export const generateSignMintWithSigMessageData = (
+export const generateSignMintWithSignMessageData = (
   contentHash: BytesLike,
   metadataHash: BytesLike,
   creatorShareBN: BigNumber,
@@ -143,62 +143,6 @@ export const generateSignMintWithSigMessageData = (
       deadline,
     },
   };
-};
-
-/**
- * Signs a openAR MintWithSig Message as specified by EIP-712
- *
- * @param owner
- * @param contentHash
- * @param metadataHash
- * @param creatorShareBN
- * @param nonce
- * @param deadline
- * @param domain
- */
-export const signMintWithSigMessageFromWallet = async (
-  owner: Wallet,
-  contentHash: BytesLike,
-  metadataHash: BytesLike,
-  creatorShareBN: BigNumber,
-  nonce: number,
-  deadline: number,
-  domain: EIP712Domain
-): Promise<EIP712Signature> => {
-  try {
-    validateBytes32(contentHash);
-    validateBytes32(metadataHash);
-  } catch (err: any) {
-    return Promise.reject(err.message);
-  }
-
-  return new Promise<EIP712Signature>((res, reject) => {
-    try {
-      const sig = signTypedData_v4(
-        Buffer.from(owner.privateKey.slice(2), "hex"),
-        {
-          data: generateSignMintWithSigMessageData(
-            contentHash,
-            metadataHash,
-            creatorShareBN,
-            nonce,
-            deadline,
-            domain
-          ),
-        }
-      );
-      const response = fromRpcSig(sig);
-      res({
-        r: response.r,
-        s: response.s,
-        v: response.v,
-        deadline: deadline.toString(),
-      });
-    } catch (e) {
-      console.error(e);
-      reject(e);
-    }
-  });
 };
 
 export const recoverSignatureFromMintWithSig = async (
@@ -244,6 +188,171 @@ export const recoverSignatureFromMintWithSig = async (
     sig: toRpcSig(eipSig.v, Buffer.from(r), Buffer.from(s)),
   });
   return recovered;
+};
+
+/*
+ * Signs a openAR MintArObject Payload by EIP-712
+ *
+ * @param owner
+ * @param contentHash
+ * @param metadataHash
+ * @param creatorShareBN
+ * @param nonce (use UNIX timestamp)
+ * @param deadline
+ * @param domain
+ */
+export const generateMintArObjectSignMessageData = (
+  key: string,
+  editionOf: number,
+  setInitialAsk: boolean,
+  initialAskBN: BigNumber,
+  creatorShareBN: BigNumber,
+  nonce: number,
+  deadline: number,
+  domain: EIP712Domain
+) => {
+  const initialAsk = initialAskBN.toString();
+  const creatorShare = creatorShareBN.toString();
+
+  return {
+    types: {
+      EIP712Domain: [
+        { name: "name", type: "string" },
+        { name: "version", type: "string" },
+        { name: "chainId", type: "uint256" },
+        { name: "verifyingContract", type: "address" },
+      ],
+      MintArObject: [
+        { name: "key", type: "string" },
+        { name: "editionOf", type: "uint256" },
+        { name: "setInitialAsk", type: "bool" },
+        { name: "initialAsk", type: "uint256" },
+        { name: "creatorShare", type: "uint256" },
+        { name: "nonce", type: "uint256" },
+        { name: "deadline", type: "uint256" },
+      ],
+    },
+    primaryType: "MintArObject" as "MintArObject" | "EIP712Domain",
+    domain,
+    message: {
+      key,
+      editionOf,
+      setInitialAsk,
+      initialAsk,
+      creatorShare,
+      nonce,
+      deadline,
+    },
+  };
+};
+
+export const recoverSignatureFromMintArObject = async (
+  keyHash: string,
+  editionOf: number,
+  setInitialAsk: boolean,
+  initialAskBN: BigNumber,
+  creatorShareBN: BigNumber,
+  nonce: number,
+  deadline: number,
+  domain: EIP712Domain,
+  eipSig: EIP712Signature
+) => {
+  const r = arrayify(eipSig.r);
+  const s = arrayify(eipSig.s);
+
+  const initialAsk = initialAskBN.toString();
+  const creatorShare = creatorShareBN.toString();
+
+  const recovered = recoverTypedSignature({
+    data: {
+      types: {
+        EIP712Domain: [
+          { name: "name", type: "string" },
+          { name: "version", type: "string" },
+          { name: "chainId", type: "uint256" },
+          { name: "verifyingContract", type: "address" },
+        ],
+        MintArObject: [
+          { name: "key", type: "string" },
+          { name: "editionOf", type: "uint256" },
+          { name: "setInitialAsk", type: "bool" },
+          { name: "initialAsk", type: "uint256" },
+          { name: "creatorShare", type: "uint256" },
+          { name: "nonce", type: "uint256" },
+          { name: "deadline", type: "uint256" },
+        ],
+      },
+      primaryType: "MintArObject",
+      domain: domain,
+      message: {
+        keyHash,
+        editionOf,
+        setInitialAsk,
+        initialAsk,
+        creatorShare,
+        nonce,
+        deadline,
+      },
+    },
+    sig: toRpcSig(eipSig.v, Buffer.from(r), Buffer.from(s)),
+  });
+  return recovered;
+};
+
+/**
+ * Signs a openAR MintWithSig Message as specified by EIP-712
+ *
+ * @param owner
+ * @param contentHash
+ * @param metadataHash
+ * @param creatorShareBN
+ * @param nonce
+ * @param deadline
+ * @param domain
+ */
+export const signMintWithSigMessageFromWallet = async (
+  owner: Wallet,
+  contentHash: BytesLike,
+  metadataHash: BytesLike,
+  creatorShareBN: BigNumber,
+  nonce: number,
+  deadline: number,
+  domain: EIP712Domain
+): Promise<EIP712Signature> => {
+  try {
+    validateBytes32(contentHash);
+    validateBytes32(metadataHash);
+  } catch (err: any) {
+    return Promise.reject(err.message);
+  }
+
+  return new Promise<EIP712Signature>((res, reject) => {
+    try {
+      const sig = signTypedData_v4(
+        Buffer.from(owner.privateKey.slice(2), "hex"),
+        {
+          data: generateSignMintWithSignMessageData(
+            contentHash,
+            metadataHash,
+            creatorShareBN,
+            nonce,
+            deadline,
+            domain
+          ),
+        }
+      );
+      const response = fromRpcSig(sig);
+      res({
+        r: response.r,
+        s: response.s,
+        v: response.v,
+        deadline: deadline.toString(),
+      });
+    } catch (e) {
+      console.error(e);
+      reject(e);
+    }
+  });
 };
 
 /**
