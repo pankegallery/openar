@@ -1,15 +1,11 @@
 import React from "react";
 import {
-  AspectRatio,
   Box,
   LinkBox,
   LinkOverlay,
   chakra,
   Heading,
 } from "@chakra-ui/react";
-import { ApiImage } from "../ui";
-import { ArtworkStatusEnum } from "~/utils";
-import Link from "next/link";
 
 export const ExhibitionTitleTile = ({
   title,
@@ -30,11 +26,7 @@ export const ExhibitionTitleTile = ({
 }) => {
 
   const href = `/e/${exSlug}/`;
-  const chakraTitleTag = `chakra.${titleTag}`;
-  const TitleElement = chakra(titleTag)
-
-//        React.createElement(chakraTitleTag, {textStyle: "worktitle"}, titleContent)
-
+  
   if (link){
     return (
       <LinkBox
@@ -43,9 +35,9 @@ export const ExhibitionTitleTile = ({
         display="flex"
         flexDirection="column"
       >
-        <TitleElement textStyle="worktitle" mt="auto" mb="2rem">
+        <Heading as={(titleTag as any)} textStyle="worktitle" mt="auto" mb="2rem">
           <LinkOverlay href={href} passHref>{title}</LinkOverlay>
-        </TitleElement>
+        </Heading>
         <chakra.p textStyle="subtitle" mb="1rem">
           {subtitle}
         </chakra.p>
@@ -64,9 +56,9 @@ export const ExhibitionTitleTile = ({
         display="flex"
         flexDirection="column"
       >
-        <TitleElement textStyle="worktitle" mt="auto" mb="2rem">
+        <Heading as={(titleTag as any)} textStyle="worktitle" mt="auto" mb="2rem">
           {title}
-        </TitleElement>
+        </Heading>
         <chakra.p textStyle="subtitle" mb="1rem">
           {subtitle}
         </chakra.p>
