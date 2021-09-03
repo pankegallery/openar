@@ -46,7 +46,7 @@ DEV_DAPP_PORT=4400
 BASE_URL_API=[API_URL]
 ```
 
-In both cases [API_URL] can either be the URL to the local api if you are running it or if you just want to do frontend work you should be able to just use the live url https://api.openar.art 
+In both cases `[API_URL]` can either be the URL to the local api if you are running it or if you just want to do frontend work you should be able to just use the live url https://api.openar.art 
 
 For your convenience we provide several npm scripts to help you development. Please use
 
