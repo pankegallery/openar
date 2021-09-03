@@ -169,7 +169,7 @@ yarn-error.log*
 # vercel
 .vercel
 openar.config.js
-
+dist/
 data/*
 !data/.keep
 !data/postgres
