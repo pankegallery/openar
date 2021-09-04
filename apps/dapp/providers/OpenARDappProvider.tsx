@@ -43,7 +43,7 @@ const OpenARDappEnsureDisConnect = ({
   useWeb3InactiveListener(!triedEager || !!activatingConnector);
   useWeb3ActiveListener(!triedEager || !!activatingConnector);
   useWeb3ReactListener();
-  
+
   return <>{children}</>;
 };
 

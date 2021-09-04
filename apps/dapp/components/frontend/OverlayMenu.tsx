@@ -108,7 +108,7 @@ export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
           <Fade in={isOpen}>
 
           {(isOpen || isClosing) && <RemoveScroll>
-        
+
             <Grid
               className="menu"
               position="fixed"

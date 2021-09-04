@@ -157,7 +157,7 @@ export function useWeb3ActiveListener(suppress: boolean = false) {
 export function useWeb3ReactListener() {
   const { walletDisconnect } = useWalletLogin();
   const { connector } = useWeb3React();
-  
+
   useEffect((): any => {
     if (connector && connector.addListener) {
       const handleEvent = async (a, b, c) => {

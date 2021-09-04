@@ -26,7 +26,7 @@ export const ExhibitionTitleTile = ({
 }) => {
 
   const href = `/e/${exSlug}/`;
-  
+
   if (link){
     return (
       <LinkBox

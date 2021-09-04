@@ -217,7 +217,7 @@ a {
 
   .img {
     width: 66.666%;
-    opacity: 0.6; // remove TODO: 
+    opacity: 0.6; // remove TODO:
     picture, img {
       height: 100%;
       width: 100%;
@@ -237,7 +237,7 @@ a {
   }
 
   &:nth-child(2n + 2) {
-    
+
     .info {
       a::before {
         background-color: rgba(0,250,0,0.6);
@@ -281,7 +281,7 @@ a {
       width: 100%;
       .info {
         height: calc(22.19vw - var(--sbw));
-      } 
+      }
     }
 
     .corner-light + .openOverlayMenu {
@@ -304,3 +304,13 @@ a {
     }
 }
 
+
+//.css-1hnz6hu::before {
+//width: 100%;
+//height: 100%;
+//border: 2px solid red;
+//transform: rotate(90deg) translate(0, -17%);
+//transform-origin: left top;
+//width: 200%;
+//height: 234%;
+//}

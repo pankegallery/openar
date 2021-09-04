@@ -117,7 +117,7 @@ const EmailConfirmation = () => {
               "Thanky you"}
           </Heading>
         </Box>
-       
+
         <>{buttonDashboardLogin}</>
       </>
     );

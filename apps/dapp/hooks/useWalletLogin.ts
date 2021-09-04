@@ -95,7 +95,7 @@ export function useWalletLogin() {
     setWalletLoginError(msg);
     setAwaitingUserInteraction(null);
   }, []);
-  
+
   const connected = useCallback(async () => {
     store.dispatch(authSetJustConnected());
   }, []);
@@ -148,7 +148,7 @@ export function useWalletLogin() {
     setIsConnected,
     handleError,
   ]);
-  
+
   const connectInjected = useCallback(async () => {
     try {
       setWalletLoginError(null);
@@ -168,7 +168,7 @@ export function useWalletLogin() {
     setIsConnected,
     handleError,
   ]);
-  
+
   const walletLoginFinalize = useCallback(async () => {
     store.dispatch(
       cryptoStateUpdate({
@@ -184,7 +184,7 @@ export function useWalletLogin() {
     Router.push("/openar/");
 
   }, [triggerToast, setIsLoggingIn, setWalletLoginError, setIsConnected]);
-  
+
   const walletLoginLogin = useCallback(
     async (signedMessage) => {
       const { data, errors } = await loginMutation(account, signedMessage);
@@ -201,7 +201,7 @@ export function useWalletLogin() {
         handleError(error);
       }
     },
-   [account, loginMutation, handleError, walletLoginFinalize] 
+   [account, loginMutation, handleError, walletLoginFinalize]
   );
 
   const walletLoginRequestSignature = useCallback(
