@@ -43,11 +43,21 @@ export const ArtworkListItem = ({
       className={`${isWhite ? "white" : ""} artwork list item`}
       key={`artwork-${id}`}
     >
-      <Box className="info">
-        <chakra.h2 className="title" textStyle="subtitle">
-          <Link passHref href={href}><LinkOverlay>{title}</LinkOverlay></Link>
+      <Box className="info" p="4">
+        <chakra.h2
+          className="title"
+          fontWeight="600"
+        >
+          <LinkOverlay href={href} passHref>{title}</LinkOverlay>
         </chakra.h2>
-        <chakra.span className="artist" textStyle="meta">{artist}</chakra.span>
+        <chakra.span
+          width="2em"
+          overflow="hidden"
+          display="block"
+          text-overflow="ellipsis"
+          white-space="nowrap"
+          className="artist"
+          textStyle="meta">{artist}</chakra.span>
       </Box>
       <Box
         className={`${

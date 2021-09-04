@@ -22,7 +22,7 @@ export const Artwork = ({ artwork, exhibition }: { artwork: any, exhibition: any
   const isDesktop = useSSRSaveMediaQuery(
     "(min-width: 75rem)"
   );
-  
+
   let hasMultipleObjects = artwork.arObjects.legth  > 1
 
   let artist = artwork.creator?.pseudonym ? artwork.creator?.pseudonym : artwork.creator?.ethAddress;
@@ -341,7 +341,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           pseudonym
           id
           ethAddress
-        }        
+        }
       }
     }`;
 

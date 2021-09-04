@@ -58,10 +58,12 @@ function OpenARApp({ Component, pageProps }: AppPropsWithLayout) {
 
     if (!document) return;
 
+
     document.documentElement.style.setProperty(
       "--sbw",
       `${calculateScrollbarWidth()}px`
     );
+
   }, []);
 
   return (

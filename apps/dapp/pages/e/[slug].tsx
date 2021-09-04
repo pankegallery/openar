@@ -287,9 +287,9 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
               </chakra.p>
             </Flex>
           </Flex>
-          {/* --------- Footer  --------- */}
+          {/* --------- Artworks arrow  --------- */}
           <Flex
-            className="footer"
+            className="artworksArrow"
             p="6"
             pr="10"
             pl={{
@@ -345,7 +345,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
       </Grid>
       {/* --------- Artworks  --------- */}
       <Flex
-        ref={refArtworksWrapper} 
+        ref={refArtworksWrapper}
         id="artworks"
         className="artworks"
         layerStyle="backdropLight"
