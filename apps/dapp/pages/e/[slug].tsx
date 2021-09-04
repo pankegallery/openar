@@ -204,7 +204,6 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
         >
           {/* --------- Exhibition title  --------- */}
           <Flex
-            
             w={{
               base: "calc(66.66vw - var(--sbw))",
               t: "calc(50vw - var(--sbw))",
@@ -289,9 +288,9 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
               </chakra.p>
             </Flex>
           </Flex>
-          {/* --------- Footer  --------- */}
+          {/* --------- Artworks arrow  --------- */}
           <Flex
-            className="footer"
+            className="artworksArrow"
             p="6"
             pr="10"
             pl={{
