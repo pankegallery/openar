@@ -340,7 +340,7 @@ const defaultPropsForFormComponentents = (components: string[]): object => {
           defaultProps: {
             focusBoxShadow: false,
             focusBorderColor: "transparent",
-            errorBorderColor: "openar.error",
+            errorBorderColor: "transparent",
           },
         },
       };

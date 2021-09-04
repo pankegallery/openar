@@ -188,7 +188,14 @@ export const FieldInput = ({
       isInvalid={errors[name]?.message}
       {...{ isRequired, isDisabled }}
     >
-      <Box alignItems="center" p="3" borderBottom="1px solid #fff">
+      <Box
+        alignItems="center"
+        p="3"
+        borderBottom="1px solid #fff"
+        borderLeft={errors[name]?.message ? "4px solid " : "0px"}
+        borderLeftColor="openar.error"
+        pl={errors[name]?.message ? "calc(var(--chakra-space-3) - 4px)" : "3"}
+      >
       {errors[name]?.message && (
           <Box
             m={0}
@@ -198,7 +205,7 @@ export const FieldInput = ({
             pt="3"
             pr="3"
           >
-            <FieldErrorMessage error={errors[name]?.message}/>
+            <FieldErrorMessage error={errors[name]?.message} color="openar.error"/>
           </Box>
         )}
         <FormLabel
