@@ -39,7 +39,6 @@ export const FieldErrorMessage = ({
             textTransform="uppercase"
             letterSpacing="0.02em"
             fontWeight="700"
-            color="openar.error"
             display="inline-block"
             errorIcon='alert'
          >{message}</FormErrorMessage>
