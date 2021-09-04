@@ -632,7 +632,26 @@ const _abi = [
         type: "bool",
       },
     ],
-    name: "configureOpenAREnforcePlatformCuts",
+    name: "configureEnforcePlatformCuts",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bool",
+        name: "flag",
+        type: "bool",
+      },
+    ],
+    name: "configurePausedUnpaused",
     outputs: [
       {
         internalType: "bool",
@@ -647,11 +666,11 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
-        name: "openARPlaformMaintenanceAddress",
+        name: "platformAddress",
         type: "address",
       },
     ],
-    name: "configureOpenARPlaformMaintenanceAddress",
+    name: "configurePlatformAddress",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -726,7 +745,7 @@ const _abi = [
         type: "tuple",
       },
     ],
-    name: "configureOpenARPlatformCuts",
+    name: "configurePlatformCuts",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -735,31 +754,12 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
-        name: "openARPlatformPoolAddess",
+        name: "poolAddress",
         type: "address",
       },
     ],
-    name: "configureOpenARPlatformPoolAddress",
+    name: "configurePoolAddress",
     outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bool",
-        name: "flag",
-        type: "bool",
-      },
-    ],
-    name: "configurePausedUnpaused",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
     stateMutability: "nonpayable",
     type: "function",
   },

@@ -25,8 +25,10 @@ interface IMediaInterface extends ethers.utils.Interface {
     "acceptBid(uint256,tuple)": FunctionFragment;
     "auctionTransfer(uint256,address)": FunctionFragment;
     "configure(address)": FunctionFragment;
+    "creatorBalanceOf(address)": FunctionFragment;
     "mint(tuple,tuple)": FunctionFragment;
-    "mintWithSig(address,tuple,tuple,tuple)": FunctionFragment;
+    "mintArObject(address,string[],string[],bytes32[],bytes32[],tuple,tuple,tuple)": FunctionFragment;
+    "mintWithSig(address,tuple,tuple,uint256,tuple)": FunctionFragment;
     "permit(address,uint256,tuple)": FunctionFragment;
     "removeAsk(uint256)": FunctionFragment;
     "removeBid(uint256)": FunctionFragment;
@@ -34,6 +36,7 @@ interface IMediaInterface extends ethers.utils.Interface {
     "setAsk(uint256,tuple)": FunctionFragment;
     "setBid(uint256,tuple)": FunctionFragment;
     "tokenMetadataURI(uint256)": FunctionFragment;
+    "tokenOfCreatorByIndex(address,uint256)": FunctionFragment;
     "updateTokenMetadataURI(uint256,string)": FunctionFragment;
     "updateTokenURI(uint256,string)": FunctionFragment;
   };
@@ -57,6 +60,10 @@ interface IMediaInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "configure", values: [string]): string;
   encodeFunctionData(
+    functionFragment: "creatorBalanceOf",
+    values: [string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "mint",
     values: [
       {
@@ -72,6 +79,32 @@ interface IMediaInterface extends ethers.utils.Interface {
         owner: { value: BigNumberish };
         prevOwner: { value: BigNumberish };
       }
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "mintArObject",
+    values: [
+      string,
+      string[],
+      string[],
+      BytesLike[],
+      BytesLike[],
+      {
+        keyHash: BytesLike;
+        editionOf: BigNumberish;
+        initialAsk: BigNumberish;
+        mintArObjectNonce: BigNumberish;
+        currency: string;
+        setInitialAsk: boolean;
+      },
+      {
+        platform: { value: BigNumberish };
+        pool: { value: BigNumberish };
+        creator: { value: BigNumberish };
+        owner: { value: BigNumberish };
+        prevOwner: { value: BigNumberish };
+      },
+      { deadline: BigNumberish; v: BigNumberish; r: BytesLike; s: BytesLike }
     ]
   ): string;
   encodeFunctionData(
@@ -91,6 +124,7 @@ interface IMediaInterface extends ethers.utils.Interface {
         owner: { value: BigNumberish };
         prevOwner: { value: BigNumberish };
       },
+      BigNumberish,
       { deadline: BigNumberish; v: BigNumberish; r: BytesLike; s: BytesLike }
     ]
   ): string;
@@ -136,6 +170,10 @@ interface IMediaInterface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "tokenOfCreatorByIndex",
+    values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "updateTokenMetadataURI",
     values: [BigNumberish, string]
   ): string;
@@ -150,7 +188,15 @@ interface IMediaInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "configure", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "creatorBalanceOf",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "mintArObject",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "mintWithSig",
     data: BytesLike
@@ -166,6 +212,10 @@ interface IMediaInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "setBid", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "tokenMetadataURI",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "tokenOfCreatorByIndex",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -246,6 +296,20 @@ export class IMedia extends Contract {
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
+    creatorBalanceOf(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
+    "creatorBalanceOf(address)"(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
     mint(
       data: {
         tokenURI: string;
@@ -280,13 +344,19 @@ export class IMedia extends Contract {
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
-    mintWithSig(
+    mintArObject(
       creator: string,
+      tokenURI: string[],
+      metadataURI: string[],
+      contentHash: BytesLike[],
+      metadataHash: BytesLike[],
       data: {
-        tokenURI: string;
-        metadataURI: string;
-        contentHash: BytesLike;
-        metadataHash: BytesLike;
+        keyHash: BytesLike;
+        editionOf: BigNumberish;
+        initialAsk: BigNumberish;
+        mintArObjectNonce: BigNumberish;
+        currency: string;
+        setInitialAsk: boolean;
       },
       bidShares: {
         platform: { value: BigNumberish };
@@ -304,7 +374,37 @@ export class IMedia extends Contract {
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
-    "mintWithSig(address,tuple,tuple,tuple)"(
+    "mintArObject(address,string[],string[],bytes32[],bytes32[],tuple,tuple,tuple)"(
+      creator: string,
+      tokenURI: string[],
+      metadataURI: string[],
+      contentHash: BytesLike[],
+      metadataHash: BytesLike[],
+      data: {
+        keyHash: BytesLike;
+        editionOf: BigNumberish;
+        initialAsk: BigNumberish;
+        mintArObjectNonce: BigNumberish;
+        currency: string;
+        setInitialAsk: boolean;
+      },
+      bidShares: {
+        platform: { value: BigNumberish };
+        pool: { value: BigNumberish };
+        creator: { value: BigNumberish };
+        owner: { value: BigNumberish };
+        prevOwner: { value: BigNumberish };
+      },
+      sig: {
+        deadline: BigNumberish;
+        v: BigNumberish;
+        r: BytesLike;
+        s: BytesLike;
+      },
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    mintWithSig(
       creator: string,
       data: {
         tokenURI: string;
@@ -319,6 +419,32 @@ export class IMedia extends Contract {
         owner: { value: BigNumberish };
         prevOwner: { value: BigNumberish };
       },
+      mintWithSigNonce: BigNumberish,
+      sig: {
+        deadline: BigNumberish;
+        v: BigNumberish;
+        r: BytesLike;
+        s: BytesLike;
+      },
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "mintWithSig(address,tuple,tuple,uint256,tuple)"(
+      creator: string,
+      data: {
+        tokenURI: string;
+        metadataURI: string;
+        contentHash: BytesLike;
+        metadataHash: BytesLike;
+      },
+      bidShares: {
+        platform: { value: BigNumberish };
+        pool: { value: BigNumberish };
+        creator: { value: BigNumberish };
+        owner: { value: BigNumberish };
+        prevOwner: { value: BigNumberish };
+      },
+      mintWithSigNonce: BigNumberish,
       sig: {
         deadline: BigNumberish;
         v: BigNumberish;
@@ -432,6 +558,22 @@ export class IMedia extends Contract {
       0: string;
     }>;
 
+    tokenOfCreatorByIndex(
+      creator: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
+    "tokenOfCreatorByIndex(address,uint256)"(
+      creator: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
     updateTokenMetadataURI(
       tokenId: BigNumberish,
       metadataURI: string,
@@ -503,6 +645,16 @@ export class IMedia extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
+  creatorBalanceOf(
+    creator: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  "creatorBalanceOf(address)"(
+    creator: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   mint(
     data: {
       tokenURI: string;
@@ -537,13 +689,19 @@ export class IMedia extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
-  mintWithSig(
+  mintArObject(
     creator: string,
+    tokenURI: string[],
+    metadataURI: string[],
+    contentHash: BytesLike[],
+    metadataHash: BytesLike[],
     data: {
-      tokenURI: string;
-      metadataURI: string;
-      contentHash: BytesLike;
-      metadataHash: BytesLike;
+      keyHash: BytesLike;
+      editionOf: BigNumberish;
+      initialAsk: BigNumberish;
+      mintArObjectNonce: BigNumberish;
+      currency: string;
+      setInitialAsk: boolean;
     },
     bidShares: {
       platform: { value: BigNumberish };
@@ -561,7 +719,37 @@ export class IMedia extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
-  "mintWithSig(address,tuple,tuple,tuple)"(
+  "mintArObject(address,string[],string[],bytes32[],bytes32[],tuple,tuple,tuple)"(
+    creator: string,
+    tokenURI: string[],
+    metadataURI: string[],
+    contentHash: BytesLike[],
+    metadataHash: BytesLike[],
+    data: {
+      keyHash: BytesLike;
+      editionOf: BigNumberish;
+      initialAsk: BigNumberish;
+      mintArObjectNonce: BigNumberish;
+      currency: string;
+      setInitialAsk: boolean;
+    },
+    bidShares: {
+      platform: { value: BigNumberish };
+      pool: { value: BigNumberish };
+      creator: { value: BigNumberish };
+      owner: { value: BigNumberish };
+      prevOwner: { value: BigNumberish };
+    },
+    sig: {
+      deadline: BigNumberish;
+      v: BigNumberish;
+      r: BytesLike;
+      s: BytesLike;
+    },
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  mintWithSig(
     creator: string,
     data: {
       tokenURI: string;
@@ -576,6 +764,32 @@ export class IMedia extends Contract {
       owner: { value: BigNumberish };
       prevOwner: { value: BigNumberish };
     },
+    mintWithSigNonce: BigNumberish,
+    sig: {
+      deadline: BigNumberish;
+      v: BigNumberish;
+      r: BytesLike;
+      s: BytesLike;
+    },
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "mintWithSig(address,tuple,tuple,uint256,tuple)"(
+    creator: string,
+    data: {
+      tokenURI: string;
+      metadataURI: string;
+      contentHash: BytesLike;
+      metadataHash: BytesLike;
+    },
+    bidShares: {
+      platform: { value: BigNumberish };
+      pool: { value: BigNumberish };
+      creator: { value: BigNumberish };
+      owner: { value: BigNumberish };
+      prevOwner: { value: BigNumberish };
+    },
+    mintWithSigNonce: BigNumberish,
     sig: {
       deadline: BigNumberish;
       v: BigNumberish;
@@ -685,6 +899,18 @@ export class IMedia extends Contract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  tokenOfCreatorByIndex(
+    creator: string,
+    index: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  "tokenOfCreatorByIndex(address,uint256)"(
+    creator: string,
+    index: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   updateTokenMetadataURI(
     tokenId: BigNumberish,
     metadataURI: string,
@@ -756,6 +982,16 @@ export class IMedia extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    creatorBalanceOf(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "creatorBalanceOf(address)"(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     mint(
       data: {
         tokenURI: string;
@@ -790,13 +1026,19 @@ export class IMedia extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    mintWithSig(
+    mintArObject(
       creator: string,
+      tokenURI: string[],
+      metadataURI: string[],
+      contentHash: BytesLike[],
+      metadataHash: BytesLike[],
       data: {
-        tokenURI: string;
-        metadataURI: string;
-        contentHash: BytesLike;
-        metadataHash: BytesLike;
+        keyHash: BytesLike;
+        editionOf: BigNumberish;
+        initialAsk: BigNumberish;
+        mintArObjectNonce: BigNumberish;
+        currency: string;
+        setInitialAsk: boolean;
       },
       bidShares: {
         platform: { value: BigNumberish };
@@ -814,7 +1056,37 @@ export class IMedia extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    "mintWithSig(address,tuple,tuple,tuple)"(
+    "mintArObject(address,string[],string[],bytes32[],bytes32[],tuple,tuple,tuple)"(
+      creator: string,
+      tokenURI: string[],
+      metadataURI: string[],
+      contentHash: BytesLike[],
+      metadataHash: BytesLike[],
+      data: {
+        keyHash: BytesLike;
+        editionOf: BigNumberish;
+        initialAsk: BigNumberish;
+        mintArObjectNonce: BigNumberish;
+        currency: string;
+        setInitialAsk: boolean;
+      },
+      bidShares: {
+        platform: { value: BigNumberish };
+        pool: { value: BigNumberish };
+        creator: { value: BigNumberish };
+        owner: { value: BigNumberish };
+        prevOwner: { value: BigNumberish };
+      },
+      sig: {
+        deadline: BigNumberish;
+        v: BigNumberish;
+        r: BytesLike;
+        s: BytesLike;
+      },
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    mintWithSig(
       creator: string,
       data: {
         tokenURI: string;
@@ -829,6 +1101,32 @@ export class IMedia extends Contract {
         owner: { value: BigNumberish };
         prevOwner: { value: BigNumberish };
       },
+      mintWithSigNonce: BigNumberish,
+      sig: {
+        deadline: BigNumberish;
+        v: BigNumberish;
+        r: BytesLike;
+        s: BytesLike;
+      },
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "mintWithSig(address,tuple,tuple,uint256,tuple)"(
+      creator: string,
+      data: {
+        tokenURI: string;
+        metadataURI: string;
+        contentHash: BytesLike;
+        metadataHash: BytesLike;
+      },
+      bidShares: {
+        platform: { value: BigNumberish };
+        pool: { value: BigNumberish };
+        creator: { value: BigNumberish };
+        owner: { value: BigNumberish };
+        prevOwner: { value: BigNumberish };
+      },
+      mintWithSigNonce: BigNumberish,
       sig: {
         deadline: BigNumberish;
         v: BigNumberish;
@@ -932,6 +1230,18 @@ export class IMedia extends Contract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    tokenOfCreatorByIndex(
+      creator: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "tokenOfCreatorByIndex(address,uint256)"(
+      creator: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     updateTokenMetadataURI(
       tokenId: BigNumberish,
       metadataURI: string,
@@ -1018,6 +1328,16 @@ export class IMedia extends Contract {
       overrides?: Overrides
     ): Promise<BigNumber>;
 
+    creatorBalanceOf(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "creatorBalanceOf(address)"(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     mint(
       data: {
         tokenURI: string;
@@ -1052,13 +1372,19 @@ export class IMedia extends Contract {
       overrides?: Overrides
     ): Promise<BigNumber>;
 
-    mintWithSig(
+    mintArObject(
       creator: string,
+      tokenURI: string[],
+      metadataURI: string[],
+      contentHash: BytesLike[],
+      metadataHash: BytesLike[],
       data: {
-        tokenURI: string;
-        metadataURI: string;
-        contentHash: BytesLike;
-        metadataHash: BytesLike;
+        keyHash: BytesLike;
+        editionOf: BigNumberish;
+        initialAsk: BigNumberish;
+        mintArObjectNonce: BigNumberish;
+        currency: string;
+        setInitialAsk: boolean;
       },
       bidShares: {
         platform: { value: BigNumberish };
@@ -1076,7 +1402,37 @@ export class IMedia extends Contract {
       overrides?: Overrides
     ): Promise<BigNumber>;
 
-    "mintWithSig(address,tuple,tuple,tuple)"(
+    "mintArObject(address,string[],string[],bytes32[],bytes32[],tuple,tuple,tuple)"(
+      creator: string,
+      tokenURI: string[],
+      metadataURI: string[],
+      contentHash: BytesLike[],
+      metadataHash: BytesLike[],
+      data: {
+        keyHash: BytesLike;
+        editionOf: BigNumberish;
+        initialAsk: BigNumberish;
+        mintArObjectNonce: BigNumberish;
+        currency: string;
+        setInitialAsk: boolean;
+      },
+      bidShares: {
+        platform: { value: BigNumberish };
+        pool: { value: BigNumberish };
+        creator: { value: BigNumberish };
+        owner: { value: BigNumberish };
+        prevOwner: { value: BigNumberish };
+      },
+      sig: {
+        deadline: BigNumberish;
+        v: BigNumberish;
+        r: BytesLike;
+        s: BytesLike;
+      },
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    mintWithSig(
       creator: string,
       data: {
         tokenURI: string;
@@ -1091,6 +1447,32 @@ export class IMedia extends Contract {
         owner: { value: BigNumberish };
         prevOwner: { value: BigNumberish };
       },
+      mintWithSigNonce: BigNumberish,
+      sig: {
+        deadline: BigNumberish;
+        v: BigNumberish;
+        r: BytesLike;
+        s: BytesLike;
+      },
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "mintWithSig(address,tuple,tuple,uint256,tuple)"(
+      creator: string,
+      data: {
+        tokenURI: string;
+        metadataURI: string;
+        contentHash: BytesLike;
+        metadataHash: BytesLike;
+      },
+      bidShares: {
+        platform: { value: BigNumberish };
+        pool: { value: BigNumberish };
+        creator: { value: BigNumberish };
+        owner: { value: BigNumberish };
+        prevOwner: { value: BigNumberish };
+      },
+      mintWithSigNonce: BigNumberish,
       sig: {
         deadline: BigNumberish;
         v: BigNumberish;
@@ -1194,6 +1576,18 @@ export class IMedia extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    tokenOfCreatorByIndex(
+      creator: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "tokenOfCreatorByIndex(address,uint256)"(
+      creator: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     updateTokenMetadataURI(
       tokenId: BigNumberish,
       metadataURI: string,
@@ -1266,6 +1660,16 @@ export class IMedia extends Contract {
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
+    creatorBalanceOf(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "creatorBalanceOf(address)"(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     mint(
       data: {
         tokenURI: string;
@@ -1300,13 +1704,19 @@ export class IMedia extends Contract {
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
-    mintWithSig(
+    mintArObject(
       creator: string,
+      tokenURI: string[],
+      metadataURI: string[],
+      contentHash: BytesLike[],
+      metadataHash: BytesLike[],
       data: {
-        tokenURI: string;
-        metadataURI: string;
-        contentHash: BytesLike;
-        metadataHash: BytesLike;
+        keyHash: BytesLike;
+        editionOf: BigNumberish;
+        initialAsk: BigNumberish;
+        mintArObjectNonce: BigNumberish;
+        currency: string;
+        setInitialAsk: boolean;
       },
       bidShares: {
         platform: { value: BigNumberish };
@@ -1324,7 +1734,37 @@ export class IMedia extends Contract {
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
-    "mintWithSig(address,tuple,tuple,tuple)"(
+    "mintArObject(address,string[],string[],bytes32[],bytes32[],tuple,tuple,tuple)"(
+      creator: string,
+      tokenURI: string[],
+      metadataURI: string[],
+      contentHash: BytesLike[],
+      metadataHash: BytesLike[],
+      data: {
+        keyHash: BytesLike;
+        editionOf: BigNumberish;
+        initialAsk: BigNumberish;
+        mintArObjectNonce: BigNumberish;
+        currency: string;
+        setInitialAsk: boolean;
+      },
+      bidShares: {
+        platform: { value: BigNumberish };
+        pool: { value: BigNumberish };
+        creator: { value: BigNumberish };
+        owner: { value: BigNumberish };
+        prevOwner: { value: BigNumberish };
+      },
+      sig: {
+        deadline: BigNumberish;
+        v: BigNumberish;
+        r: BytesLike;
+        s: BytesLike;
+      },
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    mintWithSig(
       creator: string,
       data: {
         tokenURI: string;
@@ -1339,6 +1779,32 @@ export class IMedia extends Contract {
         owner: { value: BigNumberish };
         prevOwner: { value: BigNumberish };
       },
+      mintWithSigNonce: BigNumberish,
+      sig: {
+        deadline: BigNumberish;
+        v: BigNumberish;
+        r: BytesLike;
+        s: BytesLike;
+      },
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "mintWithSig(address,tuple,tuple,uint256,tuple)"(
+      creator: string,
+      data: {
+        tokenURI: string;
+        metadataURI: string;
+        contentHash: BytesLike;
+        metadataHash: BytesLike;
+      },
+      bidShares: {
+        platform: { value: BigNumberish };
+        pool: { value: BigNumberish };
+        creator: { value: BigNumberish };
+        owner: { value: BigNumberish };
+        prevOwner: { value: BigNumberish };
+      },
+      mintWithSigNonce: BigNumberish,
       sig: {
         deadline: BigNumberish;
         v: BigNumberish;
@@ -1445,6 +1911,18 @@ export class IMedia extends Contract {
 
     "tokenMetadataURI(uint256)"(
       tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    tokenOfCreatorByIndex(
+      creator: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "tokenOfCreatorByIndex(address,uint256)"(
+      creator: string,
+      index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

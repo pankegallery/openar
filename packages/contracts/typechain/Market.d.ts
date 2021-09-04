@@ -26,25 +26,28 @@ interface MarketInterface extends ethers.utils.Interface {
     "bidForTokenBidder(uint256,address)": FunctionFragment;
     "bidSharesForToken(uint256)": FunctionFragment;
     "configure(address)": FunctionFragment;
-    "configureOpenAREnforcePlatformCuts(bool)": FunctionFragment;
-    "configureOpenARPlaformMaintenanceAddress(address)": FunctionFragment;
-    "configureOpenARPlatformCuts(tuple)": FunctionFragment;
-    "configureOpenARPlatformPoolAddress(address)": FunctionFragment;
+    "configureEnforcePlatformCuts(bool)": FunctionFragment;
     "configurePausedUnpaused(bool)": FunctionFragment;
+    "configurePlatformAddress(address)": FunctionFragment;
+    "configurePlatformCuts(tuple)": FunctionFragment;
+    "configurePoolAddress(address)": FunctionFragment;
     "currentAskForToken(uint256)": FunctionFragment;
     "enforcePlatformCuts()": FunctionFragment;
     "isValidBid(uint256,uint256)": FunctionFragment;
     "isValidBidShares(tuple)": FunctionFragment;
     "mediaContract()": FunctionFragment;
-    "openARPlaformMaintenance()": FunctionFragment;
-    "openARPlatformPool()": FunctionFragment;
+    "openARPlatform()": FunctionFragment;
+    "openARPool()": FunctionFragment;
+    "owner()": FunctionFragment;
     "platformCuts()": FunctionFragment;
     "removeAsk(uint256)": FunctionFragment;
     "removeBid(uint256,address)": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
     "setAsk(uint256,tuple)": FunctionFragment;
     "setBid(uint256,tuple,address)": FunctionFragment;
     "setBidShares(uint256,tuple)": FunctionFragment;
     "splitShare(tuple,uint256)": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -70,15 +73,19 @@ interface MarketInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "configure", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "configureOpenAREnforcePlatformCuts",
+    functionFragment: "configureEnforcePlatformCuts",
     values: [boolean]
   ): string;
   encodeFunctionData(
-    functionFragment: "configureOpenARPlaformMaintenanceAddress",
+    functionFragment: "configurePausedUnpaused",
+    values: [boolean]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "configurePlatformAddress",
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "configureOpenARPlatformCuts",
+    functionFragment: "configurePlatformCuts",
     values: [
       {
         firstSalePlatform: { value: BigNumberish };
@@ -90,12 +97,8 @@ interface MarketInterface extends ethers.utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "configureOpenARPlatformPoolAddress",
+    functionFragment: "configurePoolAddress",
     values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "configurePausedUnpaused",
-    values: [boolean]
   ): string;
   encodeFunctionData(
     functionFragment: "currentAskForToken",
@@ -126,13 +129,14 @@ interface MarketInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "openARPlaformMaintenance",
+    functionFragment: "openARPlatform",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "openARPlatformPool",
+    functionFragment: "openARPool",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "platformCuts",
     values?: undefined
@@ -144,6 +148,10 @@ interface MarketInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "removeBid",
     values: [BigNumberish, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "renounceOwnership",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "setAsk",
@@ -180,6 +188,10 @@ interface MarketInterface extends ethers.utils.Interface {
     functionFragment: "splitShare",
     values: [{ value: BigNumberish }, BigNumberish]
   ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [string]
+  ): string;
 
   decodeFunctionResult(functionFragment: "acceptBid", data: BytesLike): Result;
   decodeFunctionResult(
@@ -192,23 +204,23 @@ interface MarketInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "configure", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "configureOpenAREnforcePlatformCuts",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "configureOpenARPlaformMaintenanceAddress",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "configureOpenARPlatformCuts",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "configureOpenARPlatformPoolAddress",
+    functionFragment: "configureEnforcePlatformCuts",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "configurePausedUnpaused",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "configurePlatformAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "configurePlatformCuts",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "configurePoolAddress",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -229,19 +241,21 @@ interface MarketInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "openARPlaformMaintenance",
+    functionFragment: "openARPlatform",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "openARPlatformPool",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "openARPool", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "platformCuts",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "removeAsk", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "removeBid", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "setAsk", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setBid", data: BytesLike): Result;
   decodeFunctionResult(
@@ -249,6 +263,10 @@ interface MarketInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "splitShare", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
 
   events: {
     "AskCreated(uint256,tuple)": EventFragment;
@@ -257,6 +275,7 @@ interface MarketInterface extends ethers.utils.Interface {
     "BidFinalized(uint256,tuple)": EventFragment;
     "BidRemoved(uint256,tuple)": EventFragment;
     "BidShareUpdated(uint256,tuple)": EventFragment;
+    "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address)": EventFragment;
     "PlatformCutsUpdated(tuple)": EventFragment;
     "Unpaused(address)": EventFragment;
@@ -268,6 +287,7 @@ interface MarketInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "BidFinalized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BidRemoved"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BidShareUpdated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PlatformCutsUpdated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
@@ -395,55 +415,13 @@ export class Market extends Contract {
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
-    configureOpenAREnforcePlatformCuts(
+    configureEnforcePlatformCuts(
       flag: boolean,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
-    "configureOpenAREnforcePlatformCuts(bool)"(
+    "configureEnforcePlatformCuts(bool)"(
       flag: boolean,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    configureOpenARPlaformMaintenanceAddress(
-      openARPlaformMaintenanceAddress: string,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    "configureOpenARPlaformMaintenanceAddress(address)"(
-      openARPlaformMaintenanceAddress: string,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    configureOpenARPlatformCuts(
-      pCuts: {
-        firstSalePlatform: { value: BigNumberish };
-        firstSalePool: { value: BigNumberish };
-        furtherSalesPlatform: { value: BigNumberish };
-        furtherSalesPool: { value: BigNumberish };
-        furtherSalesCreator: { value: BigNumberish };
-      },
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    "configureOpenARPlatformCuts(tuple)"(
-      pCuts: {
-        firstSalePlatform: { value: BigNumberish };
-        firstSalePool: { value: BigNumberish };
-        furtherSalesPlatform: { value: BigNumberish };
-        furtherSalesPool: { value: BigNumberish };
-        furtherSalesCreator: { value: BigNumberish };
-      },
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    configureOpenARPlatformPoolAddress(
-      openARPlatformPoolAddress: string,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    "configureOpenARPlatformPoolAddress(address)"(
-      openARPlatformPoolAddress: string,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
@@ -454,6 +432,48 @@ export class Market extends Contract {
 
     "configurePausedUnpaused(bool)"(
       flag: boolean,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    configurePlatformAddress(
+      platformAddress: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "configurePlatformAddress(address)"(
+      platformAddress: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    configurePlatformCuts(
+      pCuts: {
+        firstSalePlatform: { value: BigNumberish };
+        firstSalePool: { value: BigNumberish };
+        furtherSalesPlatform: { value: BigNumberish };
+        furtherSalesPool: { value: BigNumberish };
+        furtherSalesCreator: { value: BigNumberish };
+      },
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "configurePlatformCuts(tuple)"(
+      pCuts: {
+        firstSalePlatform: { value: BigNumberish };
+        firstSalePool: { value: BigNumberish };
+        furtherSalesPlatform: { value: BigNumberish };
+        furtherSalesPool: { value: BigNumberish };
+        furtherSalesCreator: { value: BigNumberish };
+      },
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    configurePoolAddress(
+      openARPoolAddress: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "configurePoolAddress(address)"(
+      openARPoolAddress: string,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
@@ -537,25 +557,37 @@ export class Market extends Contract {
       0: string;
     }>;
 
-    openARPlaformMaintenance(
+    openARPlatform(
       overrides?: CallOverrides
     ): Promise<{
       0: string;
     }>;
 
-    "openARPlaformMaintenance()"(
+    "openARPlatform()"(
       overrides?: CallOverrides
     ): Promise<{
       0: string;
     }>;
 
-    openARPlatformPool(
+    openARPool(
       overrides?: CallOverrides
     ): Promise<{
       0: string;
     }>;
 
-    "openARPlatformPool()"(
+    "openARPool()"(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: string;
+    }>;
+
+    owner(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: string;
+    }>;
+
+    "owner()"(
       overrides?: CallOverrides
     ): Promise<{
       0: string;
@@ -612,6 +644,10 @@ export class Market extends Contract {
       bidder: string,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
+
+    renounceOwnership(overrides?: Overrides): Promise<ContractTransaction>;
+
+    "renounceOwnership()"(overrides?: Overrides): Promise<ContractTransaction>;
 
     setAsk(
       tokenId: BigNumberish,
@@ -690,6 +726,16 @@ export class Market extends Contract {
     ): Promise<{
       0: BigNumber;
     }>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "transferOwnership(address)"(
+      newOwner: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
   };
 
   acceptBid(
@@ -792,55 +838,13 @@ export class Market extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
-  configureOpenAREnforcePlatformCuts(
+  configureEnforcePlatformCuts(
     flag: boolean,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
-  "configureOpenAREnforcePlatformCuts(bool)"(
+  "configureEnforcePlatformCuts(bool)"(
     flag: boolean,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  configureOpenARPlaformMaintenanceAddress(
-    openARPlaformMaintenanceAddress: string,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  "configureOpenARPlaformMaintenanceAddress(address)"(
-    openARPlaformMaintenanceAddress: string,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  configureOpenARPlatformCuts(
-    pCuts: {
-      firstSalePlatform: { value: BigNumberish };
-      firstSalePool: { value: BigNumberish };
-      furtherSalesPlatform: { value: BigNumberish };
-      furtherSalesPool: { value: BigNumberish };
-      furtherSalesCreator: { value: BigNumberish };
-    },
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  "configureOpenARPlatformCuts(tuple)"(
-    pCuts: {
-      firstSalePlatform: { value: BigNumberish };
-      firstSalePool: { value: BigNumberish };
-      furtherSalesPlatform: { value: BigNumberish };
-      furtherSalesPool: { value: BigNumberish };
-      furtherSalesCreator: { value: BigNumberish };
-    },
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  configureOpenARPlatformPoolAddress(
-    openARPlatformPoolAddress: string,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  "configureOpenARPlatformPoolAddress(address)"(
-    openARPlatformPoolAddress: string,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
@@ -851,6 +855,48 @@ export class Market extends Contract {
 
   "configurePausedUnpaused(bool)"(
     flag: boolean,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  configurePlatformAddress(
+    platformAddress: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "configurePlatformAddress(address)"(
+    platformAddress: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  configurePlatformCuts(
+    pCuts: {
+      firstSalePlatform: { value: BigNumberish };
+      firstSalePool: { value: BigNumberish };
+      furtherSalesPlatform: { value: BigNumberish };
+      furtherSalesPool: { value: BigNumberish };
+      furtherSalesCreator: { value: BigNumberish };
+    },
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "configurePlatformCuts(tuple)"(
+    pCuts: {
+      firstSalePlatform: { value: BigNumberish };
+      firstSalePool: { value: BigNumberish };
+      furtherSalesPlatform: { value: BigNumberish };
+      furtherSalesPool: { value: BigNumberish };
+      furtherSalesCreator: { value: BigNumberish };
+    },
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  configurePoolAddress(
+    openARPoolAddress: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "configurePoolAddress(address)"(
+    openARPoolAddress: string,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
@@ -906,13 +952,17 @@ export class Market extends Contract {
 
   "mediaContract()"(overrides?: CallOverrides): Promise<string>;
 
-  openARPlaformMaintenance(overrides?: CallOverrides): Promise<string>;
+  openARPlatform(overrides?: CallOverrides): Promise<string>;
 
-  "openARPlaformMaintenance()"(overrides?: CallOverrides): Promise<string>;
+  "openARPlatform()"(overrides?: CallOverrides): Promise<string>;
 
-  openARPlatformPool(overrides?: CallOverrides): Promise<string>;
+  openARPool(overrides?: CallOverrides): Promise<string>;
 
-  "openARPlatformPool()"(overrides?: CallOverrides): Promise<string>;
+  "openARPool()"(overrides?: CallOverrides): Promise<string>;
+
+  owner(overrides?: CallOverrides): Promise<string>;
+
+  "owner()"(overrides?: CallOverrides): Promise<string>;
 
   platformCuts(
     overrides?: CallOverrides
@@ -965,6 +1015,10 @@ export class Market extends Contract {
     bidder: string,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
+
+  renounceOwnership(overrides?: Overrides): Promise<ContractTransaction>;
+
+  "renounceOwnership()"(overrides?: Overrides): Promise<ContractTransaction>;
 
   setAsk(
     tokenId: BigNumberish,
@@ -1039,6 +1093,16 @@ export class Market extends Contract {
     amount: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
+
+  transferOwnership(
+    newOwner: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "transferOwnership(address)"(
+    newOwner: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
 
   callStatic: {
     acceptBid(
@@ -1141,57 +1205,15 @@ export class Market extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    configureOpenAREnforcePlatformCuts(
+    configureEnforcePlatformCuts(
       flag: boolean,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    "configureOpenAREnforcePlatformCuts(bool)"(
+    "configureEnforcePlatformCuts(bool)"(
       flag: boolean,
       overrides?: CallOverrides
     ): Promise<boolean>;
-
-    configureOpenARPlaformMaintenanceAddress(
-      openARPlaformMaintenanceAddress: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "configureOpenARPlaformMaintenanceAddress(address)"(
-      openARPlaformMaintenanceAddress: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    configureOpenARPlatformCuts(
-      pCuts: {
-        firstSalePlatform: { value: BigNumberish };
-        firstSalePool: { value: BigNumberish };
-        furtherSalesPlatform: { value: BigNumberish };
-        furtherSalesPool: { value: BigNumberish };
-        furtherSalesCreator: { value: BigNumberish };
-      },
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "configureOpenARPlatformCuts(tuple)"(
-      pCuts: {
-        firstSalePlatform: { value: BigNumberish };
-        firstSalePool: { value: BigNumberish };
-        furtherSalesPlatform: { value: BigNumberish };
-        furtherSalesPool: { value: BigNumberish };
-        furtherSalesCreator: { value: BigNumberish };
-      },
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    configureOpenARPlatformPoolAddress(
-      openARPlatformPoolAddress: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "configureOpenARPlatformPoolAddress(address)"(
-      openARPlatformPoolAddress: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     configurePausedUnpaused(
       flag: boolean,
@@ -1202,6 +1224,48 @@ export class Market extends Contract {
       flag: boolean,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    configurePlatformAddress(
+      platformAddress: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "configurePlatformAddress(address)"(
+      platformAddress: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    configurePlatformCuts(
+      pCuts: {
+        firstSalePlatform: { value: BigNumberish };
+        firstSalePool: { value: BigNumberish };
+        furtherSalesPlatform: { value: BigNumberish };
+        furtherSalesPool: { value: BigNumberish };
+        furtherSalesCreator: { value: BigNumberish };
+      },
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "configurePlatformCuts(tuple)"(
+      pCuts: {
+        firstSalePlatform: { value: BigNumberish };
+        firstSalePool: { value: BigNumberish };
+        furtherSalesPlatform: { value: BigNumberish };
+        furtherSalesPool: { value: BigNumberish };
+        furtherSalesCreator: { value: BigNumberish };
+      },
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    configurePoolAddress(
+      openARPoolAddress: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "configurePoolAddress(address)"(
+      openARPoolAddress: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     currentAskForToken(
       tokenId: BigNumberish,
@@ -1265,13 +1329,17 @@ export class Market extends Contract {
 
     "mediaContract()"(overrides?: CallOverrides): Promise<string>;
 
-    openARPlaformMaintenance(overrides?: CallOverrides): Promise<string>;
+    openARPlatform(overrides?: CallOverrides): Promise<string>;
 
-    "openARPlaformMaintenance()"(overrides?: CallOverrides): Promise<string>;
+    "openARPlatform()"(overrides?: CallOverrides): Promise<string>;
 
-    openARPlatformPool(overrides?: CallOverrides): Promise<string>;
+    openARPool(overrides?: CallOverrides): Promise<string>;
 
-    "openARPlatformPool()"(overrides?: CallOverrides): Promise<string>;
+    "openARPool()"(overrides?: CallOverrides): Promise<string>;
+
+    owner(overrides?: CallOverrides): Promise<string>;
+
+    "owner()"(overrides?: CallOverrides): Promise<string>;
 
     platformCuts(
       overrides?: CallOverrides
@@ -1321,6 +1389,10 @@ export class Market extends Contract {
       bidder: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    "renounceOwnership()"(overrides?: CallOverrides): Promise<void>;
 
     setAsk(
       tokenId: BigNumberish,
@@ -1395,6 +1467,16 @@ export class Market extends Contract {
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "transferOwnership(address)"(
+      newOwner: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {
@@ -1409,6 +1491,11 @@ export class Market extends Contract {
     BidRemoved(tokenId: BigNumberish | null, bid: null): EventFilter;
 
     BidShareUpdated(tokenId: BigNumberish | null, bidShares: null): EventFilter;
+
+    OwnershipTransferred(
+      previousOwner: string | null,
+      newOwner: string | null
+    ): EventFilter;
 
     Paused(account: null): EventFilter;
 
@@ -1474,55 +1561,13 @@ export class Market extends Contract {
       overrides?: Overrides
     ): Promise<BigNumber>;
 
-    configureOpenAREnforcePlatformCuts(
+    configureEnforcePlatformCuts(
       flag: boolean,
       overrides?: Overrides
     ): Promise<BigNumber>;
 
-    "configureOpenAREnforcePlatformCuts(bool)"(
+    "configureEnforcePlatformCuts(bool)"(
       flag: boolean,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    configureOpenARPlaformMaintenanceAddress(
-      openARPlaformMaintenanceAddress: string,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    "configureOpenARPlaformMaintenanceAddress(address)"(
-      openARPlaformMaintenanceAddress: string,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    configureOpenARPlatformCuts(
-      pCuts: {
-        firstSalePlatform: { value: BigNumberish };
-        firstSalePool: { value: BigNumberish };
-        furtherSalesPlatform: { value: BigNumberish };
-        furtherSalesPool: { value: BigNumberish };
-        furtherSalesCreator: { value: BigNumberish };
-      },
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    "configureOpenARPlatformCuts(tuple)"(
-      pCuts: {
-        firstSalePlatform: { value: BigNumberish };
-        firstSalePool: { value: BigNumberish };
-        furtherSalesPlatform: { value: BigNumberish };
-        furtherSalesPool: { value: BigNumberish };
-        furtherSalesCreator: { value: BigNumberish };
-      },
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    configureOpenARPlatformPoolAddress(
-      openARPlatformPoolAddress: string,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    "configureOpenARPlatformPoolAddress(address)"(
-      openARPlatformPoolAddress: string,
       overrides?: Overrides
     ): Promise<BigNumber>;
 
@@ -1533,6 +1578,48 @@ export class Market extends Contract {
 
     "configurePausedUnpaused(bool)"(
       flag: boolean,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    configurePlatformAddress(
+      platformAddress: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "configurePlatformAddress(address)"(
+      platformAddress: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    configurePlatformCuts(
+      pCuts: {
+        firstSalePlatform: { value: BigNumberish };
+        firstSalePool: { value: BigNumberish };
+        furtherSalesPlatform: { value: BigNumberish };
+        furtherSalesPool: { value: BigNumberish };
+        furtherSalesCreator: { value: BigNumberish };
+      },
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "configurePlatformCuts(tuple)"(
+      pCuts: {
+        firstSalePlatform: { value: BigNumberish };
+        firstSalePool: { value: BigNumberish };
+        furtherSalesPlatform: { value: BigNumberish };
+        furtherSalesPool: { value: BigNumberish };
+        furtherSalesCreator: { value: BigNumberish };
+      },
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    configurePoolAddress(
+      openARPoolAddress: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "configurePoolAddress(address)"(
+      openARPoolAddress: string,
       overrides?: Overrides
     ): Promise<BigNumber>;
 
@@ -1588,13 +1675,17 @@ export class Market extends Contract {
 
     "mediaContract()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    openARPlaformMaintenance(overrides?: CallOverrides): Promise<BigNumber>;
+    openARPlatform(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "openARPlaformMaintenance()"(overrides?: CallOverrides): Promise<BigNumber>;
+    "openARPlatform()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    openARPlatformPool(overrides?: CallOverrides): Promise<BigNumber>;
+    openARPool(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "openARPlatformPool()"(overrides?: CallOverrides): Promise<BigNumber>;
+    "openARPool()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "owner()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     platformCuts(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1618,6 +1709,10 @@ export class Market extends Contract {
       bidder: string,
       overrides?: Overrides
     ): Promise<BigNumber>;
+
+    renounceOwnership(overrides?: Overrides): Promise<BigNumber>;
+
+    "renounceOwnership()"(overrides?: Overrides): Promise<BigNumber>;
 
     setAsk(
       tokenId: BigNumberish,
@@ -1691,6 +1786,16 @@ export class Market extends Contract {
       sharePercentage: { value: BigNumberish },
       amount: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "transferOwnership(address)"(
+      newOwner: string,
+      overrides?: Overrides
     ): Promise<BigNumber>;
   };
 
@@ -1751,55 +1856,13 @@ export class Market extends Contract {
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
-    configureOpenAREnforcePlatformCuts(
+    configureEnforcePlatformCuts(
       flag: boolean,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
-    "configureOpenAREnforcePlatformCuts(bool)"(
+    "configureEnforcePlatformCuts(bool)"(
       flag: boolean,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    configureOpenARPlaformMaintenanceAddress(
-      openARPlaformMaintenanceAddress: string,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    "configureOpenARPlaformMaintenanceAddress(address)"(
-      openARPlaformMaintenanceAddress: string,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    configureOpenARPlatformCuts(
-      pCuts: {
-        firstSalePlatform: { value: BigNumberish };
-        firstSalePool: { value: BigNumberish };
-        furtherSalesPlatform: { value: BigNumberish };
-        furtherSalesPool: { value: BigNumberish };
-        furtherSalesCreator: { value: BigNumberish };
-      },
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    "configureOpenARPlatformCuts(tuple)"(
-      pCuts: {
-        firstSalePlatform: { value: BigNumberish };
-        firstSalePool: { value: BigNumberish };
-        furtherSalesPlatform: { value: BigNumberish };
-        furtherSalesPool: { value: BigNumberish };
-        furtherSalesCreator: { value: BigNumberish };
-      },
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    configureOpenARPlatformPoolAddress(
-      openARPlatformPoolAddress: string,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    "configureOpenARPlatformPoolAddress(address)"(
-      openARPlatformPoolAddress: string,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
@@ -1810,6 +1873,48 @@ export class Market extends Contract {
 
     "configurePausedUnpaused(bool)"(
       flag: boolean,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    configurePlatformAddress(
+      platformAddress: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "configurePlatformAddress(address)"(
+      platformAddress: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    configurePlatformCuts(
+      pCuts: {
+        firstSalePlatform: { value: BigNumberish };
+        firstSalePool: { value: BigNumberish };
+        furtherSalesPlatform: { value: BigNumberish };
+        furtherSalesPool: { value: BigNumberish };
+        furtherSalesCreator: { value: BigNumberish };
+      },
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "configurePlatformCuts(tuple)"(
+      pCuts: {
+        firstSalePlatform: { value: BigNumberish };
+        firstSalePool: { value: BigNumberish };
+        furtherSalesPlatform: { value: BigNumberish };
+        furtherSalesPool: { value: BigNumberish };
+        furtherSalesCreator: { value: BigNumberish };
+      },
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    configurePoolAddress(
+      openARPoolAddress: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "configurePoolAddress(address)"(
+      openARPoolAddress: string,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
@@ -1869,21 +1974,19 @@ export class Market extends Contract {
 
     "mediaContract()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    openARPlaformMaintenance(
+    openARPlatform(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "openARPlatform()"(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    "openARPlaformMaintenance()"(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    openARPool(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    openARPlatformPool(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    "openARPool()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "openARPlatformPool()"(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "owner()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     platformCuts(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1910,6 +2013,10 @@ export class Market extends Contract {
       bidder: string,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
+
+    renounceOwnership(overrides?: Overrides): Promise<PopulatedTransaction>;
+
+    "renounceOwnership()"(overrides?: Overrides): Promise<PopulatedTransaction>;
 
     setAsk(
       tokenId: BigNumberish,
@@ -1983,6 +2090,16 @@ export class Market extends Contract {
       sharePercentage: { value: BigNumberish },
       amount: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "transferOwnership(address)"(
+      newOwner: string,
+      overrides?: Overrides
     ): Promise<PopulatedTransaction>;
   };
 }
