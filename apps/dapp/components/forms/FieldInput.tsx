@@ -133,7 +133,8 @@ export const FieldInput = ({
         fieldRef.current = e; // you can still assign to ref
       }}
       _placeholder={{
-        color: "gray.200",
+        opacity: "0.6",
+        color: "white"
       }}
       border="0"
     />
@@ -197,7 +198,7 @@ export const FieldInput = ({
             pt="3"
             pr="3"
           >
-            <FieldErrorMessage error={errors[name]?.message} />
+            <FieldErrorMessage error={errors[name]?.message}/>
           </Box>
         )}
         <FormLabel

@@ -34,27 +34,27 @@ The curator badge will be assigned to users, that have successfully curated an e
 
 Each year, we nominate an artist to create badges for OpenAR. The badges of 2021 have been designed by [Anna-Luise Lorenz](https://annaluiselorenz.com/).
 
-![User Badge](/badges2021/user.jpg)
+![User Badge](/images/badges2021/user@14x-100.jpg)
 
 User Badge
 
-![Collector badge](/badges2021/collector@14-100.jpg)
+![Collector badge](/images/badges2021/collector@14x-100.jpg)
 
 Collector badge
 
-![Artist badge](/badges2021/artist@14-100.jpg)
+![Artist badge](/images/badges2021/artist@14x-100.jpg)
 
 Artist badge
 
-![Curator badge](/badges2021/curator@14-100.jpg)
+![Curator badge](/images/badges2021/curator@14x-100.jpg)
 
 Curator badge
 
-![Reviewer badge](/badges2021/reviewer@14-100.jpg)
+![Reviewer badge](/images/badges2021/critic@14x-100.jpg)
 
 Reviewer badge
 
-![Administrator badge](/badges2021/administrator@14-100.jpg)
+![Administrator badge](/images/badges2021/admin@14x-100.jpg)
 
 Administrator badge
 

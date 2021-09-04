@@ -4,7 +4,8 @@
 export const components = {
   Button: {
     baseStyle: {
-      borderRadius: "md",
+      borderRadius: "0",
+      fontSize: "xs",
       _focus: {
         boxShadow: false,
       },
@@ -12,6 +13,9 @@ export const components = {
         color: "white !important"        
       },
       _active: {
+        bg: "transparent"
+      },
+      _hover: {
         bg: "transparent"
       }
     },
@@ -45,15 +49,16 @@ export const components = {
         },
       },
       outline: {
+        fontSize: "xs",
+        textTransform: "uppercase",
+        letterSpacing: "0.02em",
         boder: "1px solid #fff",
-        borderRadius: "0",
-        bg: "transparent",
-        transition: "all 0.3s",
+        bg: "transparent linear-gradient(170deg, #FFFFFF02 0%, #FFFFFF3B 100%) 0% 0% no-repeat padding-box",
+        transition: "all 0.4s",
         color: "white",
         _hover: {
-          bg: "transparent",
-          borderColor: "gray.300",
-          color: "gray.300",
+          bg: "transparent 0% 0% no-repeat padding-box",
+          bgImage: "linear-gradient(132deg, #FFF0 49%, #FFFFFF24 50%, #FFFA 100%), linear-gradient(170deg, #FFFFFF02 0%, #FFFFFF3B 100%)",
         },
         _focus: {
           boxShadow: false,
@@ -67,7 +72,7 @@ export const components = {
         color: "white",
         p: "0",
         _hover: {
-          color: "gray.300",
+          opacity: "0.6",
         },
         _focus: {
           boxShadow: false,
@@ -119,6 +124,12 @@ export const components = {
     },
   },
   Input: {
+    baseStyle:{
+      _placeholder: {
+          color: "white",
+          opacity: "0.6"
+        },
+    },
     variants: {
       outline: {
         field: {
@@ -134,11 +145,13 @@ export const components = {
       },
       flushed: {
         _placeholder: {
-          color: "black.900",
+          color: "white",
+          opacity: "0.6"
         },
         field: {
           _placeholder: {
-            color: "black.900",
+            color: "white",
+            opacity: "0.6"
           },
           fontFamily: "Source code pro, monospace",
           bg: "transparent",
@@ -184,17 +197,19 @@ export const components = {
     },
     variants: {
       outline: {
+        fontSize: "xs",
+        textTransform: "uppercase",
         boder: "1px solid #fff",
-        borderRadius: "0",
-        bg: "transparent",
-        transition: "all 0.3s",
-
+        bg: "transparent linear-gradient(170deg, #FFFFFF02 0%, #FFFFFF3B 100%) 0% 0% no-repeat padding-box",
+        transition: "all 0.4s",
+        color: "white",
         _hover: {
-          bg: "transparent",
-          borderColor: "openarGray.300",
-          color: "openarGray.300",
+          bg: "transparent 0% 0% no-repeat padding-box",
+          bgImage: "linear-gradient(132deg, #FFF0 49%, #FFFFFF24 50%, #FFFA 100%), linear-gradient(170deg, #FFFFFF02 0%, #FFFFFF3B 100%)",
         },
-        
+        _focus: {
+          boxShadow: false,
+        }
       },
     }
   },
@@ -203,9 +218,29 @@ export const components = {
       track: {
         bg: "gray.400",
         _invalid: {
-          bg: "red.400",
+          bg: "openar.error",
         },
       },
     },
   },
+  FormLabel: {
+    baseStyle: {
+      fontSize: "sm",
+      textTransform: "uppercase",
+      letterSpacing: "0.02em",
+      fontWeight: "600",
+    },
+  },
+  FormErrorMessage: {
+    baseStyle: {
+      fontSize: "md",
+      textTransform: "uppercase",
+      letterSpacing: "0.02em",
+      fontWeight: "700",
+      color: "openar.error"
+    }
+  },
+  FormRequiredIndicator: {
+    color: "openar.error"
+  }
 };

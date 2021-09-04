@@ -41,6 +41,8 @@ export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
     </Box>
   );
 
+  /* TODO: We define menu items here and in the pages header and footer elements, should be defined somewhere centrally */
+
   const mainMenu = [
     { slug: "exhibitions", label: "Exhibitions", url: "" },
     { slug: "artworks", label: "Artworks", url: "artworks" },

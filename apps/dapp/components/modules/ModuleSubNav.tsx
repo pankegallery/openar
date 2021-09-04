@@ -86,7 +86,6 @@ export const ModuleSubNav = ({
 
       let buttonProps: ButtonListRenderElement = {
         key: `bl-${index}`,
-        colorScheme: "openarWhite",
         variant: "outline",
       };
 
@@ -97,8 +96,6 @@ export const ModuleSubNav = ({
             <Link href={`${button.to}`} passHref key={`bl-${index}`}>
               <ChakraLink
                 as={Button}
-                colorScheme="openarWhite"
-                color="white"
                 variant="outline"
                 textDecoration="none !important"
                 isDisabled={button.isDisabled}
@@ -114,12 +111,9 @@ export const ModuleSubNav = ({
             <Link href={`${button.to}`} passHref key={`bl-${index}`}>
               <ChakraLink
                 as={Button}
-                isDisabled={button.isDisabled}
-                colorScheme="openarGray"
-                color="openarGray.500"
-                textDecoration="none !important"
-                borderColor="openarGray.500"
                 variant="outline"
+                textDecoration="none !important"
+                isDisabled={button.isDisabled}
               >
                 {button?.label}
               </ChakraLink>

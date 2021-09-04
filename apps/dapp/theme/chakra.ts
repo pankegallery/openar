@@ -133,6 +133,7 @@ const themeConfig = {
       muddygreen: "#bab79f",
       light: "#F7F7F7",
       dark: "#555555",
+      error: "#FF3E88",
     },
     openarGray: {
       50: "#f8f8f8",
@@ -339,7 +340,7 @@ const defaultPropsForFormComponentents = (components: string[]): object => {
           defaultProps: {
             focusBoxShadow: false,
             focusBorderColor: "transparent",
-            errorBorderColor: "red.400",
+            errorBorderColor: "openar.error",
           },
         },
       };
