@@ -68,7 +68,7 @@ const Index = () => {
           <Grid
             templateColumns={columns}
             templateRows={rows}
-            height="100%"
+            minH="100%"
           >
             <Box p="4" w="100%" overflow="hidden">
               <Stat mb="4">
@@ -97,7 +97,7 @@ const Index = () => {
                 <StatNumber mt="-1">
                   {emailVerified
                     ? "You've verified your email address"
-                    : "You've not verified your email address. Check your inbox!"}
+                    : "You've not verified your email address."}
                 </StatNumber>
               </Stat>}
 

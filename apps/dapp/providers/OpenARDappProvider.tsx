@@ -10,7 +10,7 @@ import { useWeb3React, Web3ReactProvider } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
 import detectEthereumProvider from "@metamask/detect-provider";
 
-import { useEagerConnect, useInactiveListener, useDisconnectListener, useAccountChangeListener } from "~/hooks";
+import { useWeb3EagerConnect, useWeb3InactiveListener, useWeb3ActiveListener, useWeb3ReactListener } from "~/hooks";
 import { readOnlyUrls } from "~/services/crypto";
 import { boolean } from "yup";
 
@@ -37,12 +37,12 @@ const OpenARDappEnsureDisConnect = ({
   }, [activatingConnector, connector]);
 
   // handle logic to eagerly connect to the injected ethereum provider, if it exists and has granted access already
-  const triedEager = useEagerConnect();
+  const triedEager = useWeb3EagerConnect();
 
   // handle logic to connect in reaction to certain events on the injected ethereum provider, if it exists
-  useInactiveListener(!triedEager || !!activatingConnector);
-  useDisconnectListener();
-  useAccountChangeListener();
+  useWeb3InactiveListener(!triedEager || !!activatingConnector);
+  useWeb3ActiveListener(!triedEager || !!activatingConnector);
+  useWeb3ReactListener();
 
   return <>{children}</>;
 };

@@ -223,6 +223,7 @@ export const ModuleArtworkArObjectForm = ({
               <Grid
                 w="100%"
                 mt="3"
+                templateRows="1fr"
                 templateColumns={{
                   base: "100%",
                   t: "1fr 1fr",

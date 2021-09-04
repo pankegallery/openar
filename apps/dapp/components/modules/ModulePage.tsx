@@ -27,9 +27,8 @@ export const ModulePage = ({
     <>
       <Box
         position="relative"
-        minH="calc(100vh - 4rem)"
       >
-        {isLoading && <LoadingIcon type="inline" />}
+        {isLoading && <LoadingIcon type="inline" position="fixed" />}
         {isError && (errorInfo ? errorInfo : <>{err}</>)}
         {!isLoading && !isError && <>{children}</>}
       </Box>

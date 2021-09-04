@@ -33,7 +33,6 @@ const themeConfig = {
   styles: {
     global: {
       ":root": {
-        "66.66vw": "33vw",
         "--openar-header-height-desktop": "22vh"
       },
       "html, body": {
@@ -43,12 +42,10 @@ const themeConfig = {
         padding: 0,
         height: "100%",
         overscrollBehavior: "none",
+        "WebkitOverflowScrolling":"touch",
       },
       "#root, #__next": {
         height: "100%",
-      },
-      body: {
-        minHeight: "100%",
       },
       a: {
         transitionProperty: "common",
@@ -213,6 +210,9 @@ const themeConfig = {
     full: "9999px",
   },
   layerStyles: {
+    backdropSuperDark: {
+      bg: "rgba(0,0,0,0.85)"
+    },
     backdropDark: {
       bg: "rgba(0,0,0,0.6)"
     },

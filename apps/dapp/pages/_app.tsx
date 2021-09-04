@@ -1,12 +1,12 @@
 import "../styles/globals.scss";
 import { Provider } from "react-redux";
-import { useLayoutEffect } from "react";
 import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 
 import { ChakraProvider } from "@chakra-ui/react";
 import { store } from "~/redux/store";
+import { useIsomorphicLayoutEffect } from "~/hooks";
 import {
   ConfigContextProvider,
   AppApolloProvider,
@@ -31,7 +31,7 @@ type AppPropsWithLayout = AppProps & {
 function OpenARApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const calculateScrollbarWidth = () => {
       var outer = document.createElement("div");
       outer.style.visibility = "hidden";
@@ -58,10 +58,12 @@ function OpenARApp({ Component, pageProps }: AppPropsWithLayout) {
 
     if (!document) return;
 
-     document.documentElement.style.setProperty(
-       "--sbw",
-       `${calculateScrollbarWidth()}px`
-     );
+
+    document.documentElement.style.setProperty(
+      "--sbw",
+      `${calculateScrollbarWidth()}px`
+    );
+
   }, []);
 
   return (

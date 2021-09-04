@@ -13,7 +13,7 @@ import {
 } from "@web3-react/injected-connector";
 import { UserRejectedRequestError as UserRejectedRequestErrorWalletConnect } from "@web3-react/walletconnect-connector";
 
-import { useLocalStorage, useAppToast } from "~/hooks";
+import { useLocalStorage, useAppToast, useStableCallback } from "~/hooks";
 
 import { walletConntectConnector, injectedConnector } from "~/services/crypto";
 import { authSetJustConnected } from "~/redux/slices/user";
@@ -100,7 +100,7 @@ export function useWalletLogin() {
     store.dispatch(authSetJustConnected());
   }, []);
 
-  const walletDisconnect = useCallback(async () => {
+  const walletDisconnect = useStableCallback(async () => {
     try {
 
       setWalletLoginError(null);
@@ -120,14 +120,15 @@ export function useWalletLogin() {
 
       deactivate();
 
-      console.log(`PUSH ${appConfig.reauthenticateRedirectUrl}`);
+      console.log(`walletDisconnect: PUSH ${appConfig.reauthenticateRedirectUrl}`);
       Router.push(appConfig.reauthenticateRedirectUrl);
 
     } catch (error) {
       setIsConnected(false);
       handleError(error);
     }
-  }, [setIsConnected, deactivate, handleError, logoutMutation]);
+  // }, []);
+  });
 
   const connectWalletConnect = useCallback(async () => {
     try {
@@ -200,7 +201,7 @@ export function useWalletLogin() {
         handleError(error);
       }
     },
-    [account, loginMutation, handleError, walletLoginFinalize]
+   [account, loginMutation, handleError, walletLoginFinalize]
   );
 
   const walletLoginRequestSignature = useCallback(
@@ -254,7 +255,7 @@ export function useWalletLogin() {
   const walletLoginPreLogin = useCallback(
     async (account: string) => {
       setWalletLoginError(null);
-
+      console.log("walletLoginPreLogin");
       const { data, errors } = await preloginMutation(account);
 
       try {
@@ -305,6 +306,7 @@ export function useWalletLogin() {
           // ) {
           //   await walletLoginRequestSignature(payload?.message, account);
           // } else {
+            console.log("walletLoginPreLogin push /openar/login");
             Router.push("/openar/login");
           //}
         } else if (errors) {

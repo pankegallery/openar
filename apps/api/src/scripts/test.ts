@@ -12,8 +12,8 @@ const run = async () => {
   console.log(ipfs.getEndpointConfig());
 
   try {
-
     const file = await ipfs.add(
+      // @ts-ignore
       globSource(
         "/Users/fluxed/Dropbox/www/fluxed/openar/openar-monorepo/data/uploadtests/o1/",
         { recursive: true }

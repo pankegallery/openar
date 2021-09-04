@@ -17,7 +17,6 @@ import openingBg from "~/assets/img/opening-bg.png";
 const beta = process && process.env.NODE_ENV !== "development";
 
 export const Home = (props) => {
-  console.log(process.env, beta);
   return (
     <>
       <Head>
@@ -56,6 +55,7 @@ export const Home = (props) => {
           t: "calc(50vw + var(--openar-header-height-desktop)) auto",
           d: "calc(33.33vw + var(--openar-header-height-desktop)) auto",
         }}
+        templateColumns="1fr"
         color="white"
         overflow="hidden"
       >

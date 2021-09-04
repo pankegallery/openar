@@ -6,9 +6,11 @@ import BounceLoader from "react-spinners/BounceLoader";
 export const LoadingIcon = ({
   size = 90,
   type = "full",
+  position = "absolute",
 }: {
   size?: number;
   type: "full" | "light" | "inline";
+  position: "fixed" | "absolute";
 }) => {
   const [gray400] = useToken("colors", ["gray.400"]);
   const h =
@@ -23,7 +25,7 @@ export const LoadingIcon = ({
 
   if (type === "inline")
     inlineProps = {
-      position: "absolute",
+      position,
       top: "50%",
       left: 0,
       transform: "translateY(-50%)",

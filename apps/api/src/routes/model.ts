@@ -18,9 +18,9 @@ const storage = multer.diskStorage({
   destination: async (req: Request, file, cb) => {
     const date = new Date();
 
-    const uploadFolder = `ar/${date.getUTCFullYear()}/${
-      date.getUTCMonth() + 1
-    }`;
+    const uploadFolder = `${
+      apiConfig.modelUploadDir
+    }/${date.getUTCFullYear()}/${date.getUTCMonth() + 1}`;
     const uploadPath = `${apiConfig.baseDir}/${apiConfig.publicDir}/${uploadFolder}`;
 
     try {

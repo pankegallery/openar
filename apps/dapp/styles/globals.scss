@@ -202,17 +202,22 @@ a {
   width: 100%;
   display: flex;
   overflow: hidden;
+
   .info {
-    width: 33.33%;
+    width: 33.333%;
+    height: calc(66.66vw - var(--sbw));
+    padding: 0.5rem;
     writing-mode:vertical-rl;
     transform: rotate(180deg);
     a::before {
-//      width: 100vw;
+      width: 100vw;
+      background-color: rgba(255,0,0,0.6);
     }
-    height: 22.22vw;
   } 
+
   .img {
-    width: 66.66%;
+    width: 66.666%;
+    opacity: 0.6; // remove TODO:
     picture, img {
       height: 100%;
       width: 100%;
@@ -223,10 +228,27 @@ a {
 
   &:nth-child(2n + 1) {
     flex-direction: row-reverse;
+
+    // .info {
+    //   a::before {
+    //     left: 100px
+    //   }
+   // }
+  }
+
+  &:nth-child(2n + 2) {
+
+    .info {
+      a::before {
+        background-color: rgba(0,250,0,0.6);
+        left: auto;
+        right: 0px;
+      }
+    }
   }
 }
 
-@media (min-width: 45rem) and (max-width: 74rem){
+@media (min-width: 45rem) and (max-width: 74.999rem){
   .artwork.item {
     width: 50%;
     display: flex;
@@ -234,20 +256,17 @@ a {
     flex-direction: row-reverse;
 
     .info {
-      height: 33.33vw;
-//      a::before {
-//        width: 50vw;
-//      }
+      height: calc(33.333vw - (var(--sbw) * 0.5));
     } 
 
     &:nth-child(4n + 1),
     &:nth-child(4n + 2) {
           flex-direction: row;
           .info {
-//            a::before {
-//              left: auto;
-//              right: 0;
-//            }
+           a::before {
+             left: auto;
+             right: 0;
+           }
           }
         }
     }
@@ -259,7 +278,10 @@ a {
 
 @media (min-width: 75rem){
     .artwork.item {
-        width: 100%;
+      width: 100%;
+      .info {
+        height: calc(22.19vw - var(--sbw));
+      }
     }
 
     .corner-light + .openOverlayMenu {
@@ -268,13 +290,13 @@ a {
 
 }
 
-@media (max-width: 45rem){
-    .artwork.item {
-        .info {
-            height: 66.66vw;
-        }
-    }
-}
+// @media (max-width: 45rem){
+//     .artwork.item {
+//         .info {
+//             //height: 66.66vw;
+//         }
+//     }
+// }
 
 .artworkDetails{
     .label{

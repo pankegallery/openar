@@ -43,12 +43,13 @@ export const WalletControl = () => {
       walletDisclosure.onClose();
     }    
   }, [stateUser.authenticated, stateCrypto.signatureRequired, walletDisclosure, library])
-  
+
+  console.log(account, stateUser);
   return (
     <Box>
       {/* ------- Buttons ------- */}
       <Box>
-        {!account && (
+        {(!account || !stateUser.authenticated) && (
           <Button
             variant="menuLink"
             onClick={walletDisclosure.onOpen}
@@ -58,7 +59,7 @@ export const WalletControl = () => {
           </Button>
         )}
 
-        {account && (
+        {account && stateUser.authenticated && (
           <Button
             variant="menuLink"
             onClick={async () => {

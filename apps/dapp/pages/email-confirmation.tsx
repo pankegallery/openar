@@ -91,13 +91,13 @@ const EmailConfirmation = () => {
 
   let content = (
     <Flex height="220" alignItems="center" justify="center" position="relative">
-      <LoadingIcon type="inline" size={90} />
+      <LoadingIcon position="fixed" type="inline" size={90} />
     </Flex>
   );
 
   let buttonDashboardLogin = (
     <Text>
-      <Link href={isLoggedIn() ? "/openar" : "/"} passHref>
+      <Link href={isLoggedIn() ? "/openar/" : "/openar/connect"} passHref>
         <Button as={ChakraLink}>
           {isLoggedIn() ? "Goto dashboard" : "Goto login"}
         </Button>
@@ -117,13 +117,7 @@ const EmailConfirmation = () => {
               "Thanky you"}
           </Heading>
         </Box>
-        <Text>
-          {(isRequestingError || requestMutationResults.error) &&
-            "We could not verify your email address based on the information provided."}
-          {!isRequestingError &&
-            !requestMutationResults.error &&
-            "We've send you another email. Please check your inbox."}
-        </Text>
+
         <>{buttonDashboardLogin}</>
       </>
     );
@@ -178,7 +172,7 @@ const EmailConfirmation = () => {
       </>
     );
 
-  return <Box>{content}</Box>;
+  return <Box p="6" minH="100%">{content}</Box>;
 };
 
 EmailConfirmation.getLayout = function getLayout(page: ReactElement) {

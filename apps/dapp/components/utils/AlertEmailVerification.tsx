@@ -114,6 +114,7 @@ export const AlertEmailVerification = () => {
           <AlertBox status="warning" hasClose>
             <Grid
               w="100%"
+              templateRows="1fr"
               templateColumns={{ base: "1fr", tw: "66% 34%" }}
               gap="4"
               alignItems={{ base: "start", tw: "center" }}

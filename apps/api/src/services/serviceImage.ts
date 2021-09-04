@@ -19,7 +19,7 @@ export const imageGetUploadInfo = async (): Promise<{
 }> => {
   const date = new Date();
 
-  const uploadFolder = `${apiConfig.uploadDir}/${date.getUTCFullYear()}/${
+  const uploadFolder = `${apiConfig.imgUploadDir}/${date.getUTCFullYear()}/${
     date.getUTCMonth() + 1
   }`;
   const path =
