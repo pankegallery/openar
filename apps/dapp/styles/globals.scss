@@ -24,7 +24,8 @@ a {
     transform: translate(0, 0);
     fill: inherit;
 
-    &.light g{
+    &.light g,
+    .light & g{
         fill: #000;
         stroke: #000;
     }

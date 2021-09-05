@@ -10,6 +10,8 @@ import {
 import { ApiImage } from "../ui";
 import { ArtworkStatusEnum } from "~/utils";
 import Link from "next/link";
+import { useRouter } from 'next/router'
+
 
 export const ArtworkListItem = ({
   id,
@@ -34,9 +36,20 @@ export const ArtworkListItem = ({
   isAdmin?: boolean;
 }) => {
   let artist = creator?.pseudonym ? `${creator?.pseudonym}` : "";
+
+  // `
   if (artist.trim().length === 0) artist = creator?.ethAddress;
 
-  const href = isAdmin ? `/openar/artworks/${id}/update` : `/e/openar-art/${urlKey}/`;
+  const router = useRouter();
+  console.log(router)
+
+  let cameFromExhibition;
+
+  if(router.components) cameFromExhibition = "/e/[slug]" in router.components
+
+  // TODO: change a-detail to a once opening exhibition done
+  const baseURL = cameFromExhibition ? router.asPath : "/a-detail"
+  const href = isAdmin ? `/openar/artworks/${id}/update` : `${baseURL}/${urlKey}/`;
 
   return (
     <LinkBox

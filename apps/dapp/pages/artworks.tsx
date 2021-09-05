@@ -69,7 +69,7 @@ export const Artworks = ({artworks}: {artworks: any}) => {
                 col={3}
                 {...pick(artwork, [
                   "id",
-                  "status",
+                  "key",
                   "heroImage",
                   "title",
                   "creator",
@@ -94,6 +94,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
         artworks {
           id
           title
+          key
           description
           heroImage {
             id
