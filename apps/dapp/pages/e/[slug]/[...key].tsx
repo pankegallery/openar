@@ -25,8 +25,6 @@ export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibitio
     "(min-width: 75rem)"
   );
 
-  const hasMultipleObjects = artwork.arObjects.legth  > 1
-
   let selectedObject = {}
   if (okey === "initial"){
     selectedObject = artwork.arObjects[0]
@@ -34,13 +32,10 @@ export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibitio
     selectedObject = artwork.arObjects.find(o => o.key === okey)
   }
 
-  console.log("[... key] sel obj: ", selectedObject)
-  console.log("[... key] ex: ", exhibition)
+//  console.log("[... key] sel obj: ", selectedObject)
+//  console.log("[... key] artwork: ", artwork)
+//  console.log("[... key] ex: ", exhibition)
 
-  let artist = artwork.creator?.pseudonym ? artwork.creator?.pseudonym : artwork.creator?.ethAddress;
-
-//  console.log("Artwork:", artwork)
-//  console.log("Exhibition:", exhibition)
 
   return (
     <>
@@ -102,18 +97,6 @@ export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibitio
             direction="column"
             className="exhibitionColumn"
           >
-            {/* --------- ROW: Header row --------- */}
-            <Flex
-              w="33.33vw"
-              h="var(--openar-header-height-desktop)"
-              p="10"
-            >
-              <Link href={`/e/openar-art`}>
-                <a>
-                  <Arrow className="arrow" />
-                </a>
-              </Link>
-            </Flex>
 
             {/* --------- Exhibition title  --------- */}
             <Flex
