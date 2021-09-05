@@ -78,6 +78,7 @@ type Artwork {
   description: String
   heroImage: Image
   id: Int!
+  isBanned: Boolean
   key: String
   lat: Float
   lng: Float
