@@ -25,6 +25,10 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
         t: "50vw",
         d: "33.3vw"
       }}
+      height={{
+          base: "auto",
+          t: "100%"
+        }}
       minHeight="100vh"
       bg="var(--chakra-colors-openar-muddygreen)"
       overflowY="auto"
@@ -37,16 +41,15 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
       >
         <chakra.h1 textStyle="subtitle">{artwork.title}</chakra.h1>
         <chakra.p textStyle="meta">{artist}</chakra.p>
+        <chakra.p textStyle="meta">{object.createdAt}</chakra.p>
 
       </Box>
 
       <Box
-        height={{
-          base: "auto",
-          t: "100%"
-        }}
+
         width="100%"
         overflow="auto"
+        flexGrow="0"
       >
 
         {/* ======== BOX: Artwork description  ======== */}
@@ -60,7 +63,7 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
         </Box>
 
         {/* ======== BOX: Artwork purchase  ======== */}
-        {artwork.arObjects[0].askPrice&&
+        {object.askPrice&&
           <Box
             className="artworkPurchase"
             borderBottom="1px solid white"
@@ -75,27 +78,6 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
             <chakra.p mb="0 !important" textStyle="label" className="label">Edition <chakra.span fontWeight="300" pl="1rem">3/{object.editionOf}</chakra.span></chakra.p>
           </Box>
         }
-
-
-        {/* ======== BOX: Artist further link  ======== */}
-        {artwork.creator.bio&&
-          <Box
-            className="artistInfo"
-            borderBottom="1px solid white"
-            p="6"
-          >
-            <CornerButton label="View profile" emphasis onClick=""/>
-            <chakra.p textStyle="label" className="label">About the artist</chakra.p>
-            <div dangerouslySetInnerHTML={{__html: artwork.creator.bio}} />
-          </Box>
-        }
-
-
-          {/* _____________________________
-
-                TODO: Artist Info Button Corner
-            _______________________________*/}
-
 
         {/* ======== BOX: Artwork further link  ======== */}
         {artwork.url&&
@@ -119,6 +101,30 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
             VIDEO PLAYER HERE
           </Box>
         }
+
+        {/* ======== BOX: Artist further link  ======== */}
+        {/*artwork.creator.bio&&*/}
+          <Box
+            className="artistInfo"
+            borderBottom="1px solid white"
+            p="6"
+            position="relative"
+          >
+            <CornerButton label="View profile" onClick=""/>
+            <chakra.p textStyle="label" className="label">About the artist</chakra.p>
+            <div dangerouslySetInnerHTML={{__html: artwork.creator.bio}}  />
+            <p>    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          </Box>
+        {/* */}
+
+
+          {/* _____________________________
+
+                TODO: Artist Info Button Corner LINK
+            _______________________________*/}
+
+
+
       </Box>
     </Flex>
   );

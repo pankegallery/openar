@@ -5,6 +5,8 @@ import { Box, chakra} from "@chakra-ui/react";
 export const CornerButton = ({ label, emphasis = false, position = "bottom" }: { label?: String, emphasis?: String, position?: String }) => {
 
   const bg = emphasis ? "#939180" : "transparent"
+  const fw = emphasis ? "600" : "400"
+
   if (position=="top"){
     return (
       <Box
@@ -31,11 +33,17 @@ export const CornerButton = ({ label, emphasis = false, position = "bottom" }: {
         }}
         _hover={{
           width:"10rem",
-          _before: {
-          }
+          bg:"#ffffff30"
         }}
       >
-        <chakra.p textStyle="label" my="6" mr="4" ml="auto">{label}</chakra.p>
+        <chakra.p
+          textStyle="label"
+          my="6" mr="4" ml="auto"
+          width="calc(5rem - var(--chakra-space-4))"
+          textAlign="right"
+          fontSize="xs"
+          fontWeight={fw}
+        >{label}</chakra.p>
       </Box>
     );
   } else {
@@ -64,11 +72,17 @@ export const CornerButton = ({ label, emphasis = false, position = "bottom" }: {
         }}
         _hover={{
           width:"10rem",
-          _before: {
-          }
+          bg:"#ffffff30"
         }}
       >
-        <chakra.p textStyle="label" pb="6" mr="4" ml="auto" mt="auto">{label}</chakra.p>
+        <chakra.p
+          textStyle="label"
+          pb="4" mr="4" ml="auto" mt="auto"
+          width="calc(5rem - var(--chakra-space-4))"
+          textAlign="right"
+          fontSize="xs"
+          fontWeight={fw}
+          >{label}</chakra.p>
       </Box>
     );
   }

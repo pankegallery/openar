@@ -134,11 +134,11 @@ export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, objec
   } else{
     // Multile object view
     return(
-      <Box w="100%" justifyContent="center"
+      <Flex w="100%" h="100%" justifyContent="center"
         alignItems="center" direction="column">
         {modelViewer}
         {arButton}
-      </Box>
+      </Flex>
     );
   }
 
