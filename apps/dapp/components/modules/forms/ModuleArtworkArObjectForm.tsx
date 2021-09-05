@@ -115,10 +115,10 @@ export const ModuleArtworkArObjectForm = ({
   ];
 
   console.log("CHAIN ID", chainId, account);
-  console.log(addresses.development.media);
-  connector.getChainId().then((data) => {
-    console.log(data);
-  });
+  // console.log(addresses.development.media);
+  // connector.getChainId().then((data) => {
+  //   console.log(data);
+  // });
 
   const [mintObject, mintSignature] = watch(["mintObject", "mintSignature"]);
 
@@ -135,271 +135,272 @@ export const ModuleArtworkArObjectForm = ({
   // TODO: https://github.com/MetaMask/test-dapp/blob/main/src/index.js
   // TODO: https://github.com/dmihal/eth-permit
   // https://stackoverflow.com/questions/46611117/how-to-authenticate-and-send-contract-method-using-web3-js-1-0
-  useEffect(() => {
-    if (
-      !awaitingSignature &&
-      mintObject &&
-      mintSignature.trim() === "" &&
-      account &&
-      active &&
-      library.provider
-    ) {
-      mintDisclosure.onOpen();
-      setAwaitingSignature(true);
+  // useEffect(() => {
+  //   if (
+  //     !awaitingSignature &&
+  //     mintObject &&
+  //     mintSignature.trim() === "" &&
+  //     account &&
+  //     active &&
+  //     library.provider
+  //   ) {
+  //     mintDisclosure.onOpen();
+  //     setAwaitingSignature(true);
 
-      console.log(library.getSigner(account));
-      const openAR = new OpenAR(
-        library.getSigner(account),
-        chainId,
-        addresses.development.media,
-        addresses.development.market
-      );
+  //     console.log(library.getSigner(account));
+  //     const openAR = new OpenAR(
+  //       library.getSigner(account),
+  //       chainId,
+  //       addresses.development.media,
+  //       addresses.development.market
+  //     );
 
-      console.log("network:", library.network);
-      console.log("addresses: ", addresses.development);
-      const test = async () => {
-        // try {
-        //   console.log("test");
-        //   const tx1 = await openAR.media.marketContract();
-        //   console.log("test2", tx1);
-        //   const tx2 = await openAR.fetchTotalMedia();
-        //   // console.log(tx);
-        //   console.log("test3", tx2);
-        // } catch (err) {
-        //   console.log(err);
-        // }
+  //     console.log("network:", library.network);
+  //     console.log("addresses: ", addresses.development);
+  //     const test = async () => {
+  //       // try {
+  //       //   console.log("test");
+  //       //   const tx1 = await openAR.media.marketContract();
+  //       //   console.log("test2", tx1);
+  //       //   const tx2 = await openAR.fetchTotalMedia();
+  //       //   // console.log(tx);
+  //       //   console.log("test3", tx2);
+  //       // } catch (err) {
+  //       //   console.log(err);
+  //       // }
 
-        const name = await openAR.media.name();
-        console.log(name);
+  //       const name = await openAR.media.name();
+  //       console.log(name);
 
-        const timeStamp = new Date().getTime();
-        const deadline = Math.floor(new Date().getTime() / 1000) + 60 * 60 * 24; // 24 hours
+  //       const timeStamp = new Date().getTime();
+  //       const deadline = Math.floor(new Date().getTime() / 1000) + 60 * 60 * 24; // 24 hours
 
-        const keyHash = sha256FromBuffer(Buffer.from(arObjectReadOwn?.key));
+  //       const keyHash = sha256FromBuffer(Buffer.from(arObjectReadOwn?.key));
 
-        const messageData = generateMintArObjectSignMessageData(
-          keyHash,
-          Decimal.new(getValues("editionOf")).value,
-          true,
-          Decimal.new(getValues("askPrice")).value,
-          timeStamp,
-          deadline,
-          openAR.eip712Domain()
-        );
+  //       const messageData = generateMintArObjectSignMessageData(
+  //         keyHash,
+  //         Decimal.new(getValues("editionOf")).value,
+  //         true,
+  //         Decimal.new(getValues("askPrice")).value,
+  //         timeStamp,
+  //         deadline,
+  //         openAR.eip712Domain()
+  //       );
 
-        console.log(messageData);
-        console.log(JSON.stringify(messageData));
-        const msgParams = JSON.stringify(messageData);
+  //       console.log(messageData);
+  //       console.log(JSON.stringify(messageData));
+  //       const msgParams = JSON.stringify(messageData);
 
-        console.log(msgParams);
+  //       console.log(msgParams);
 
-        var params = [account, msgParams];
+  //       var params = [account, msgParams];
 
-        console.log(params);
-        library
-          .send("eth_signTypedData_v4", params)
-          .then((signature) => {
-            console.log(signature);
-            console.log(account);
+  //       console.log(params);
+  //       library
+  //         .send("eth_signTypedData_v4", params)
+  //         .then((signature) => {
+  //           console.log(signature);
+  //           console.log(account);
 
-            // const recovered = recoverTypedSignature_v4({
-            //   data: JSON.parse(msgParams),
-            //   sig: result.result,
-            // });
+  //           // const recovered = recoverTypedSignature_v4({
+  //           //   data: JSON.parse(msgParams),
+  //           //   sig: result.result,
+  //           // });
             
-            // https://programtheblockchain.com/posts/2018/02/17/signing-and-verifying-messages-in-ethereum/
+  //           // https://programtheblockchain.com/posts/2018/02/17/signing-and-verifying-messages-in-ethereum/
 
-            console.log(createEIP712Signature(signature, deadline));
+  //           console.log(createEIP712Signature(signature, deadline));
 
-            let signature2 = signature.split('x')[1];
-            console.log("length: ", signature.length);
-            var r2 = new Buffer(signature2.substring(0, 64), 'hex')
-            var s2 = new Buffer(signature2.substring(64, 128), 'hex')
-            var v2 = new Buffer((parseInt(signature2.substring(128, 130)) + 27).toString());
+  //           let signature2 = signature.split('x')[1];
+  //           console.log("length: ", signature.length);
+  //           var r2 = new Buffer(signature2.substring(0, 64), 'hex')
+  //           var s2 = new Buffer(signature2.substring(64, 128), 'hex')
+  //           var v2 = new Buffer((parseInt(signature2.substring(128, 130)) + 27).toString());
             
-            console.log('V,R,S at client -'+v2,r2,s2); 
+  //           console.log('V,R,S at client -'+v2,r2,s2); 
 
-            recoverSignatureFromMintArObject(
-              keyHash,
-              Decimal.new(getValues("editionOf")).value,
-              true,
-              Decimal.new(getValues("askPrice")).value,
-              timeStamp,
-              deadline,
-              openAR.eip712Domain(),
-              signature
-            ).then((recovered) => console.log("RRRR: ", recovered)).catch((err) => console.log(err))
+  //           recoverSignatureFromMintArObject(
+  //             keyHash,
+  //             Decimal.new(getValues("editionOf")).value,
+  //             true,
+  //             Decimal.new(getValues("askPrice")).value,
+  //             timeStamp,
+  //             deadline,
+  //             openAR.eip712Domain(),
+  //             signature
+  //           ).then((recovered) => console.log("RRRR: ", recovered)).catch((err) => console.log(err))
 
 
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+  //         })
+  //         .catch((err) => {
+  //           console.log(err);
+  //         });
           
-        // .sendAsync(
-        //   {
-        //     method,
-        //     params,
-        //     from,
-        //   },
-        //   function (err, result) {
-        //     if (err) return console.dir(err);
-        //     if (result.error) {
-        //       alert(result.error.message);
-        //     }
-        //     if (result.error) return console.error('ERROR', result);
-        //     console.log('TYPED SIGNED:' + JSON.stringify(result.result));
+  //       // .sendAsync(
+  //       //   {
+  //       //     method,
+  //       //     params,
+  //       //     from,
+  //       //   },
+  //       //   function (err, result) {
+  //       //     if (err) return console.dir(err);
+  //       //     if (result.error) {
+  //       //       alert(result.error.message);
+  //       //     }
+  //       //     if (result.error) return console.error('ERROR', result);
+  //       //     console.log('TYPED SIGNED:' + JSON.stringify(result.result));
 
-        //     const recovered = sigUtil.recoverTypedSignature_v4({
-        //       data: JSON.parse(msgParams),
-        //       sig: result.result,
-        //     });
+  //       //     const recovered = sigUtil.recoverTypedSignature_v4({
+  //       //       data: JSON.parse(msgParams),
+  //       //       sig: result.result,
+  //       //     });
 
-        //     if (
-        //       ethUtil.toChecksumAddress(recovered) === ethUtil.toChecksumAddress(from)
-        //     ) {
-        //       alert('Successfully recovered signer as ' + from);
-        //     } else {
-        //       alert(
-        //         'Failed to verify signer when comparing ' + result + ' to ' + from
-        //       );
-        //     }
-        //   }
-        // );
-      };
+  //       //     if (
+  //       //       ethUtil.toChecksumAddress(recovered) === ethUtil.toChecksumAddress(from)
+  //       //     ) {
+  //       //       alert('Successfully recovered signer as ' + from);
+  //       //     } else {
+  //       //       alert(
+  //       //         'Failed to verify signer when comparing ' + result + ' to ' + from
+  //       //       );
+  //       //     }
+  //       //   }
+  //       // );
+  //     };
 
-      test();
+  //     test();
 
-      //   // library
-      //   //           .getSigner(account)
-      //   //           .signMessage('👋')
-      //   //           .then((signature: any) => {
-      //   //             window.alert(`Success!\n\n${signature}`)
-      //   //           })
-      //   //           .catch((error: any) => {
-      //   //             window.alert('Failure!' + (error && error.message ? `\n\n${error.message}` : ''))
-      //   //           })
+  //     //   // library
+  //     //   //           .getSigner(account)
+  //     //   //           .signMessage('👋')
+  //     //   //           .then((signature: any) => {
+  //     //   //             window.alert(`Success!\n\n${signature}`)
+  //     //   //           })
+  //     //   //           .catch((error: any) => {
+  //     //   //             window.alert('Failure!' + (error && error.message ? `\n\n${error.message}` : ''))
+  //     //   //           })
 
-      //   // Market: 0x53b56c2dB09865a21B3242B8Bd5Fae00a0dFf119
-      //   // Media: 0x588352A251aAC2EC0e868fC13612Fa2edd604f23
-      //   const msgParams = JSON.stringify({
-      //     domain: {
-      //       // Defining the chain aka Rinkeby testnet or Ethereum Main Net
-      //       chainId: 50,
-      //       // Give a user friendly name to the specific contract you are signing for.
-      //       name: 'openAr',
-      //       // If name isn't enough add verifying contract to make sure you are establishing contracts with the proper entity
-      //       verifyingContract: '0x588352A251aAC2EC0e868fC13612Fa2edd604f23',
-      //       // Just let's you know the latest version. Definitely make sure the field name is correct.
-      //       version: '1',
-      //     },
+  //     //   // Market: 0x53b56c2dB09865a21B3242B8Bd5Fae00a0dFf119
+  //     //   // Media: 0x588352A251aAC2EC0e868fC13612Fa2edd604f23
+  //     //   const msgParams = JSON.stringify({
+  //     //     domain: {
+  //     //       // Defining the chain aka Rinkeby testnet or Ethereum Main Net
+  //     //       chainId: 50,
+  //     //       // Give a user friendly name to the specific contract you are signing for.
+  //     //       name: 'openAr',
+  //     //       // If name isn't enough add verifying contract to make sure you are establishing contracts with the proper entity
+  //     //       verifyingContract: '0x588352A251aAC2EC0e868fC13612Fa2edd604f23',
+  //     //       // Just let's you know the latest version. Definitely make sure the field name is correct.
+  //     //       version: '1',
+  //     //     },
 
-      //     // Defining the message signing data content.
-      //     message: {
-      //       /*
-      //        - Anything you want. Just a JSON Blob that encodes the data you want to send
-      //        - No required fields
-      //        - This is DApp Specific
-      //        - Be as explicit as possible when building out the message schema.
-      //       */
-      //       contents: 'Hello, Bob!',
-      //       attachedMoneyInEth: 4.2,
-      //       from: {
-      //         name: 'Cow',
-      //         wallets: [
-      //           '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
-      //           '0xDeaDbeefdEAdbeefdEadbEEFdeadbeEFdEaDbeeF',
-      //         ],
-      //       },
-      //       to: [
-      //         {
-      //           name: 'Bob',
-      //           wallets: [
-      //             '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
-      //             '0xB0BdaBea57B0BDABeA57b0bdABEA57b0BDabEa57',
-      //             '0xB0B0b0b0b0b0B000000000000000000000000000',
-      //           ],
-      //         },
-      //       ],
-      //     },
-      //     // Refers to the keys of the *types* object below.
-      //     primaryType: 'Mail',
-      //     types: {
-      //       // TODO: Clarify if EIP712Domain refers to the domain the contract is hosted on
-      //       EIP712Domain: [
-      //         { name: 'name', type: 'string' },
-      //         { name: 'version', type: 'string' },
-      //         { name: 'chainId', type: 'uint256' },
-      //         { name: 'verifyingContract', type: 'address' },
-      //       ],
-      //       // Not an EIP712Domain definition
-      //       Group: [
-      //         { name: 'name', type: 'string' },
-      //         { name: 'members', type: 'Person[]' },
-      //       ],
-      //       // Refer to PrimaryType
-      //       Mail: [
-      //         { name: 'from', type: 'Person' },
-      //         { name: 'to', type: 'Person[]' },
-      //         { name: 'contents', type: 'string' },
-      //       ],
-      //       // Not an EIP712Domain definition
-      //       Person: [
-      //         { name: 'name', type: 'string' },
-      //         { name: 'wallets', type: 'address[]' },
-      //       ],
-      //     },
-      //   });
+  //     //     // Defining the message signing data content.
+  //     //     message: {
+  //     //       /*
+  //     //        - Anything you want. Just a JSON Blob that encodes the data you want to send
+  //     //        - No required fields
+  //     //        - This is DApp Specific
+  //     //        - Be as explicit as possible when building out the message schema.
+  //     //       */
+  //     //       contents: 'Hello, Bob!',
+  //     //       attachedMoneyInEth: 4.2,
+  //     //       from: {
+  //     //         name: 'Cow',
+  //     //         wallets: [
+  //     //           '0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826',
+  //     //           '0xDeaDbeefdEAdbeefdEadbEEFdeadbeEFdEaDbeeF',
+  //     //         ],
+  //     //       },
+  //     //       to: [
+  //     //         {
+  //     //           name: 'Bob',
+  //     //           wallets: [
+  //     //             '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
+  //     //             '0xB0BdaBea57B0BDABeA57b0bdABEA57b0BDabEa57',
+  //     //             '0xB0B0b0b0b0b0B000000000000000000000000000',
+  //     //           ],
+  //     //         },
+  //     //       ],
+  //     //     },
+  //     //     // Refers to the keys of the *types* object below.
+  //     //     primaryType: 'Mail',
+  //     //     types: {
+  //     //       // TODO: Clarify if EIP712Domain refers to the domain the contract is hosted on
+  //     //       EIP712Domain: [
+  //     //         { name: 'name', type: 'string' },
+  //     //         { name: 'version', type: 'string' },
+  //     //         { name: 'chainId', type: 'uint256' },
+  //     //         { name: 'verifyingContract', type: 'address' },
+  //     //       ],
+  //     //       // Not an EIP712Domain definition
+  //     //       Group: [
+  //     //         { name: 'name', type: 'string' },
+  //     //         { name: 'members', type: 'Person[]' },
+  //     //       ],
+  //     //       // Refer to PrimaryType
+  //     //       Mail: [
+  //     //         { name: 'from', type: 'Person' },
+  //     //         { name: 'to', type: 'Person[]' },
+  //     //         { name: 'contents', type: 'string' },
+  //     //       ],
+  //     //       // Not an EIP712Domain definition
+  //     //       Person: [
+  //     //         { name: 'name', type: 'string' },
+  //     //         { name: 'wallets', type: 'address[]' },
+  //     //       ],
+  //     //     },
+  //     //   });
 
-      //   library.provider.send({
-      //     method: "eth_signTypedData_v4",
-      //   });
+  //     //   library.provider.send({
+  //     //     method: "eth_signTypedData_v4",
+  //     //   });
 
-      //   const sign = await ethereum.request({
-      //     method: "eth_signTypedData_v4",
-      //     params: [from, JSON.stringify(msgParams)],
-      //   });
+  //     //   const sign = await ethereum.request({
+  //     //     method: "eth_signTypedData_v4",
+  //     //     params: [from, JSON.stringify(msgParams)],
+  //     //   });
 
-      //   library.provider.sendAsync(
-      //     {
-      //       method: "eth_signTypedData_v4",
-      //       params: [
-      //         ethersUtils.hexlify(ethersUtils.toUtf8Bytes(toSign)),
-      //         account.toLowerCase(),
-      //       ],
-      //       from: account,
-      //     },
-      //     async (error, result) => {
-      //       if (!error && result?.result) {
-      //         await walletLoginLogin(result?.result);
-      //       } else {
-      //         if (error?.code && error?.code === 4001) {
-      //           // TODO: make better
-      //           setAwaitingUserInteraction(null);
+  //     //   library.provider.sendAsync(
+  //     //     {
+  //     //       method: "eth_signTypedData_v4",
+  //     //       params: [
+  //     //         ethersUtils.hexlify(ethersUtils.toUtf8Bytes(toSign)),
+  //     //         account.toLowerCase(),
+  //     //       ],
+  //     //       from: account,
+  //     //     },
+  //     //     async (error, result) => {
+  //     //       if (!error && result?.result) {
+  //     //         await walletLoginLogin(result?.result);
+  //     //       } else {
+  //     //         if (error?.code && error?.code === 4001) {
+  //     //           // TODO: make better
+  //     //           setAwaitingUserInteraction(null);
 
-      //           triggerToast(
-      //             "Signature required",
-      //             "Please sign the requested signature to be able to logon to our plaform",
-      //             "error"
-      //           );
-      //           await walletDisconnect();
-      //         } else {
-      //           handleError(error);
-      //         }
-      //       }
-      //     }
-      //   );
-    }
-  }, [
-    mintObject,
-    mintSignature,
-    mintDisclosure,
-    account,
-    active,
-    library.provider,
-  ]);
+  //     //           triggerToast(
+  //     //             "Signature required",
+  //     //             "Please sign the requested signature to be able to logon to our plaform",
+  //     //             "error"
+  //     //           );
+  //     //           await walletDisconnect();
+  //     //         } else {
+  //     //           handleError(error);
+  //     //         }
+  //     //       }
+  //     //     }
+  //     //   );
+  //   }
+  // }, [
+  //   mintObject,
+  //   mintSignature,
+  //   mintDisclosure,
+  //   account,
+  //   active,
+  //   library.provider,
+  // console.log("web3 error", error, mintObject);
+  
+  // ]);
 
-  console.log("web3 error", error, mintObject);
   return (
     <>
       <Grid
@@ -421,30 +422,6 @@ export const ModuleArtworkArObjectForm = ({
               }}
             />
           </FieldRow>
-          {action === "update" && (
-            <FieldRow>
-              <FieldInput
-                name="key"
-                id="key"
-                type="key"
-                label="Url key"
-                isRequired={yupIsFieldRequired("key", validationSchema)}
-                settings={{
-                  // defaultValue: data.abc.key
-                  placeholder: "What is the url key of your objec?",
-                }}
-              />
-            </FieldRow>
-          )}
-          {action === "update" && (
-            <FieldRow>
-              <FieldStatusSelect
-                statusEnum={ArObjectStatusEnum}
-                status={currentStatus}
-                options={statusOptions}
-              />
-            </FieldRow>
-          )}
           <FieldRow>
             <FieldTextEditor
               id="description"

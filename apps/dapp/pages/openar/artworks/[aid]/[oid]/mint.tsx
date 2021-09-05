@@ -10,7 +10,7 @@ import { LayoutOpenAR } from "~/components/app";
 import { FormNavigationBlock } from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
 import { ModuleArtworkArObjectForm } from "~/components/modules/forms";
-import { ModuleArObjectUpdateSchema, ModuleArObjectMintableSchema } from "~/components/modules/validation";
+import { ModuleArObjectUpdateSchema } from "~/components/modules/validation";
 import { RestrictPageAccess } from "~/components/utils";
 import { BeatLoader } from "react-spinners";
 
@@ -69,7 +69,6 @@ const Update = () => {
   const [activeUploadCounter, setActiveUploadCounter] = useState<number>(0);
   const [isNavigatingAway, setIsNavigatingAway] = useState(false)
 
-  const [couldMint, setCouldMint] = useState(false)
   const [firstMutation, firstMutationResults] = useArObjectUpdateMutation();
   const [isFormError, setIsFormError] = useState(false);
 
@@ -77,14 +76,16 @@ const Update = () => {
 
   const formMethods = useForm({
     mode: "onTouched",
-    resolver: yupResolver(ModuleArObjectUpdateSchema),    
+    resolver: yupResolver(ModuleArObjectUpdateSchema),
+    defaultValues: {
+      dates: [],
+    },
   });
   const {
     handleSubmit,
     reset,
     setError,
-    watch,
-    formState: { isSubmitting, isDirty, isValid },
+    formState: { isSubmitting, isDirty },
   } = formMethods;
 
   const { data, loading, error } = useQuery(arObjectReadOwnQueryGQL, {
@@ -126,6 +127,7 @@ const Update = () => {
             orderNumber: newData.orderNumber ?? null,
             askPrice: newData.askPrice ?? null,
             status: newData.status ?? null,
+            key: newData.key ?? "",
             creator: {
               connect: {
                 id: appUser.id,
@@ -173,48 +175,17 @@ const Update = () => {
     },
   ];
 
-  const askPrice = watch("askPrice");
-  useEffect(() => {
-    console.log(1);
-    if (isValid && askPrice && Number.isFinite(askPrice)) {
-      console.log(2);
-      setCouldMint(true);
-    } else {
-      console.log(3);
-      setCouldMint(false);
-    }
-
-  }, [isValid, askPrice, setCouldMint])
-  console.log("Is Valid", isValid, askPrice, couldMint);
-  
-
   // TODO: this makes some trouble on SSR as the buttons look differently
   // as the user can't do thing on the server
   const buttonList: ButtonListElement[] = [
     {
       type: "back",
-      to: `${moduleConfig.rootPath}/${router.query.aid}/update`,
-      label: "Back to artwork",
-      isDisabled: disableNavigation || activeUploadCounter > 0,
+      to: `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`,
+      label: "Cancel",
       userCan: "artworkReadOwn",
-    },
-    {
-      type: "submit",
-      isLoading: isSubmitting,
-      label: "Update",
-      isDisabled: disableNavigation || activeUploadCounter > 0,
-      userCan: "artworkUpdateOwn",
-    },
-    {
-      type: "navigation",
-      to: `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/mint`,
-      label: "Mint",
-      isDisabled: !couldMint,
-      userCan: "artworkUpdateOwn",
     },
   ];
 
-  
   const errorMessage = firstMutationResults.error
     ? firstMutationResults?.error?.message
     : "";

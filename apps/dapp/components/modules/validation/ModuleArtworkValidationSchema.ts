@@ -28,7 +28,6 @@ export const ModuleArObjectCreateSchema = object().shape({
     is: true, // alternatively: (isBig, isSpecial) => isBig && isSpecial
     then: number()
       .transform((v, o) => (o === "" ? null : v))
-      .nullable()
       .typeError("should be a number > 0")
       .required(),
     otherwise: number()
@@ -40,7 +39,6 @@ export const ModuleArObjectCreateSchema = object().shape({
     is: true, // alternatively: (isBig, isSpecial) => isBig && isSpecial
     then: number()
       .transform((v, o) => (o === "" ? null : v))
-      .nullable()
       .typeError("should be a number > 0")
       .min(1)
       .max(100)
@@ -57,7 +55,6 @@ export const ModuleArObjectCreateSchema = object().shape({
 export const ModuleArObjectUpdateSchema = ModuleArObjectCreateSchema.concat(
   object().shape({
     mintSignature: string(),
-    key: string().required().length(16),
     status: number().required().typeError("Please select the publish state"),
     heroImage: number()
       .required()
@@ -73,3 +70,16 @@ export const ModuleArObjectUpdateSchema = ModuleArObjectCreateSchema.concat(
       .typeError("Please upload your .usdz file"),
   })
 );
+
+
+export const ModuleArObjectMintableSchema = ModuleArObjectUpdateSchema.concat(
+  object().shape({
+    editionOf: number()
+        .transform((v, o) => (o === "" ? null : v))
+        .typeError("should be a number > 0")
+        .min(1)
+        .max(100)
+        .required()
+  })
+);
+
