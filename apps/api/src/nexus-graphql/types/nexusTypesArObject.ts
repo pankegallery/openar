@@ -208,6 +208,8 @@ export const ArObjectQueries = extendType({
               ...include,
               creator: {
                 select: {
+                  id: true,
+                  bio: true,
                   pseudonym: true,
                   ethAddress: true,
                   isBanned: true,
@@ -299,6 +301,7 @@ export const ArObjectQueries = extendType({
             creator: {
               select: {
                 id: true,
+                bio: true,
                 pseudonym: true,
                 ethAddress: true,
                 isBanned: true,
@@ -410,6 +413,7 @@ export const ArObjectQueries = extendType({
               creator: {
                 select: {
                   id: true,
+                  bio: true,
                   pseudonym: true,
                   ethAddress: true,
                   isBanned: true,

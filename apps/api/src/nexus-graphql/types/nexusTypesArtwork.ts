@@ -190,17 +190,24 @@ export const ArtworkQueries = extendType({
             };
           }
 
-          if ((pRI?.fieldsByTypeName?.Artwork as any)?.creator)
+          if (
+            (pRI as any).fieldsByTypeName?.ArtworkQueryResult?.artworks
+              ?.fieldsByTypeName.Artwork?.creator
+          )
             include = {
               ...include,
               creator: {
                 select: {
+                  id: true,
+                  bio: true,
                   pseudonym: true,
                   ethAddress: true,
                   isBanned: true,
                 },
               },
             };
+
+          console.log(include);
 
           artworks = await daoArtworkQuery(
             where,
@@ -275,6 +282,7 @@ export const ArtworkQueries = extendType({
             creator: {
               select: {
                 id: true,
+                bio: true,
                 pseudonym: true,
                 ethAddress: true,
                 isBanned: true,
@@ -402,6 +410,7 @@ export const ArtworkQueries = extendType({
               creator: {
                 select: {
                   id: true,
+                  bio: true,
                   pseudonym: true,
                   ethAddress: true,
                   isBanned: true,
