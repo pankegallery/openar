@@ -2,7 +2,7 @@ import React from "react";
 
 import { Box, Grid, Flex, chakra } from "@chakra-ui/react";
 import {ArrowLink} from "~/components/ui";
-import {CornerButton, EmbeddedVideoPlayer} from "~/components/frontend";
+import {CornerButton, EmbeddedVideoPlayer, isValidEmbeddedVideoPlayerVideo} from "~/components/frontend";
 
 import LogoXDAI from "~/assets/img/xdai/xdai-white.svg"
 
@@ -14,11 +14,6 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
   console.log("[ArtworkDetails] object: ", object)
 
   /* --------- COL: Artwork details) --------- */
-
-  let videoPlayer;
-
-  if (artwork.video && artwork.video.trim().lenght > 0)
-    videoPlayer = <EmbeddedVideoPlayer url={artwork.video} />
 
   return(
 
@@ -125,7 +120,7 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
 
 
         {/* ======== BOX: Artwork video  ======== */}
-        { videoPlayer &&
+        { artwork.video && artwork.video.trim().length > 0 && isValidEmbeddedVideoPlayerVideo(artwork.video) && 
           <Box
             className="artworkVideo"
             borderBottom="1px solid white"
@@ -139,7 +134,7 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
             }}
           >
             <chakra.p textStyle="label" className="label">Artwork video</chakra.p>
-            
+            <EmbeddedVideoPlayer url={artwork.video} />
           </Box>
         }
 

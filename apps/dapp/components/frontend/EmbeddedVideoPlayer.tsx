@@ -1,6 +1,8 @@
 import React from "react";
 import { AspectRatio } from "@chakra-ui/react";
 
+export const isValidEmbeddedVideoPlayerVideo = (url: string) => url.indexOf("yout") > -1 || url.indexOf("vimeo") > -1
+
 export const EmbeddedVideoPlayer = ({ url }: { url: string }) => {
   const isYoutube = url.indexOf("yout") !== -1;
   const isVimeo = url.indexOf("vimeo") !== -1;
