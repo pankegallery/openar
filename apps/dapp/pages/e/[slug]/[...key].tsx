@@ -216,6 +216,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
         arObjects {
           id
           key
+          createdAt
           title
           orderNumber
           status
