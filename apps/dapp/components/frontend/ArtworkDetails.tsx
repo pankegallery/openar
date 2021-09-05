@@ -2,7 +2,7 @@ import React from "react";
 
 import { Box, Grid, Flex, chakra } from "@chakra-ui/react";
 import {ArrowLink} from "~/components/ui";
-import {CornerButton} from "~/components/frontend";
+import {CornerButton, EmbeddedVideoPlayer} from "~/components/frontend";
 
 import LogoXDAI from "~/assets/img/xdai/xdai-white.svg"
 
@@ -39,9 +39,9 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
         borderBottom="1px solid white"
         p="6"
       >
-        <chakra.h1 textStyle="subtitle">{artwork.title}</chakra.h1>
-        <chakra.p textStyle="meta">{artist}</chakra.p>
-        <chakra.p textStyle="meta">{object.createdAt}</chakra.p>
+        <chakra.h1 textStyle="subtitle" maxWidth="80%">{artwork.title}</chakra.h1>
+        <chakra.p textStyle="copy">{artist}</chakra.p>
+        <chakra.p textStyle="meta">{new Date(artwork.createdAt).getFullYear()}</chakra.p>
 
       </Box>
 
@@ -79,6 +79,11 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
           </Box>
         }
 
+            {/* _____________________________
+
+                TODO: Buy Button onclick LINK
+            _______________________________*/}
+
         {/* ======== BOX: Artwork further link  ======== */}
         {artwork.url&&
           <Box
@@ -91,19 +96,9 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
           </Box>
         }
 
-        {/* ======== BOX: Artwork video  ======== */}
-        {artwork.invalidIteratorState&&
-          <Box
-            className="artworkVideo"
-            borderBottom="1px solid white"
-            p="6"
-          >
-            VIDEO PLAYER HERE
-          </Box>
-        }
 
-        {/* ======== BOX: Artist further link  ======== */}
-        {/*artwork.creator.bio&&*/}
+        {/* ======== BOX: Artist profile  ======== */}
+        {artwork.creator.bio&&
           <Box
             className="artistInfo"
             borderBottom="1px solid white"
@@ -113,17 +108,35 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
             <CornerButton label="View profile" onClick=""/>
             <chakra.p textStyle="label" className="label">About the artist</chakra.p>
             <div dangerouslySetInnerHTML={{__html: artwork.creator.bio}}  />
-            <p>    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
           </Box>
-        {/* */}
+        }
 
 
           {/* _____________________________
 
-                TODO: Artist Info Button Corner LINK
+                TODO: View Profile onclick LINK
             _______________________________*/}
 
 
+
+        {/* ======== BOX: Artwork video  ======== */}
+        {artwork.video&&
+          <Box
+            className="artworkVideo"
+            borderBottom="1px solid white"
+            p="6"
+            sx={{
+              ".chakra-aspect-ratio":{
+                mx:"-6",
+                mt:"6",
+                mb:"-10",
+              }
+            }}
+          >
+            <chakra.p textStyle="label" className="label">Artwork video</chakra.p>
+            <EmbeddedVideoPlayer url={artwork.video} />
+          </Box>
+        }
 
       </Box>
     </Flex>

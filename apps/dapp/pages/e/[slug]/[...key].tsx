@@ -11,7 +11,10 @@ import { getApolloClient } from "~/services/apolloClient";
 
 import openingBg from "~/assets/img/opening-bg.png";
 import Arrow from "~/assets/img/arrow.svg";
-import {ArtworkListItem, ArtworkDetails, ArtworkImageViewer} from "~/components/frontend";
+import {ArtworkListItem,
+        ArtworkDetails,
+        ArtworkImageViewer,
+        ExhibitionTitleTile} from "~/components/frontend";
 import {ArrowLink} from "~/components/ui";
 import pick from "lodash/pick";
 import { useSSRSaveMediaQuery } from "~/hooks";
@@ -33,6 +36,7 @@ export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibitio
   }
 
   console.log("[... key] sel obj: ", selectedObject)
+  console.log("[... key] ex: ", exhibition)
 
   let artist = artwork.creator?.pseudonym ? artwork.creator?.pseudonym : artwork.creator?.ethAddress;
 
@@ -121,22 +125,9 @@ export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibitio
               h="33.33vw"
               layerStyle="backdropDark"
               flexDirection="column"
-              alignContent="flex-end"
+              justifyContent="flex-end"
             >
-              <Link href="/e/openar-art" passHref>
-                <chakra.a display="block" mt="auto">
-                  <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">
-                    {exhibition.title}
-                  </chakra.h1>
-                  <chakra.p textStyle="subtitle" mb="1rem">
-                    {exhibition.subtitle}
-                  </chakra.p>
-                  <chakra.p textStyle="workmeta">
-                    {new Date(exhibition.dateBegin).toLocaleDateString("de")}{" - "}
-                    {new Date(exhibition.dateEnd).toLocaleDateString("de")}
-                  </chakra.p>
-                </chakra.a>
-              </Link>
+              <ExhibitionTitleTile exhibition={exhibition} />
             </Flex>
           </Flex>
         }
@@ -150,10 +141,12 @@ export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibitio
             d: "33.3vw"
           }}
           minHeight="70vh"
+          h="100%"
           bg="white"
           color="var(--chakra-colors-openar-dark)"
           p="6"
           pt="10"
+          overflow="auto"
         >
           <Flex
             w="auto"
@@ -195,6 +188,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   const artworkQuery = gql`
     query ($key: String!, $slug: String!) {
       artwork(key: $key) {
+        createdAt
         id
         key
         title

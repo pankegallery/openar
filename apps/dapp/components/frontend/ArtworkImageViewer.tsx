@@ -72,10 +72,10 @@ export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, objec
   if (artwork.arObjects.length > 1) {
     // Single object view
     return(
-      <Box h="100%" w="calc(100% + calc(var(--chakra-space-6) * 2))" overflow="auto" mx="-6" mb="-6">
+      <Box w="calc(100% + calc(var(--chakra-space-6) * 2))" mx="-6" mb="-6" direction="column" >
         <Flex
           w="100%"
-          h="90%"
+          minHeight="400px"
           justifyContent="center"
           alignItems="center"
           direction="column"

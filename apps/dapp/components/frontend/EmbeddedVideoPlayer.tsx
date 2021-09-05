@@ -1,7 +1,7 @@
 import React from "react";
 import { AspectRatio } from "@chakra-ui/react";
 
-export const EmbededVideoPlayer = ({ url }: { url: string }) => {
+export const EmbeddedVideoPlayer = ({ url }: { url: string }) => {
   const isYoutube = url.indexOf("yout") !== -1;
   const isVimeo = url.indexOf("vimeo") !== -1;
 
@@ -51,7 +51,7 @@ export const EmbededVideoPlayer = ({ url }: { url: string }) => {
         );
       }
     } catch (err) {}
-    
+
   }
 
   return <></>;
