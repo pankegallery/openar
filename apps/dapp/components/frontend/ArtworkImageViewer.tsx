@@ -20,9 +20,9 @@ export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, objec
 
 //  const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
-  let urlUsdz = "";
-  let urlGlb = "";
-  let modelViewer = "";
+  let urlUsdz;
+  let urlGlb;
+  let modelViewer;
 
 
   const arObject = object ? object : artwork?.arObjects[0];
