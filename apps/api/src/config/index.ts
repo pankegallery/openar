@@ -133,9 +133,9 @@ const db: ApiConfigDB = {
   maxPageSize: 500,
   privateJSONDataKeys: {
     all: ["password"],
-    artwork: ["createdAt", "updatedAt"],
-    arobject: ["createdAt", "updatedAt"],
-    exhibition: ["createdAt", "updatedAt"],
+    artwork: ["isBanned"],
+    arobject: ["isBanned"],
+    exhibition: ["isBanned"],
     image: [],
     armodel: [],
     user: ["password"],

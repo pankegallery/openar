@@ -134,6 +134,8 @@ export const ArObjectQueries = extendType({
         let where: Prisma.ArObjectWhereInput = args.where ?? {};
         where = {
           ...where,
+          isBanned: false,
+          public: true,
           status: {
             in: [
               ArObjectStatusEnum.PUBLISHED,
@@ -243,6 +245,7 @@ export const ArObjectQueries = extendType({
         let include = {};
         let where: Prisma.ArObjectWhereInput = {
           key: args.key,
+          isBanned: false,
           status: {
             in: [
               ArObjectStatusEnum.PUBLISHED,

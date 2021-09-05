@@ -74,6 +74,9 @@ model Artwork {
   heroImage   Image? @relation(fields: [heroImageId], references: [id], name: "artworkHeroImage")
 
   images Image[] @relation("imagesArtwork")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model ArObject {
@@ -110,6 +113,9 @@ model ArObject {
 
   images Image[] @relation("imagesObject")
   arModels ArModel[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model ArObject2Collector {
@@ -142,6 +148,9 @@ model Image {
   profileImageUsers User[]    @relation("userProfileImage")
   heroImageArtworks Artwork[] @relation("artworkHeroImage")
   heroImageArObjects  ArObject[]  @relation("arObjectHeroImage")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model ArModel {
@@ -155,6 +164,9 @@ model ArModel {
   arObject     ArObject @relation(fields: [arObjectId], references: [id])
   ownerId    Int  
   owner      User   @relation(fields: [ownerId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model File {
@@ -166,6 +178,9 @@ model File {
   artwork   Artwork @relation(fields: [artworkId], references: [id])
   ownerId    Int  
   owner      User   @relation(fields: [ownerId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Token {

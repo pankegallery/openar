@@ -17,7 +17,7 @@
     "@ladjs/graceful": "^1.0.5",
     "@openar/contracts": "^1.0.0",
     "@openar/crypto": "^1.0.0",
-    "@prisma/client": "^2.29.0",
+    "@prisma/client": "^2.30.3",
     "apollo-server-core": "^3.0.0",
     "apollo-server-express": "^3.0.0",
     "apollo-server-plugin-base": "^3.0.1",
