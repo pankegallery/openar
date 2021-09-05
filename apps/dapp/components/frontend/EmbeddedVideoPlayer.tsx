@@ -5,7 +5,7 @@ export const EmbeddedVideoPlayer = ({ url }: { url: string }) => {
   const isYoutube = url.indexOf("yout") !== -1;
   const isVimeo = url.indexOf("vimeo") !== -1;
 
-  if (!isVimeo && !isYoutube) return <></>;
+  if (!isVimeo && !isYoutube) return null;
 
   if (isYoutube) {
     const matches = url.match(
