@@ -11,8 +11,7 @@ import { getApolloClient } from "~/services/apolloClient";
 
 import openingBg from "~/assets/img/opening-bg.png";
 import Arrow from "~/assets/img/arrow.svg";
-import { ArtworkListItem,
-         ArtworkDetails,
+import { ArtworkDetails,
          ArtworkImageViewer,
          ExhibitionTitleTile } from "~/components/frontend";
 import { ArrowLink } from "~/components/ui";

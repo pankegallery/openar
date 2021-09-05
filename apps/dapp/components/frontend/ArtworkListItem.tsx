@@ -15,7 +15,7 @@ export const ArtworkListItem = ({
   id,
   title,
   urlKey,
-  exSlug,
+  col,
   creator,
   heroImage,
   status,
@@ -24,6 +24,7 @@ export const ArtworkListItem = ({
 }: {
   id: number;
   title: string;
+  col: Int;
   urlKey: string;
   exSlug?: string;
   creator: any;
@@ -40,7 +41,7 @@ export const ArtworkListItem = ({
   return (
     <LinkBox
       as="article"
-      className={`${isWhite ? "white" : ""} artwork list item`}
+      className={`${isWhite ? "white" : ""} artwork list item col-${col}`}
       key={`artwork-${id}`}
     >
       <Box className="info" p="4">
