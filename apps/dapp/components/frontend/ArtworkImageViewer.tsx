@@ -113,7 +113,7 @@ export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, objec
 
                 // TODO: Create link (sometimes with object ID, sometimes not…)
                 return(
-                  <Link passhref href={obj.key}>
+                  <Link passHref href={obj.key} key={obj.key}>
                     <ApiImage
                       id={obj?.heroImage?.id}
                       meta={obj?.heroImage?.meta}

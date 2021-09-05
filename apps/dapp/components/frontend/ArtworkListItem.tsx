@@ -48,7 +48,8 @@ export const ArtworkListItem = ({
           className="title"
           fontWeight="600"
         >
-          <LinkOverlay href={href} passHref>{title}</LinkOverlay>
+          
+          <Link  href={href} passHref><LinkOverlay>{title}</LinkOverlay></Link>
         </chakra.h2>
         <chakra.span
           width="2em"

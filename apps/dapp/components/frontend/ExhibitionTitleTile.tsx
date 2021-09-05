@@ -1,4 +1,6 @@
 import React from "react";
+import Link from "next/link";
+
 import {
   Box,
   LinkBox,
@@ -28,7 +30,7 @@ export const ExhibitionTitleTile = ({
         flexDirection="column"
       >
         <Heading as={(titleTag as any)} textStyle="worktitle" mt="auto" mb="2rem">
-          <LinkOverlay href={href} passHref>{exhibition?.title}</LinkOverlay>
+          <Link href={href} passHref><LinkOverlay>{exhibition?.title}</LinkOverlay></Link>
         </Heading>
         <chakra.p textStyle="subtitle" mb="1rem">
           {exhibition?.subtitle}
