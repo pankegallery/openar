@@ -63,7 +63,7 @@ export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, objec
     <Button
       borderColor="openar.dark"
       color="openar.dark"
-      onlick=""
+      onClick={() => console.log("MAKE IT HAPPNE TODO: ")}
     >
       View in AR <BoxIcon viewBox="-10 -7 50 50" width="30px" height="25px"/>
     </Button>
