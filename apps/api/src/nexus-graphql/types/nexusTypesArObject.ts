@@ -246,7 +246,6 @@ export const ArObjectQueries = extendType({
         let where: Prisma.ArObjectWhereInput = {
           key: args.key,
           isBanned: false,
-          public: true,
           status: {
             in: [
               ArObjectStatusEnum.PUBLISHED,

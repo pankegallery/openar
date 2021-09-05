@@ -117,6 +117,12 @@ export const ArtworkQueries = extendType({
           ...where,
           isBanned: false,
           public: true,
+          status: {
+            in: [
+              ArtworkStatusEnum.PUBLISHED,
+              ArtworkStatusEnum.HASMINTEDOBJECTS,
+            ],
+          },
         };
 
         if ((pRI?.fieldsByTypeName?.ArtworkQueryResult as any)?.totalCount) {
@@ -228,7 +234,6 @@ export const ArtworkQueries = extendType({
         let where: Prisma.ArtworkWhereInput = {
           key: args.key,
           isBanned: false,
-          public: true,
           status: {
             in: [
               ArtworkStatusEnum.PUBLISHED,
