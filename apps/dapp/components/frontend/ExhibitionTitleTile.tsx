@@ -17,7 +17,7 @@ export const ExhibitionTitleTile = ({
   link?:boolean;
 }) => {
 
-  const href = `/e/${exhibition.slug}/`;
+  const href = `/e/${exhibition?.slug}/`;
 
   if (link){
     return (
@@ -28,15 +28,15 @@ export const ExhibitionTitleTile = ({
         flexDirection="column"
       >
         <Heading as={(titleTag as any)} textStyle="worktitle" mt="auto" mb="2rem">
-          <LinkOverlay href={href} passHref>{exhibition.title}</LinkOverlay>
+          <LinkOverlay href={href} passHref>{exhibition?.title}</LinkOverlay>
         </Heading>
         <chakra.p textStyle="subtitle" mb="1rem">
-          {exhibition.subtitle}
+          {exhibition?.subtitle}
         </chakra.p>
         <chakra.p textStyle="workmeta">
-          {new Date(exhibition.dateBegin).toLocaleDateString("de")}
+          {new Date(exhibition?.dateBegin).toLocaleDateString("de")}
           {" - "}
-          {new Date(exhibition.dateEnd).toLocaleDateString("de")}
+          {new Date(exhibition?.dateEnd).toLocaleDateString("de")}
         </chakra.p>
       </LinkBox>
     );
@@ -49,15 +49,15 @@ export const ExhibitionTitleTile = ({
         flexDirection="column"
       >
         <Heading as={(titleTag as any)} textStyle="worktitle" mt="auto" mb="2rem">
-          {title}
+          {exhibition?.title}
         </Heading>
         <chakra.p textStyle="subtitle" mb="1rem">
-          {subtitle}
+          {exhibition?.subtitle}
         </chakra.p>
         <chakra.p textStyle="workmeta">
-          {new Date(dateBegin).toLocaleDateString("de")}
+          {new Date(exhibition?.dateBegin).toLocaleDateString("de")}
           {" - "}
-          {new Date(dateEnd).toLocaleDateString("de")}
+          {new Date(exhibition?.dateEnd).toLocaleDateString("de")}
         </chakra.p>
       </Box>
     )

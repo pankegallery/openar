@@ -75,7 +75,7 @@ export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, objec
       <Box w="calc(100% + calc(var(--chakra-space-6) * 2))" mx="-6" mb="-6" direction="column" >
         <Flex
           w="100%"
-          minHeight="400px"
+          h="80vh"
           justifyContent="center"
           alignItems="center"
           direction="column"
