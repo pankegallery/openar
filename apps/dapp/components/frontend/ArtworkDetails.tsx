@@ -2,14 +2,16 @@ import React from "react";
 
 import { Box, Grid, Flex, chakra } from "@chakra-ui/react";
 import {ArrowLink} from "~/components/ui";
+import {CornerButton} from "~/components/frontend";
+
+import LogoXDAI from "~/assets/img/xdai/xdai-white.svg"
 
 export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any}) => {
 
   let artist = artwork.creator?.pseudonym ? artwork.creator?.pseudonym : artwork.creator?.ethAddress;
 
-  let hasMultipleObjects = artwork.arObjects.legth  > 1;
-
-  console.log("Artwork:", artwork)
+  console.log("[ArtworkDetails] Artwork: ", artwork)
+  console.log("[ArtworkDetails] object: ", object)
 
   /* --------- COL: Artwork details) --------- */
 
@@ -36,34 +38,7 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
         <chakra.h1 textStyle="subtitle">{artwork.title}</chakra.h1>
         <chakra.p textStyle="meta">{artist}</chakra.p>
 
-        {artwork.arObjects[0].askPrice&&
-          <chakra.p textStyle="subtitle">{artwork.arObjects[0].askPrice}</chakra.p>
-        }
-
       </Box>
-
-          {/* _____________________________
-
-              TODO: BUY Button Corner
-          _______________________________*/}
-
-
-
-      {/* ======== BOX: Artwork objects  ======== */}
-      {hasMultipleObjects&&
-        <Box
-          className="artworkObjects"
-          borderBottom="1px solid white"
-          p="6"
-        >
-          ALLE OBJEKTE
-          {artwork.arObjects.map((obj)=>{
-            <p>obj.key</p>
-          })}
-
-
-        </Box>
-      }
 
       {/* ======== BOX: Artwork description  ======== */}
       <Box
@@ -74,6 +49,23 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
         <chakra.p textStyle="label" className="label">Artwork description</chakra.p>
         <div dangerouslySetInnerHTML={{__html: artwork.description}} />
       </Box>
+
+      {/* ======== BOX: Artwork purchase  ======== */}
+      {artwork.arObjects[0].askPrice&&
+        <Box
+          className="artworkPurchase"
+          borderBottom="1px solid white"
+          p="6"
+          position="relative"
+        >
+          <CornerButton label="Buy" onClick=""/>
+          <chakra.p textStyle="subtitle" mb="10" sx={{svg:{display: "inline-block"}}}>
+            <LogoXDAI width="30px" height="20px" viewBox="40 0 150 150"/>{artwork.arObjects[0].askPrice} xDai
+          </chakra.p>
+          {/* ======== TODO: Edition number  ======== */}
+          <chakra.p mb="0 !important" textStyle="label" className="label">Edition <chakra.span fontWeight="300" pl="1rem">3/{object.editionOf}</chakra.span></chakra.p>
+        </Box>
+      }
 
 
       {/* ======== BOX: Artist further link  ======== */}
