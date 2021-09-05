@@ -57,9 +57,6 @@ export const Artwork = objectType({
     t.float("lat");
     t.float("lng");
 
-    // TODO: make good use of this
-    t.boolean("isBanned");
-
     t.field("heroImage", {
       type: "Image",
     });
@@ -115,6 +112,12 @@ export const ArtworkQueries = extendType({
         let totalCount;
         let artworks;
         let where: Prisma.ArtworkWhereInput = args.where ?? {};
+
+        where = {
+          ...where,
+          isBanned: false,
+          public: true,
+        };
 
         if ((pRI?.fieldsByTypeName?.ArtworkQueryResult as any)?.totalCount) {
           totalCount = await daoArtworkQueryCount(args.where);
@@ -224,6 +227,8 @@ export const ArtworkQueries = extendType({
         let include = {};
         let where: Prisma.ArtworkWhereInput = {
           key: args.key,
+          isBanned: false,
+          public: true,
           status: {
             in: [
               ArtworkStatusEnum.PUBLISHED,
@@ -302,7 +307,7 @@ export const ArtworkQueries = extendType({
                   ],
                 },
               },
-            
+
               orderBy: {
                 orderNumber: "asc",
               },

@@ -37,6 +37,7 @@ export enum ArObjectStatusEnum {
   DELETED,
   AUTODRAFT,
   MINT,
+  MINTSIGNATUREREQUIRED,
 }
 
 export enum ArModelStatusEnum {
