@@ -1,6 +1,6 @@
 {
   "name": "@openar/crypto",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "contributors": [
     {
@@ -20,10 +20,9 @@
     "@ethersproject/bytes": "^5.4.0",
     "@ethersproject/contracts": "^5.4.1",
     "@ethersproject/providers": "^5.4.5",
-    "@openar/contracts": "npm:contracts@^0.1.0",
+    "@openar/contracts": "^1.0.0",
     "axios": "^0.21.1",
     "eth-sig-util": "^3.0.1",
-    "ethereumjs-util": "^7.1.0",
     "ethers": "^5.4.6",
     "ipfs-http-client": "^52.0.2",
     "sjcl": "^1.0.8",
@@ -33,6 +32,7 @@
   "devDependencies": {
     "@types/eth-sig-util": "^2.1.1",
     "@types/ethereumjs-util": "^6.1.0",
-    "@types/sjcl": "^1.0.30"
+    "@types/sjcl": "^1.0.30",
+    "ethereumjs-util": "^5.2.1"
   }
 }

@@ -15,8 +15,8 @@
   "scripts": {},
   "dependencies": {
     "@ladjs/graceful": "^1.0.5",
-    "@openar/contracts": "^0.1.0",
-    "@openar/crypto": "^0.1.0",
+    "@openar/contracts": "^1.0.0",
+    "@openar/crypto": "^1.0.0",
     "@prisma/client": "^2.29.0",
     "apollo-server-core": "^3.0.0",
     "apollo-server-express": "^3.0.0",

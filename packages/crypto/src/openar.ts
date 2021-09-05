@@ -11,7 +11,7 @@ import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
 import { ContractTransaction } from "@ethersproject/contracts";
 import { Provider } from "@ethersproject/providers";
 import { Signer } from "@ethersproject/abstract-signer";
-import { Market, MarketFactory, Media, MediaFactory } from "@openar/contracts";
+import { MarketFactory, MediaFactory } from "@openar/contracts";
 import { addresses } from "./addresses";
 
 import {
@@ -34,9 +34,9 @@ export class OpenAR {
 
   public signerOrProvider: Signer | Provider;
 
-  public media: Media;
+  public media: ReturnType<typeof MediaFactory>;
 
-  public market: Market;
+  public market: ReturnType<typeof MarketFactory>;
 
   public readOnly: boolean;
 
@@ -580,7 +580,7 @@ export class OpenAR {
       version: "1",
       chainId: chainId,
       verifyingContract: this.mediaAddress,
-    };uxed
+    };
   }
 
   /**

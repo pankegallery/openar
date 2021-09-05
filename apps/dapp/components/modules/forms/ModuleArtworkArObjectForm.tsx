@@ -3,9 +3,17 @@ import { useEffect, useState } from "react";
 import { useWeb3React, UnsupportedChainIdError } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
 
-import { OpenAR, addresses } from "@openar/crypto";
+import {
+  OpenAR,
+  addresses,
+  generateMintArObjectSignMessageData,
+  recoverSignatureFromMintArObject,
+  Decimal,
+  sha256FromBuffer,
+  createEIP712Signature,
+} from "@openar/crypto";
 import { MediaFactory } from "@openar/contracts";
-
+import {recoverTypedSignature_v4} from "eth-sig-util";
 import {
   arModelDeleteMutationGQL,
   imageDeleteMutationGQL,
@@ -74,13 +82,14 @@ export const ModuleArtworkArObjectForm = ({
   const [signatureError, setSignatureError] = useState<string | undefined>(
     undefined
   );
+  const [awaitingSignature, setAwaitingSignature] = useState(false);
 
   const { library, chainId, account, active, error, connector } =
     useWeb3React<Web3Provider>();
 
-  const { watch, register, setValue } = useFormContext();
+  const { watch, register, setValue, getValues } = useFormContext();
 
-  const currentStatus = data?.arObjectReadOwn?.status;
+  const currentStatus = arObjectReadOwn?.status;
 
   const statusOptions = [
     {
@@ -120,6 +129,7 @@ export const ModuleArtworkArObjectForm = ({
     setValue("mintSignature", "", {
       shouldDirty: true,
     });
+    setAwaitingSignature(false);
     mintDisclosure.onClose();
   };
   // TODO: https://github.com/MetaMask/test-dapp/blob/main/src/index.js
@@ -127,6 +137,7 @@ export const ModuleArtworkArObjectForm = ({
   // https://stackoverflow.com/questions/46611117/how-to-authenticate-and-send-contract-method-using-web3-js-1-0
   useEffect(() => {
     if (
+      !awaitingSignature &&
       mintObject &&
       mintSignature.trim() === "" &&
       account &&
@@ -134,6 +145,7 @@ export const ModuleArtworkArObjectForm = ({
       library.provider
     ) {
       mintDisclosure.onOpen();
+      setAwaitingSignature(true);
 
       console.log(library.getSigner(account));
       const openAR = new OpenAR(
@@ -144,18 +156,116 @@ export const ModuleArtworkArObjectForm = ({
       );
 
       console.log("network:", library.network);
-
+      console.log("addresses: ", addresses.development);
       const test = async () => {
-        try {
-          console.log("test");
-          const tx1 = await openAR.media.marketContract();
-          console.log("test2", tx1);
-          const tx2 = await openAR.fetchTotalMedia();
-          // console.log(tx);
-          console.log("test3", tx2);
-        } catch (err) {
-          console.log(err);
-        }
+        // try {
+        //   console.log("test");
+        //   const tx1 = await openAR.media.marketContract();
+        //   console.log("test2", tx1);
+        //   const tx2 = await openAR.fetchTotalMedia();
+        //   // console.log(tx);
+        //   console.log("test3", tx2);
+        // } catch (err) {
+        //   console.log(err);
+        // }
+
+        const name = await openAR.media.name();
+        console.log(name);
+
+        const timeStamp = new Date().getTime();
+        const deadline = Math.floor(new Date().getTime() / 1000) + 60 * 60 * 24; // 24 hours
+
+        const keyHash = sha256FromBuffer(Buffer.from(arObjectReadOwn?.key));
+
+        const messageData = generateMintArObjectSignMessageData(
+          keyHash,
+          Decimal.new(getValues("editionOf")).value,
+          true,
+          Decimal.new(getValues("askPrice")).value,
+          timeStamp,
+          deadline,
+          openAR.eip712Domain()
+        );
+
+        console.log(messageData);
+        console.log(JSON.stringify(messageData));
+        const msgParams = JSON.stringify(messageData);
+
+        console.log(msgParams);
+
+        var params = [account, msgParams];
+
+        console.log(params);
+        library
+          .send("eth_signTypedData_v4", params)
+          .then((signature) => {
+            console.log(signature);
+            console.log(account);
+
+            // const recovered = recoverTypedSignature_v4({
+            //   data: JSON.parse(msgParams),
+            //   sig: result.result,
+            // });
+            
+            // https://programtheblockchain.com/posts/2018/02/17/signing-and-verifying-messages-in-ethereum/
+
+            console.log(createEIP712Signature(signature, deadline));
+
+            let signature2 = signature.split('x')[1];
+            console.log("length: ", signature.length);
+            var r2 = new Buffer(signature2.substring(0, 64), 'hex')
+            var s2 = new Buffer(signature2.substring(64, 128), 'hex')
+            var v2 = new Buffer((parseInt(signature2.substring(128, 130)) + 27).toString());
+            
+            console.log('V,R,S at client -'+v2,r2,s2); 
+
+            recoverSignatureFromMintArObject(
+              keyHash,
+              Decimal.new(getValues("editionOf")).value,
+              true,
+              Decimal.new(getValues("askPrice")).value,
+              timeStamp,
+              deadline,
+              openAR.eip712Domain(),
+              signature
+            ).then((recovered) => console.log("RRRR: ", recovered)).catch((err) => console.log(err))
+
+
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+          
+        // .sendAsync(
+        //   {
+        //     method,
+        //     params,
+        //     from,
+        //   },
+        //   function (err, result) {
+        //     if (err) return console.dir(err);
+        //     if (result.error) {
+        //       alert(result.error.message);
+        //     }
+        //     if (result.error) return console.error('ERROR', result);
+        //     console.log('TYPED SIGNED:' + JSON.stringify(result.result));
+
+        //     const recovered = sigUtil.recoverTypedSignature_v4({
+        //       data: JSON.parse(msgParams),
+        //       sig: result.result,
+        //     });
+
+        //     if (
+        //       ethUtil.toChecksumAddress(recovered) === ethUtil.toChecksumAddress(from)
+        //     ) {
+        //       alert('Successfully recovered signer as ' + from);
+        //     } else {
+        //       alert(
+        //         'Failed to verify signer when comparing ' + result + ' to ' + from
+        //       );
+        //     }
+        //   }
+        // );
       };
 
       test();

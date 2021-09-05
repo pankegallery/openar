@@ -1,4 +1,4 @@
-import { Wallet, BigNumber } from "ethers";
+import { Wallet, BigNumber, BigNumberish } from "ethers";
 import sjcl from "sjcl";
 import warning from "tiny-warning";
 import invariant from "tiny-invariant";
@@ -12,7 +12,11 @@ import {
 } from "@ethersproject/bytes";
 import axios from "axios";
 
-import { recoverTypedSignature, signTypedData_v4 } from "eth-sig-util";
+import {
+  recoverTypedSignature,
+  signTypedData_v4,
+  recoverTypedSignature_v4,
+} from "eth-sig-util";
 
 import { fromRpcSig, toRpcSig } from "ethereumjs-util";
 
@@ -93,6 +97,27 @@ export const openARConstructBidShares = (
     creator: decimalCreator,
     owner: decimalOwner,
     prevOwner: decimalPrevOwner,
+  };
+};
+
+export const createEIP712Signature = (
+  signature: string,
+  deadline: BigNumberish
+): EIP712Signature => {
+  invariant(typeof signature === "string", "Signature needs to be a string");
+  invariant(signature.length === 132, "Signature length needs to be 132");
+
+  const r = Buffer.from(signature.substring(2, 66), "hex");
+  const s = Buffer.from(signature.substring(66, 130), "hex");
+  // const r = signature.substring(2, 66);
+  // const s = signature.substring(66, 130);
+  const v = parseInt(signature.substring(130, 132)) + 27;
+
+  return {
+    deadline,
+    v,
+    r,
+    s,
   };
 };
 
@@ -190,115 +215,6 @@ export const recoverSignatureFromMintWithSig = async (
   return recovered;
 };
 
-/*
- * Signs a openAR MintArObject Payload by EIP-712
- *
- * @param owner
- * @param contentHash
- * @param metadataHash
- * @param creatorShareBN
- * @param nonce (use UNIX timestamp)
- * @param deadline
- * @param domain
- */
-export const generateMintArObjectSignMessageData = (
-  key: string,
-  editionOf: number,
-  setInitialAsk: boolean,
-  initialAskBN: BigNumber,
-  creatorShareBN: BigNumber,
-  nonce: number,
-  deadline: number,
-  domain: EIP712Domain
-) => {
-  const initialAsk = initialAskBN.toString();
-  const creatorShare = creatorShareBN.toString();
-
-  return {
-    types: {
-      EIP712Domain: [
-        { name: "name", type: "string" },
-        { name: "version", type: "string" },
-        { name: "chainId", type: "uint256" },
-        { name: "verifyingContract", type: "address" },
-      ],
-      MintArObject: [
-        { name: "key", type: "string" },
-        { name: "editionOf", type: "uint256" },
-        { name: "setInitialAsk", type: "bool" },
-        { name: "initialAsk", type: "uint256" },
-        { name: "creatorShare", type: "uint256" },
-        { name: "nonce", type: "uint256" },
-        { name: "deadline", type: "uint256" },
-      ],
-    },
-    primaryType: "MintArObject" as "MintArObject" | "EIP712Domain",
-    domain,
-    message: {
-      key,
-      editionOf,
-      setInitialAsk,
-      initialAsk,
-      creatorShare,
-      nonce,
-      deadline,
-    },
-  };
-};
-
-export const recoverSignatureFromMintArObject = async (
-  keyHash: string,
-  editionOf: number,
-  setInitialAsk: boolean,
-  initialAskBN: BigNumber,
-  creatorShareBN: BigNumber,
-  nonce: number,
-  deadline: number,
-  domain: EIP712Domain,
-  eipSig: EIP712Signature
-) => {
-  const r = arrayify(eipSig.r);
-  const s = arrayify(eipSig.s);
-
-  const initialAsk = initialAskBN.toString();
-  const creatorShare = creatorShareBN.toString();
-
-  const recovered = recoverTypedSignature({
-    data: {
-      types: {
-        EIP712Domain: [
-          { name: "name", type: "string" },
-          { name: "version", type: "string" },
-          { name: "chainId", type: "uint256" },
-          { name: "verifyingContract", type: "address" },
-        ],
-        MintArObject: [
-          { name: "key", type: "string" },
-          { name: "editionOf", type: "uint256" },
-          { name: "setInitialAsk", type: "bool" },
-          { name: "initialAsk", type: "uint256" },
-          { name: "creatorShare", type: "uint256" },
-          { name: "nonce", type: "uint256" },
-          { name: "deadline", type: "uint256" },
-        ],
-      },
-      primaryType: "MintArObject",
-      domain: domain,
-      message: {
-        keyHash,
-        editionOf,
-        setInitialAsk,
-        initialAsk,
-        creatorShare,
-        nonce,
-        deadline,
-      },
-    },
-    sig: toRpcSig(eipSig.v, Buffer.from(r), Buffer.from(s)),
-  });
-  return recovered;
-};
-
 /**
  * Signs a openAR MintWithSig Message as specified by EIP-712
  *
@@ -349,6 +265,137 @@ export const signMintWithSigMessageFromWallet = async (
         deadline: deadline.toString(),
       });
     } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      reject(e);
+    }
+  });
+};
+
+/*
+ * Signs a openAR MintArObject Payload by EIP-712
+ *
+ * @param owner
+ * @param contentHash
+ * @param metadataHash
+ * @param creatorShareBN
+ * @param nonce (use UNIX timestamp)
+ * @param deadline
+ * @param domain
+ */
+export const generateMintArObjectSignMessageData = (
+  keyHash: BytesLike,
+  editionOfBN: BigNumber,
+  setInitialAsk: boolean,
+  initialAskBN: BigNumber,
+  nonce: number,
+  deadline: number,
+  domain: EIP712Domain
+) => {
+  const editionOf = editionOfBN.toString();
+  const initialAsk = initialAskBN.toString();
+
+  return {
+    types: {
+      EIP712Domain: [
+        { name: "name", type: "string" },
+        { name: "version", type: "string" },
+        { name: "chainId", type: "uint256" },
+        { name: "verifyingContract", type: "address" },
+      ],
+      MintArObject: [
+        { name: "keyHash", type: "bytes32" },
+        { name: "editionOf", type: "uint256" },
+        { name: "setInitialAsk", type: "bool" },
+        { name: "initialAsk", type: "uint256" },
+        { name: "nonce", type: "uint256" },
+        { name: "deadline", type: "uint256" },
+      ],
+    },
+    primaryType: "MintArObject" as "MintArObject" | "EIP712Domain",
+    domain,
+    message: {
+      keyHash,
+      editionOf,
+      setInitialAsk,
+      initialAsk,
+      nonce,
+      deadline,
+    },
+  };
+};
+
+export const recoverSignatureFromMintArObject = async (
+  keyHash: BytesLike,
+  editionOfBN: BigNumber,
+  setInitialAsk: boolean,
+  initialAskBN: BigNumber,
+  nonce: number,
+  deadline: number,
+  domain: EIP712Domain,
+  sig: string
+) => {
+  const recovered = recoverTypedSignature_v4({
+    data: generateMintArObjectSignMessageData(
+      keyHash,
+      editionOfBN,
+      setInitialAsk,
+      initialAskBN,
+      nonce,
+      deadline,
+      domain
+    ),
+    sig: sig,
+  });
+
+  return recovered;
+};
+
+/**
+ * Signs a openAR MintWithSig Message as specified by EIP-712
+ *
+ * @param owner
+ * @param contentHash
+ * @param metadataHash
+ * @param nonce
+ * @param deadline
+ * @param domain
+ */
+export const signMintArObjectMessageFromWallet = async (
+  owner: Wallet,
+  keyHash: BytesLike,
+  editionOfBN: BigNumber,
+  setInitialAsk: boolean,
+  initialAskBN: BigNumber,
+  nonce: number,
+  deadline: number,
+  domain: EIP712Domain
+): Promise<EIP712Signature> => {
+  return new Promise<EIP712Signature>((res, reject) => {
+    try {
+      const sig = signTypedData_v4(
+        Buffer.from(owner.privateKey.slice(2), "hex"),
+        {
+          data: generateMintArObjectSignMessageData(
+            keyHash,
+            editionOfBN,
+            setInitialAsk,
+            initialAskBN,
+            nonce,
+            deadline,
+            domain
+          ),
+        }
+      );
+      const response = fromRpcSig(sig);
+      res({
+        r: response.r,
+        s: response.s,
+        v: response.v,
+        deadline: deadline.toString(),
+      });
+    } catch (e) {
+      // eslint-disable-next-line no-console
       console.error(e);
       reject(e);
     }
@@ -362,26 +409,17 @@ export const signMintWithSigMessageFromWallet = async (
  */
 export function chainIdToNetworkName(chainId: number): string {
   switch (chainId) {
-    case 80001: {
-      return "polygonMumbai";
-    }
-    case 137: {
-      return "polygon";
+    case 1337: {
+      return "localhost";
     }
     case 100: {
       return "xDai";
-    }
-    case 4: {
-      return "rinkeby";
-    }
-    case 1: {
-      return "mainnet";
     }
   }
 
   invariant(
     false,
-    `chainId ${chainId} not officially supported by the Zora Protocol`
+    `chainId ${chainId} not officially supported by the openAR Protocol`
   );
 }
 
