@@ -21,11 +21,11 @@ export const TextErrorMessage = ({
 
   if (!message || message.trim().length === 0) return null;
 
-  // make sure first character is uppder case
+  // make sure first character is upper case
   message = message.charAt(0).toUpperCase() + message.slice(1);
 
   return (
-    <Text pb="4" color="red.400">
+    <Text pb="4" color="openar.error">
       {message}
     </Text>
   );

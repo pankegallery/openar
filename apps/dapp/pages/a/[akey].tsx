@@ -44,7 +44,8 @@ export const Artwork = ({ artwork }: { artwork: any }) => {
 
     const [urlGlb, urlUsdz] = arObject?.arModels.reduce(
       (acc: string[], model: any) => {
-        if (model.type === "glb") return [model?.meta?.originalFileUrl, acc[1]];
+        if (model.type === "glb")
+          return [model?.meta?.originalFileUrl, acc[1]];
 
         if (model.type === "usdz")
           return [acc[0], model?.meta?.originalFileUrl];

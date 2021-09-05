@@ -205,7 +205,7 @@ const Update = () => {
                   lineHeight="3rem"
                   px="3"
                   borderBottom="1px solid #fff"
-                  color="red.400"
+                  color="openar.error"
                 >
                   Unfortunately, we could not save your artwork. Please try
                   again in a little bit.

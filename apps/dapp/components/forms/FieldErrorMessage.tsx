@@ -1,9 +1,12 @@
 import React from "react";
-import { FormErrorMessage } from "@chakra-ui/react";
+import { FormErrorMessage, FormErrorIcon } from "@chakra-ui/react";
 type TypeErrorMessage = {
   key: string;
   values: object;
 };
+
+import { RiAlertFill } from "react-icons/hi";
+
 
 export const FieldErrorMessage = ({
   error,
@@ -23,7 +26,23 @@ export const FieldErrorMessage = ({
   // make sure first character is uppder case
   message = message.charAt(0).toUpperCase() + message.slice(1);
 
-  return <FormErrorMessage mt="0.5">{message}</FormErrorMessage>;
+  return <>
+      <FormErrorIcon
+        icon={<RiAlertFill />}
+        mr="2"
+        color="openar.error"
+        fontSize="xs"/>
+      <FormErrorMessage
+            mt="0"
+            color="openar.error"
+            fontSize="xs"
+            textTransform="uppercase"
+            letterSpacing="0.02em"
+            fontWeight="700"
+            display="inline-block"
+            errorIcon='alert'
+         >{message}</FormErrorMessage>
+    </>;
 };
 
 export default FieldErrorMessage;

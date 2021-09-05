@@ -74,9 +74,9 @@ const acceptStyle = {
 };
 
 const rejectStyle = {
-  bg: "red.400",
+  bg: "openar.error",
   _hover: {
-    bg: "red.400",
+    bg: "openar.error",
   },
 };
 

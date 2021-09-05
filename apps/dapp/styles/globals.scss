@@ -125,8 +125,7 @@ a {
     &.basic {
       .ProseMirror p.is-editor-empty:first-child::before,
       .ProseMirror p.is-empty::before {
-        color: var(--chakra-colors-red-400);
-        
+        color: var(--chakra-colors-openar-error);
       }
 
     }
@@ -161,7 +160,8 @@ a {
 .ProseMirror p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
   float: left;
-  color: var(--chakra-colors-gray-200);
+  opacity: 0.6;
+  color: white;
   pointer-events: none;
   height: 0;
 }
@@ -206,7 +206,7 @@ a {
   .info {
     width: 33.333%;
     height: calc(66.66vw - var(--sbw));
-    padding: 0.5rem;
+//    padding: 0.5rem;
     writing-mode:vertical-rl;
     transform: rotate(180deg);
     a::before {
@@ -314,3 +314,11 @@ a {
 //width: 200%;
 //height: 234%;
 //}
+
+// Styled mainly return of in FieldErrorMessage.tsx
+
+.chakra-form__error-message{
+    &:before {
+
+    }
+}

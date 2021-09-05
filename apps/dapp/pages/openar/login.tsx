@@ -51,7 +51,7 @@ const OpenARLogin = () => {
           Hello, you&#39;re now connected with your wallet, to fully login please sign the login request using the button below.
           </Text>
 
-          {walletLoginError && <Text color="red.400">{walletLoginError}</Text>}
+          {walletLoginError && <Text color="openar.error">{walletLoginError}</Text>}
           <Button
             mt="4"
             isLoading={isLoggingIn && !walletLoginError}

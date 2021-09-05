@@ -95,7 +95,7 @@ const EditorMenuBarButton = ({
     sx={
       isFlashing
         ? {
-            color: "var(--chakra-colors-red-500) !important",
+            color: "var(--chakra-colors-openar.error) !important",
           }
         : {}
     }

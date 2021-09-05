@@ -84,9 +84,9 @@ const acceptStyle = {
 };
 
 const rejectStyle = {
-  bg: "red.400",
+  bg: "openar.error",
   _hover: {
-    bg: "red.400",
+    bg: "openar.error",
   },
 };
 
@@ -388,7 +388,7 @@ export const FieldModelUploader = ({
           </Box>
         )}
         {isDeleteError && (
-          <Text fontSize="sm" mt="0.5" color="red.500">
+          <Text fontSize="sm" mt="0.5" color="openar.error">
             Unfortunately, we could not process you deletion request please try
             again later
           </Text>
@@ -472,7 +472,7 @@ export const FieldModelUploader = ({
           </>
         )}
         {isUploadError && (
-          <Text fontSize="sm" mt="0.5" color="red.500">
+          <Text fontSize="sm" mt="0.5" color="openar.error">
             Unfortunately, we could not finish you upload please try again later
           </Text>
         )}
