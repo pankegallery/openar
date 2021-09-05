@@ -15,6 +15,11 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
 
   /* --------- COL: Artwork details) --------- */
 
+  let videoPlayer;
+
+  if (artwork.video && artwork.video.trim().lenght > 0)
+    videoPlayer = <EmbeddedVideoPlayer url={artwork.video} />
+
   return(
 
     <Flex
@@ -63,7 +68,7 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
         </Box>
 
         {/* ======== BOX: Artwork purchase  ======== */}
-        {object.askPrice&&
+        {artwork.askPrice&&
           <Box
             className="artworkPurchase"
             borderBottom="1px solid white"
@@ -120,7 +125,7 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
 
 
         {/* ======== BOX: Artwork video  ======== */}
-        {artwork.video&&
+        { videoPlayer &&
           <Box
             className="artworkVideo"
             borderBottom="1px solid white"
@@ -134,7 +139,7 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
             }}
           >
             <chakra.p textStyle="label" className="label">Artwork video</chakra.p>
-            <EmbeddedVideoPlayer url={artwork.video} />
+            
           </Box>
         }
 
