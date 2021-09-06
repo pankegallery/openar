@@ -9,9 +9,11 @@ import {
   generateMintArObjectSignMessageData,
   recoverSignatureFromMintArObject,
   Decimal,
-  sha256FromBuffer
+  sha256FromBuffer,
+  createEIP712Signature,
 } from "@openar/crypto";
-
+import { MediaFactory } from "@openar/contracts";
+import {recoverTypedSignature_v4} from "eth-sig-util";
 import {
   arModelDeleteMutationGQL,
   imageDeleteMutationGQL,
@@ -423,6 +425,36 @@ export const ModuleArtworkArObjectForm = ({
           </FieldRow>
           <FieldRow>
             <FieldInput
+              name="askPrice"
+              id="askPrice"
+              type="askPrice"
+              label="Initial ask price"
+              isRequired={
+                yupIsFieldRequired("askPrice", validationSchema) || mintObject
+              }
+              settings={{
+                // defaultValue: data.abc.key
+                placeholder: "How much would you ask for on the first sales",
+              }}
+            />
+          </FieldRow>
+          <FieldRow>
+            <FieldInput
+              name="editionOf"
+              id="editionOf"
+              type="editionOf"
+              label="Editon of"
+              isRequired={
+                yupIsFieldRequired("editionOf", validationSchema) || mintObject
+              }
+              settings={{
+                // defaultValue: data.abc.key
+                placeholder: "How many NFTs of this object should be minted?",
+              }}
+            />
+          </FieldRow>
+          <FieldRow>
+            <FieldInput
               name="orderNumber"
               id="orderNumber"
               type="orderNumber"
@@ -434,9 +466,64 @@ export const ModuleArtworkArObjectForm = ({
               }}
             />
           </FieldRow>
+
+          <FieldRow>
+            <Box borderBottom="1px solid #fff">
+              <Box px="3" pt="3" fontSize="sm">
+                Some info about the minting process... In sem urna, aliquam
+                vel consectetur sit amet, pulvinar sit amet lectus. Quisque
+                molestie dapibus libero non pellentesque. Vivamus quam arcu,
+                dictum quis hendrerit eget, lobortis eu felis. Nulla felis
+                velit, ornare ac porttitor ut, rhoncus eu ipsum. Donec auctor
+                efficitur est vel congue.
+              </Box>
+              <FieldSwitch
+                defaultChecked={mintObject}
+                name="mintObject"
+                label="Mint object"
+                colorScheme="red"
+                isChecked={mintObject}
+              ></FieldSwitch>
+
+              <input type="hidden" {...register("mintSignature")} />
+
+              {mintObject && mintSignature && mintSignature.trim() && (
+                <Box px="3" pb="3" color="gray.500" fontSize="xs">
+                  Signature: {mintSignature}
+                </Box>
+              )}
+            </Box>
+          </FieldRow>
           
-         
-          
+          {action === "update" && (
+            <FieldRow>
+              <Box borderBottom="1px solid #fff">
+                <Box px="3" pt="3" fontSize="sm">
+                  Some info about the minting process... In sem urna, aliquam
+                  vel consectetur sit amet, pulvinar sit amet lectus. Quisque
+                  molestie dapibus libero non pellentesque. Vivamus quam arcu,
+                  dictum quis hendrerit eget, lobortis eu felis. Nulla felis
+                  velit, ornare ac porttitor ut, rhoncus eu ipsum. Donec auctor
+                  efficitur est vel congue.
+                </Box>
+                <FieldSwitch
+                  defaultChecked={mintObject}
+                  name="mintObject"
+                  label="Mint object"
+                  colorScheme="red"
+                  isChecked={mintObject}
+                ></FieldSwitch>
+
+                <input type="hidden" {...register("mintSignature")} />
+
+                {mintObject && mintSignature && mintSignature.trim() && (
+                  <Box px="3" pb="3" color="gray.500" fontSize="xs">
+                    Signature: {mintSignature}
+                  </Box>
+                )}
+              </Box>
+            </FieldRow>
+          )}
         </Box>
         <Box
           w={{ base: "50%", t: "auto" }}

@@ -21,9 +21,7 @@ import {
   ButtonListElement,
 } from "~/components/modules";
 
-import {
-  filteredOutputByWhitelist
-} from "~/utils";
+import { filteredOutputByWhitelist, ArtworkStatusEnum } from "~/utils";
 
 // TODO
 export const artworkReadOwnQueryGQL = gql`
@@ -55,7 +53,6 @@ export const artworkReadOwnQueryGQL = gql`
           meta
           status
         }
-
       }
       # files {
       # }
@@ -64,7 +61,7 @@ export const artworkReadOwnQueryGQL = gql`
         meta
         status
       }
-    }
+    } 
   }
 `;
 
@@ -74,7 +71,7 @@ const Update = () => {
   const [appUser] = useAuthentication();
   const successToast = useSuccessfullySavedToast();
   const [disableNavigation, setDisableNavigation] = useState(false);
-  const [isNavigatingAway, setIsNavigatingAway] = useState(false)
+  const [isNavigatingAway, setIsNavigatingAway] = useState(false);
   const [activeUploadCounter, setActiveUploadCounter] = useState<number>(0);
 
   const [firstMutation, firstMutationResults] = useArtworkUpdateMutation();
@@ -86,33 +83,34 @@ const Update = () => {
     mode: "onTouched",
     resolver: yupResolver(ModuleArtworkUpdateSchema),
     defaultValues: {
-      dates: [],
+      status: ArtworkStatusEnum.DRAFT,
     },
   });
   const {
     handleSubmit,
     reset,
     clearErrors,
+    setValue,
     formState: { isSubmitting, isDirty },
   } = formMethods;
 
-  const { data, loading, error } = useQuery(
-    artworkReadOwnQueryGQL,
-    {
-      variables: {
-        id: parseInt(router.query.aid as string, 10),
-      },
-    }
-  );
+  const { data, loading, error } = useQuery(artworkReadOwnQueryGQL, {
+    variables: {
+      id: parseInt(router.query.aid as string, 10),
+    },
+  });
 
   useEffect(() => {
     if (!data || !data.artworkReadOwn) return;
 
     reset({
-      ...filteredOutputByWhitelist(
-        data.artworkReadOwn,
-        ["title", "description", "url", "video", "status", "key"]
-      )
+      ...filteredOutputByWhitelist(data.artworkReadOwn, [
+        "title",
+        "description",
+        "url",
+        "video",
+        "status",
+      ]),
     });
   }, [reset, data]);
 
@@ -126,25 +124,28 @@ const Update = () => {
         const { data, errors } = await firstMutation(
           parseInt(router.query.aid as string),
           {
-          title: newData.title,
-          description: newData.description,
-          video: newData.video ?? "",
-          url: newData.url ?? "",
-          status: newData.status ?? "",
-          key: newData.key ?? "",
+            title: newData.title,
+            description: newData.description,
+            video: newData.video ?? "",
+            url: newData.url ?? "",
+            status: newData.status ?? ArtworkStatusEnum.DRAFT,
+            key: newData.key ?? "",
 
-          creator: {
-            connect: {
-              id: appUser.id,
+            creator: {
+              connect: {
+                id: appUser.id,
+              },
             },
-          },
-        });
+          }
+        );
 
         if (!errors) {
           clearErrors();
           successToast();
           setIsNavigatingAway(true);
-          router.push(`${moduleConfig.rootPath}/${data?.artworkUpdate?.id}/update`);          
+          router.push(
+            `${moduleConfig.rootPath}/${data?.artworkUpdate?.id}/update`
+          );
         } else {
           setIsFormError(true);
         }
@@ -167,8 +168,8 @@ const Update = () => {
     },
   ];
 
-  // TODO: this makes some trouble on SSR as the buttons look differently 
-  // as the user can't do thing on the server 
+  // TODO: this makes some trouble on SSR as the buttons look differently
+  // as the user can't do thing on the server
   const buttonList: ButtonListElement[] = [
     {
       type: "back",
@@ -178,9 +179,30 @@ const Update = () => {
       userCan: "artworkReadOwn",
     },
     {
-      type: "submit",
+      type: "button",
       isLoading: isSubmitting,
-      label: "Update",
+      onClick: () => {
+        setValue("status", ArtworkStatusEnum.DRAFT);
+        handleSubmit(onSubmit)();
+      },
+      label:
+        data?.artworkReadOwn?.status === ArtworkStatusEnum.DRAFT
+          ? "Save draft"
+          : "Unpublish",
+      isDisabled: disableNavigation || activeUploadCounter > 0,
+      userCan: "artworkUpdateOwn",
+    },
+    {
+      type: "button",
+      isLoading: isSubmitting,
+      onClick: () => {
+        setValue("status", ArtworkStatusEnum.PUBLISHED);
+        handleSubmit(onSubmit)();
+      },
+      label:
+        data?.artworkReadOwn?.status === ArtworkStatusEnum.PUBLISHED
+          ? "Save"
+          : "Publish",
       isDisabled: disableNavigation || activeUploadCounter > 0,
       userCan: "artworkUpdateOwn",
     },
@@ -188,16 +210,19 @@ const Update = () => {
 
   return (
     <>
-      <FormNavigationBlock shouldBlock={!isNavigatingAway && ((isDirty && !isSubmitting) || activeUploadCounter > 0)} />
+      <FormNavigationBlock
+        shouldBlock={
+          !isNavigatingAway &&
+          ((isDirty && !isSubmitting) || activeUploadCounter > 0)
+        }
+      />
       <FormProvider {...formMethods}>
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={disableForm}>
             <ModuleSubNav breadcrumb={breadcrumb} buttonList={buttonList} />
             <ModulePage
               isLoading={loading}
-              isError={
-                !!error || (!error && !loading && !data?.artworkReadOwn)
-              }
+              isError={!!error || (!error && !loading && !data?.artworkReadOwn)}
             >
               {isFormError && (
                 <Text

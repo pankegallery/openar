@@ -1,4 +1,4 @@
-import { string, object, number, mixed, boolean } from "yup";
+import { string, object, number, boolean } from "yup";
 
 export const ModuleArtworkCreateSchema = object().shape({
   title: string().required(),
@@ -15,47 +15,21 @@ export const ModuleArtworkUpdateSchema = ModuleArtworkCreateSchema.concat(
 );
 
 export const ModuleArObjectCreateSchema = object().shape({
-  mintObject: boolean(),
   title: string().required(),
-
   description: string().html({ max: 500 }),
+
+  // TODO: remove order number 
+
   orderNumber: number()
     .transform((v, o) => (o === "" ? null : v))
     .nullable()
     .typeError("should be a number > 0"),
-    // TODO: ensure that this is a number that works with the contract
-  askPrice: number().when("mintObject", {
-    is: true, // alternatively: (isBig, isSpecial) => isBig && isSpecial
-    then: number()
-      .transform((v, o) => (o === "" ? null : v))
-      .typeError("should be a number > 0")
-      .required(),
-    otherwise: number()
-      .transform((v, o) => (o === "" ? null : v))
-      .nullable()
-      .typeError("should be a number > 0"),
-  }),
-  editionOf: number().when("mintObject", {
-    is: true, // alternatively: (isBig, isSpecial) => isBig && isSpecial
-    then: number()
-      .transform((v, o) => (o === "" ? null : v))
-      .typeError("should be a number > 0")
-      .min(1)
-      .max(100)
-      .required(),
-    otherwise: number()
-      .transform((v, o) => (o === "" ? null : v))
-      .nullable()
-      .typeError("should be a number > 0")
-      .min(1)
-      .max(100),
-  }),
+  
 });
 
 export const ModuleArObjectUpdateSchema = ModuleArObjectCreateSchema.concat(
   object().shape({
-    mintSignature: string(),
-    status: number().required().typeError("Please select the publish state"),
+    status: number().required(),
     heroImage: number()
       .required()
       .nullable()
@@ -71,15 +45,22 @@ export const ModuleArObjectUpdateSchema = ModuleArObjectCreateSchema.concat(
   })
 );
 
-
-export const ModuleArObjectMintableSchema = ModuleArObjectUpdateSchema.concat(
-  object().shape({
-    editionOf: number()
-        .transform((v, o) => (o === "" ? null : v))
-        .typeError("should be a number > 0")
-        .min(1)
-        .max(100)
-        .required()
-  })
-);
+export const ModuleArObjectMintableSchema = object().shape({
+  setAsk: boolean(),
+  askPrice: number().when("setAsk", {
+    is: true, 
+    then: number()
+      .transform((v, o) => (o === "" ? null : v))
+      .typeError("should be a number > 0")
+      .required(),
+    otherwise: number()
+      .nullable(),
+  }),
+  editionOf: number()
+      .transform((v, o) => (o === "" ? null : v))
+      .typeError("should be a number > 0")
+      .min(1)
+      .max(100)
+      .required(),  
+});
 

@@ -13,6 +13,7 @@ import { ModuleArtworkArObjectForm } from "~/components/modules/forms";
 import { ModuleArObjectUpdateSchema, ModuleArObjectMintableSchema } from "~/components/modules/validation";
 import { RestrictPageAccess } from "~/components/utils";
 import { BeatLoader } from "react-spinners";
+import pick from "lodash/pick";
 
 import { useAuthentication, useSuccessfullySavedToast } from "~/hooks";
 import { useArObjectUpdateMutation } from "~/hooks/mutations";
@@ -22,7 +23,7 @@ import {
   ButtonListElement,
 } from "~/components/modules";
 
-import { filteredOutputByWhitelist } from "~/utils";
+import { filteredOutputByWhitelist, ArObjectStatusEnum } from "~/utils";
 
 // TODO
 export const arObjectReadOwnQueryGQL = gql`
@@ -56,6 +57,7 @@ export const arObjectReadOwnQueryGQL = gql`
     artworkReadOwn(id: $aid) {
       id
       title
+      description
     }
   }
 `;
@@ -82,9 +84,10 @@ const Update = () => {
   const {
     handleSubmit,
     reset,
-    setError,
+    setValue,
+    getValues,
     watch,
-    formState: { isSubmitting, isDirty, isValid },
+    formState: { isSubmitting, isDirty, isSubmitSuccessful },
   } = formMethods;
 
   const { data, loading, error } = useQuery(arObjectReadOwnQueryGQL, {
@@ -102,10 +105,7 @@ const Update = () => {
         "title",
         "description",
         "orderNumber",
-        "editionOf",
-        "askPrice",
         "status",
-        "key",
       ]),
     });
   }, [reset, data]);
@@ -122,9 +122,8 @@ const Update = () => {
           {
             title: newData.title,
             description: newData.description,
-            editionOf: newData.editionOf ?? null,
+            // TODO: remove order number
             orderNumber: newData.orderNumber ?? null,
-            askPrice: newData.askPrice ?? null,
             status: newData.status ?? null,
             creator: {
               connect: {
@@ -137,7 +136,7 @@ const Update = () => {
         if (!errors) {
           successToast();
           setIsNavigatingAway(true);
-          router.push(`${moduleConfig.rootPath}/${router.query.aid}/update`);
+          router.push(`${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`);
         } else {
           setIsFormError(true);
         }
@@ -173,21 +172,31 @@ const Update = () => {
     },
   ];
 
-  const askPrice = watch("askPrice");
   useEffect(() => {
-    console.log(1);
-    if (isValid && askPrice && Number.isFinite(askPrice)) {
-      console.log(2);
-      setCouldMint(true);
-    } else {
-      console.log(3);
-      setCouldMint(false);
+    if (!data || !data.arObjectReadOwn) return;
+
+    const uploadedFiles = data.arObjectReadOwn?.arModels.reduce(
+      (acc, model) => ({
+        ...acc,
+        [model.type]: pick(model, ["status", "meta", "id"]),
+      }),
+      {}
+    );
+
+    const checkValues = {
+      ...getValues(),
+      heroImage: data.arObjectReadOwn?.heroImage?.id,
+      modelGlb: uploadedFiles.glb.id,
+      modelUsdz: uploadedFiles.usdz.id
     }
 
-  }, [isValid, askPrice, setCouldMint])
-  console.log("Is Valid", isValid, askPrice, couldMint);
+    if (ModuleArObjectUpdateSchema.isValidSync(checkValues)) {
+      setCouldMint(true);
+    } else {
+      setCouldMint(false);
+    }
+  }, [setCouldMint, isSubmitSuccessful, getValues, data])
   
-
   // TODO: this makes some trouble on SSR as the buttons look differently
   // as the user can't do thing on the server
   const buttonList: ButtonListElement[] = [
@@ -199,16 +208,37 @@ const Update = () => {
       userCan: "artworkReadOwn",
     },
     {
-      type: "submit",
+      type: "button",
       isLoading: isSubmitting,
-      label: "Update",
+      onClick: () => {
+        setValue("status", ArObjectStatusEnum.DRAFT);
+        handleSubmit(onSubmit)();
+      },
+      label:
+        data?.arObjectReadOwn?.status === ArObjectStatusEnum.DRAFT
+          ? "Save draft"
+          : "Unpublish",
+      isDisabled: disableNavigation || activeUploadCounter > 0,
+      userCan: "artworkUpdateOwn",
+    },
+    {
+      type: "button",
+      isLoading: isSubmitting,
+      onClick: () => {
+        setValue("status", ArObjectStatusEnum.PUBLISHED);
+        handleSubmit(onSubmit)();
+      },
+      label:
+        data?.arObjectReadOwn?.status === ArObjectStatusEnum.PUBLISHED
+          ? "Save"
+          : "Publish",
       isDisabled: disableNavigation || activeUploadCounter > 0,
       userCan: "artworkUpdateOwn",
     },
     {
       type: "navigation",
       to: `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/mint`,
-      label: "Mint",
+      label: "Mint as NFT",
       isDisabled: !couldMint,
       userCan: "artworkUpdateOwn",
     },

@@ -56,6 +56,7 @@ export const arObjectReadOwnQueryGQL = gql`
     artworkReadOwn(id: $aid) {
       id
       title
+      description
     }
   }
 `;

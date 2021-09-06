@@ -1,19 +1,17 @@
 import { imageDeleteMutationGQL } from "~/graphql/mutations";
 
-import { AspectRatio, Box, Grid, Text } from "@chakra-ui/react";
+import { AspectRatio, Box, Grid } from "@chakra-ui/react";
 
 import {
   FieldInput,
   FieldRow,
   FieldTextEditor,
   FieldImageUploader,
-  FieldStatusSelect
 } from "~/components/forms";
 
 import { ModuleArtworkArObjectsList } from ".";
 
 import { yupIsFieldRequired } from "../validation";
-import { ArtworkStatusEnum } from "~/utils";
 
 export const ModuleArtworkForm = ({
   action,
@@ -35,18 +33,6 @@ export const ModuleArtworkForm = ({
   const columns = { base: "100%", t: "50% 50%" };
   const rows = { base: "auto 1fr", t: "1fr" };
 
-  const statusOptions = [
-    {
-      value: ArtworkStatusEnum.DRAFT,
-      label: "Draft",
-    },
-    {
-      value: ArtworkStatusEnum.PUBLISHED,
-      label: "Published",
-    },
-  ];
-
-
   return (
     <Grid
       templateColumns={columns}
@@ -67,7 +53,7 @@ export const ModuleArtworkForm = ({
             }}
           />
         </FieldRow>
-        
+        {/* TODO: remove key field */}
         {action === "update" && <FieldRow>
           <FieldInput
             name="key"
@@ -79,13 +65,6 @@ export const ModuleArtworkForm = ({
               // defaultValue: data.abc.key
               placeholder: "What is the url key of your?",
             }}
-          />
-        </FieldRow>}
-        {action === "update" && <FieldRow>
-          <FieldStatusSelect
-            statusEnum={ArtworkStatusEnum}
-            status={data?.artworkReadOwn?.status}
-            options={statusOptions}
           />
         </FieldRow>}
         <FieldRow>
