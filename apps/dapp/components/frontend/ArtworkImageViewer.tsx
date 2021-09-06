@@ -20,9 +20,9 @@ export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, objec
 
 //  const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
-  let urlUsdz = "";
-  let urlGlb = "";
-  let modelViewer = "";
+  let urlUsdz;
+  let urlGlb;
+  let modelViewer;
 
 
   const arObject = object ? object : artwork?.arObjects[0];
@@ -63,7 +63,7 @@ export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, objec
     <Button
       borderColor="openar.dark"
       color="openar.dark"
-      onlick=""
+      onClick={() => console.log("MAKE IT HAPPNE TODO: ")}
     >
       View in AR <BoxIcon viewBox="-10 -7 50 50" width="30px" height="25px"/>
     </Button>
@@ -72,10 +72,10 @@ export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, objec
   if (artwork.arObjects.length > 1) {
     // Single object view
     return(
-      <Box h="100%" w="calc(100% + calc(var(--chakra-space-6) * 2))" overflow="auto" mx="-6" mb="-6">
+      <Box w="calc(100% + calc(var(--chakra-space-6) * 2))" mx="-6" mb="-6" direction="column" >
         <Flex
           w="100%"
-          h="90%"
+          h="80vh"
           justifyContent="center"
           alignItems="center"
           direction="column"
@@ -113,7 +113,7 @@ export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, objec
 
                 // TODO: Create link (sometimes with object ID, sometimes not…)
                 return(
-                  <Link passhref href={obj.key}>
+                  <Link passHref href={obj.key} key={obj.key}>
                     <ApiImage
                       id={obj?.heroImage?.id}
                       meta={obj?.heroImage?.meta}
@@ -134,11 +134,11 @@ export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, objec
   } else{
     // Multile object view
     return(
-      <Box w="100%" justifyContent="center"
+      <Flex w="100%" h="100%" justifyContent="center"
         alignItems="center" direction="column">
         {modelViewer}
         {arButton}
-      </Box>
+      </Flex>
     );
   }
 

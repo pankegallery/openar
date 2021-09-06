@@ -22,12 +22,15 @@ export const RestrictPageAccess = (
     hocComponent.getLayout = AccessRestrictedComponent.getLayout
 
   hocComponent.getInitialProps = async (context) => {
+    
+    // TODO: is this safe? 
     let canPotentiallyReadPage = false;
+    
     if (context.req) {
       context.req.cookies = cookie.parse(context.req.headers['cookie'] ?? "");
-      if (context.req.cookies.refreshToken)
+      if (context.req.cookies.refreshToken || getAppUser())
         canPotentiallyReadPage = true;
-
+      
     } else {
       if (getAppUser())
         canPotentiallyReadPage = true;

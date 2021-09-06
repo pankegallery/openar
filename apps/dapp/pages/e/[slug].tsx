@@ -240,11 +240,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
               alignContent="flex-end"
             >
               <ExhibitionTitleTile
-                title={exhibition.title}
-                subtitle={exhibition.subtitle}
-                exSlug="openar-art"
-                dateBegin={exhibition.dateBegin}
-                dateEnd={exhibition.dateEnd}
+                exhibition={exhibition}
                 link={false}
               />
             </Flex>

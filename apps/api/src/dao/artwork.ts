@@ -26,8 +26,6 @@ export const daoArtworkQuery = async (
     take: Math.min(pageSize, apiConfig.db.maxPageSize),
   });
 
-  console.log(artworks);
-
   return filteredOutputByBlacklist(
     artworks,
     apiConfig.db.privateJSONDataKeys.artwork

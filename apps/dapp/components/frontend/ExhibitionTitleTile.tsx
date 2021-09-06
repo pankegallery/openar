@@ -1,4 +1,6 @@
 import React from "react";
+import Link from "next/link";
+
 import {
   Box,
   LinkBox,
@@ -8,24 +10,16 @@ import {
 } from "@chakra-ui/react";
 
 export const ExhibitionTitleTile = ({
-  title,
-  subtitle,
-  exSlug,
-  dateBegin,
-  dateEnd,
+  exhibition,
   titleTag="h1",
   link=true,
 }: {
-  title: string;
-  subtitle: string;
-  exSlug?: string;
-  dateBegin: any;
-  dateEnd: any;
+  exhibition: any;
   titleTag?: string;
   link?:boolean;
 }) => {
 
-  const href = `/e/${exSlug}/`;
+  const href = `/e/${exhibition?.slug}/`;
 
   if (link){
     return (
@@ -36,15 +30,15 @@ export const ExhibitionTitleTile = ({
         flexDirection="column"
       >
         <Heading as={(titleTag as any)} textStyle="worktitle" mt="auto" mb="2rem">
-          <LinkOverlay href={href} passHref>{title}</LinkOverlay>
+          <Link href={href} passHref><LinkOverlay>{exhibition?.title}</LinkOverlay></Link>
         </Heading>
         <chakra.p textStyle="subtitle" mb="1rem">
-          {subtitle}
+          {exhibition?.subtitle}
         </chakra.p>
         <chakra.p textStyle="workmeta">
-          {new Date(dateBegin).toLocaleDateString("de")}
+          {new Date(exhibition?.dateBegin).toLocaleDateString("de")}
           {" - "}
-          {new Date(dateEnd).toLocaleDateString("de")}
+          {new Date(exhibition?.dateEnd).toLocaleDateString("de")}
         </chakra.p>
       </LinkBox>
     );
@@ -57,15 +51,15 @@ export const ExhibitionTitleTile = ({
         flexDirection="column"
       >
         <Heading as={(titleTag as any)} textStyle="worktitle" mt="auto" mb="2rem">
-          {title}
+          {exhibition?.title}
         </Heading>
         <chakra.p textStyle="subtitle" mb="1rem">
-          {subtitle}
+          {exhibition?.subtitle}
         </chakra.p>
         <chakra.p textStyle="workmeta">
-          {new Date(dateBegin).toLocaleDateString("de")}
+          {new Date(exhibition?.dateBegin).toLocaleDateString("de")}
           {" - "}
-          {new Date(dateEnd).toLocaleDateString("de")}
+          {new Date(exhibition?.dateEnd).toLocaleDateString("de")}
         </chakra.p>
       </Box>
     )
