@@ -67,20 +67,6 @@ export const ModuleArtworkForm = ({
             }}
           />
         </FieldRow>
-        
-        {action === "update" && <FieldRow>
-          <FieldInput
-            name="key"
-            id="key"
-            type="key"
-            label="Url key"
-            isRequired={yupIsFieldRequired("key", validationSchema)}
-            settings={{
-              // defaultValue: data.abc.key
-              placeholder: "What is the url key of your?",
-            }}
-          />
-        </FieldRow>}
         {action === "update" && <FieldRow>
           <FieldStatusSelect
             statusEnum={ArtworkStatusEnum}

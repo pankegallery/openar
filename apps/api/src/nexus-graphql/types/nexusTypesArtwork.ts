@@ -178,6 +178,7 @@ export const ArtworkQueries = extendType({
                   editionOf: true,
                 },
                 where: {
+                  isBanned: false,
                   status: {
                     in: [
                       ArObjectStatusEnum.PUBLISHED,
@@ -312,6 +313,7 @@ export const ArtworkQueries = extendType({
                 arModels: true,
               },
               where: {
+                isBanned: false,
                 status: {
                   in: [
                     ArObjectStatusEnum.PUBLISHED,
@@ -442,6 +444,7 @@ export const ArtworkQueries = extendType({
                   },
                 },
                 where: {
+                  isBanned: false,
                   status: {
                     in: [
                       ArObjectStatusEnum.PUBLISHED,
@@ -521,6 +524,9 @@ export const ArtworkQueries = extendType({
                   },
                 },
               },
+              where: {
+                isBanned: false,
+              },
               orderBy: {
                 orderNumber: "asc",
               },
@@ -547,7 +553,6 @@ export const ArtworkUpsertInput = inputObjectType({
     t.int("status");
     t.nonNull.string("description");
     t.string("url");
-    t.string("key");
     t.string("video");
     t.float("lat");
     t.float("lng");
@@ -619,16 +624,8 @@ export const ArtworkMutations = extendType({
         let data: any = {
           ...args.data,
           type: 1,
-          key: undefined,
           status: args.data?.status ?? ArtworkStatusEnum.DRAFT,
         };
-
-        if (args?.data?.key) {
-          data = {
-            ...data,
-            key: args?.data?.key,
-          };
-        }
 
         const artwork = await daoArtworkUpdate(args.id, data);
 

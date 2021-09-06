@@ -22,7 +22,7 @@ const Index = () => {
 
   const { data, loading, error } = useQuery(userProfileReadQueryGQL, {
     variables: {
-      id: appUser?.id ?? 0,
+      ethAddress: appUser?.ethAddress ?? "",
     },
   });
 

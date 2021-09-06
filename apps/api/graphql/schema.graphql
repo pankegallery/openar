@@ -62,7 +62,6 @@ input ArObjectUpsertInput {
   heroImage: JSON
   id: Int
   images: JSON
-  key: String
   lat: Float
   lng: Float
   orderNumber: Int
@@ -102,7 +101,6 @@ input ArtworkUpsertInput {
   heroImage: JSON
   id: Int
   images: JSON
-  key: String
   lat: Float
   lng: Float
   objects: JSON
@@ -251,13 +249,11 @@ type Mutation {
 }
 
 type PublicUser implements UserBaseNode {
+  artworks: [Artwork]
   bio: String
-  email: EmailAddress
-  emailVerified: Boolean
   ethAddress: String
   id: Int!
   profileImage: Image
-  profileImageId: Int
   pseudonym: String
   roles: [String]
   url: String
@@ -278,13 +274,14 @@ type Query {
   imageRead(id: Int!): Image!
   imageStatus(id: Int!): ImageStatus!
   images(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, taxonomyId: Int, where: JSON): ImageQueryResult
-  userByEthAddress(ethAddress: String!): User!
-  userProfileRead(id: Int!): PublicUser!
-  userRead(id: Int!): User!
+  user(ethAddress: String!): PublicUser
+  userProfileRead(ethAddress: String!): User
+  userRead(id: Int!): User
   users(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): UsersQueryResult
 }
 
 type User implements UserBaseNode {
+  artworks: [Artwork]
   bio: String
   createdAt: DateTime
   email: EmailAddress
@@ -293,7 +290,6 @@ type User implements UserBaseNode {
   id: Int!
   isBanned: Boolean
   profileImage: Image
-  profileImageId: Int
   pseudonym: String
   roles: [String]
   updatedAt: DateTime
@@ -301,13 +297,11 @@ type User implements UserBaseNode {
 }
 
 interface UserBaseNode {
+  artworks: [Artwork]
   bio: String
-  email: EmailAddress
-  emailVerified: Boolean
   ethAddress: String
   id: Int!
   profileImage: Image
-  profileImageId: Int
   pseudonym: String
   roles: [String]
   url: String
