@@ -13,4 +13,20 @@ export const isCurrentApiUser = (ctx: NexusResolverContext, userId: number) => {
   return true;
 };
 
+export const isCurrentApiUserByEthAddress = (
+  ctx: NexusResolverContext,
+  ethAddress: string
+) => {
+  if (
+    !ctx.tokenInfo.validAccessTokenProvided &&
+    ctx.tokenInfo.validRefreshTokenProvided
+  )
+    return Error("Authentication failed (maybe refresh)");
+
+  if (!(ctx.appUser && ctx.appUser.ethAddress === ethAddress))
+    throw Error("GQL authorization rejected");
+
+  return true;
+};
+
 export default isCurrentApiUser;

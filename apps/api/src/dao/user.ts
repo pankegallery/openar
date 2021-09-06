@@ -83,10 +83,12 @@ export const daoUserQuery = async (
 };
 
 export const daoUserFindFirst = async (
-  where: Prisma.UserWhereInput
-): Promise<User | null> => {
-  const user: User | null = await prisma.user.findFirst({
+  where: Prisma.UserWhereInput,
+  include?: Prisma.UserInclude | undefined
+): Promise<User> => {
+  const user = await prisma.user.findFirst({
     where,
+    include,
   });
 
   return filteredOutputByBlacklistOrNotFound(

@@ -349,6 +349,7 @@ export const ArObjectQueries = extendType({
 
         where = {
           ...where,
+          isBanned: false,
           creator: {
             id: ctx.appUser?.id ?? 0,
           },
@@ -465,6 +466,7 @@ export const ArObjectQueries = extendType({
                 id: true,
               },
               where: {
+                isBanned: false,
                 status: {
                   not: ArModelStatusEnum.DELETED,
                 },
