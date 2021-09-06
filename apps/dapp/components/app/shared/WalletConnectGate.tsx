@@ -73,10 +73,10 @@ export const WalletConnectGate = ({
         stored = window.localStorage.getItem("walletconnect");
         const walletConnect = stored ? JSON.parse(stored) : false;
 
-        if (connected && walletConnect.connected) {
-          console.log("Wallet Connect might be connected");
+        if (connected === "walletconnect" && walletConnect.connected) {
+          console.log("Wallet Connect might be connected", account);
           if (Router.pathname !== appConfig.reauthenticateRedirectUrl) {
-            console.log("So go through the login flow to establish a new connection");
+            console.log("So go through the login flow to establish a new connection", account);
             Router.replace(appConfig.reauthenticateRedirectUrl);        
           }
             

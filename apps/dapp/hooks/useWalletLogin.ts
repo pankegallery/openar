@@ -30,7 +30,7 @@ import { store } from "~/redux";
 import { appConfig } from "~/config";
 
 export function useWalletLogin() {
-  const [, setIsConnected] = useLocalStorage("connected", false);
+  const [, setIsConnected] = useLocalStorage("connected", undefined);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [awaitingUserInteraction, setAwaitingUserInteraction] = useState<
     string | null
@@ -49,14 +49,8 @@ export function useWalletLogin() {
     "success"
   );
 
-  const {
-    library,
-    chainId,
-    account,
-    activate,
-    deactivate,
-    active,
-  } = useWeb3React<Web3Provider>();
+  const { library, chainId, account, activate, deactivate, active } =
+    useWeb3React<Web3Provider>();
 
   const handleError = useCallback((error: any) => {
     let msg: string;
@@ -98,10 +92,9 @@ export function useWalletLogin() {
 
   const walletDisconnect = useStableCallback(async () => {
     try {
-
       setWalletLoginError(null);
       setIsLoggingIn(false);
-      setIsConnected(false);
+      setIsConnected(undefined);
       setAwaitingUserInteraction(null);
 
       const appUser = getAppUser();
@@ -109,21 +102,22 @@ export function useWalletLogin() {
         try {
           await logoutMutation(appUser.id);
         } catch (err) {
-          // just fail silently 
+          // just fail silently
         }
       }
       await user.logout();
 
       deactivate();
 
-      console.log(`walletDisconnect: PUSH ${appConfig.reauthenticateRedirectUrl}`);
+      console.log(
+        `walletDisconnect: PUSH ${appConfig.reauthenticateRedirectUrl}`
+      );
       Router.push(appConfig.reauthenticateRedirectUrl);
-
     } catch (error) {
-      setIsConnected(false);
+      setIsConnected(undefined);
       handleError(error);
     }
-  // }, []);
+    // }, []);
   });
 
   const connectWalletConnect = useCallback(async () => {
@@ -131,9 +125,10 @@ export function useWalletLogin() {
       setWalletLoginError(null);
       setAwaitingUserInteraction("walletconnect");
       await activate(walletConntectConnector, undefined, true);
+      setIsConnected("walletconnect");
       connected();
     } catch (error) {
-      setIsConnected(false);
+      setIsConnected(undefined);
       handleError(error);
     }
   }, [
@@ -149,11 +144,12 @@ export function useWalletLogin() {
     try {
       setWalletLoginError(null);
       setAwaitingUserInteraction("injected");
-      await activate(injectedConnector, undefined, true);
 
+      await activate(injectedConnector, undefined, true);
+      setIsConnected("injected");
       connected();
     } catch (error) {
-      setIsConnected(false);
+      setIsConnected(undefined);
       handleError(error);
     }
   }, [
@@ -176,10 +172,9 @@ export function useWalletLogin() {
     setWalletLoginError(null);
     setIsLoggingIn(false);
     triggerToast();
-    setIsConnected(true);
-    Router.push("/openar/");
 
-  }, [triggerToast, setIsLoggingIn, setWalletLoginError, setIsConnected]);
+    Router.push("/openar/");
+  }, [triggerToast, setIsLoggingIn, setWalletLoginError]);
 
   const walletLoginLogin = useCallback(
     async (signedMessage) => {
@@ -197,7 +192,7 @@ export function useWalletLogin() {
         handleError(error);
       }
     },
-   [account, loginMutation, handleError, walletLoginFinalize]
+    [account, loginMutation, handleError, walletLoginFinalize]
   );
 
   const walletLoginRequestSignature = useCallback(
@@ -219,7 +214,6 @@ export function useWalletLogin() {
               if (error?.code && error?.code === 4001) {
                 // TODO: make better
                 setAwaitingUserInteraction(null);
-                
 
                 triggerToast(
                   "Signature required",
@@ -302,8 +296,8 @@ export function useWalletLogin() {
           // ) {
           //   await walletLoginRequestSignature(payload?.message, account);
           // } else {
-            console.log("walletLoginPreLogin push /openar/login");
-            Router.push("/openar/login");
+          console.log("walletLoginPreLogin push /openar/login");
+          Router.push("/openar/login");
           //}
         } else if (errors) {
           throw errors[0];

@@ -8,17 +8,18 @@ import { useLocalStorage, useWalletLogin } from ".";
 export function useWeb3EagerConnect() {
   const { activate, active, account } = useWeb3React();
 
-  const [connected] = useLocalStorage("connected", false);
+  const [connected] = useLocalStorage("connected", undefined);
   const [walletConnect] = useLocalStorage("walletconnect", {});
 
   const [tried, setTried] = useState(false);
 
   useEffect(() => {
-    if (!connected) return;
+    if (connected !== "injected") return;
 
     injectedConnector.isAuthorized().then((isAuthorized: boolean) => {
       if (isAuthorized) {
         activate(injectedConnector, undefined, true).catch(() => {
+          console.log('activated injectedConnector')
           setTried(true);
         });
       } else {
