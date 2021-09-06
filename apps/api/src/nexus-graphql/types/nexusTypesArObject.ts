@@ -503,13 +503,11 @@ export const ArObjectUpsertInput = inputObjectType({
     t.nonNull.string("description");
     t.int("status");
     t.int("orderNumber");
-    t.int("editionOf");
-    t.float("lat");
     t.float("lng");
     t.float("askPrice");
+    t.int("editionOf");
+    t.float("lat");
     t.string("ownerEthAddress");
-    t.string("key");
-
     t.json("creator");
     t.json("collector");
     t.json("heroImage");
