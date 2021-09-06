@@ -1,18 +1,23 @@
 import { useState, useEffect } from "react";
 import { useWeb3React } from "@web3-react/core";
-import { injectedConnector } from "~/services/crypto";
-import { useLocalStorage, useWalletLogin } from ".";
 import { useWhyDidYouUpdate } from "@chakra-ui/react";
 
+import { walletConntectConnector, injectedConnector } from "~/services/crypto";
+import { useLocalStorage, useWalletLogin } from ".";
+
 export function useWeb3EagerConnect() {
-  const { activate, active } = useWeb3React();
+  const { activate, active, account } = useWeb3React();
+
   const [connected] = useLocalStorage("connected", false);
+  const [walletConnect] = useLocalStorage("walletconnect", {});
 
   const [tried, setTried] = useState(false);
 
   useEffect(() => {
+    if (!connected) return;
+
     injectedConnector.isAuthorized().then((isAuthorized: boolean) => {
-      if (isAuthorized && connected) {
+      if (isAuthorized) {
         activate(injectedConnector, undefined, true).catch(() => {
           setTried(true);
         });
@@ -20,6 +25,7 @@ export function useWeb3EagerConnect() {
         setTried(true);
       }
     });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // intentionally only running on mount (make sure it's only mounted once :))
 
@@ -49,7 +55,10 @@ export function useWeb3InactiveListener(suppress: boolean = false) {
         // TODO: this one should also ensure that the login flow is happeing
       };
       const handleChainChanged = (chainId: string | number) => {
-        console.log("useWeb3InactiveListener: Handling 'chainChanged' event with payload", chainId);
+        console.log(
+          "useWeb3InactiveListener: Handling 'chainChanged' event with payload",
+          chainId
+        );
         activate(injectedConnector);
       };
       const handleAccountsChanged = (accounts: string[]) => {
@@ -88,7 +97,7 @@ export function useWeb3InactiveListener(suppress: boolean = false) {
 export function useWeb3ActiveListener(suppress: boolean = false) {
   const { active, error, activate, deactivate, account } = useWeb3React();
   const { walletDisconnect } = useWalletLogin();
-  useWhyDidYouUpdate("w3AL",  {
+  useWhyDidYouUpdate("w3AL", {
     active,
     error,
     suppress,
@@ -110,7 +119,10 @@ export function useWeb3ActiveListener(suppress: boolean = false) {
         // TODO: this one should also ensure that the login flow is happeing
       };
       const handleChainChanged = (chainId: string | number) => {
-        console.log("Handling 'useWeb3ActiveListener:chainChanged' event with payload", chainId);
+        console.log(
+          "Handling 'useWeb3ActiveListener:chainChanged' event with payload",
+          chainId
+        );
         activate(injectedConnector);
       };
       const handleAccountsChanged = (accounts: string[]) => {

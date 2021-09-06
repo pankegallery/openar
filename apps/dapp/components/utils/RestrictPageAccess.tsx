@@ -1,7 +1,7 @@
 import Router from "next/router";
 import type { PermissionName } from "~/appuser";
 import cookie from 'cookie';
-import { AuthenticatedAppUser } from "~/appuser";
+import { walletConntectConnector } from "~/services/crypto";
 
 import { appConfig } from "~/config";
 import { getAppUser } from "~/services/authentication";
@@ -22,10 +22,10 @@ export const RestrictPageAccess = (
     hocComponent.getLayout = AccessRestrictedComponent.getLayout
 
   hocComponent.getInitialProps = async (context) => {
-    
     // TODO: is this safe? 
-    let canPotentiallyReadPage = false;
-    
+    let canPotentiallyReadPage: boolean;
+    let redirectTo = appConfig.restrictedAccessRedirectUrl;
+
     if (context.req) {
       context.req.cookies = cookie.parse(context.req.headers['cookie'] ?? "");
       if (context.req.cookies.refreshToken || getAppUser())
@@ -41,11 +41,12 @@ export const RestrictPageAccess = (
       // Handle server-side and client-side rendering.
       if (context.res) {
         context.res?.writeHead(302, {
-          Location: appConfig.restrictedAccessRedirectUrl,
+          Location: redirectTo,
         });
         context.res?.end();
       } else {
-        Router.replace(appConfig.restrictedAccessRedirectUrl);
+        if (Router.pathname !== redirectTo)
+          Router.replace(redirectTo);          
       }
     } else if (AccessRestrictedComponent.getInitialProps) {
       const wrappedProps = await AccessRestrictedComponent.getInitialProps({

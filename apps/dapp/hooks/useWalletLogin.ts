@@ -1,11 +1,9 @@
 import { useWeb3React, UnsupportedChainIdError } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
-import React, { useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import Router from "next/router";
 import { decode } from "jsonwebtoken";
 import { utils as ethersUtils } from "ethers";
-import { InjectedConnector } from "@web3-react/injected-connector";
-import { primaryInput } from "detect-it";
 
 import {
   NoEthereumProviderError,
