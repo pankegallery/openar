@@ -49,7 +49,7 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
 
         width="100%"
         overflow="auto"
-        flexGrow="0"
+        flexGrow={0}
       >
 
         {/* ======== BOX: Artwork description  ======== */}
@@ -70,7 +70,7 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
             p="6"
             position="relative"
           >
-            <CornerButton label="Buy" position="top" emphasis onClick=""/>
+            <CornerButton label="Buy" position="top" emphasis onClick={() => { console.log("TODO:")}}/>
             <chakra.p textStyle="subtitle" mb="10" sx={{svg:{display: "inline-block"}}}>
               <LogoXDAI width="30px" height="20px" viewBox="40 0 150 150"/>{artwork.arObjects[0].askPrice} xDai
             </chakra.p>
@@ -105,7 +105,7 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
             p="6"
             position="relative"
           >
-            <CornerButton label="View profile" onClick=""/>
+            <CornerButton label="View profile" onClick={() => { console.log("TODO:")}}/>
             <chakra.p textStyle="label" className="label">About the artist</chakra.p>
             <div dangerouslySetInnerHTML={{__html: artwork.creator.bio}}  />
           </Box>

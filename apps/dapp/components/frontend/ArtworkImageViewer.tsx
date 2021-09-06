@@ -16,7 +16,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 
-export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, object: any, url: String}) => {
+// TODO: is the url attribute actually used anywhere? 
+export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, object: any, url?: String}) => {
 
 //  const [thumbsSwiper, setThumbsSwiper] = useState(null);
 

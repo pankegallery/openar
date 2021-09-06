@@ -94,6 +94,7 @@ const Index = () => {
                   {" "}
                   {artworks.map((artwork) => (
                     <ArtworkListItem key={`aw-${artwork.id}`}
+                      col={1}
                       isAdmin={true}
                       urlKey={artwork.key}
                       {...pick(artwork, [

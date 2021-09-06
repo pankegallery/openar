@@ -65,11 +65,13 @@ export const Artworks = ({artworks}: {artworks: any}) => {
             {artworks.map((artwork) => (
               <ArtworkListItem
                 isAdmin={false}
+                key={artwork.key}
                 urlKey={artwork.key}
                 col={3}
                 {...pick(artwork, [
                   "id",
                   "key",
+                  "status",
                   "heroImage",
                   "title",
                   "creator",

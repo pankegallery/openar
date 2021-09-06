@@ -26,7 +26,7 @@ export const ArtworkListItem = ({
 }: {
   id: number;
   title: string;
-  col: Int;
+  col: number;
   urlKey: string;
   exSlug?: string;
   creator: any;
@@ -45,7 +45,12 @@ export const ArtworkListItem = ({
 
   let cameFromExhibition;
 
-  if(router.components) cameFromExhibition = "/e/[slug]" in router.components
+  // TODO: VVU router.components does not work, does it? TypeScript complains that the function is not known
+  // SO I changed the line to simply check if the pathname starts with /e/ should do the same thing
+  //if(router.components) cameFromExhibition = "/e/[slug]" in router.components, right? 
+  cameFromExhibition = router.pathname.indexOf("/e/") > -1;
+
+  
 
   // TODO: change a-detail to a once opening exhibition done
   const baseURL = cameFromExhibition ? router.asPath : "/a-detail"

@@ -5,8 +5,11 @@ import { Box } from "@chakra-ui/react";
 import { WalletConnectGate } from "./shared";
 import {LoadingBar} from "~/components/app/shared";
 import { OverlayMenu} from "../frontend";
+import { useSSRSaveMediaQuery} from "~/hooks";
 
 export const LayoutBlank = ({mode = "dark", beta = false, children} : {mode?: any, beta?: boolean, children: ReactNode}) => {
+
+  const isMobile = useSSRSaveMediaQuery("(max-width: 45rem)");
 
   console.log(beta)
 
@@ -21,7 +24,7 @@ export const LayoutBlank = ({mode = "dark", beta = false, children} : {mode?: an
         {children}
       </Box>
       {!beta&&
-        <OverlayMenu mode={mode} />
+        <OverlayMenu mode={isMobile? "light" : "dark"} />
       }
     </WalletConnectGate>
   );
