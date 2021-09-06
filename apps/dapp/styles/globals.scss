@@ -24,6 +24,7 @@ a {
     transform: translate(0, 0);
     fill: inherit;
 
+    &.light g,
     .light & g{
         fill: #000;
         stroke: #000;
@@ -211,13 +212,13 @@ a {
     transform: rotate(180deg);
     a::before {
       width: 100vw;
-      background-color: rgba(255,0,0,0.6);
+//      background-color: rgba(255,0,0,0.6);
     }
   } 
 
   .img {
     width: 66.666%;
-    opacity: 0.6; // remove TODO:
+//    opacity: 0.6; // remove TODO:
     picture, img {
       height: 100%;
       width: 100%;
@@ -228,19 +229,13 @@ a {
 
   &:nth-child(2n + 1) {
     flex-direction: row-reverse;
-
-    // .info {
-    //   a::before {
-    //     left: 100px
-    //   }
-   // }
   }
 
-  &:nth-child(2n + 2) {
+  &:nth-child(2n) {
 
     .info {
       a::before {
-        background-color: rgba(0,250,0,0.6);
+//        background-color: rgba(0,250,0,0.6);
         left: auto;
         right: 0px;
       }
@@ -271,24 +266,42 @@ a {
         }
     }
 
-    .corner-light + .openOverlayMenu {
-        right: 50vw;
-    }
+//    .corner-light + .openOverlayMenu {
+//        right: 50vw;
+//    }
 }
 
 @media (min-width: 75rem){
     .artwork.item {
       width: 100%;
+
       .info {
         height: calc(22.19vw - var(--sbw));
       }
-    }
 
-    .corner-light + .openOverlayMenu {
-        right: 33.33vw;
+      &.col-3{
+        width: 33.33%;
+        flex-direction: row-reverse;
+      }
+
+      &.col-3:nth-child(6n + 1),
+      &.col-3:nth-child(6n + 2),
+      &.col-3:nth-child(6n + 3) {
+        flex-direction: row;
+        .info {
+         a::before {
+           left: auto;
+           right: 0;
+         }
+        }
+      }
     }
 
 }
+
+//    .corner-light + .openOverlayMenu {
+//        right: 33.33vw;
+//    }
 
 // @media (max-width: 45rem){
 //     .artwork.item {

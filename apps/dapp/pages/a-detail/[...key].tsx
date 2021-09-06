@@ -1,5 +1,4 @@
 import type { ReactElement } from "react";
-import { useState } from "react";
 import Head from "next/head";
 import { gql } from "@apollo/client";
 
@@ -12,31 +11,33 @@ import { getApolloClient } from "~/services/apolloClient";
 
 import openingBg from "~/assets/img/opening-bg.png";
 import Arrow from "~/assets/img/arrow.svg";
-import { ArtworkListItem } from "~/components/frontend";
+import { ArtworkDetails,
+         ArtworkImageViewer,
+         ExhibitionTitleTile } from "~/components/frontend";
 import pick from "lodash/pick";
+import { ArrowLink } from "~/components/ui";
 import { useSSRSaveMediaQuery } from "~/hooks";
-import { ApiImage, ApiArModel } from "~/components/ui";
 
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Thumbs } from "swiper";
-
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
 
 export const Artwork = ({
   artwork,
-  exhibition,
+  okey,
 }: {
   artwork: any;
-  exhibition: any;
+  okey?: String;
 }) => {
-  const [thumbsSwiper, setThumbsSwiper] = useState(null);
-
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
 
-  const startWith =
-    artwork?.heroImage && artwork?.heroImage?.id ? "image" : "firstObject";
+  let selectedObject = {}
+  if (okey === "initial"){
+    selectedObject = artwork.arObjects[0]
+  } else {
+    selectedObject = artwork.arObjects.find(o => o.key === okey)
+  }
+
+//  console.log("[... key] sel obj: ", selectedObject)
+//  console.log("[... key] artwork: ", artwork)
+
 
   return (
     <>
@@ -48,24 +49,7 @@ export const Artwork = ({
           key="title"
         />
       </Head>
-      {/* --------- Background image --------- */}
-      {/* <Box
-        position="relative"
-        zIndex="100"
-        h="100vh"
-        w="100%"
-        overflow="hidden"
-        mb="-100vh"
-      >
-        <Image
-          src={exhibition.openingBg}
-          layout="fill"
-          objectFit="cover"
-          objectPosition="50% 100%"
-          alt=""
-          role="presentation"
-        />
-      </Box> */}
+
       {/* --------- Column Layout --------- */}
       <Flex
         position={{
@@ -89,7 +73,7 @@ export const Artwork = ({
         }}
       >
         {/* --------- COL: Exhibition (desktop only) --------- */}
-        {/* {isDesktop&&
+        {isDesktop&&
           <Flex
             direction="column"
             className="exhibitionColumn"
@@ -132,25 +116,34 @@ export const Artwork = ({
                   </chakra.p>
                 </chakra.a>
               </Link>
-            </Flex>
+            </Flex>*/}
           </Flex>
-        } */}
+        }
         {/* --------- COL: Artwork images --------- */}
         <Flex
+          className="imageViewer light"
           direction="column"
-          height="100vh"
-          overflowY="auto"
           w={{
             base: "100vw",
             t: "50vw",
-            d: "33.33vw",
+            d: "66.66vw"
           }}
+          minHeight="70vh"
+          h="100%"
+          bg="white"
+          color="var(--chakra-colors-openar-dark)"
+          p="6"
+          pt="10"
+          overflow="auto"
         >
+
+          <ArtworkImageViewer artwork={artwork} object={selectedObject}/>
 
         </Flex>
 
         {/* --------- COL: Artwork details) --------- */}
-        <Flex direction="column"></Flex>
+        <ArtworkDetails artwork={artwork} object={selectedObject} />
+
       </Flex>{" "}
       {/* Column Layout close*/}
     </>
@@ -169,6 +162,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   const artworkQuery = gql`
     query ($key: String!) {
       artwork(key: $key) {
+        createdAt
         id
         key
         title
@@ -179,23 +173,18 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           ethAddress
           bio
           url
-          profileImage {
-            id
-            meta
-            status
-          }
         }
         url
         video
         heroImage {
           id
           meta
-
           status
         }
         arObjects {
           id
           key
+          createdAt
           title
           orderNumber
           status
@@ -219,7 +208,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   const { data } = await client.query({
     query: artworkQuery,
     variables: {
-      key: params.akey,
+      key: params.key[0],
     },
   });
 
@@ -230,16 +219,22 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     };
   }
 
+  const okey = params.key[1] ? params.key[1] : "initial";
+
   console.log(data?.artwork);
   return {
     props: {
       artwork: data?.artwork,
+      okey: okey,
     },
   };
 };
 
 Artwork.getLayout = function getLayout(page: ReactElement) {
-  return <LayoutBlank>{page}</LayoutBlank>;
+
+  const isMobile = useSSRSaveMediaQuery("(max-width: 45rem)");
+
+  return <LayoutBlank mode={isMobile? "light" : "dark"}>{page}</LayoutBlank>;
 };
 
 export default Artwork;

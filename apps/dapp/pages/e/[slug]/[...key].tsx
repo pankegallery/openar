@@ -11,8 +11,7 @@ import { getApolloClient } from "~/services/apolloClient";
 
 import openingBg from "~/assets/img/opening-bg.png";
 import Arrow from "~/assets/img/arrow.svg";
-import { ArtworkListItem,
-         ArtworkDetails,
+import { ArtworkDetails,
          ArtworkImageViewer,
          ExhibitionTitleTile } from "~/components/frontend";
 import { ArrowLink } from "~/components/ui";
@@ -22,11 +21,7 @@ import { useSSRSaveMediaQuery } from "~/hooks";
 
 export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibition: any, okey?: String }) => {
 
-  const isDesktop = useSSRSaveMediaQuery(
-    "(min-width: 75rem)"
-  );
-
-  const hasMultipleObjects = artwork.arObjects.legth  > 1
+  const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
 
   let selectedObject = {}
   if (okey === "initial"){
@@ -35,13 +30,10 @@ export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibitio
     selectedObject = artwork.arObjects.find(o => o.key === okey)
   }
 
-  console.log("[... key] sel obj: ", selectedObject)
-  console.log("[... key] ex: ", exhibition)
+//  console.log("[... key] sel obj: ", selectedObject)
+//  console.log("[... key] artwork: ", artwork)
+//  console.log("[... key] ex: ", exhibition)
 
-  let artist = artwork.creator?.pseudonym ? artwork.creator?.pseudonym : artwork.creator?.ethAddress;
-
-//  console.log("Artwork:", artwork)
-//  console.log("Exhibition:", exhibition)
 
   return (
     <>
@@ -103,17 +95,18 @@ export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibitio
             direction="column"
             className="exhibitionColumn"
           >
-            {/* --------- ROW: Header row --------- */}
-            <Flex
-              w="33.33vw"
-              h="var(--openar-header-height-desktop)"
-              p="10"
-            >
-              <Link href={`/e/openar-art`}>
-                <a>
-                  <Arrow className="arrow" />
-                </a>
-              </Link>
+                      {/* --------- ROW: Header row --------- */}
+
+         <Flex
+           w="33.33vw"
+           h="var(--openar-header-height-desktop)"
+           p="10"
+         >
+           <Link href={`/e/openar-art`}>
+             <a>
+               <Arrow className="arrow" />
+             </a>
+           </Link>
             </Flex>
 
             {/* --------- Exhibition title  --------- */}
@@ -277,7 +270,10 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 };
 
 Artwork.getLayout = function getLayout(page: ReactElement) {
-  return <LayoutBlank>{page}</LayoutBlank>;
+
+  const isMobile = useSSRSaveMediaQuery("(max-width: 45rem)");
+
+  return <LayoutBlank mode={isMobile? "light" : "dark"}>{page}</LayoutBlank>;
 };
 
 export default Artwork;
