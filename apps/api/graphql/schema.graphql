@@ -62,7 +62,6 @@ input ArObjectUpsertInput {
   heroImage: JSON
   id: Int
   images: JSON
-  key: String
   lat: Float
   lng: Float
   orderNumber: Int
@@ -102,7 +101,6 @@ input ArtworkUpsertInput {
   heroImage: JSON
   id: Int
   images: JSON
-  key: String
   lat: Float
   lng: Float
   objects: JSON

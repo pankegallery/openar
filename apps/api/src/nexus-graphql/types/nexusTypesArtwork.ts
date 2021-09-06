@@ -207,8 +207,6 @@ export const ArtworkQueries = extendType({
               },
             };
 
-          console.log(include);
-
           artworks = await daoArtworkQuery(
             where,
             Object.keys(include).length > 0 ? include : undefined,
@@ -547,7 +545,6 @@ export const ArtworkUpsertInput = inputObjectType({
     t.int("status");
     t.nonNull.string("description");
     t.string("url");
-    t.string("key");
     t.string("video");
     t.float("lat");
     t.float("lng");
@@ -619,16 +616,8 @@ export const ArtworkMutations = extendType({
         let data: any = {
           ...args.data,
           type: 1,
-          key: undefined,
           status: args.data?.status ?? ArtworkStatusEnum.DRAFT,
         };
-
-        if (args?.data?.key) {
-          data = {
-            ...data,
-            key: args?.data?.key,
-          };
-        }
 
         const artwork = await daoArtworkUpdate(args.id, data);
 
