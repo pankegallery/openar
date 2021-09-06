@@ -21,9 +21,7 @@ import { useSSRSaveMediaQuery } from "~/hooks";
 
 export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibition: any, okey?: String }) => {
 
-  const isDesktop = useSSRSaveMediaQuery(
-    "(min-width: 75rem)"
-  );
+  const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
 
   let selectedObject = {}
   if (okey === "initial"){
@@ -97,6 +95,19 @@ export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibitio
             direction="column"
             className="exhibitionColumn"
           >
+                      {/* --------- ROW: Header row --------- */}
+
+         <Flex
+           w="33.33vw"
+           h="var(--openar-header-height-desktop)"
+           p="10"
+         >
+           <Link href={`/e/openar-art`}>
+             <a>
+               <Arrow className="arrow" />
+             </a>
+           </Link>
+            </Flex>
 
             {/* --------- Exhibition title  --------- */}
             <Flex
@@ -259,7 +270,10 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 };
 
 Artwork.getLayout = function getLayout(page: ReactElement) {
-  return <LayoutBlank>{page}</LayoutBlank>;
+
+  const isMobile = useSSRSaveMediaQuery("(max-width: 45rem)");
+
+  return <LayoutBlank mode={isMobile? "light" : "dark"}>{page}</LayoutBlank>;
 };
 
 export default Artwork;
