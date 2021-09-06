@@ -131,7 +131,7 @@ export const UserQueries = extendType({
         }),
       },
 
-      // TODO: authorize: :  (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
+      // TODO:authorize:   (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
 
       async resolve(...[, args]) {
         const totalCount = await daoUserQueryCount(args.where);
@@ -162,7 +162,7 @@ export const UserQueries = extendType({
     //     roles: nonNull(list(stringArg())),
     //   },
 
-    //   // // TODO: authorize: :  (...[, , ctx]) =>
+    //   // // TODO:authorize:   (...[, , ctx]) =>
     //   //   authorizeApiUser(ctx, "accessAsAuthenticatedUser"),
 
     //   async resolve(...[, args]) {
@@ -192,7 +192,7 @@ export const UserQueries = extendType({
         ethAddress: nonNull(stringArg()),
       },
 
-      // TODO: authorize: :  (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
+      // TODO:authorize:   (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
 
       // resolve(root, args, ctx, info)
       async resolve(...[, args, , info]) {
@@ -311,7 +311,7 @@ export const UserQueries = extendType({
         id: nonNull(intArg()),
       },
 
-      // TODO: authorize: :  (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
+      authorize: (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
 
       // resolve(root, args, ctx, info)
       async resolve(...[, args]) {
@@ -326,9 +326,9 @@ export const UserQueries = extendType({
         ethAddress: nonNull(stringArg()),
       },
 
-      // authorize: (...[, args, ctx]) =>
-      //   authorizeApiUser(ctx, "profileRead") &&
-      //   isCurrentApiUserByEthAddress(ctx, args.ethAddress),
+      authorize: (...[, args, ctx]) =>
+        authorizeApiUser(ctx, "profileRead") &&
+        isCurrentApiUserByEthAddress(ctx, args.ethAddress),
 
       // resolve(root, args, ctx, info)
       async resolve(...[, args, , info]) {
@@ -482,7 +482,7 @@ export const UserMutations = extendType({
     //     data: nonNull(UserSignupInput),
     //   },
 
-    //   // TODO: authorize: :  () => apiConfig.enablePublicRegistration,
+    //   // TODO:authorize:   () => apiConfig.enablePublicRegistration,
 
     //   async resolve(...[, args, { res }]) {
     //     const authPayload = await userRegister(args.data);
@@ -523,7 +523,7 @@ export const UserMutations = extendType({
         data: nonNull(UserCreateInput),
       },
 
-      // TODO: how to lock down the API // TODO: authorize: :  (...[, , ctx]) => authorizeApiUser(ctx, "userCreate"),
+      // TODO: how to lock down the API // TODO:authorize:   (...[, , ctx]) => authorizeApiUser(ctx, "userCreate"),
 
       async resolve(...[, args]) {
         const user = await userCreate(args.data);
@@ -546,7 +546,7 @@ export const UserMutations = extendType({
         data: nonNull(UserUpdateInput),
       },
 
-      // TODO: authorize: :  (...[, , ctx]) => authorizeApiUser(ctx, "userUpdate"),
+      // TODO:authorize:   (...[, , ctx]) => authorizeApiUser(ctx, "userUpdate"),
 
       async resolve(...[, args]) {
         const user = await userUpdate(args.id, args.data);
@@ -601,7 +601,7 @@ export const UserMutations = extendType({
         id: nonNull(intArg()),
       },
 
-      // TODO: authorize: :  (...[, args, ctx]) =>
+      // TODO:authorize:   (...[, args, ctx]) =>
       // authorizeApiUser(ctx, "userDelete") &&
       // isNotCurrentApiUser(ctx, args.id),
 
