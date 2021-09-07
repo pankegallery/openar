@@ -31,7 +31,8 @@ export const Artworks = ({artworks}: {artworks: any}) => {
     <Flex
       direction="column"
       height="100vh"
-      width="100$"
+      width="100%"
+      backdropStyle="light"
     >
       {/* --------- ROW: Arrow --------- */}
       <Box

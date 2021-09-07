@@ -9,7 +9,6 @@ import Image from "next/image";
 
 import { getApolloClient } from "~/services/apolloClient";
 
-import openingBg from "~/assets/img/opening-bg.png";
 import Arrow from "~/assets/img/arrow.svg";
 import { ArtworkDetails,
          ArtworkImageViewer,
