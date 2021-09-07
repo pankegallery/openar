@@ -270,7 +270,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 };
 
 Artwork.getLayout = function getLayout(page: ReactElement) {
-  return <LayoutBlank>{page}</LayoutBlank>;
+  return <LayoutBlank mode="dark" modeSize="light" size="mobile">{page}</LayoutBlank>;
 };
 
 export default Artwork;

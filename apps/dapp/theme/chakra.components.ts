@@ -100,6 +100,7 @@ export const components = {
         boder: "none",
         borderRadius: "0",
         bg: "transparent",
+        p: "0",
       }
     },
   },

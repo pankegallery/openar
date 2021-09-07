@@ -32,7 +32,7 @@ export const Artworks = ({artworks}: {artworks: any}) => {
       direction="column"
       height="100vh"
       width="100%"
-      backdropStyle="light"
+      layerStyle="backdropLight"
     >
       {/* --------- ROW: Arrow --------- */}
       <Box

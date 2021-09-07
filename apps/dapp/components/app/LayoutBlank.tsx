@@ -7,11 +7,14 @@ import {LoadingBar} from "~/components/app/shared";
 import { OverlayMenu} from "../frontend";
 import { useSSRSaveMediaQuery} from "~/hooks";
 
-export const LayoutBlank = ({mode = "dark", beta = false, children} : {mode?: any, beta?: boolean, children: ReactNode}) => {
+export const LayoutBlank = ({mode = "dark", modeSize, size, beta = false, children} : {mode?: String, modeSize?: String, size?: String, beta?: boolean, children: ReactNode}) => {
 
   const isMobile = useSSRSaveMediaQuery("(max-width: 45rem)");
+  const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
 
-  console.log(beta)
+  const finalMode = (isMobile && size === "mobile") || (isDesktop && size === "desktop") || !modeSize ? modeSize: mode;
+
+  console.log("mode", finalMode)
 
   return (
     <WalletConnectGate>
@@ -24,7 +27,7 @@ export const LayoutBlank = ({mode = "dark", beta = false, children} : {mode?: an
         {children}
       </Box>
       {!beta&&
-        <OverlayMenu mode={isMobile? "light" : "dark"} />
+        <OverlayMenu mode={finalMode} />
       }
     </WalletConnectGate>
   );

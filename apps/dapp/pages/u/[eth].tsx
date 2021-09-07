@@ -10,10 +10,11 @@ import Image from "next/image";
 import { getApolloClient } from "~/services/apolloClient";
 
 import Arrow from "~/assets/img/arrow.svg";
-import { ArtworkDetails,
-         ArtworkImageViewer,
-         ExhibitionTitleTile } from "~/components/frontend";
-import pick from "lodash/pick";
+import { ArtworkListItem,
+        CollectionList,
+        ArtworkList,
+        UserDetails
+       } from "~/components/frontend";
 import { ArrowLink } from "~/components/ui";
 import { useSSRSaveMediaQuery } from "~/hooks";
 
@@ -23,13 +24,16 @@ export const User = ({
   user: any;
 }) => {
 
-  user = {
-    ethAdress: "0x61e323d9Ad70d40474Cb3e0FE1Cf132Dd5049584",
-    psydonym: "crosssenses",
-    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-  }
+//  user = {
+//    ethAdress: "0x61e323d9Ad70d40474Cb3e0FE1Cf132Dd5049584",
+//    psydonym: "crosssenses",
+//    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+//  }
 
-  const isArtworks = true
+  console.log("[Profile] User", user)
+
+
+  const isArtworks = user.artworks.length > 0;
   const isCollection = true
   const name = user.psydonym ? user.psydonym : user.ethAdress
 
@@ -66,107 +70,17 @@ export const User = ({
           t: "hidden",
         }}
       >
-      {/* --------- COL: Exhibition (desktop only) --------- */}
+      {/* --------- COL: Collection --------- */}
         {isCollection&&
-          <Flex
-            direction="column"
-            className="collectionColumn light"
-            color="black"
-            w={{
-              base: "100vw",
-              t: "50vw",
-              d: "33.3vw"
-            }}
-          >
-
-            {/* --------- ROW: Arrow --------- */}
-            <Box
-              className="header"
-              p="6"
-              pb="20"
-              pt={{
-                base: "10",
-                t: "6",
-              }}
-              w="100%"
-              textAlign="left"
-              flexDirection="column"
-            >
-              <chakra.p textStyle="bigLabel">
-                Collection
-              </chakra.p>
-              <Box ml="-6"><Arrow className="arrow down light"/></Box>
-            </Box>
-
-
-            {/* --------- ROW: Artworks --------- */}
-            <Box height="100%"
-              width="100%" overflow="scroll">
-              ARTWORKS
-              {/*artworks.length > 0 && (
-                <Flex
-                  width="100%"
-                  flexWrap="wrap"
-                >
-                  {artworks.map((artwork) => (
-                    <ArtworkListItem
-                      isAdmin={false}
-                      urlKey={artwork.key}
-                      col={3}
-                      {...pick(artwork, [
-                        "id",
-                        "key",
-                        "heroImage",
-                        "title",
-                        "creator",
-                      ])}
-                    />
-                  ))}
-                </Flex>
-              )*/}
-            </Box>
-
-          </Flex>
+          <CollectionList artworks={user.artworks} />
         }
-        {/* --------- COL: Artwork images --------- */}
-        <Flex
-          className="imageViewer light"
-          direction="column"
-          w={{
-            base: "100vw",
-            t: "50vw",
-            d: "33.3vw"
-          }}
-          minHeight="70vh"
-          h="100%"
-          bg="white"
-          color="var(--chakra-colors-openar-dark)"
-          p="6"
-          pt="10"
-          overflow="auto"
-        >
-          <Flex
-            w="auto"
-            mb="10"
-          >
-            <Link href="/prev">
-              <a>
-                <Arrow className="arrow" />
-              </a>
-            </Link>
-            <Link href="/next" passHref>
-              <chakra.a ml="6">
-                <Arrow className="arrow right" />
-              </chakra.a>
-            </Link>
-          </Flex>
-
-          ARTWORKS
-
-        </Flex>
+        {/* --------- COL: Artworks --------- */}
+        {isArtworks&&
+          <ArtworkList artworks={user.artworks} />
+        }
 
         {/* --------- COL: Artwork details) --------- */}
-        USER DETAILS
+          <UserDetails user={user} />
       </Flex> {/* Column Layout close*/}
 
     </>
@@ -184,12 +98,27 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   // TODO: enable read protection of non published artworks
   const userQuery = gql`
     query ($eth: String!) {
-      userByEthAddress(ethAddress: $eth) {
+      user(ethAddress: $eth) {
+    ethAddress
+    bio
+    pseudonym
+    roles
+    artworks {
+      id
+      title
+      key
+      creator {
         pseudonym
+        id
         ethAddress
-        bio
-        url
       }
+      heroImage {
+        id
+        meta
+        status
+      }
+    }
+  }
     }
   `;
 
@@ -204,22 +133,16 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 
   console.log("user query: ", data?.user);
 
-  // TODO: access protect artwork here
-//  if (!data?.user) {
-//    return {
-//      notFound: true,
-//    };
-//  }
-
-//  return {
-//    props: {
-//      user: data?.user,
-//    },
-//  };
+//   TODO: access protect artwork here
+  if (!data?.user) {
+    return {
+      notFound: true,
+    };
+  }
 
   return {
     props: {
-      user: {},
+      user: data?.user,
     },
   };
 

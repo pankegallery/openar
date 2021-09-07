@@ -70,52 +70,15 @@ export const Artwork = ({
           base: "show",
           t: "hidden",
         }}
+        flexWrap="wrap"
       >
-        {/* --------- COL: Exhibition (desktop only) --------- */}
+        {/* --------- COL: TODO: Left column (desktop only) --------- */}
         {isDesktop&&
           <Flex
             direction="column"
             className="exhibitionColumn"
           >
-            {/* --------- ROW: Header row --------- * /}
-            <Flex
-              w="33.33vw"
-              h="var(--openar-header-height-desktop)"
-              p="10"
-            >
-              <Link href="/">
-                <a>
-                  <Arrow className="arrow" />
-                </a>
-              </Link>
-            </Flex>
 
-            {/* --------- Exhibition title  --------- * /}
-            <Flex
-              borderY="1px solid #fff"
-              p="10"
-              pb="20"
-              w="33.33vw"
-              h="33.33vw"
-              layerStyle="backdropDark"
-              flexDirection="column"
-              alignContent="flex-end"
-            >
-              <Link href="/e/openar-art" passHref>
-                <chakra.a display="block" mt="auto">
-                  <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">
-                    {exhibition.title}
-                  </chakra.h1>
-                  <chakra.p textStyle="subtitle" mb="1rem">
-                    {exhibition.subtitle}
-                  </chakra.p>
-                  <chakra.p textStyle="workmeta">
-                    {new Date(exhibition.dateBegin).toLocaleDateString("de")}{" - "}
-                    {new Date(exhibition.dateEnd).toLocaleDateString("de")}
-                  </chakra.p>
-                </chakra.a>
-              </Link>
-            </Flex>*/}
           </Flex>
         }
         {/* --------- COL: Artwork images --------- */}
@@ -230,7 +193,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 };
 
 Artwork.getLayout = function getLayout(page: ReactElement) {
-  return <LayoutBlank>{page}</LayoutBlank>;
+  return <LayoutBlank mode="dark" modeSize="light" size="mobile">{page}</LayoutBlank>;
 };
 
 export default Artwork;

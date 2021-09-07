@@ -216,8 +216,11 @@ const themeConfig = {
     backdropDark: {
       bg: "rgba(0,0,0,0.6)"
     },
+    backdropMud: {
+      bg: "openar.muddygreen"
+    },
     backdropLight: {
-      bg: "var(--chakra-colors-openar-light)"
+      bg: "openar.light"
     },
     backdropExtraDark: {
       bg: "rgba(0,0,0,0.5)"
