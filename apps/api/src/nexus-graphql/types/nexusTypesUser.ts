@@ -1,5 +1,5 @@
 /// <reference path="../../types/nexus-typegen.ts" />
-
+import { parseResolveInfo } from "graphql-parse-resolve-info";
 import dedent from "dedent";
 import { Prisma, User as PrismaTypeUser } from "@prisma/client";
 
@@ -15,35 +15,35 @@ import {
   interfaceType,
 } from "nexus";
 import httpStatus from "http-status";
-import { filteredOutputByWhitelist, ApiError } from "../../utils";
+import { ApiError } from "../../utils";
 
 import {
-  userRegister,
   userRead,
   userCreate,
   userUpdate,
   userDelete,
   userProfileUpdate,
 } from "../../services/serviceUser";
-import {
-  tokenProcessRefreshToken,
-  tokenClearRefreshToken,
-} from "../../services/serviceToken";
+
 import { GQLJson } from "./nexusTypesShared";
 import {
   authorizeApiUser,
   isCurrentApiUser,
-  isNotCurrentApiUser,
+  isCurrentApiUserByEthAddress,
 } from "../helpers";
 import { getApiConfig } from "../../config";
 import {
   daoUserQuery,
   daoUserQueryCount,
   daoUserFindFirst,
-  daoImageGetById,
   daoUserProfileImageDelete,
-  daoUserGetByEthAddress,
 } from "../../dao";
+
+import {
+  ImageStatusEnum,
+  ArObjectStatusEnum,
+  ArtworkStatusEnum,
+} from "../../utils";
 
 const apiConfig = getApiConfig();
 
@@ -53,34 +53,26 @@ const UserBaseNode = interfaceType({
     typeof (data as any).role !== "undefined" ? "User" : "PublicUser",
   definition(t) {
     t.nonNull.int("id");
-    t.int("profileImageId");
     t.string("pseudonym");
     t.string("ethAddress");
-    t.email("email");
-    t.boolean("emailVerified");
     t.string("url");
     t.string("bio");
     t.list.string("roles");
+
     t.field("profileImage", {
       type: "Image",
-
-      async resolve(...[parent]) {
-        if (parent?.profileImageId)
-          return daoImageGetById(parent.profileImageId);
-
-        return null;
-      },
     });
-  },
-});
 
-export const User = objectType({
-  name: "User",
-  definition(t) {
-    t.implements(UserBaseNode);
-    t.boolean("isBanned");
-    t.date("createdAt");
-    t.date("updatedAt");
+    t.list.field("artworks", {
+      type: "Artwork",
+
+      // async resolve(...[parent]) {
+      //   if (parent?.profileImageId)
+      //     return daoImageGetById(parent.profileImageId);
+
+      //   return null;
+      // },
+    });
   },
 });
 
@@ -88,16 +80,18 @@ export const PublicUser = objectType({
   name: "PublicUser",
   definition(t) {
     t.implements(UserBaseNode);
-    t.field("profileImage", {
-      type: "Image",
+  },
+});
 
-      async resolve(...[parent]) {
-        if (parent?.profileImageId)
-          return daoImageGetById(parent.profileImageId);
-
-        return null;
-      },
-    });
+export const User = objectType({
+  name: "User",
+  definition(t) {
+    t.implements(UserBaseNode);
+    t.email("email");
+    t.boolean("emailVerified");
+    t.boolean("isBanned");
+    t.date("createdAt");
+    t.date("updatedAt");
   },
 });
 
@@ -137,7 +131,7 @@ export const UserQueries = extendType({
         }),
       },
 
-      // TODO: authorize: :  (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
+      // TODO:authorize:   (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
 
       async resolve(...[, args]) {
         const totalCount = await daoUserQueryCount(args.where);
@@ -168,7 +162,7 @@ export const UserQueries = extendType({
     //     roles: nonNull(list(stringArg())),
     //   },
 
-    //   // // TODO: authorize: :  (...[, , ctx]) =>
+    //   // // TODO:authorize:   (...[, , ctx]) =>
     //   //   authorizeApiUser(ctx, "accessAsAuthenticatedUser"),
 
     //   async resolve(...[, args]) {
@@ -191,49 +185,244 @@ export const UserQueries = extendType({
     //   },
     // });
 
-    t.nonNull.field("userByEthAddress", {
+    t.field("user", {
+      type: "PublicUser",
+
+      args: {
+        ethAddress: nonNull(stringArg()),
+      },
+
+      // TODO:authorize:   (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
+
+      // resolve(root, args, ctx, info)
+      async resolve(...[, args, , info]) {
+        const pRI = parseResolveInfo(info);
+        let include = {};
+        let where: Prisma.UserWhereInput = {
+          isBanned: false,
+          ethAddress: args.ethAddress,
+        };
+        if ((pRI?.fieldsByTypeName?.PublicUser as any)?.profileImage) {
+          include = {
+            ...include,
+            profileImage: {
+              select: {
+                meta: true,
+                status: true,
+                id: true,
+              },
+            },
+          };
+          where = {
+            ...where,
+            OR: [
+              {
+                profileImage: {
+                  status: ImageStatusEnum.READY,
+                },
+              },
+              {
+                profileImage: null,
+              },
+            ],
+          };
+        }
+
+        if ((pRI?.fieldsByTypeName?.PublicUser as any)?.artworks) {
+          include = {
+            ...include,
+            artworks: {
+              select: {
+                id: true,
+                key: true,
+                title: true,
+                description: true,
+                url: true,
+                video: true,
+                createdAt: true,
+                heroImage: {
+                  select: {
+                    id: true,
+                    meta: true,
+                    status: true,
+                  },
+                },
+                arObjects: {
+                  select: {
+                    id: true,
+                    status: true,
+                    key: true,
+                    orderNumber: true,
+                    title: true,
+                    askPrice: true,
+                    editionOf: true,
+                    heroImage: {
+                      select: {
+                        id: true,
+                        meta: true,
+                        status: true,
+                      },
+                    },
+                    arModels: true,
+                  },
+                  where: {
+                    isBanned: false,
+                    public: true,
+                    status: {
+                      in: [
+                        ArObjectStatusEnum.PUBLISHED,
+                        ArObjectStatusEnum.MINTING,
+                        ArObjectStatusEnum.MINTED,
+                      ],
+                    },
+                  },
+                  orderBy: {
+                    orderNumber: "asc",
+                  },
+                },
+              },
+              where: {
+                isBanned: false,
+                public: true,
+                status: {
+                  in: [
+                    ArtworkStatusEnum.PUBLISHED,
+                    ArtworkStatusEnum.HASMINTEDOBJECTS,
+                  ],
+                },
+              },
+              orderBy: {
+                createdAt: "desc",
+              },
+            },
+          };
+        }
+        return daoUserFindFirst(
+          where,
+          Object.keys(include).length > 0 ? include : undefined
+        );
+      },
+    });
+
+    t.field("userRead", {
+      type: "User",
+
+      args: {
+        id: nonNull(intArg()),
+      },
+
+      authorize: (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
+
+      // resolve(root, args, ctx, info)
+      async resolve(...[, args]) {
+        return userRead(args.id);
+      },
+    });
+
+    t.field("userProfileRead", {
       type: "User",
 
       args: {
         ethAddress: nonNull(stringArg()),
       },
 
-      // TODO: authorize: :  (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
+      authorize: (...[, args, ctx]) =>
+        authorizeApiUser(ctx, "profileRead") &&
+        isCurrentApiUserByEthAddress(ctx, args.ethAddress),
 
       // resolve(root, args, ctx, info)
-      async resolve(...[, args]) {
-        return daoUserGetByEthAddress(args.ethAddress);
-      },
-    });
+      async resolve(...[, args, , info]) {
+        const pRI = parseResolveInfo(info);
+        let include = {};
+        let where: Prisma.UserWhereInput = {
+          isBanned: false,
+          ethAddress: args.ethAddress,
+        };
 
-    t.nonNull.field("userRead", {
-      type: "User",
+        if ((pRI?.fieldsByTypeName?.User as any)?.profileImage) {
+          include = {
+            ...include,
+            profileImage: {
+              select: {
+                meta: true,
+                status: true,
+                id: true,
+              },
+            },
+          };
+          where = {
+            ...where,
+            OR: [
+              {
+                profileImage: {
+                  status: ImageStatusEnum.READY,
+                },
+              },
+              {
+                profileImage: null,
+              },
+            ],
+          };
+        }
 
-      args: {
-        id: nonNull(intArg()),
-      },
+        if ((pRI?.fieldsByTypeName?.User as any)?.artworks) {
+          include = {
+            ...include,
+            artworks: {
+              select: {
+                id: true,
+                title: true,
+                description: true,
+                url: true,
+                video: true,
+                createdAt: true,
+                heroImage: {
+                  select: {
+                    id: true,
+                    meta: true,
+                    status: true,
+                  },
+                },
+                arObjects: {
+                  select: {
+                    id: true,
+                    status: true,
+                    key: true,
+                    orderNumber: true,
+                    title: true,
+                    askPrice: true,
+                    editionOf: true,
+                    heroImage: {
+                      select: {
+                        id: true,
+                        meta: true,
+                        status: true,
+                      },
+                    },
+                    arModels: true,
+                  },
+                  where: {
+                    isBanned: false,
+                  },
 
-      // TODO: authorize: :  (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
-
-      // resolve(root, args, ctx, info)
-      async resolve(...[, args]) {
-        return userRead(args.id);
-      },
-    });
-
-    t.nonNull.field("userProfileRead", {
-      type: "PublicUser",
-
-      args: {
-        id: nonNull(intArg()),
-      },
-
-      // TODO: authorize: :  (...[, args, ctx]) =>
-      //  authorizeApiUser(ctx, "profileRead") && isCurrentApiUser(ctx, args.id),
-
-      // resolve(root, args, ctx, info)
-      async resolve(...[, args]) {
-        return userRead(args.id);
+                  orderBy: {
+                    orderNumber: "asc",
+                  },
+                },
+              },
+              where: {
+                isBanned: false,
+              },
+              orderBy: {
+                createdAt: "desc",
+              },
+            },
+          };
+        }
+        return daoUserFindFirst(
+          where,
+          Object.keys(include).length > 0 ? include : undefined
+        );
       },
     });
   },
@@ -293,7 +482,7 @@ export const UserMutations = extendType({
     //     data: nonNull(UserSignupInput),
     //   },
 
-    //   // TODO: authorize: :  () => apiConfig.enablePublicRegistration,
+    //   // TODO:authorize:   () => apiConfig.enablePublicRegistration,
 
     //   async resolve(...[, args, { res }]) {
     //     const authPayload = await userRegister(args.data);
@@ -334,7 +523,7 @@ export const UserMutations = extendType({
         data: nonNull(UserCreateInput),
       },
 
-      // TODO: how to lock down the API // TODO: authorize: :  (...[, , ctx]) => authorizeApiUser(ctx, "userCreate"),
+      // TODO: how to lock down the API // TODO:authorize:   (...[, , ctx]) => authorizeApiUser(ctx, "userCreate"),
 
       async resolve(...[, args]) {
         const user = await userCreate(args.data);
@@ -357,7 +546,7 @@ export const UserMutations = extendType({
         data: nonNull(UserUpdateInput),
       },
 
-      // TODO: authorize: :  (...[, , ctx]) => authorizeApiUser(ctx, "userUpdate"),
+      // TODO:authorize:   (...[, , ctx]) => authorizeApiUser(ctx, "userUpdate"),
 
       async resolve(...[, args]) {
         const user = await userUpdate(args.id, args.data);
@@ -412,7 +601,7 @@ export const UserMutations = extendType({
         id: nonNull(intArg()),
       },
 
-      // TODO: authorize: :  (...[, args, ctx]) =>
+      // TODO:authorize:   (...[, args, ctx]) =>
       // authorizeApiUser(ctx, "userDelete") &&
       // isNotCurrentApiUser(ctx, args.id),
 

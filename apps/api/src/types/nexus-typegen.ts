@@ -65,7 +65,6 @@ export interface NexusGenInputs {
     heroImage?: NexusGenScalars['JSON'] | null; // JSON
     id?: number | null; // Int
     images?: NexusGenScalars['JSON'] | null; // JSON
-    key?: string | null; // String
     lat?: number | null; // Float
     lng?: number | null; // Float
     orderNumber?: number | null; // Int
@@ -80,7 +79,6 @@ export interface NexusGenInputs {
     heroImage?: NexusGenScalars['JSON'] | null; // JSON
     id?: number | null; // Int
     images?: NexusGenScalars['JSON'] | null; // JSON
-    key?: string | null; // String
     lat?: number | null; // Float
     lng?: number | null; // Float
     objects?: NexusGenScalars['JSON'] | null; // JSON
@@ -269,18 +267,18 @@ export interface NexusGenObjects {
   }
   Mutation: {};
   PublicUser: { // root type
+    artworks?: Array<NexusGenRootTypes['Artwork'] | null> | null; // [Artwork]
     bio?: string | null; // String
-    email?: NexusGenScalars['EmailAddress'] | null; // EmailAddress
-    emailVerified?: boolean | null; // Boolean
     ethAddress?: string | null; // String
     id: number; // Int!
-    profileImageId?: number | null; // Int
+    profileImage?: NexusGenRootTypes['Image'] | null; // Image
     pseudonym?: string | null; // String
     roles?: Array<string | null> | null; // [String]
     url?: string | null; // String
   }
   Query: {};
   User: { // root type
+    artworks?: Array<NexusGenRootTypes['Artwork'] | null> | null; // [Artwork]
     bio?: string | null; // String
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     email?: NexusGenScalars['EmailAddress'] | null; // EmailAddress
@@ -288,7 +286,7 @@ export interface NexusGenObjects {
     ethAddress?: string | null; // String
     id: number; // Int!
     isBanned?: boolean | null; // Boolean
-    profileImageId?: number | null; // Int
+    profileImage?: NexusGenRootTypes['Image'] | null; // Image
     pseudonym?: string | null; // String
     roles?: Array<string | null> | null; // [String]
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -462,13 +460,11 @@ export interface NexusGenFieldTypes {
     userUpdate: NexusGenRootTypes['BooleanResult']; // BooleanResult!
   }
   PublicUser: { // field return type
+    artworks: Array<NexusGenRootTypes['Artwork'] | null> | null; // [Artwork]
     bio: string | null; // String
-    email: NexusGenScalars['EmailAddress'] | null; // EmailAddress
-    emailVerified: boolean | null; // Boolean
     ethAddress: string | null; // String
     id: number; // Int!
     profileImage: NexusGenRootTypes['Image'] | null; // Image
-    profileImageId: number | null; // Int
     pseudonym: string | null; // String
     roles: Array<string | null> | null; // [String]
     url: string | null; // String
@@ -488,12 +484,13 @@ export interface NexusGenFieldTypes {
     imageRead: NexusGenRootTypes['Image']; // Image!
     imageStatus: NexusGenRootTypes['ImageStatus']; // ImageStatus!
     images: NexusGenRootTypes['ImageQueryResult'] | null; // ImageQueryResult
-    userByEthAddress: NexusGenRootTypes['User']; // User!
-    userProfileRead: NexusGenRootTypes['PublicUser']; // PublicUser!
-    userRead: NexusGenRootTypes['User']; // User!
+    user: NexusGenRootTypes['PublicUser'] | null; // PublicUser
+    userProfileRead: NexusGenRootTypes['User'] | null; // User
+    userRead: NexusGenRootTypes['User'] | null; // User
     users: NexusGenRootTypes['UsersQueryResult'] | null; // UsersQueryResult
   }
   User: { // field return type
+    artworks: Array<NexusGenRootTypes['Artwork'] | null> | null; // [Artwork]
     bio: string | null; // String
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     email: NexusGenScalars['EmailAddress'] | null; // EmailAddress
@@ -502,7 +499,6 @@ export interface NexusGenFieldTypes {
     id: number; // Int!
     isBanned: boolean | null; // Boolean
     profileImage: NexusGenRootTypes['Image'] | null; // Image
-    profileImageId: number | null; // Int
     pseudonym: string | null; // String
     roles: Array<string | null> | null; // [String]
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -513,13 +509,11 @@ export interface NexusGenFieldTypes {
     users: Array<NexusGenRootTypes['User'] | null> | null; // [User]
   }
   UserBaseNode: { // field return type
+    artworks: Array<NexusGenRootTypes['Artwork'] | null> | null; // [Artwork]
     bio: string | null; // String
-    email: NexusGenScalars['EmailAddress'] | null; // EmailAddress
-    emailVerified: boolean | null; // Boolean
     ethAddress: string | null; // String
     id: number; // Int!
     profileImage: NexusGenRootTypes['Image'] | null; // Image
-    profileImageId: number | null; // Int
     pseudonym: string | null; // String
     roles: Array<string | null> | null; // [String]
     url: string | null; // String
@@ -677,13 +671,11 @@ export interface NexusGenFieldTypeNames {
     userUpdate: 'BooleanResult'
   }
   PublicUser: { // field return type name
+    artworks: 'Artwork'
     bio: 'String'
-    email: 'EmailAddress'
-    emailVerified: 'Boolean'
     ethAddress: 'String'
     id: 'Int'
     profileImage: 'Image'
-    profileImageId: 'Int'
     pseudonym: 'String'
     roles: 'String'
     url: 'String'
@@ -703,12 +695,13 @@ export interface NexusGenFieldTypeNames {
     imageRead: 'Image'
     imageStatus: 'ImageStatus'
     images: 'ImageQueryResult'
-    userByEthAddress: 'User'
-    userProfileRead: 'PublicUser'
+    user: 'PublicUser'
+    userProfileRead: 'User'
     userRead: 'User'
     users: 'UsersQueryResult'
   }
   User: { // field return type name
+    artworks: 'Artwork'
     bio: 'String'
     createdAt: 'DateTime'
     email: 'EmailAddress'
@@ -717,7 +710,6 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
     isBanned: 'Boolean'
     profileImage: 'Image'
-    profileImageId: 'Int'
     pseudonym: 'String'
     roles: 'String'
     updatedAt: 'DateTime'
@@ -728,13 +720,11 @@ export interface NexusGenFieldTypeNames {
     users: 'User'
   }
   UserBaseNode: { // field return type name
+    artworks: 'Artwork'
     bio: 'String'
-    email: 'EmailAddress'
-    emailVerified: 'Boolean'
     ethAddress: 'String'
     id: 'Int'
     profileImage: 'Image'
-    profileImageId: 'Int'
     pseudonym: 'String'
     roles: 'String'
     url: 'String'
@@ -866,11 +856,11 @@ export interface NexusGenArgTypes {
       taxonomyId?: number | null; // Int
       where?: NexusGenScalars['JSON'] | null; // JSON
     }
-    userByEthAddress: { // args
+    user: { // args
       ethAddress: string; // String!
     }
     userProfileRead: { // args
-      id: number; // Int!
+      ethAddress: string; // String!
     }
     userRead: { // args
       id: number; // Int!

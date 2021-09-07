@@ -230,10 +230,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 };
 
 Artwork.getLayout = function getLayout(page: ReactElement) {
-
-  const isMobile = useSSRSaveMediaQuery("(max-width: 45rem)");
-
-  return <LayoutBlank mode={isMobile? "light" : "dark"}>{page}</LayoutBlank>;
+  return <LayoutBlank>{page}</LayoutBlank>;
 };
 
 export default Artwork;

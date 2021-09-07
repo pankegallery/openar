@@ -1,14 +1,23 @@
 import React from "react";
-import { Box, chakra} from "@chakra-ui/react";
+import { Box, chakra } from "@chakra-ui/react";
 
+export const CornerButton = ({
+  label,
+  emphasis = false,
+  position = "bottom",
+}: {
+  label?: String,
+  emphasis?: boolean,
+  position?: String,
+  onClick?: () => void
+}) => {
+  const bg = emphasis ? "#939180" : "openar.mudgreen";
+  const bghover = emphasis
+    ? "linear-gradient(337deg, #bab7a1 20%, #737160 90%)"
+    : "linear-gradient(337deg, #bab7a1 20%, #737160 90%)";
+  const fw = emphasis ? "600" : "400";
 
-export const CornerButton = ({ label, emphasis = false, position = "bottom" }: { label?: String, emphasis?: String, position?: String }) => {
-
-  const bg = emphasis ? "#939180" : "openar.mudgreen"
-  const bghover = emphasis ? "linear-gradient(337deg, #bab7a1 20%, #737160 90%)" : "linear-gradient(337deg, #bab7a1 20%, #737160 90%)"
-  const fw = emphasis ? "600" : "400"
-
-  if (position=="top"){
+  if (position == "top") {
     return (
       <Box
         position="absolute"
@@ -33,19 +42,23 @@ export const CornerButton = ({ label, emphasis = false, position = "bottom" }: {
           zIndex: "-1",
         }}
         _hover={{
-          width:"10rem",
-          bg:"linear-gradient(206deg, #bab7a1 33%, #737160 100%)"
+          width: "10rem",
+          bg: "linear-gradient(206deg, #bab7a1 33%, #737160 100%)",
         }}
       >
         <chakra.p
           textStyle="label"
-          my="6" mr="4" ml="auto"
+          my="6"
+          mr="4"
+          ml="auto"
           width="calc(5rem - var(--chakra-space-4))"
           textAlign="right"
           fontSize="xs"
           fontWeight={fw}
           transition="all 0.5s ease"
-        >{label}</chakra.p>
+        >
+          {label}
+        </chakra.p>
       </Box>
     );
   } else {
@@ -73,18 +86,23 @@ export const CornerButton = ({ label, emphasis = false, position = "bottom" }: {
           zIndex: "-1",
         }}
         _hover={{
-          width:"10rem",
-          bg:"linear-gradient(337deg, #bab7a1 33%, #737160 100%)"
+          width: "10rem",
+          bg: "linear-gradient(337deg, #bab7a1 33%, #737160 100%)",
         }}
       >
         <chakra.p
           textStyle="label"
-          pb="4" mr="4" ml="auto" mt="auto"
+          pb="4"
+          mr="4"
+          ml="auto"
+          mt="auto"
           width="calc(5rem - var(--chakra-space-4))"
           textAlign="right"
           fontSize="xs"
           fontWeight={fw}
-          >{label}</chakra.p>
+        >
+          {label}
+        </chakra.p>
       </Box>
     );
   }

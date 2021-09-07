@@ -10,6 +10,7 @@ import { useImageStatusPoll } from "~/hooks";
 export type ApiImageProps = {
   id: number | undefined;
   alt: string;
+  title?: string;
   meta?: ApiImageMetaInformation;
   status: ImageStatusEnum;
   forceAspectRatioPB?: number;

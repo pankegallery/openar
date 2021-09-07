@@ -205,7 +205,7 @@ export const FieldInput = ({
             pt="3"
             pr="3"
           >
-            <FieldErrorMessage error={errors[name]?.message} color="openar.error"/>
+            <FieldErrorMessage error={errors[name]?.message} />
           </Box>
         )}
         <FormLabel

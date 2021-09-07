@@ -127,7 +127,6 @@ const Update = () => {
             orderNumber: newData.orderNumber ?? null,
             askPrice: newData.askPrice ?? null,
             status: newData.status ?? null,
-            key: newData.key ?? "",
             creator: {
               connect: {
                 id: appUser.id,

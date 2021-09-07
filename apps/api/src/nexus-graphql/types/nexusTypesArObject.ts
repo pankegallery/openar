@@ -349,6 +349,7 @@ export const ArObjectQueries = extendType({
 
         where = {
           ...where,
+          isBanned: false,
           creator: {
             id: ctx.appUser?.id ?? 0,
           },
@@ -465,6 +466,7 @@ export const ArObjectQueries = extendType({
                 id: true,
               },
               where: {
+                isBanned: false,
                 status: {
                   not: ArModelStatusEnum.DELETED,
                 },
@@ -503,13 +505,11 @@ export const ArObjectUpsertInput = inputObjectType({
     t.nonNull.string("description");
     t.int("status");
     t.int("orderNumber");
-    t.int("editionOf");
-    t.float("lat");
     t.float("lng");
     t.float("askPrice");
+    t.int("editionOf");
+    t.float("lat");
     t.string("ownerEthAddress");
-    t.string("key");
-
     t.json("creator");
     t.json("collector");
     t.json("heroImage");

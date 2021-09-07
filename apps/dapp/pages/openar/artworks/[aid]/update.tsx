@@ -131,8 +131,7 @@ const Update = () => {
           video: newData.video ?? "",
           url: newData.url ?? "",
           status: newData.status ?? "",
-          key: newData.key ?? "",
-
+          
           creator: {
             connect: {
               id: appUser.id,
