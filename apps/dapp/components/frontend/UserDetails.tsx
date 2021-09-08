@@ -85,6 +85,8 @@ export const UserDetails = ({ user, showArtworks }: {user: any; showArtworks: Bo
         flexGrow={0}
       >
 
+
+
         {/* ======== BOX: User bio  ======== */}
         <Box
           className="artworkDescription"
@@ -93,6 +95,12 @@ export const UserDetails = ({ user, showArtworks }: {user: any; showArtworks: Bo
         >
           <chakra.p textStyle="label" className="label">About</chakra.p>
           <div dangerouslySetInnerHTML={{__html: user.bio}} />
+
+
+        {/* ======== BOX: User link  ======== */}
+
+          <chakra.p textStyle="label" className="label" mt="6">More information</chakra.p>
+          <ArrowLink href="user.url">{user.url}</ArrowLink>
         </Box>
 
 

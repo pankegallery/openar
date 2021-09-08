@@ -36,10 +36,10 @@ export const User = ({
   const isMobile = useSSRSaveMediaQuery("(max-width: 45rem)");
 
 
-//  const isArtworks = user.artworks.length > 0;
-  const isArtworks = false;
+  const isArtworks = user.artworks.length > 0;
+//  const isArtworks = false;
   const isCollection = false;
-  const name = user.psydonym ? user.psydonym : user.ethAdress
+  const name = user.pseudonym ? user.pseudonym : user.ethAddress
 
   const showArtworksUnderDetails = (isArtworks && !isDesktop && isCollection) || (isArtworks && isMobile)
 
@@ -122,26 +122,27 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   const userQuery = gql`
     query ($eth: String!) {
       user(ethAddress: $eth) {
-    ethAddress
-    bio
-    pseudonym
-    roles
-    artworks {
-      id
-      title
-      key
-      creator {
-        pseudonym
-        id
         ethAddress
+        bio
+        url
+        pseudonym
+        roles
+        artworks {
+          id
+          title
+          key
+          creator {
+            pseudonym
+            id
+            ethAddress
+          }
+          heroImage {
+            id
+            meta
+            status
+          }
+        }
       }
-      heroImage {
-        id
-        meta
-        status
-      }
-    }
-  }
     }
   `;
 
