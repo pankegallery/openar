@@ -30,7 +30,7 @@ function PageTemplate({ content, data }) {
           base: "100%",
           t: "33.33vw",
         }}
-        h={{
+        maxHeight={{
           base: "100vw",
           t: "calc(100% - var(--openar-header-height-desktop))",
           d: "33vw",

@@ -31,11 +31,22 @@ export const User = ({
 //  }
 
   console.log("[Profile] User", user)
+  const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
+  const isTablet = useSSRSaveMediaQuery("(min-width: 45rem) and (max-width: 75rem)");
+  const isMobile = useSSRSaveMediaQuery("(max-width: 45rem)");
 
 
-  const isArtworks = user.artworks.length > 0;
-  const isCollection = true
+//  const isArtworks = user.artworks.length > 0;
+  const isArtworks = false;
+  const isCollection = false;
   const name = user.psydonym ? user.psydonym : user.ethAdress
+
+  const showArtworksUnderDetails = (isArtworks && !isDesktop && isCollection) || (isArtworks && isMobile)
+
+  const showArtworksColumn = (isArtworks && isDesktop) || (isArtworks && isTablet && !isCollection)
+
+  const showCollectionColumn = isCollection
+  const showCollectionPlaceholder = !isCollection && !isArtworks && !isMobile
 
   return(
     <>
@@ -63,24 +74,36 @@ export const User = ({
           base: "auto",
           t: "100vh"
         }}
+        minHeight={{
+          base: "100vh"
+        }}
         zIndex="200"
         color="white"
         overflow={{
           base: "show",
           t: "hidden",
         }}
+        flexDirection={{
+          base: "column-reverse",
+          t: "row"
+        }}
+        layerStyle="backdropMud"
       >
       {/* --------- COL: Collection --------- */}
-        {isCollection&&
-          <CollectionList artworks={user.artworks} />
+        {showCollectionColumn&&
+          <CollectionList artworks={user.artworks} col={isArtworks ? 1 : isDesktop? 2 : 1} />
+        }
+
+        {showCollectionPlaceholder &&
+          <CollectionList userName={user?.pseudonym} col={isDesktop ? 2 : 1}/>
         }
         {/* --------- COL: Artworks --------- */}
-        {isArtworks&&
-          <ArtworkList artworks={user.artworks} />
+        {showArtworksColumn &&
+          <ArtworkList artworks={user.artworks} col={isCollection ? 1 : isDesktop? 2 : 1}/>
         }
 
         {/* --------- COL: Artwork details) --------- */}
-          <UserDetails user={user} />
+        <UserDetails user={user} showArtworks={showArtworksUnderDetails}/>
       </Flex> {/* Column Layout close*/}
 
     </>

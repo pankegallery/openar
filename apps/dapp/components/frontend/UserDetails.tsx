@@ -2,14 +2,20 @@ import React from "react";
 
 import { Box, Grid, Flex, chakra } from "@chakra-ui/react";
 import {ArrowLink} from "~/components/ui";
-import {CornerButton, RoleBadgeControl} from "~/components/frontend";
+import {CornerButton, RoleBadgeControl, ArtworkList} from "~/components/frontend";
 
-export const UserDetails = ({ user }: {user: any}) => {
+import { useSSRSaveMediaQuery } from "~/hooks";
+
+
+export const UserDetails = ({ user, showArtworks }: {user: any; showArtworks: Boolean;}) => {
 
   let name = user?.pseudonym ? user?.pseudonym : user?.ethAddress;
 
-  console.log("[UserDetails] user: ", user)
-  console.log("[UserDetails] name: ", name)
+  const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
+  const isTablet = useSSRSaveMediaQuery("(min-width: 45rem) and (max-width: 75rem)");
+
+//  console.log("[UserDetails] user: ", user)
+//  console.log("[UserDetails] name: ", name)
 
   const allRoles=[
     {
@@ -45,7 +51,7 @@ export const UserDetails = ({ user }: {user: any}) => {
     <Flex
       direction="column"
       layerStyle="backdropMud"
-      className="artworkDetails"
+      className="userDetails"
       color="white"
       w={{
         base: "100vw",
@@ -56,7 +62,6 @@ export const UserDetails = ({ user }: {user: any}) => {
           base: "auto",
           t: "100%"
         }}
-      minHeight="100vh"
       bg="var(--chakra-colors-openar-muddygreen)"
       overflowY="auto"
       borderLeft="1px solid white"
@@ -69,7 +74,7 @@ export const UserDetails = ({ user }: {user: any}) => {
         pt="20"
       >
         <chakra.p textStyle="label" className="label">Profile</chakra.p>
-        <chakra.h1 textStyle="subtitle" maxWidth="80%">{name}</chakra.h1>
+        <chakra.h1 textStyle="pagetitle" maxWidth="80%">{name}</chakra.h1>
 
       </Box>
 
@@ -102,8 +107,8 @@ export const UserDetails = ({ user }: {user: any}) => {
             <CornerButton label="View badges" href="/p/badges"/>
             <chakra.p textStyle="label" className="label">Roles</chakra.p>
 
-            {user.roles.map(role => {
-              return <RoleBadgeControl role={allRoles.filter(r => r.slug === role)[0]} />
+            {user.roles.map((role, key) => {
+              return <RoleBadgeControl key={key} role={allRoles.filter(r => r.slug === role)[0]} />
             })}
           </Box>
         }
@@ -121,11 +126,17 @@ export const UserDetails = ({ user }: {user: any}) => {
             p="6"
           >
             <chakra.p textStyle="label" className="label">More information</chakra.p>
-            {user.reviews.map(review => (
-              <ArrowLink href={review.url}>{review.title}</ArrowLink>
+            {user.reviews.map((review, key) => (
+              <ArrowLink href={review.url} key={key}>{review.title}</ArrowLink>
             ))}
 
           </Box>
+        }
+
+        {/* ======== BOX: User artworks  ======== */}
+
+        {showArtworks &&
+          <ArtworkList artworks={user.artworks} col={1}/>
         }
 
       </Box>

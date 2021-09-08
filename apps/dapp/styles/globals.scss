@@ -57,13 +57,13 @@ a {
     }
 
     .arrowLink.to &, &.right{
-        transform: rotate(-180deg) translate(5px, 3.7px);
+        transform: rotate(-180deg) translate(5px, 2.7px);
         transform-origin: center center;
     }
 
     .arrowLink.to:hover > &,
     &.right:hover {
-        transform: rotate(-180deg) translate(0px, 3.7px);
+        transform: rotate(-180deg) translate(0px, 2.7px);
     }
 }
 
@@ -256,15 +256,32 @@ a {
 
     &:nth-child(4n + 1),
     &:nth-child(4n + 2) {
-          flex-direction: row;
-          .info {
-           a::before {
-             left: auto;
-             right: 0;
-           }
-          }
-        }
+      flex-direction: row;
+      .info {
+       a::before {
+         left: auto;
+         right: 0;
+       }
+      }
     }
+
+    &.col-1{
+      width: 100%;
+      flex-direction: row;
+    }
+
+    &.col-1:nth-child(2n) {
+      flex-direction: row-reverse;
+      .info {
+       a::before {
+         left: auto;
+         right: 0;
+       }
+      }
+    }
+  }
+
+
 
 //    .corner-light + .openOverlayMenu {
 //        right: 50vw;
@@ -277,6 +294,22 @@ a {
 
       .info {
         height: calc(22.19vw - var(--sbw));
+      }
+
+      &.col-2{
+        width: 50%;
+        flex-direction: row-reverse;
+      }
+
+      &.col-2:nth-child(4n + 1),
+      &.col-2:nth-child(4n + 2) {
+        flex-direction: row;
+        .info {
+         a::before {
+           left: auto;
+           right: 0;
+         }
+        }
       }
 
       &.col-3{

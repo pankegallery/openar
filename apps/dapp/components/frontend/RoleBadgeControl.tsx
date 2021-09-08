@@ -1,6 +1,7 @@
 import React, {useEffect} from "react";
 
 import {ArrowLink} from "~/components/ui";
+import Image from "next/image";
 
 
 import {
@@ -15,10 +16,6 @@ import {
   ModalOverlay,
   useDisclosure,
 } from "@chakra-ui/react";
-
-
-
-import Image from "next/image";
 
 export const RoleBadgeControl = ({role}: {role: any;}) => {
 
@@ -57,11 +54,14 @@ export const RoleBadgeControl = ({role}: {role: any;}) => {
             {role.badges.map(badge => (
               <>
                 <chakra.p textStyle="label" mt="10" mb="4">{role.title} badge 2021</chakra.p>
-                <img
+                <Box display="block"><Image
+                  layout="responsive"
                   width="100%"
+                  height="100%"
+
                   src={`/images/${badge.image}`}
                   alt={role.title}
-                />
+                /></Box>
                 <chakra.p textStyle="label" mt="6">Artist</chakra.p>
                 <p>Created by {badge.artist}</p>
               </>

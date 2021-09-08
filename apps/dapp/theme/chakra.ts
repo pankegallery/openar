@@ -24,7 +24,7 @@ const themeConfig = {
     md: "30rem", // ~480px < Chakra requirement don't use
     mw: "30rem", // ~480px - aka "Mobile wide"
     lg: "45rem", // 720px < Chakra requirement don't use
-    t: "38rem", // 720px - aka "Tablet"
+    t: "45rem", // 720px - aka "Tablet" was 38, Larissa adapted to MediaQueries
     xl: "55rem", // 880px < Chakra requirement don't use
     tw: "55rem", // 880px - aka "Tablet Wide"
     d: "75rem", // 1200px - aka "Desktop"
@@ -280,6 +280,15 @@ const themeConfig = {
         base: "26px",
         t: "42px",
         d: "42px"
+      },
+      fontWeight: "bold",
+      lineHeight: "130%",
+    },
+    pagetitle: {
+      fontSize: {
+        base: "20px",
+        t: "22px",
+        d: "22px"
       },
       fontWeight: "bold",
       lineHeight: "130%",
