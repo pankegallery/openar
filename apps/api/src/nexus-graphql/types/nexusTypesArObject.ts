@@ -466,7 +466,6 @@ export const ArObjectQueries = extendType({
                 id: true,
               },
               where: {
-                isBanned: false,
                 status: {
                   not: ArModelStatusEnum.DELETED,
                 },

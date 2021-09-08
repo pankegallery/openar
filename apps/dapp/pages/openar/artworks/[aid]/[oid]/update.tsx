@@ -186,8 +186,8 @@ const Update = () => {
     const checkValues = {
       ...getValues(),
       heroImage: data.arObjectReadOwn?.heroImage?.id,
-      modelGlb: uploadedFiles.glb.id,
-      modelUsdz: uploadedFiles.usdz.id
+      modelGlb: uploadedFiles?.glb?.id,
+      modelUsdz: uploadedFiles?.usdz?.id
     }
 
     if (ModuleArObjectUpdateSchema.isValidSync(checkValues)) {
