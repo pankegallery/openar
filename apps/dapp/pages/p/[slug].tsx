@@ -113,12 +113,7 @@ function PageTemplate({ content, data }) {
           base: "auto",
           t: "calc(100vh - var(--openar-header-height-desktop))",
         }}
-        overflow="scroll"
-        pb={{
-          base: "10",
-          t: "var(--openar-header-height-desktop)",
-          d: "0",
-        }}
+        overflowY="auto"       
       >
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
       </Box>
