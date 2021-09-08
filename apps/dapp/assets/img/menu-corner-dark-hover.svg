@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="238.707" height="238.707" viewBox="0 0 238.707 238.707">
+  <g id="Menu_corner" data-name="Menu corner" transform="translate(0.354 0.354)">
+    <path id="Path_33" data-name="Path 33" d="M0,0,238,238H0Z" transform="translate(238 238) rotate(180)" opacity="0.022" style="mix-blend-mode: lighten;isolation: isolate"/>
+    <line id="Line_20" data-name="Line 20" x2="238" y2="238" fill="none" stroke="#555" stroke-width="1"/>
+    <rect id="Rectangle_59" data-name="Rectangle 59" width="40.602" height="5.414" rx="2.707" transform="translate(149.464 45.699)" fill="#555"/>
+    <rect id="Rectangle_112" data-name="Rectangle 112" width="40.602" height="5.414" rx="2.707" transform="translate(149.464 60.586)" fill="#555"/>
+    <rect id="Rectangle_113" data-name="Rectangle 113" width="40.602" height="5.414" rx="2.707" transform="translate(149.464 75.473)" fill="#555"/>
+  </g>
+</svg>

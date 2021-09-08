@@ -21,7 +21,9 @@ import { useWalletLogin } from "~/hooks";
 
 import Close from "~/assets/img/close.svg";
 import Logo from "~/assets/img/logo-white.svg";
+import MenuCornerWhiteHover from "~/assets/img/menu-corner-light-hover.svg";
 import MenuCornerWhite from "~/assets/img/menu-corner-light.svg";
+import MenuCornerDarkHover from "~/assets/img/menu-corner-dark-hover.svg";
 import MenuCornerDark from "~/assets/img/menu-corner-dark.svg";
 
 export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
@@ -33,6 +35,8 @@ export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
   const { isOpen, onToggle, onClose } = useDisclosure();
   const [isClosing, setIsClosing] = useState(false);
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
+
+  const menuWidth = isDesktop ? "150px" : "100px";
 
   const aboutText = (
     <Box textStyle="subtitle">
@@ -78,8 +82,8 @@ export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
       <Button
         onClick={onToggle}
         className="openOverlayMenu"
-        w="100px"
-        h="100"
+        w={menuWidth}
+        h={menuWidth}
         position="fixed"
         top="0"
         right="0"
@@ -87,22 +91,55 @@ export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
         p="0"
         border="0"
         variant="functional"
+        sx={{
+          "&:hover .menuCorner":{
+            display: "none"
+          },
+          "& .menuCornerHover":{
+            display: "none"
+          },
+          "&:hover .menuCornerHover":{
+            display: "block"
+          }
+        }}
       >
         {mode === "light" && (
-          <MenuCornerDark
-            viewBox="0 0 120 120"
-            width="120px"
-            height="120px"
-            className="menuCorner"
-          />
+          <>
+            <MenuCornerDark
+              viewBox="0 0 120 120"
+              width={menuWidth}
+              height={menuWidth}
+              className="menuCorner"
+            />
+            <MenuCornerDarkHover
+              viewBox="0 0 240 240"
+              width={{
+                base: "100px",
+                t: "150px",
+              }}
+              height={{
+                base: "100px",
+                t: "150px",
+              }}
+              className="menuCornerHover"
+            />
+          </>
         )}
         {mode === "dark" && (
-          <MenuCornerWhite
-            viewBox="0 0 120 120"
-            width="120px"
-            height="120px"
-            className="menuCorner"
-          />
+          <>
+            <MenuCornerWhite
+              viewBox="0 0 120 120"
+              width={menuWidth}
+              height={menuWidth}
+              className="menuCorner"
+            />
+            <MenuCornerWhiteHover
+              viewBox="0 0 240 240"
+              width={menuWidth}
+              height={menuWidth}
+              className="menuCornerHover"
+            />
+          </>
         )}
       </Button>
 
@@ -175,7 +212,7 @@ export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
                   }}
                   variant="functional"
                 >
-                  <Close viewBox="-40 -8 80 80" />
+                  <Close viewBox="0 -8 80 80" />
                 </Button>
               </Flex>
               {/* --------- About, main nav, login nav --------- */}

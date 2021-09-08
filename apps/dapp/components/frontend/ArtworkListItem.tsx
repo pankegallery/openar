@@ -10,12 +10,14 @@ import {
 import { ApiImage } from "../ui";
 import { ArtworkStatusEnum } from "~/utils";
 import Link from "next/link";
+import { useRouter } from 'next/router'
+
 
 export const ArtworkListItem = ({
   id,
   title,
   urlKey,
-  exSlug,
+  col,
   creator,
   heroImage,
   status,
@@ -24,6 +26,7 @@ export const ArtworkListItem = ({
 }: {
   id: number;
   title: string;
+  col: number;
   urlKey: string;
   exSlug?: string;
   creator: any;
@@ -33,14 +36,30 @@ export const ArtworkListItem = ({
   isAdmin?: boolean;
 }) => {
   let artist = creator?.pseudonym ? `${creator?.pseudonym}` : "";
+
+  // `
   if (artist.trim().length === 0) artist = creator?.ethAddress;
 
-  const href = isAdmin ? `/openar/artworks/${id}/update` : `/e/openar-art/${urlKey}/`;
+  const router = useRouter();
+  console.log(router)
+
+  let cameFromExhibition;
+
+  // TODO: VVU router.components does not work, does it? TypeScript complains that the function is not known
+  // SO I changed the line to simply check if the pathname starts with /e/ should do the same thing
+  //if(router.components) cameFromExhibition = "/e/[slug]" in router.components, right? 
+  cameFromExhibition = router.pathname.indexOf("/e/") > -1;
+
+  
+
+  // TODO: change a-detail to a once opening exhibition done
+  const baseURL = cameFromExhibition ? router.asPath : "/a-detail"
+  const href = isAdmin ? `/openar/artworks/${id}/update` : `${baseURL}/${urlKey}/`;
 
   return (
     <LinkBox
       as="article"
-      className={`${isWhite ? "white" : ""} artwork list item`}
+      className={`${isWhite ? "white" : ""} artwork list item col-${col}`}
       key={`artwork-${id}`}
     >
       <Box className="info" p="4">

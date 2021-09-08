@@ -124,17 +124,15 @@ const Update = () => {
         const { data, errors } = await firstMutation(
           parseInt(router.query.aid as string),
           {
-            title: newData.title,
-            description: newData.description,
-            video: newData.video ?? "",
-            url: newData.url ?? "",
-            status: newData.status ?? ArtworkStatusEnum.DRAFT,
-            key: newData.key ?? "",
-
-            creator: {
-              connect: {
-                id: appUser.id,
-              },
+          title: newData.title,
+          description: newData.description,
+          video: newData.video ?? "",
+          url: newData.url ?? "",
+          status: newData.status ?? "",
+          
+          creator: {
+            connect: {
+              id: appUser.id,
             },
           }
         );

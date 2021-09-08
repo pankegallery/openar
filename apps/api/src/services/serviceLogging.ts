@@ -1,5 +1,4 @@
 import winston from "winston";
-import { resolve, dirname } from "path";
 import { ApiError } from "../utils";
 
 const levels = {

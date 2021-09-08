@@ -1,16 +1,17 @@
 import React from 'react'
 import Link from 'next/link'
-import { chakra } from '@chakra-ui/react'
+import { chakra, Button } from '@chakra-ui/react'
 
 
 import Arrow from "~/assets/img/arrow.svg";
 
-export const ArrowLink = ({ children, type = "to", href } : {
+export const ArrowLink = ({ children, type = "to", href, onClick } : {
   children: React.ReactNode;
   type?: string;
   href?: string;
+  onClick?: any;
 }) => {
-  if (type === "to"){
+  if (type === "to" && href){
     return(
       <Link href={href} passHref>
         <chakra.a
@@ -27,7 +28,20 @@ export const ArrowLink = ({ children, type = "to", href } : {
     );
   }
 
-  if (type === "back"){
+  if (!href && onClick){
+    return(
+      <Button
+        variant="functional"
+        className="arrowLink to"
+        onClick={onClick}
+      >
+        <Arrow className="arrow" />
+        {children}
+      </Button>
+    );
+  }
+
+  if (type === "back"  && href){
     return(
       <Link href={href} passHref>
         <chakra.a
@@ -44,6 +58,8 @@ export const ArrowLink = ({ children, type = "to", href } : {
       </Link>
     );
   }
+
+  else return <></>
 
 };
 

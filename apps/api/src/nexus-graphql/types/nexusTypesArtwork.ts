@@ -178,6 +178,7 @@ export const ArtworkQueries = extendType({
                   editionOf: true,
                 },
                 where: {
+                  isBanned: false,
                   status: {
                     in: [
                       ArObjectStatusEnum.PUBLISHED,
@@ -310,6 +311,7 @@ export const ArtworkQueries = extendType({
                 arModels: true,
               },
               where: {
+                isBanned: false,
                 status: {
                   in: [
                     ArObjectStatusEnum.PUBLISHED,
@@ -440,6 +442,7 @@ export const ArtworkQueries = extendType({
                   },
                 },
                 where: {
+                  isBanned: false,
                   status: {
                     in: [
                       ArObjectStatusEnum.PUBLISHED,
@@ -518,6 +521,9 @@ export const ArtworkQueries = extendType({
                     id: true,
                   },
                 },
+              },
+              where: {
+                isBanned: false,
               },
               orderBy: {
                 orderNumber: "asc",

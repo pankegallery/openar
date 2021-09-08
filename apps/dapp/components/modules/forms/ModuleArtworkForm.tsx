@@ -53,20 +53,6 @@ export const ModuleArtworkForm = ({
             }}
           />
         </FieldRow>
-        {/* TODO: remove key field */}
-        {action === "update" && <FieldRow>
-          <FieldInput
-            name="key"
-            id="key"
-            type="key"
-            label="Url key"
-            isRequired={yupIsFieldRequired("key", validationSchema)}
-            settings={{
-              // defaultValue: data.abc.key
-              placeholder: "What is the url key of your?",
-            }}
-          />
-        </FieldRow>}
         <FieldRow>
           <FieldTextEditor
             id="description"

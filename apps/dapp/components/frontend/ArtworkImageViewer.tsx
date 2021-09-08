@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-
+import { useRouter } from 'next/router'
 
 import { Box, Grid, Flex, chakra, Button, Link } from "@chakra-ui/react";
 import BoxIcon from "~/assets/img/box.svg";
@@ -16,9 +16,17 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 
-export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, object: any, url: String}) => {
+// TODO: is the url attribute actually used anywhere? 
+export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, object: any, url?: String}) => {
 
 //  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+
+  const router = useRouter();
+//    console.log("[ArtworkImageViewer] router: ", router);
+  const baseURL = router.asPath.split(artwork.key)[0];
+  const artworkURL = baseURL + artwork.key;
+//    console.log("[ArtworkImageViewer] artwork url: ", artworkURL);
+
 
   let urlUsdz;
   let urlGlb;
@@ -111,13 +119,13 @@ export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, objec
               artwork.arObjects.map(obj => {
 //                console.log("[ArtworkImageViewer] mapped obj: ", obj);
 
-                // TODO: Create link (sometimes with object ID, sometimes not…)
                 return(
-                  <Link passHref href={obj.key} key={obj.key}>
+                  <Link passHref href={`${artworkURL}/${obj.key}`} key={obj.key}>
                     <ApiImage
                       id={obj?.heroImage?.id}
                       meta={obj?.heroImage?.meta}
                       status={obj?.heroImage?.status}
+                      title={obj?.title}
                       alt={obj?.title}
                       sizes="(min-width: 75rem) 10vw, (min-width: 45rem) 18vw, 28vw"
                       forceAspectRatioPB={100}
