@@ -124,6 +124,19 @@ export const ArtworkQueries = extendType({
               ArtworkStatusEnum.HASMINTEDOBJECTS,
             ],
           },
+          arObjects: {
+            every: {
+              status: {
+                in: [
+                  ArObjectStatusEnum.PUBLISHED,
+                  ArObjectStatusEnum.MINTSIGNATUREREQUIRED,
+                  ArObjectStatusEnum.MINT,
+                  ArObjectStatusEnum.MINTING,
+                  ArObjectStatusEnum.MINTED,
+                ],
+              },
+            },
+          },
         };
 
         if ((pRI?.fieldsByTypeName?.ArtworkQueryResult as any)?.totalCount) {
@@ -183,6 +196,8 @@ export const ArtworkQueries = extendType({
                   status: {
                     in: [
                       ArObjectStatusEnum.PUBLISHED,
+                      ArObjectStatusEnum.MINTSIGNATUREREQUIRED,
+                      ArObjectStatusEnum.MINT,
                       ArObjectStatusEnum.MINTING,
                       ArObjectStatusEnum.MINTED,
                     ],
@@ -246,6 +261,19 @@ export const ArtworkQueries = extendType({
               ArtworkStatusEnum.PUBLISHED,
               ArtworkStatusEnum.HASMINTEDOBJECTS,
             ],
+          },
+          arObjects: {
+            every: {
+              status: {
+                in: [
+                  ArObjectStatusEnum.PUBLISHED,
+                  ArObjectStatusEnum.MINTSIGNATUREREQUIRED,
+                  ArObjectStatusEnum.MINT,
+                  ArObjectStatusEnum.MINTING,
+                  ArObjectStatusEnum.MINTED,
+                ],
+              },
+            },
           },
         };
 
