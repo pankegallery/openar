@@ -116,7 +116,7 @@ export const ArtworkQueries = extendType({
         where = {
           ...where,
           isBanned: false,
-          public: true,
+          isPublic: true,
           status: {
             in: [
               ArtworkStatusEnum.PUBLISHED,
