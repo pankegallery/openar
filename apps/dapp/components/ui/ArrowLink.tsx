@@ -31,7 +31,7 @@ export const ArrowLink = ({ children, type = "to", href, onClick } : {
   if (!href && onClick){
     return(
       <Button
-        variant="functional"
+        variant="link"
         className="arrowLink to"
         onClick={onClick}
       >

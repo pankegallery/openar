@@ -6,104 +6,125 @@ import matter from "gray-matter";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Box, Flex, chakra } from "@chakra-ui/react";
+import { Footer } from "~/components/app/site";
+
+import { useSSRSaveMediaQuery } from "~/hooks";
+
 
 function PageTemplate({ content, data }) {
 
   const frontmatter = data;
 
+  const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
+  const isTablet = useSSRSaveMediaQuery("(min-width: 45rem) and (max-width: 75rem)");
+
   return (
-    <>
-      {/* --------- Title and Submenu --------- */}
+    <Flex
+      direction="row"
+      flexWrap="wrap"
+      height={{
+        base: "auto",
+        d: "100vh",
+      }}
+      pt={{
+        base: "0",
+        t: "var(--openar-header-height-desktop)"
+      }}
+    >
+
+      {/* --------- COL: Title Tile + Footer--------- */}
       <Flex
-        position={{
-          base: "relative",
-          t: "fixed",
-        }}
-        flexDirection="column"
-        bg="white"
-        top={{
-          base: "0",
-          t: "var(--openar-header-height-desktop)",
-        }}
-        left="0"
-        w={{
-          base: "100%",
-          t: "33.33vw",
-        }}
-        h={{
-          base: "100vw",
-          t: "calc(100% - var(--openar-header-height-desktop))",
-          d: "33vw",
-        }}
-        zIndex="200"
-        color="black"
-        overflow={{
-          base: "show",
-          t: "hidden",
-        }}
-        p="6"
-        borderRight="1px solid black"
-        borderBottom={{
-          base: "1px solid black",
-          t: "none",
-        }}
-        pb={{
-          base: "10",
-          t: "var(--openar-header-height-desktop)",
-          d: "0",
-        }}
-      >
-        {frontmatter.parentPage && (
-          <Box className="parentPage" mb="4">
-            <ArrowLink type="back" href={`/${frontmatter.parentPage[0].url}`}>
-              {frontmatter.parentPage[0].label}
-            </ArrowLink>
-          </Box>
-        )}
-
-        <chakra.h1 textStyle="worktitle" mt={{ base: "auto", t: "0" }}>
-          {frontmatter.title}
-        </chakra.h1>
-
-        <Box
-          className="subPages"
-          mt="auto"
-          sx={{
-            a: {
-              display: "block",
-              mt: "4",
-            },
-            "a svg": {
-              mr: "1",
-            },
+        direction="column"
+         w={{
+            base: "100%",
+            t: "50vw",
+            d: "33.33vw",
           }}
+        height={{
+          base: "auto",
+          d: "100%",
+        }}
+        borderRight={{
+          base: "none",
+          t: "1px solid black"
+        }}
+
+      >
+        {/* --------- TILE: Back + Title + Subpages --------- */}
+        <Flex
+          flexDirection="column"
+          bg="white"
+          w={{
+            base: "100%",
+            t: "50vw",
+            d: "33.33vw",
+          }}
+          flex={{
+            base: "100vw 0 0",
+            t: "50vw 0 1",
+            d: "33vw 0 1;",
+          }}
+          zIndex="200"
+          color="black"
+          overflow={{
+            base: "show",
+            t: "hidden",
+          }}
+          borderRight="1px solid black"
+          borderBottom={{
+            base: "1px solid black",
+            d: "none",
+          }}
+          p="6"
         >
-          {frontmatter.subPages &&
-            frontmatter.subPages.map((pageItem) => (
-              <ArrowLink
-                type="to"
-                href={`/${pageItem.url}`}
-                key={pageItem.slug}
-              >
-                {pageItem.label}
+          {frontmatter.parentPage && (
+            <Box className="parentPage" mb="4">
+                <ArrowLink type="back" href={`/${frontmatter.parentPage[0].url}`}>
+                {frontmatter.parentPage[0].label}
               </ArrowLink>
-            ))}
-        </Box>
+            </Box>
+          )}
+
+          <chakra.h1 textStyle="worktitle" mt={{ base: "auto", t: "0" }}>
+            {frontmatter.title}
+          </chakra.h1>
+
+          {frontmatter.subPages &&
+            <Box
+              className="subPages"
+              mt="auto"
+              sx={{
+                a: {
+                  display: "block",
+                  mt: "4",
+                },
+                "a svg": {
+                  mr: "1",
+                },
+              }}
+            >
+              {frontmatter.subPages.map((pageItem) => (
+                <ArrowLink
+                  type="to"
+                  href={`/${pageItem.url}`}
+                  key={pageItem.slug}
+                >
+                  {pageItem.label}
+                </ArrowLink>
+              ))}
+            </Box>
+          }
+          </Flex>
+
+          {isDesktop &&
+            <Footer />
+          }
+
       </Flex>
+
       {/* --------- Page content --------- */}
       <Box
-        position={{
-          base: "relative",
-          t: "fixed",
-        }}
-        top={{
-          base: "0",
-          t: "var(--openar-header-height-desktop)",
-        }}
-        left={{
-          base: "0",
-          t: "33.33vw",
-        }}
+        position="relative"
         p="6"
         pr={{
           base: "6",
@@ -111,14 +132,29 @@ function PageTemplate({ content, data }) {
         }}
         h={{
           base: "auto",
-          t: "calc(100vh - var(--openar-header-height-desktop))",
+          t: "100%",
         }}
         overflowY="auto"       
+        pb={{
+          base: "10",
+          t: "var(--openar-header-height-desktop)",
+          d: "0",
+        }}
+        w={{
+          base: "100%",
+          t: "50vw",
+          d: "66.66vw",
+        }}
       >
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
       </Box>
-    </>
-  );
+      {!isDesktop &&
+        <Footer />
+      }
+
+    </Flex>
+
+);
 }
 
 export const getStaticProps = async (context) => {

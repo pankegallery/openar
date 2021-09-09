@@ -13,9 +13,9 @@ import { ArtworkListItem } from "~/components/frontend";
 import pick from "lodash/pick";
 
 
+export const ArtworkList = ({artworks, col}: {artworks: any; col?: any}) => {
 
-export const ArtworkList = ({artworks}: {artworks: any;}) => {
-
+  let colW = (col === 2) ? "66.6vw" : "33.3vw";
   return (
 
     <Flex
@@ -23,12 +23,20 @@ export const ArtworkList = ({artworks}: {artworks: any;}) => {
       className="artworkColumn"
       color="white"
       layerStyle="backdropMud"
-      minWidth={{
+      w={{
         base: "100vw",
         t: "50vw",
-        d: "33.3vw"
+        d: `${colW}`
       }}
-      h="100%"
+      h={{
+        base: "auto",
+        t: "100%"
+      }}
+      sx={{
+        ".userDetails &": {
+          h: "auto"
+        }
+      }}
     >
 
       {/* --------- ROW: Arrow --------- */}
@@ -53,7 +61,7 @@ export const ArtworkList = ({artworks}: {artworks: any;}) => {
 
       {/* --------- ROW: Artworks --------- */}
       <Box height="100%"
-        width="100%" overflow="scroll">
+        width="100%" overflow="auto">
         {artworks.length > 0 && (
           <Flex
             width="100%"
@@ -63,9 +71,10 @@ export const ArtworkList = ({artworks}: {artworks: any;}) => {
               <ArtworkListItem
                 isAdmin={false}
                 urlKey={artwork.key}
+                col={col}
+                key={artwork.key}
                 {...pick(artwork, [
                   "id",
-                  "key",
                   "heroImage",
                   "title",
                   "creator",

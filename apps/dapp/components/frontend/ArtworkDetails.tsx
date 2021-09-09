@@ -39,7 +39,7 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
         borderBottom="1px solid white"
         p="6"
       >
-        <chakra.h1 textStyle="subtitle" maxWidth="80%">{artwork.title}</chakra.h1>
+        <chakra.h1 textStyle="pagetitle" maxWidth="80%">{artwork.title}</chakra.h1>
         <chakra.p textStyle="copy">{artist}</chakra.p>
         <chakra.p textStyle="meta">{new Date(artwork.createdAt).getFullYear()}</chakra.p>
 

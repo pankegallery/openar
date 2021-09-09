@@ -3,7 +3,7 @@ import Head from "next/head";
 import { Box, Flex, chakra } from "@chakra-ui/react";
 import { ActiveLink } from "~/components/ui";
 
-import { Footer, Header } from "./site";
+import { Header } from "./site";
 import { WalletConnectGate } from "./shared";
 import { LoadingBar } from "~/components/app/shared";
 import { OverlayMenu } from "../frontend";
@@ -22,7 +22,6 @@ export const LayoutSite = ({ children }: { children?: ReactNode }) => {
         }}>
         <Header />
         {children}
-        <Footer />
       </Box>
       <OverlayMenu mode="light" />
     </WalletConnectGate>

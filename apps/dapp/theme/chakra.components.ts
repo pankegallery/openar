@@ -73,10 +73,13 @@ export const components = {
         p: "0",
         _hover: {
           opacity: "0.6",
+          textDecoration: "none",
         },
         _focus: {
           boxShadow: false,
-        }
+        },
+        height: "unset",
+        fontWeight: "inherit",
       },
       menuLink: {
         boder: "none",
@@ -101,6 +104,8 @@ export const components = {
         borderRadius: "0",
         bg: "transparent",
         p: "0",
+        height: "unset",
+        fontWeight: "inherit",
       }
     },
   },

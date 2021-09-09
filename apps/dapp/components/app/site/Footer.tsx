@@ -15,23 +15,10 @@ export const Footer = (/* props */) => {
 
   return (
     <Box
-      w={{
-        base: "100%",
-        d: "calc(33.33vw + 0px)"
-      }}
-      h={{
-        base: "auto",
-        d: "calc(100vh - 33.33vw + 4px - var(--openar-header-height-desktop))"
-      }}
+      w="100%"
+      h="auto"
       borderTop="1px solid black"
-      borderRight="1px solid black"
       color="#555555"
-      position={{
-        base: "relative",
-        d: "fixed"
-      }}
-      bottom="0"
-      left="0"
       zIndex="201"
       p="6"
       layerStyle="backdropLight"
