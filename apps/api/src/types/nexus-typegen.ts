@@ -189,6 +189,7 @@ export interface NexusGenObjects {
     description?: string | null; // String
     heroImage?: NexusGenRootTypes['Image'] | null; // Image
     id: number; // Int!
+    isPublic?: boolean | null; // Boolean
     key?: string | null; // String
     lat?: number | null; // Float
     lng?: number | null; // Float
@@ -361,6 +362,7 @@ export interface NexusGenFieldTypes {
     description: string | null; // String
     heroImage: NexusGenRootTypes['Image'] | null; // Image
     id: number; // Int!
+    isPublic: boolean | null; // Boolean
     key: string | null; // String
     lat: number | null; // Float
     lng: number | null; // Float
@@ -572,6 +574,7 @@ export interface NexusGenFieldTypeNames {
     description: 'String'
     heroImage: 'Image'
     id: 'Int'
+    isPublic: 'Boolean'
     key: 'String'
     lat: 'Float'
     lng: 'Float'

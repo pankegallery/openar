@@ -1,9 +1,6 @@
 import "../styles/globals.scss";
 import { Provider } from "react-redux";
-<<<<<<< HEAD
-=======
 // import { useLayoutEffect } from "react";
->>>>>>> main
 import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
