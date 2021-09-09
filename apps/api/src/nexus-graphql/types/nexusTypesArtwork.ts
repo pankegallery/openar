@@ -125,7 +125,7 @@ export const ArtworkQueries = extendType({
             ],
           },
           arObjects: {
-            every: {
+            some: {
               status: {
                 in: [
                   ArObjectStatusEnum.PUBLISHED,
@@ -190,6 +190,7 @@ export const ArtworkQueries = extendType({
                   title: true,
                   askPrice: true,
                   editionOf: true,
+                  isPublic: true,
                 },
                 where: {
                   isBanned: false,
@@ -263,7 +264,7 @@ export const ArtworkQueries = extendType({
             ],
           },
           arObjects: {
-            every: {
+            some: {
               status: {
                 in: [
                   ArObjectStatusEnum.PUBLISHED,
@@ -330,6 +331,7 @@ export const ArtworkQueries = extendType({
                 title: true,
                 askPrice: true,
                 editionOf: true,
+                isPublic: true,
                 heroImage: {
                   select: {
                     id: true,
@@ -462,6 +464,7 @@ export const ArtworkQueries = extendType({
                   title: true,
                   askPrice: true,
                   editionOf: true,
+                  isPublic: true,
                   heroImage: {
                     select: {
                       meta: true,
@@ -543,6 +546,7 @@ export const ArtworkQueries = extendType({
                 title: true,
                 askPrice: true,
                 editionOf: true,
+                isPublic: true,
                 heroImage: {
                   select: {
                     meta: true,
