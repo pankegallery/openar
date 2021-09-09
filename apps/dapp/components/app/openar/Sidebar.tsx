@@ -2,6 +2,7 @@ import React from "react";
 
 import { Box, chakra } from "@chakra-ui/react";
 import { ActiveLink } from "~/components/ui";
+import { useAuthentication } from "~/hooks";
 
 const NavItem = ({
   title,
@@ -23,16 +24,15 @@ const NavItem = ({
 };
 
 export const Sidebar = () => {
+  const [appUser] = useAuthentication();
+  if (!appUser)
+    return <></>;
+
   const mainNavLinks = [
     {
-      title: "Dashboard",
-      path: "/openar/",
+      title: "My Profile",
+      path: `/u/${appUser.ethAddress}`,
       exact: true,
-    },
-    {
-      title: "Profile",
-      path: "/openar/profile",
-      exact: false,
     },
     {
       title: "Artworks",
@@ -50,6 +50,11 @@ export const Sidebar = () => {
     <>
       <Box w="100%" minH="100%" borderLeft="1px solid #fff" position="relative">
         <Box  position="sticky" top="0" p="4">
+          <NavItem
+            title="My profile"
+            path={`/u/${appUser.ethAddress}`}
+            exact
+          />
           {mainNavLinks.map((link) => {
             return <NavItem key={link.path} {...link} />;
           })}

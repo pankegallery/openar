@@ -308,7 +308,7 @@ export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
                     }}
                   >
                     {account && appUser && (
-                      <ActiveLink href="/openar/">Dashboard</ActiveLink>
+                      <ActiveLink href={`/u/${appUser.ethAddress}`}>Profile</ActiveLink>
                     )}
                     <WalletControl />
                   </chakra.nav>
