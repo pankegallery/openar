@@ -165,12 +165,12 @@ export interface NexusGenObjects {
     id: number; // Int!
     images?: Array<NexusGenRootTypes['Image'] | null> | null; // [Image]
     isBanned?: boolean | null; // Boolean
+    isPublic?: boolean | null; // Boolean
     key?: string | null; // String
     lat?: number | null; // Float
     lng?: number | null; // Float
     orderNumber?: number | null; // Int
     ownerEthAddress?: string | null; // String
-    public?: boolean | null; // Boolean
     status: number; // Int!
     title?: string | null; // String
     type?: number | null; // Int
@@ -337,12 +337,12 @@ export interface NexusGenFieldTypes {
     id: number; // Int!
     images: Array<NexusGenRootTypes['Image'] | null> | null; // [Image]
     isBanned: boolean | null; // Boolean
+    isPublic: boolean | null; // Boolean
     key: string | null; // String
     lat: number | null; // Float
     lng: number | null; // Float
     orderNumber: number | null; // Int
     ownerEthAddress: string | null; // String
-    public: boolean | null; // Boolean
     status: number; // Int!
     title: string | null; // String
     type: number | null; // Int
@@ -548,12 +548,12 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
     images: 'Image'
     isBanned: 'Boolean'
+    isPublic: 'Boolean'
     key: 'String'
     lat: 'Float'
     lng: 'Float'
     orderNumber: 'Int'
     ownerEthAddress: 'String'
-    public: 'Boolean'
     status: 'Int'
     title: 'String'
     type: 'Int'
