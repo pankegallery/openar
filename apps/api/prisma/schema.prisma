@@ -88,6 +88,7 @@ model ArObject {
   
   title         String?
   description   String?
+  mintSignature  String?
   orderNumber     Int? @default(0)
   editionOf     Int?
   
