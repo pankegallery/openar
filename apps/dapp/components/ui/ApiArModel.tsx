@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { BeatLoader } from "react-spinners";
 import { AspectRatio, Box, chakra, Flex, Text } from "@chakra-ui/react";
 import { primaryInput } from "detect-it";
 

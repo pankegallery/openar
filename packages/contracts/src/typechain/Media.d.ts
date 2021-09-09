@@ -22,6 +22,7 @@ import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 
 interface MediaInterface extends ethers.utils.Interface {
   functions: {
+    "MINT_AROBJECT_TYPEHASH()": FunctionFragment;
     "MINT_WITH_SIG_TYPEHASH()": FunctionFragment;
     "PERMIT_TYPEHASH()": FunctionFragment;
     "acceptBid(uint256,tuple)": FunctionFragment;
@@ -31,19 +32,23 @@ interface MediaInterface extends ethers.utils.Interface {
     "baseURI()": FunctionFragment;
     "burn(uint256)": FunctionFragment;
     "configure(address)": FunctionFragment;
+    "creatorBalanceOf(address)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "marketContract()": FunctionFragment;
     "mint(tuple,tuple)": FunctionFragment;
-    "mintWithSig(address,tuple,tuple,tuple)": FunctionFragment;
+    "mintArObject(address,string[],string[],bytes32[],bytes32[],tuple,tuple,tuple)": FunctionFragment;
+    "mintWithSig(address,tuple,tuple,uint256,tuple)": FunctionFragment;
     "mintWithSigNonces(address)": FunctionFragment;
     "name()": FunctionFragment;
+    "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "permit(address,uint256,tuple)": FunctionFragment;
     "permitNonces(address,uint256)": FunctionFragment;
     "previousTokenOwners(uint256)": FunctionFragment;
     "removeAsk(uint256)": FunctionFragment;
     "removeBid(uint256)": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
     "revokeApproval(uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
@@ -56,14 +61,20 @@ interface MediaInterface extends ethers.utils.Interface {
     "tokenCreators(uint256)": FunctionFragment;
     "tokenMetadataHashes(uint256)": FunctionFragment;
     "tokenMetadataURI(uint256)": FunctionFragment;
+    "tokenOfCreatorByIndex(address,uint256)": FunctionFragment;
     "tokenOfOwnerByIndex(address,uint256)": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
     "updateTokenMetadataURI(uint256,string)": FunctionFragment;
     "updateTokenURI(uint256,string)": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "MINT_AROBJECT_TYPEHASH",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "MINT_WITH_SIG_TYPEHASH",
     values?: undefined
@@ -98,6 +109,10 @@ interface MediaInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "burn", values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: "configure", values: [string]): string;
   encodeFunctionData(
+    functionFragment: "creatorBalanceOf",
+    values: [string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getApproved",
     values: [BigNumberish]
   ): string;
@@ -128,6 +143,32 @@ interface MediaInterface extends ethers.utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "mintArObject",
+    values: [
+      string,
+      string[],
+      string[],
+      BytesLike[],
+      BytesLike[],
+      {
+        keyHash: BytesLike;
+        editionOf: BigNumberish;
+        initialAsk: BigNumberish;
+        mintArObjectNonce: BigNumberish;
+        currency: string;
+        setInitialAsk: boolean;
+      },
+      {
+        platform: { value: BigNumberish };
+        pool: { value: BigNumberish };
+        creator: { value: BigNumberish };
+        owner: { value: BigNumberish };
+        prevOwner: { value: BigNumberish };
+      },
+      { deadline: BigNumberish; v: BigNumberish; r: BytesLike; s: BytesLike }
+    ]
+  ): string;
+  encodeFunctionData(
     functionFragment: "mintWithSig",
     values: [
       string,
@@ -144,6 +185,7 @@ interface MediaInterface extends ethers.utils.Interface {
         owner: { value: BigNumberish };
         prevOwner: { value: BigNumberish };
       },
+      BigNumberish,
       { deadline: BigNumberish; v: BigNumberish; r: BytesLike; s: BytesLike }
     ]
   ): string;
@@ -152,6 +194,7 @@ interface MediaInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "ownerOf",
     values: [BigNumberish]
@@ -179,6 +222,10 @@ interface MediaInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "removeBid",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "renounceOwnership",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "revokeApproval",
@@ -235,6 +282,10 @@ interface MediaInterface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "tokenOfCreatorByIndex",
+    values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "tokenOfOwnerByIndex",
     values: [string, BigNumberish]
   ): string;
@@ -251,6 +302,10 @@ interface MediaInterface extends ethers.utils.Interface {
     values: [string, string, BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "updateTokenMetadataURI",
     values: [BigNumberish, string]
   ): string;
@@ -259,6 +314,10 @@ interface MediaInterface extends ethers.utils.Interface {
     values: [BigNumberish, string]
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "MINT_AROBJECT_TYPEHASH",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "MINT_WITH_SIG_TYPEHASH",
     data: BytesLike
@@ -278,6 +337,10 @@ interface MediaInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "configure", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "creatorBalanceOf",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getApproved",
     data: BytesLike
   ): Result;
@@ -291,6 +354,10 @@ interface MediaInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "mintArObject",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "mintWithSig",
     data: BytesLike
   ): Result;
@@ -299,6 +366,7 @@ interface MediaInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "permit", data: BytesLike): Result;
   decodeFunctionResult(
@@ -311,6 +379,10 @@ interface MediaInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "removeAsk", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "removeBid", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "revokeApproval",
     data: BytesLike
@@ -351,6 +423,10 @@ interface MediaInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "tokenOfCreatorByIndex",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "tokenOfOwnerByIndex",
     data: BytesLike
   ): Result;
@@ -361,6 +437,10 @@ interface MediaInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "transferFrom",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -375,6 +455,7 @@ interface MediaInterface extends ethers.utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
+    "OwnershipTransferred(address,address)": EventFragment;
     "TokenMetadataURIUpdated(uint256,address,string)": EventFragment;
     "TokenURIUpdated(uint256,address,string)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
@@ -382,6 +463,7 @@ interface MediaInterface extends ethers.utils.Interface {
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "TokenMetadataURIUpdated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "TokenURIUpdated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
@@ -401,6 +483,18 @@ export class Media extends Contract {
   interface: MediaInterface;
 
   functions: {
+    MINT_AROBJECT_TYPEHASH(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: string;
+    }>;
+
+    "MINT_AROBJECT_TYPEHASH()"(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: string;
+    }>;
+
     MINT_WITH_SIG_TYPEHASH(
       overrides?: CallOverrides
     ): Promise<{
@@ -519,6 +613,20 @@ export class Media extends Contract {
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
+    creatorBalanceOf(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
+    "creatorBalanceOf(address)"(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -595,13 +703,19 @@ export class Media extends Contract {
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
-    mintWithSig(
+    mintArObject(
       creator: string,
+      tokenURIs: string[],
+      metadataURIs: string[],
+      contentHashes: BytesLike[],
+      metadataHashes: BytesLike[],
       data: {
-        tokenURI: string;
-        metadataURI: string;
-        contentHash: BytesLike;
-        metadataHash: BytesLike;
+        keyHash: BytesLike;
+        editionOf: BigNumberish;
+        initialAsk: BigNumberish;
+        mintArObjectNonce: BigNumberish;
+        currency: string;
+        setInitialAsk: boolean;
       },
       bidShares: {
         platform: { value: BigNumberish };
@@ -619,7 +733,37 @@ export class Media extends Contract {
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
-    "mintWithSig(address,tuple,tuple,tuple)"(
+    "mintArObject(address,string[],string[],bytes32[],bytes32[],tuple,tuple,tuple)"(
+      creator: string,
+      tokenURIs: string[],
+      metadataURIs: string[],
+      contentHashes: BytesLike[],
+      metadataHashes: BytesLike[],
+      data: {
+        keyHash: BytesLike;
+        editionOf: BigNumberish;
+        initialAsk: BigNumberish;
+        mintArObjectNonce: BigNumberish;
+        currency: string;
+        setInitialAsk: boolean;
+      },
+      bidShares: {
+        platform: { value: BigNumberish };
+        pool: { value: BigNumberish };
+        creator: { value: BigNumberish };
+        owner: { value: BigNumberish };
+        prevOwner: { value: BigNumberish };
+      },
+      sig: {
+        deadline: BigNumberish;
+        v: BigNumberish;
+        r: BytesLike;
+        s: BytesLike;
+      },
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    mintWithSig(
       creator: string,
       data: {
         tokenURI: string;
@@ -634,6 +778,32 @@ export class Media extends Contract {
         owner: { value: BigNumberish };
         prevOwner: { value: BigNumberish };
       },
+      mintWithSigNonce: BigNumberish,
+      sig: {
+        deadline: BigNumberish;
+        v: BigNumberish;
+        r: BytesLike;
+        s: BytesLike;
+      },
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "mintWithSig(address,tuple,tuple,uint256,tuple)"(
+      creator: string,
+      data: {
+        tokenURI: string;
+        metadataURI: string;
+        contentHash: BytesLike;
+        metadataHash: BytesLike;
+      },
+      bidShares: {
+        platform: { value: BigNumberish };
+        pool: { value: BigNumberish };
+        creator: { value: BigNumberish };
+        owner: { value: BigNumberish };
+        prevOwner: { value: BigNumberish };
+      },
+      mintWithSigNonce: BigNumberish,
       sig: {
         deadline: BigNumberish;
         v: BigNumberish;
@@ -664,6 +834,18 @@ export class Media extends Contract {
     }>;
 
     "name()"(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: string;
+    }>;
+
+    owner(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: string;
+    }>;
+
+    "owner()"(
       overrides?: CallOverrides
     ): Promise<{
       0: string;
@@ -756,6 +938,10 @@ export class Media extends Contract {
       tokenId: BigNumberish,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
+
+    renounceOwnership(overrides?: Overrides): Promise<ContractTransaction>;
+
+    "renounceOwnership()"(overrides?: Overrides): Promise<ContractTransaction>;
 
     revokeApproval(
       tokenId: BigNumberish,
@@ -926,6 +1112,22 @@ export class Media extends Contract {
       0: string;
     }>;
 
+    tokenOfCreatorByIndex(
+      creator: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
+    "tokenOfCreatorByIndex(address,uint256)"(
+      creator: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
     tokenOfOwnerByIndex(
       owner: string,
       index: BigNumberish,
@@ -982,6 +1184,16 @@ export class Media extends Contract {
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "transferOwnership(address)"(
+      newOwner: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
     updateTokenMetadataURI(
       tokenId: BigNumberish,
       metadataURI: string,
@@ -1006,6 +1218,10 @@ export class Media extends Contract {
       overrides?: Overrides
     ): Promise<ContractTransaction>;
   };
+
+  MINT_AROBJECT_TYPEHASH(overrides?: CallOverrides): Promise<string>;
+
+  "MINT_AROBJECT_TYPEHASH()"(overrides?: CallOverrides): Promise<string>;
 
   MINT_WITH_SIG_TYPEHASH(overrides?: CallOverrides): Promise<string>;
 
@@ -1094,6 +1310,16 @@ export class Media extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
+  creatorBalanceOf(
+    creator: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  "creatorBalanceOf(address)"(
+    creator: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   getApproved(
     tokenId: BigNumberish,
     overrides?: CallOverrides
@@ -1154,13 +1380,19 @@ export class Media extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
-  mintWithSig(
+  mintArObject(
     creator: string,
+    tokenURIs: string[],
+    metadataURIs: string[],
+    contentHashes: BytesLike[],
+    metadataHashes: BytesLike[],
     data: {
-      tokenURI: string;
-      metadataURI: string;
-      contentHash: BytesLike;
-      metadataHash: BytesLike;
+      keyHash: BytesLike;
+      editionOf: BigNumberish;
+      initialAsk: BigNumberish;
+      mintArObjectNonce: BigNumberish;
+      currency: string;
+      setInitialAsk: boolean;
     },
     bidShares: {
       platform: { value: BigNumberish };
@@ -1178,7 +1410,37 @@ export class Media extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
-  "mintWithSig(address,tuple,tuple,tuple)"(
+  "mintArObject(address,string[],string[],bytes32[],bytes32[],tuple,tuple,tuple)"(
+    creator: string,
+    tokenURIs: string[],
+    metadataURIs: string[],
+    contentHashes: BytesLike[],
+    metadataHashes: BytesLike[],
+    data: {
+      keyHash: BytesLike;
+      editionOf: BigNumberish;
+      initialAsk: BigNumberish;
+      mintArObjectNonce: BigNumberish;
+      currency: string;
+      setInitialAsk: boolean;
+    },
+    bidShares: {
+      platform: { value: BigNumberish };
+      pool: { value: BigNumberish };
+      creator: { value: BigNumberish };
+      owner: { value: BigNumberish };
+      prevOwner: { value: BigNumberish };
+    },
+    sig: {
+      deadline: BigNumberish;
+      v: BigNumberish;
+      r: BytesLike;
+      s: BytesLike;
+    },
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  mintWithSig(
     creator: string,
     data: {
       tokenURI: string;
@@ -1193,6 +1455,32 @@ export class Media extends Contract {
       owner: { value: BigNumberish };
       prevOwner: { value: BigNumberish };
     },
+    mintWithSigNonce: BigNumberish,
+    sig: {
+      deadline: BigNumberish;
+      v: BigNumberish;
+      r: BytesLike;
+      s: BytesLike;
+    },
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "mintWithSig(address,tuple,tuple,uint256,tuple)"(
+    creator: string,
+    data: {
+      tokenURI: string;
+      metadataURI: string;
+      contentHash: BytesLike;
+      metadataHash: BytesLike;
+    },
+    bidShares: {
+      platform: { value: BigNumberish };
+      pool: { value: BigNumberish };
+      creator: { value: BigNumberish };
+      owner: { value: BigNumberish };
+      prevOwner: { value: BigNumberish };
+    },
+    mintWithSigNonce: BigNumberish,
     sig: {
       deadline: BigNumberish;
       v: BigNumberish;
@@ -1215,6 +1503,10 @@ export class Media extends Contract {
   name(overrides?: CallOverrides): Promise<string>;
 
   "name()"(overrides?: CallOverrides): Promise<string>;
+
+  owner(overrides?: CallOverrides): Promise<string>;
+
+  "owner()"(overrides?: CallOverrides): Promise<string>;
 
   ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
@@ -1288,6 +1580,10 @@ export class Media extends Contract {
     tokenId: BigNumberish,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
+
+  renounceOwnership(overrides?: Overrides): Promise<ContractTransaction>;
+
+  "renounceOwnership()"(overrides?: Overrides): Promise<ContractTransaction>;
 
   revokeApproval(
     tokenId: BigNumberish,
@@ -1423,6 +1719,18 @@ export class Media extends Contract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  tokenOfCreatorByIndex(
+    creator: string,
+    index: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  "tokenOfCreatorByIndex(address,uint256)"(
+    creator: string,
+    index: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   tokenOfOwnerByIndex(
     owner: string,
     index: BigNumberish,
@@ -1460,6 +1768,16 @@ export class Media extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
+  transferOwnership(
+    newOwner: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "transferOwnership(address)"(
+    newOwner: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
   updateTokenMetadataURI(
     tokenId: BigNumberish,
     metadataURI: string,
@@ -1485,6 +1803,10 @@ export class Media extends Contract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    MINT_AROBJECT_TYPEHASH(overrides?: CallOverrides): Promise<string>;
+
+    "MINT_AROBJECT_TYPEHASH()"(overrides?: CallOverrides): Promise<string>;
+
     MINT_WITH_SIG_TYPEHASH(overrides?: CallOverrides): Promise<string>;
 
     "MINT_WITH_SIG_TYPEHASH()"(overrides?: CallOverrides): Promise<string>;
@@ -1569,6 +1891,16 @@ export class Media extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    creatorBalanceOf(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "creatorBalanceOf(address)"(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -1629,13 +1961,19 @@ export class Media extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    mintWithSig(
+    mintArObject(
       creator: string,
+      tokenURIs: string[],
+      metadataURIs: string[],
+      contentHashes: BytesLike[],
+      metadataHashes: BytesLike[],
       data: {
-        tokenURI: string;
-        metadataURI: string;
-        contentHash: BytesLike;
-        metadataHash: BytesLike;
+        keyHash: BytesLike;
+        editionOf: BigNumberish;
+        initialAsk: BigNumberish;
+        mintArObjectNonce: BigNumberish;
+        currency: string;
+        setInitialAsk: boolean;
       },
       bidShares: {
         platform: { value: BigNumberish };
@@ -1653,7 +1991,37 @@ export class Media extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    "mintWithSig(address,tuple,tuple,tuple)"(
+    "mintArObject(address,string[],string[],bytes32[],bytes32[],tuple,tuple,tuple)"(
+      creator: string,
+      tokenURIs: string[],
+      metadataURIs: string[],
+      contentHashes: BytesLike[],
+      metadataHashes: BytesLike[],
+      data: {
+        keyHash: BytesLike;
+        editionOf: BigNumberish;
+        initialAsk: BigNumberish;
+        mintArObjectNonce: BigNumberish;
+        currency: string;
+        setInitialAsk: boolean;
+      },
+      bidShares: {
+        platform: { value: BigNumberish };
+        pool: { value: BigNumberish };
+        creator: { value: BigNumberish };
+        owner: { value: BigNumberish };
+        prevOwner: { value: BigNumberish };
+      },
+      sig: {
+        deadline: BigNumberish;
+        v: BigNumberish;
+        r: BytesLike;
+        s: BytesLike;
+      },
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    mintWithSig(
       creator: string,
       data: {
         tokenURI: string;
@@ -1668,6 +2036,32 @@ export class Media extends Contract {
         owner: { value: BigNumberish };
         prevOwner: { value: BigNumberish };
       },
+      mintWithSigNonce: BigNumberish,
+      sig: {
+        deadline: BigNumberish;
+        v: BigNumberish;
+        r: BytesLike;
+        s: BytesLike;
+      },
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "mintWithSig(address,tuple,tuple,uint256,tuple)"(
+      creator: string,
+      data: {
+        tokenURI: string;
+        metadataURI: string;
+        contentHash: BytesLike;
+        metadataHash: BytesLike;
+      },
+      bidShares: {
+        platform: { value: BigNumberish };
+        pool: { value: BigNumberish };
+        creator: { value: BigNumberish };
+        owner: { value: BigNumberish };
+        prevOwner: { value: BigNumberish };
+      },
+      mintWithSigNonce: BigNumberish,
       sig: {
         deadline: BigNumberish;
         v: BigNumberish;
@@ -1690,6 +2084,10 @@ export class Media extends Contract {
     name(overrides?: CallOverrides): Promise<string>;
 
     "name()"(overrides?: CallOverrides): Promise<string>;
+
+    owner(overrides?: CallOverrides): Promise<string>;
+
+    "owner()"(overrides?: CallOverrides): Promise<string>;
 
     ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
@@ -1757,6 +2155,10 @@ export class Media extends Contract {
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    "renounceOwnership()"(overrides?: CallOverrides): Promise<void>;
 
     revokeApproval(
       tokenId: BigNumberish,
@@ -1895,6 +2297,18 @@ export class Media extends Contract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    tokenOfCreatorByIndex(
+      creator: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "tokenOfCreatorByIndex(address,uint256)"(
+      creator: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     tokenOfOwnerByIndex(
       owner: string,
       index: BigNumberish,
@@ -1929,6 +2343,16 @@ export class Media extends Contract {
       from: string,
       to: string,
       tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "transferOwnership(address)"(
+      newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1970,6 +2394,11 @@ export class Media extends Contract {
       approved: null
     ): EventFilter;
 
+    OwnershipTransferred(
+      previousOwner: string | null,
+      newOwner: string | null
+    ): EventFilter;
+
     TokenMetadataURIUpdated(
       _tokenId: BigNumberish | null,
       owner: null,
@@ -1990,6 +2419,10 @@ export class Media extends Contract {
   };
 
   estimateGas: {
+    MINT_AROBJECT_TYPEHASH(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "MINT_AROBJECT_TYPEHASH()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     MINT_WITH_SIG_TYPEHASH(overrides?: CallOverrides): Promise<BigNumber>;
 
     "MINT_WITH_SIG_TYPEHASH()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -2074,6 +2507,16 @@ export class Media extends Contract {
       overrides?: Overrides
     ): Promise<BigNumber>;
 
+    creatorBalanceOf(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "creatorBalanceOf(address)"(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -2134,13 +2577,19 @@ export class Media extends Contract {
       overrides?: Overrides
     ): Promise<BigNumber>;
 
-    mintWithSig(
+    mintArObject(
       creator: string,
+      tokenURIs: string[],
+      metadataURIs: string[],
+      contentHashes: BytesLike[],
+      metadataHashes: BytesLike[],
       data: {
-        tokenURI: string;
-        metadataURI: string;
-        contentHash: BytesLike;
-        metadataHash: BytesLike;
+        keyHash: BytesLike;
+        editionOf: BigNumberish;
+        initialAsk: BigNumberish;
+        mintArObjectNonce: BigNumberish;
+        currency: string;
+        setInitialAsk: boolean;
       },
       bidShares: {
         platform: { value: BigNumberish };
@@ -2158,7 +2607,37 @@ export class Media extends Contract {
       overrides?: Overrides
     ): Promise<BigNumber>;
 
-    "mintWithSig(address,tuple,tuple,tuple)"(
+    "mintArObject(address,string[],string[],bytes32[],bytes32[],tuple,tuple,tuple)"(
+      creator: string,
+      tokenURIs: string[],
+      metadataURIs: string[],
+      contentHashes: BytesLike[],
+      metadataHashes: BytesLike[],
+      data: {
+        keyHash: BytesLike;
+        editionOf: BigNumberish;
+        initialAsk: BigNumberish;
+        mintArObjectNonce: BigNumberish;
+        currency: string;
+        setInitialAsk: boolean;
+      },
+      bidShares: {
+        platform: { value: BigNumberish };
+        pool: { value: BigNumberish };
+        creator: { value: BigNumberish };
+        owner: { value: BigNumberish };
+        prevOwner: { value: BigNumberish };
+      },
+      sig: {
+        deadline: BigNumberish;
+        v: BigNumberish;
+        r: BytesLike;
+        s: BytesLike;
+      },
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    mintWithSig(
       creator: string,
       data: {
         tokenURI: string;
@@ -2173,6 +2652,32 @@ export class Media extends Contract {
         owner: { value: BigNumberish };
         prevOwner: { value: BigNumberish };
       },
+      mintWithSigNonce: BigNumberish,
+      sig: {
+        deadline: BigNumberish;
+        v: BigNumberish;
+        r: BytesLike;
+        s: BytesLike;
+      },
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "mintWithSig(address,tuple,tuple,uint256,tuple)"(
+      creator: string,
+      data: {
+        tokenURI: string;
+        metadataURI: string;
+        contentHash: BytesLike;
+        metadataHash: BytesLike;
+      },
+      bidShares: {
+        platform: { value: BigNumberish };
+        pool: { value: BigNumberish };
+        creator: { value: BigNumberish };
+        owner: { value: BigNumberish };
+        prevOwner: { value: BigNumberish };
+      },
+      mintWithSigNonce: BigNumberish,
       sig: {
         deadline: BigNumberish;
         v: BigNumberish;
@@ -2195,6 +2700,10 @@ export class Media extends Contract {
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
     "name()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "owner()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     ownerOf(
       tokenId: BigNumberish,
@@ -2265,6 +2774,10 @@ export class Media extends Contract {
       tokenId: BigNumberish,
       overrides?: Overrides
     ): Promise<BigNumber>;
+
+    renounceOwnership(overrides?: Overrides): Promise<BigNumber>;
+
+    "renounceOwnership()"(overrides?: Overrides): Promise<BigNumber>;
 
     revokeApproval(
       tokenId: BigNumberish,
@@ -2403,6 +2916,18 @@ export class Media extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    tokenOfCreatorByIndex(
+      creator: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "tokenOfCreatorByIndex(address,uint256)"(
+      creator: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     tokenOfOwnerByIndex(
       owner: string,
       index: BigNumberish,
@@ -2443,6 +2968,16 @@ export class Media extends Contract {
       overrides?: Overrides
     ): Promise<BigNumber>;
 
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "transferOwnership(address)"(
+      newOwner: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
     updateTokenMetadataURI(
       tokenId: BigNumberish,
       metadataURI: string,
@@ -2469,6 +3004,14 @@ export class Media extends Contract {
   };
 
   populateTransaction: {
+    MINT_AROBJECT_TYPEHASH(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "MINT_AROBJECT_TYPEHASH()"(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     MINT_WITH_SIG_TYPEHASH(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -2565,6 +3108,16 @@ export class Media extends Contract {
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
+    creatorBalanceOf(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "creatorBalanceOf(address)"(
+      creator: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -2627,13 +3180,19 @@ export class Media extends Contract {
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
-    mintWithSig(
+    mintArObject(
       creator: string,
+      tokenURIs: string[],
+      metadataURIs: string[],
+      contentHashes: BytesLike[],
+      metadataHashes: BytesLike[],
       data: {
-        tokenURI: string;
-        metadataURI: string;
-        contentHash: BytesLike;
-        metadataHash: BytesLike;
+        keyHash: BytesLike;
+        editionOf: BigNumberish;
+        initialAsk: BigNumberish;
+        mintArObjectNonce: BigNumberish;
+        currency: string;
+        setInitialAsk: boolean;
       },
       bidShares: {
         platform: { value: BigNumberish };
@@ -2651,7 +3210,37 @@ export class Media extends Contract {
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
-    "mintWithSig(address,tuple,tuple,tuple)"(
+    "mintArObject(address,string[],string[],bytes32[],bytes32[],tuple,tuple,tuple)"(
+      creator: string,
+      tokenURIs: string[],
+      metadataURIs: string[],
+      contentHashes: BytesLike[],
+      metadataHashes: BytesLike[],
+      data: {
+        keyHash: BytesLike;
+        editionOf: BigNumberish;
+        initialAsk: BigNumberish;
+        mintArObjectNonce: BigNumberish;
+        currency: string;
+        setInitialAsk: boolean;
+      },
+      bidShares: {
+        platform: { value: BigNumberish };
+        pool: { value: BigNumberish };
+        creator: { value: BigNumberish };
+        owner: { value: BigNumberish };
+        prevOwner: { value: BigNumberish };
+      },
+      sig: {
+        deadline: BigNumberish;
+        v: BigNumberish;
+        r: BytesLike;
+        s: BytesLike;
+      },
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    mintWithSig(
       creator: string,
       data: {
         tokenURI: string;
@@ -2666,6 +3255,32 @@ export class Media extends Contract {
         owner: { value: BigNumberish };
         prevOwner: { value: BigNumberish };
       },
+      mintWithSigNonce: BigNumberish,
+      sig: {
+        deadline: BigNumberish;
+        v: BigNumberish;
+        r: BytesLike;
+        s: BytesLike;
+      },
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "mintWithSig(address,tuple,tuple,uint256,tuple)"(
+      creator: string,
+      data: {
+        tokenURI: string;
+        metadataURI: string;
+        contentHash: BytesLike;
+        metadataHash: BytesLike;
+      },
+      bidShares: {
+        platform: { value: BigNumberish };
+        pool: { value: BigNumberish };
+        creator: { value: BigNumberish };
+        owner: { value: BigNumberish };
+        prevOwner: { value: BigNumberish };
+      },
+      mintWithSigNonce: BigNumberish,
       sig: {
         deadline: BigNumberish;
         v: BigNumberish;
@@ -2688,6 +3303,10 @@ export class Media extends Contract {
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "name()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "owner()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     ownerOf(
       tokenId: BigNumberish,
@@ -2764,6 +3383,10 @@ export class Media extends Contract {
       tokenId: BigNumberish,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
+
+    renounceOwnership(overrides?: Overrides): Promise<PopulatedTransaction>;
+
+    "renounceOwnership()"(overrides?: Overrides): Promise<PopulatedTransaction>;
 
     revokeApproval(
       tokenId: BigNumberish,
@@ -2902,6 +3525,18 @@ export class Media extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    tokenOfCreatorByIndex(
+      creator: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "tokenOfCreatorByIndex(address,uint256)"(
+      creator: string,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     tokenOfOwnerByIndex(
       owner: string,
       index: BigNumberish,
@@ -2939,6 +3574,16 @@ export class Media extends Contract {
       from: string,
       to: string,
       tokenId: BigNumberish,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "transferOwnership(address)"(
+      newOwner: string,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 

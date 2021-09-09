@@ -8,18 +8,13 @@ import { LayoutOpenAR } from "~/components/app";
 import { Box } from "@chakra-ui/layout";
 import { RestrictPageAccess, AlertEmailVerification } from "~/components/utils";
 import { Heading, Text } from "@chakra-ui/react";
-import { useSSRSaveMediaQuery } from "~/hooks";
-
-// import { useEthers, useEtherBalance } from "@usedapp/core";
-// import { formatUnits } from "@ethersproject/units";
+import { useSSRSaveMediaQuery, useWalletLogin } from "~/hooks";
 
 const OpenARDashboard = () => {
-  // const { activateBrowserWallet, deactivate, account } = useEthers();
-  // const userBalance = useEtherBalance(account);
-  // const stakingBalance = useEtherBalance(STAKING_CONTRACT);
-
+  
   const isTablet= useSSRSaveMediaQuery("(min-width: 55em)");
-
+  const {account} = useWalletLogin();
+  console.log("index account: ", account);
   return (
     <>
       <AlertEmailVerification />

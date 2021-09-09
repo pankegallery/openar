@@ -10,11 +10,14 @@ import Image from "next/image";
 import { getApolloClient } from "~/services/apolloClient";
 
 import Arrow from "~/assets/img/arrow.svg";
-import { ArtworkListItem,
-        CollectionList,
-        ArtworkList,
-        UserDetails
-       } from "~/components/frontend";
+import {
+  ArtworkListItem,
+  CollectionList,
+  ArtworkList,
+  UserDetails,
+  Profile,
+  MyProfile
+} from "~/components/frontend";
 import { ArrowLink } from "~/components/ui";
 import { useSSRSaveMediaQuery } from "~/hooks";
 
@@ -106,8 +109,20 @@ export const User = ({
         <UserDetails user={user} showArtworks={showArtworksUnderDetails}/>
       </Flex> {/* Column Layout close*/}
 
-    </>
-  );
+  {/*  TODO: VVU CLEAN UP const name = user.psydonym ? user.psydonym : user.ethAdress;
+
+  return (<>
+    <Head>
+      <title>{name} · OpenAR</title>
+      <meta property="og:title" content={`${name} · OpenAR`} key="title" />
+    </Head>
+
+    {isMyProfile && <MyProfile user={user}/>}
+    {!isMyProfile && <Profile user={user}/>} */}
+    
+  </>)
+    
+  
 };
 
 // This function gets called at build time
@@ -131,6 +146,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           id
           title
           key
+          isPublic
           creator {
             pseudonym
             id
@@ -157,7 +173,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 
   console.log("user query: ", data?.user);
 
-//   TODO: access protect artwork here
+  //   TODO: access protect artwork here
   if (!data?.user) {
     return {
       notFound: true,
@@ -169,11 +185,9 @@ export const getStaticProps = async ({ params }: { params: any }) => {
       user: data?.user,
     },
   };
-
 };
 
 User.getLayout = function getLayout(page: ReactElement) {
-
   return <LayoutBlank>{page}</LayoutBlank>;
 };
 

@@ -37,14 +37,13 @@ export const WalletControl = () => {
 
   const walletDisclosure = useDisclosure();
 
-  // TODO: change this to keep the disclosure open until 
+  // TODO: change this to keep the disclosure open until signature has been provided
   useEffect(() => {
     if ((stateUser.authenticated || stateCrypto.signatureRequired) && walletDisclosure.isOpen && library) {
       walletDisclosure.onClose();
     }    
   }, [stateUser.authenticated, stateCrypto.signatureRequired, walletDisclosure, library])
 
-  console.log(account, stateUser);
   return (
     <Box>
       {/* ------- Buttons ------- */}

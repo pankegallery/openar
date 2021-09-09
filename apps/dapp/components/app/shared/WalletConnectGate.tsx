@@ -1,6 +1,8 @@
-import React, { useEffect, useState, useCallback } from "react";
-
+import React, { useEffect } from "react";
+import { useWeb3React } from "@web3-react/core";
 import Router from "next/router";
+
+import { appConfig } from "~/config";
 
 import {
   useTypedSelector,
@@ -8,19 +10,13 @@ import {
   useWalletLogin,
 } from "~/hooks";
 
-
 export const WalletConnectGate = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-
-  const {
-    isLoggingIn,
-    account, 
-    setIsLoggingIn,
-    walletLoginPreLogin,
-  } = useWalletLogin();
+  const { isLoggingIn, account, setIsLoggingIn, walletLoginPreLogin } =
+    useWalletLogin();
 
   const [loginStatus] = useAuthTabWideLogInOutReload();
 
@@ -28,14 +24,19 @@ export const WalletConnectGate = ({
   const stateCrypto = useTypedSelector(({ crypto }) => crypto);
 
   useEffect(() => {
-    console.log("WalletConnectGate account", account)
+    console.log("WalletConnectGate account", account);
     const preLogin = async () => {
-      await walletLoginPreLogin(account)
-    }
+      await walletLoginPreLogin(account);
+    };
 
     if (!account) return;
 
-    if (stateUser.justConnected && !stateUser.authenticated && !isLoggingIn && !stateCrypto.signatureRequired) {
+    if (
+      stateUser.justConnected &&
+      !stateUser.authenticated &&
+      !isLoggingIn &&
+      !stateCrypto.signatureRequired
+    ) {
       setIsLoggingIn(true);
       preLogin();
     }
@@ -44,20 +45,48 @@ export const WalletConnectGate = ({
     account,
     stateUser.justConnected,
     stateUser.authenticated,
-    isLoggingIn,    
+    isLoggingIn,
     setIsLoggingIn,
-    stateCrypto.signatureRequired
+    stateCrypto.signatureRequired,
   ]);
 
-  // TODO: that shouldn't redirect
-  // console.log(loginStatus, isLoggingIn);
-  // // TODO: get tab wid logout running 
-  // useEffect(() => {
-  //   if (loginStatus === "logged-out" && Router.asPath !== "/" && !isLoggingIn) {
-  //     console.log("trigger redirect to /");
-  //     Router.push("/");
-  //   }
-  // }, [loginStatus, isLoggingIn]);
+  // TODO: check if tab wide logout is working as it should get tab wide logout running
+  useEffect(() => {
+    if (
+      loginStatus === "logged-out" &&
+      !["/", "/openar/connect", "/openar/login"].includes(Router.asPath) &&
+      !isLoggingIn
+    ) {
+      console.log("trigger redirect to /");
+      Router.replace("/");
+    }
+  }, [loginStatus, isLoggingIn]);
+
+  useEffect(() => {
+    const needToReconnectToWalletConnect = async () => {
+      try {
+        // Get from local storage by key
+        let stored = window.localStorage.getItem("connected");
+        // Parse stored json or if none return initialValue
+        const connected = stored ? JSON.parse(stored) : false;
+
+        stored = window.localStorage.getItem("walletconnect");
+        const walletConnect = stored ? JSON.parse(stored) : false;
+
+        if (connected === "walletconnect" && walletConnect.connected) {
+          console.log("Wallet Connect might be connected", account);
+          if (Router.pathname !== appConfig.reauthenticateRedirectUrl) {
+            console.log("So go through the login flow to establish a new connection", account);
+            Router.replace(appConfig.reauthenticateRedirectUrl);        
+          }
+            
+        }
+      } catch (error) {}
+    };
+
+    needToReconnectToWalletConnect();
+
+  }, []);
 
   return <>{children}</>;
 };

@@ -231,11 +231,7 @@ const doChores = async () => {
   }
 };
 
-const main = async () => {
-  await doChores();
-};
-
-main()
+doChores()
   .then(async () => {
     if (parentPort) postMessage("done");
     else process.exit(0);

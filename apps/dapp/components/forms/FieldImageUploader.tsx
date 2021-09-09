@@ -114,6 +114,7 @@ export const FieldImageUploader = ({
   name,
   isRequired,
   isDisabled,
+  canDelete = true,
   deleteButtonGQL,
   onDelete,
   onUpload,
@@ -127,6 +128,7 @@ export const FieldImageUploader = ({
   id: string;
   isRequired?: boolean;
   isDisabled?: boolean;
+  canDelete?: boolean;
   shouldSetFormDirtyOnUpload?: boolean;
   shouldSetFormDirtyOnDelete?: boolean;
   label: string;
@@ -139,7 +141,7 @@ export const FieldImageUploader = ({
   route?: string;
 }) => {
   const [appUser] = useAuthentication();
-  
+
   const { createNewCancelToken, isCancel, getCancelToken, getCanceler } =
     useAxiosCancelToken();
   const [progressInfo, setProgressInfo] =
@@ -223,11 +225,13 @@ export const FieldImageUploader = ({
 
                 if (setActiveUploadCounter)
                   setActiveUploadCounter((state: number) => state - 1);
-                
+
                 if (data?.id) {
                   clearErrors(name);
                   setUploadedImgId(data?.id ?? undefined);
-                  setValue(name, data?.id, { shouldDirty: shouldSetFormDirtyOnDelete });
+                  setValue(name, data?.id, {
+                    shouldDirty: shouldSetFormDirtyOnDelete,
+                  });
                   if (typeof onUpload === "function")
                     onUpload.call(this, data?.id);
                 }
@@ -348,18 +352,20 @@ export const FieldImageUploader = ({
               alt={settings?.image?.alt ?? ""}
               sizes={settings?.image?.sizes}
             />
-            <IconButton
-              position="absolute"
-              top="3"
-              right="3"
-              fontSize="xl"
-              icon={<HiOutlineTrash />}
-              onClick={() => {
-                deleteButtonOnClick(uploadedImgId ?? currentImage?.id);
-              }}
-              aria-label="Delete image"
-              title="Delete image"
-            />
+            {canDelete && (
+              <IconButton
+                position="absolute"
+                top="3"
+                right="3"
+                fontSize="xl"
+                icon={<HiOutlineTrash />}
+                onClick={() => {
+                  deleteButtonOnClick(uploadedImgId ?? currentImage?.id);
+                }}
+                aria-label="Delete image"
+                title="Delete image"
+              />
+            )}
           </Box>
         )}
         {isDeleteError && (

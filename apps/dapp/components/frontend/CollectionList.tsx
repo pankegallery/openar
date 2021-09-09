@@ -1,12 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-import {
-  Box,
-  Flex,
-  chakra,
-} from "@chakra-ui/react";
-
+import { Box, Flex, chakra } from "@chakra-ui/react";
 
 import Arrow from "~/assets/img/arrow.svg";
 import { ArtworkListItem } from "~/components/frontend";
@@ -24,7 +19,6 @@ export const CollectionList = ({artworks, col, userName}: {artworks?: any; col: 
   const isCollectionItems = artworks;
 
   return (
-
     <Flex
       direction="column"
       className="collectionColumn light"
@@ -37,7 +31,6 @@ export const CollectionList = ({artworks, col, userName}: {artworks?: any; col: 
       }}
       h="100%"
     >
-
       {/* --------- ROW: Arrow --------- */}
       <Box
         className="header"
@@ -51,12 +44,11 @@ export const CollectionList = ({artworks, col, userName}: {artworks?: any; col: 
         textAlign="left"
         flexDirection="column"
       >
-        <chakra.p textStyle="bigLabel">
-          Collection
-        </chakra.p>
-        <Box ml="-6"><Arrow className="arrow down light"/></Box>
+        <chakra.p textStyle="bigLabel">Collection</chakra.p>
+        <Box ml="-6">
+          <Arrow className="arrow down light" />
+        </Box>
       </Box>
-
 
       {/* --------- ROW: Artworks --------- */}
 
@@ -122,7 +114,5 @@ export const CollectionList = ({artworks, col, userName}: {artworks?: any; col: 
         </Flex>
       }
     </Flex>
-
   );
-
 };

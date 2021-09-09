@@ -1,5 +1,4 @@
 import { create, globSource, IPFSHTTPClient } from "ipfs-http-client";
-import { MarketFactory } from "@openar/contracts";
 
 // "/ip4/0.0.0.0/tcp/5001"
 export const ipfsCreateClient = (url: string): IPFSHTTPClient => {

@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, FormControl, Flex } from "@chakra-ui/react";
+import { Switch, FormControl, Flex, Text } from "@chakra-ui/react";
 import { useFormContext } from "react-hook-form";
 
 import { FieldErrorMessage } from ".";
@@ -7,6 +7,8 @@ import { FieldErrorMessage } from ".";
 export const FieldSwitch = ({
   name,
   label,
+  hint,
+  isChecked,
   isRequired = false,
   isReadOnly = false,
   isDisabled = false,
@@ -15,6 +17,8 @@ export const FieldSwitch = ({
 }: {
   name: string;
   label: string | React.ReactNode;
+  hint?: string;
+  isChecked?: boolean;
   isRequired?: boolean;
   isReadOnly?: boolean;
   isDisabled?: boolean;
@@ -24,6 +28,7 @@ export const FieldSwitch = ({
   const {
     register,
     formState: { errors },
+    getValues
   } = useFormContext();
 
   return (
@@ -31,6 +36,7 @@ export const FieldSwitch = ({
       mt="1"
       {...{ isRequired, isDisabled, isReadOnly }}
       isInvalid={!!errors[name]?.message}
+      p="3"
     >
       <Flex alignItems="center">
         <Switch
@@ -38,19 +44,23 @@ export const FieldSwitch = ({
           mt="1"
           key={`key-${name}`}
           isInvalid={!!errors[name]?.message}
+          
           {...{
             isRequired,
             isDisabled,
             isReadOnly,
             defaultChecked,
             colorScheme,
+            isChecked: typeof isChecked !== "undefined" && !!isChecked ? true : false
           }}
           {...register(name, { required: isRequired })}
           display="flex"
         >
           {label}
         </Switch>
+        
       </Flex>
+      {hint && <Text fontSize="sm">{hint}</Text>}
       <FieldErrorMessage error={errors[name]?.message} />
     </FormControl>
   );

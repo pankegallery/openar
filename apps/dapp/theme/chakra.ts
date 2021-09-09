@@ -78,6 +78,9 @@ const themeConfig = {
       "p + p > button": {
         mt: 2,
       },
+      "b": {
+        fontWeight: 600,
+      },
       "select,option": {
         fontFamily: "\"Source Code Pro\", monospace",
       },

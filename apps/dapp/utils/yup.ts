@@ -1,5 +1,6 @@
 import { addMethod, string, BaseSchema, number } from "yup";
 import { AnyObject, Maybe } from "yup/lib/types";
+import { htmlToString } from ".";
 
 declare module "yup" {
   interface StringSchema<
@@ -83,23 +84,25 @@ addMethod(
       const { path, createError } = this;
 
       try {
-        const dom = new DOMParser().parseFromString(value ?? "", "text/html");
+        const str = htmlToString(value ?? "");
+        const length = str ? str.length : 0;
 
-        const length = (dom?.body?.textContent ?? "").length;
-
-        if (typeof min !== "undefined" && ((min === 0 && length === 0) || (min > 0 && length < 0)))
+        if (
+          typeof min !== "undefined" &&
+          ((min === 0 && length === 0) || (min > 0 && length < 0))
+        )
           return createError({
             path,
-            message: 'This field must be at least {{min}} characters long',
+            message: "This field must be at least {{min}} characters long",
             params: {
               min,
             },
           });
-        
+
         if (typeof max !== "undefined" && max < length)
           return createError({
             path,
-            message: 'This field must be at most {{max}} characters long',
+            message: "This field must be at most {{max}} characters long",
             params: {
               max,
             },
@@ -112,7 +115,6 @@ addMethod(
     });
   }
 );
-
 
 addMethod(
   string,
@@ -130,23 +132,25 @@ addMethod(
       const { path, createError } = this;
 
       try {
-        const dom = new DOMParser().parseFromString(value ?? "", "text/html");
+        const str = htmlToString(value ?? "");
+        const length = str ? str.length : 0;
 
-        const length = (dom?.body?.textContent ?? "").length;
-
-        if (typeof min !== "undefined" && ((min === 0 && length === 0) || (min > 0 && length < 0)))
+        if (
+          typeof min !== "undefined" &&
+          ((min === 0 && length === 0) || (min > 0 && length < 0))
+        )
           return createError({
             path,
-            message: 'This field must be at least {{min}} characters long',
+            message: "This field must be at least {{min}} characters long",
             params: {
               min,
             },
           });
-        
+
         if (typeof max !== "undefined" && max < length)
           return createError({
             path,
-            message: 'This field must be at most {{max}} characters long',
+            message: "This field must be at most {{max}} characters long",
             params: {
               max,
             },

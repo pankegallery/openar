@@ -1,23 +1,25 @@
 import React from "react";
 import Link from "next/link";
 
-import {
-  Box,
-  Flex,
-  chakra,
-} from "@chakra-ui/react";
-
+import { Box, Flex, chakra } from "@chakra-ui/react";
 
 import Arrow from "~/assets/img/arrow.svg";
 import { ArtworkListItem } from "~/components/frontend";
 import pick from "lodash/pick";
+import { useAuthentication } from "~/hooks";
+import { isArtworkAccessible } from "~/utils";
 
+export const ArtworkList = ({
+  artworks,
+  col,
+}: {
+  artworks: any;
+  col?: any;
+}) => {
+  const [appUser] = useAuthentication();
 
-export const ArtworkList = ({artworks, col}: {artworks: any; col?: any}) => {
-
-  let colW = (col === 2) ? "66.6vw" : "33.3vw";
+  let colW = col === 2 ? "66.6vw" : "33.3vw";
   return (
-
     <Flex
       direction="column"
       className="artworkColumn"
@@ -26,19 +28,18 @@ export const ArtworkList = ({artworks, col}: {artworks: any; col?: any}) => {
       w={{
         base: "100vw",
         t: "50vw",
-        d: `${colW}`
+        d: `${colW}`,
       }}
       h={{
         base: "auto",
-        t: "100%"
+        t: "100%",
       }}
       sx={{
         ".userDetails &": {
-          h: "auto"
-        }
+          h: "auto",
+        },
       }}
     >
-
       {/* --------- ROW: Arrow --------- */}
       <Box
         className="header"
@@ -52,41 +53,38 @@ export const ArtworkList = ({artworks, col}: {artworks: any; col?: any}) => {
         textAlign="left"
         flexDirection="column"
       >
-        <chakra.p textStyle="bigLabel">
-          Own artworks
-        </chakra.p>
-        <Box ml="-6"><Arrow className="arrow down"/></Box>
+        <chakra.p textStyle="bigLabel">Own artworks</chakra.p>
+        <Box ml="-6">
+          <Arrow className="arrow down" />
+        </Box>
       </Box>
 
-
       {/* --------- ROW: Artworks --------- */}
-      <Box height="100%"
-        width="100%" overflow="auto">
+      <Box height="100%" width="100%" overflow="auto">
         {artworks.length > 0 && (
-          <Flex
-            width="100%"
-            flexWrap="wrap"
-          >
-            {artworks.map((artwork) => (
-              <ArtworkListItem
-                isAdmin={false}
-                urlKey={artwork.key}
-                col={col}
-                key={artwork.key}
-                {...pick(artwork, [
-                  "id",
-                  "heroImage",
-                  "title",
-                  "creator",
-                ])}
-              />
-            ))}
+          <Flex width="100%" flexWrap="wrap">
+            {artworks.map((artwork) => {
+              if (!isArtworkAccessible(artwork, appUser)) return <></>;
+
+              return (
+                <ArtworkListItem
+                  isAdmin={false}
+                  urlKey={artwork.key}
+                  col={col}
+                  key={artwork.key}
+                  {...pick(artwork, [
+                    "id",
+                    "heroImage",
+                    "title",
+                    "creator",
+                    "status",
+                  ])}
+                />
+              );
+            })}
           </Flex>
         )}
       </Box>
-
     </Flex>
-
   );
-
 };

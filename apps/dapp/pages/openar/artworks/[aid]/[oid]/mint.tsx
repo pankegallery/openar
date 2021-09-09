@@ -5,62 +5,58 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/router";
 import { Text } from "@chakra-ui/react";
 import { useQuery, gql } from "@apollo/client";
-
+import Head from "next/head";
 import { LayoutOpenAR } from "~/components/app";
 import { FormNavigationBlock } from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
-import { ModuleArtworkForm } from "~/components/modules/forms";
-import { ModuleArtworkUpdateSchema } from "~/components/modules/validation";
+import { ModuleArtworkArObjectForm } from "~/components/modules/forms";
+import { ModuleArObjectUpdateSchema } from "~/components/modules/validation";
 import { RestrictPageAccess } from "~/components/utils";
+import { BeatLoader } from "react-spinners";
 
 import { useAuthentication, useSuccessfullySavedToast } from "~/hooks";
-import { useArtworkUpdateMutation } from "~/hooks/mutations";
+import { useArObjectUpdateMutation } from "~/hooks/mutations";
 import {
   ModuleSubNav,
   ModulePage,
   ButtonListElement,
 } from "~/components/modules";
 
-import { filteredOutputByWhitelist, ArtworkStatusEnum } from "~/utils";
+import { filteredOutputByWhitelist } from "~/utils";
 
 // TODO
-export const artworkReadOwnQueryGQL = gql`
-  query artworkReadOwn($id: Int!) {
-    artworkReadOwn(id: $id) {
+export const arObjectReadOwnQueryGQL = gql`
+  query arObjectReadOwn($id: Int!, $aid: Int!) {
+    arObjectReadOwn(id: $id) {
       id
-      type
-      key
       status
       title
       description
-      url
-      video
+      editionOf
+      orderNumber
+      askPrice
+      key
       # isBanned TODO: make good use of this
       lat
       lng
       # images {
       # }
-      arObjects {
+      arModels {
         id
-        key
-        title
-        orderNumber
+        type
+        meta
         status
-        askPrice
-        editionOf
-        heroImage {
-          id
-          meta
-          status
-        }
       }
-      # files {
-      # }
       heroImage {
         id
         meta
         status
       }
+    }
+    artworkReadOwn(id: $aid) {
+      id
+      title
+      description
     }
   }
 `;
@@ -71,65 +67,68 @@ const Update = () => {
   const [appUser] = useAuthentication();
   const successToast = useSuccessfullySavedToast();
   const [disableNavigation, setDisableNavigation] = useState(false);
-  const [isNavigatingAway, setIsNavigatingAway] = useState(false);
   const [activeUploadCounter, setActiveUploadCounter] = useState<number>(0);
+  const [isNavigatingAway, setIsNavigatingAway] = useState(false)
 
-  const [firstMutation, firstMutationResults] = useArtworkUpdateMutation();
+  const [firstMutation, firstMutationResults] = useArObjectUpdateMutation();
   const [isFormError, setIsFormError] = useState(false);
 
   const disableForm = firstMutationResults.loading;
 
   const formMethods = useForm({
     mode: "onTouched",
-    resolver: yupResolver(ModuleArtworkUpdateSchema),
+    resolver: yupResolver(ModuleArObjectUpdateSchema),
     defaultValues: {
-      status: ArtworkStatusEnum.DRAFT,
+      dates: [],
     },
   });
   const {
     handleSubmit,
     reset,
-    clearErrors,
-    setValue,
+    setError,
     formState: { isSubmitting, isDirty },
   } = formMethods;
 
-  const { data, loading, error } = useQuery(artworkReadOwnQueryGQL, {
+  const { data, loading, error } = useQuery(arObjectReadOwnQueryGQL, {
     variables: {
-      id: parseInt(router.query.aid as string, 10),
+      id: parseInt(router.query.oid as string, 10),
+      aid: parseInt(router.query.aid as string, 10),
     },
   });
 
   useEffect(() => {
-    if (!data || !data.artworkReadOwn) return;
+    if (!data || !data.arObjectReadOwn) return;
 
     reset({
-      ...filteredOutputByWhitelist(data.artworkReadOwn, [
+      ...filteredOutputByWhitelist(data.arObjectReadOwn, [
         "title",
         "description",
-        "url",
-        "video",
+        "orderNumber",
+        "editionOf",
+        "askPrice",
         "status",
+        "key",
       ]),
     });
   }, [reset, data]);
 
   const onSubmit = async (
-    newData: yup.InferType<typeof ModuleArtworkUpdateSchema>
+    newData: yup.InferType<typeof ModuleArObjectUpdateSchema>
   ) => {
     setIsFormError(false);
     setIsNavigatingAway(false);
     try {
       if (appUser) {
         const { data, errors } = await firstMutation(
-          parseInt(router.query.aid as string),
+          parseInt(router.query.oid as string, 10),
           {
             title: newData.title,
             description: newData.description,
-            video: newData.video ?? "",
-            url: newData.url ?? "",
-            status: newData.status ?? "",
-
+            editionOf: newData.editionOf ?? null,
+            orderNumber: newData.orderNumber ?? null,
+            askPrice: newData.askPrice ?? null,
+            status: newData.status ?? null,
+            key: newData.key ?? "",
             creator: {
               connect: {
                 id: appUser.id,
@@ -139,12 +138,9 @@ const Update = () => {
         );
 
         if (!errors) {
-          clearErrors();
           successToast();
           setIsNavigatingAway(true);
-          router.push(
-            `${moduleConfig.rootPath}/${data?.artworkUpdate?.id}/update`
-          );
+          router.push(`${moduleConfig.rootPath}/${router.query.aid}/update`);
         } else {
           setIsFormError(true);
         }
@@ -156,14 +152,27 @@ const Update = () => {
     }
   };
 
+  // TODO: make more general
+  const trimTitle = (str: string) =>
+    str.length > 13 ? `${str.substr(0, 10)}...` : str;
+
   const breadcrumb = [
     {
       path: moduleConfig.rootPath,
       title: "Artworks",
-      userCan: "artworkReadOwn",
     },
     {
-      title: "Update artwork",
+      path: `${moduleConfig.rootPath}/${router.query.aid}/update`,
+      title:
+        data &&
+        (data.artworkReadOwn?.title ? (
+          trimTitle(data.artworkReadOwn?.title)
+        ) : (
+          <BeatLoader size="10px" color="#fff" />
+        )),
+    },
+    {
+      title: "Update object",
     },
   ];
 
@@ -172,48 +181,20 @@ const Update = () => {
   const buttonList: ButtonListElement[] = [
     {
       type: "back",
-      to: moduleConfig.rootPath,
+      to: `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`,
       label: "Cancel",
-      isDisabled: disableNavigation || activeUploadCounter > 0,
       userCan: "artworkReadOwn",
     },
-    {
-      type: "button",
-      isLoading: isSubmitting,
-      onClick: () => {
-        setValue("status", ArtworkStatusEnum.DRAFT);
-        handleSubmit(onSubmit)();
-      },
-      label:
-        data?.artworkReadOwn?.status === ArtworkStatusEnum.DRAFT
-          ? "Save draft"
-          : "Unpublish",
-      isDisabled: disableNavigation || activeUploadCounter > 0,
-      userCan: "artworkUpdateOwn",
-    },
-    {
-      type: "button",
-      isLoading: isSubmitting,
-      onClick: () => {
-        setValue("status", ArtworkStatusEnum.PUBLISHED);
-        handleSubmit(onSubmit)();
-      },
-      label:
-        data?.artworkReadOwn?.status === ArtworkStatusEnum.PUBLISHED
-          ? "Save"
-          : "Publish",
-      isDisabled: disableNavigation || activeUploadCounter > 0,
-      userCan: "artworkUpdateOwn",
-    },
   ];
+
+  const errorMessage = firstMutationResults.error
+    ? firstMutationResults?.error?.message
+    : "";
 
   return (
     <>
       <FormNavigationBlock
-        shouldBlock={
-          !isNavigatingAway &&
-          ((isDirty && !isSubmitting) || activeUploadCounter > 0)
-        }
+        shouldBlock={!isNavigatingAway && ((isDirty && !isSubmitting) || activeUploadCounter > 0)}
       />
       <FormProvider {...formMethods}>
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -221,7 +202,9 @@ const Update = () => {
             <ModuleSubNav breadcrumb={breadcrumb} buttonList={buttonList} />
             <ModulePage
               isLoading={loading}
-              isError={!!error || (!error && !loading && !data?.artworkReadOwn)}
+              isError={
+                !!error || (!error && !loading && !data?.arObjectReadOwn)
+              }
             >
               {isFormError && (
                 <Text
@@ -231,16 +214,16 @@ const Update = () => {
                   borderBottom="1px solid #fff"
                   color="openar.error"
                 >
-                  Unfortunately, we could not save your artwork. Please try
-                  again in a little bit.
+                  Unfortunately, we could not save your object. Please try again
+                  in a little bit.
                 </Text>
               )}
-              <ModuleArtworkForm
+              <ModuleArtworkArObjectForm
                 action="update"
                 data={data}
                 setActiveUploadCounter={setActiveUploadCounter}
                 disableNavigation={setDisableNavigation}
-                validationSchema={ModuleArtworkUpdateSchema}
+                validationSchema={ModuleArObjectUpdateSchema}
               />
             </ModulePage>
           </fieldset>

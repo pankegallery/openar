@@ -1,4 +1,8 @@
-import { Wallet, BigNumber } from "ethers";
+import { Wallet, BigNumber, BigNumberish } from "ethers";
+import sjcl from "sjcl";
+import warning from "tiny-warning";
+import invariant from "tiny-invariant";
+import { getAddress } from "@ethersproject/address";
 import {
   BytesLike,
   hexDataLength,
@@ -6,18 +10,26 @@ import {
   arrayify,
   isHexString,
 } from "@ethersproject/bytes";
-import invariant from "tiny-invariant";
-import { recoverTypedSignature, signTypedData_v4 } from "eth-sig-util";
+import axios from "axios";
+
+import {
+  recoverTypedSignature,
+  signTypedData_v4,
+  recoverTypedSignature_v4,
+} from "eth-sig-util";
 
 import { fromRpcSig, toRpcSig } from "ethereumjs-util";
 
+import { Decimal } from "./decimal";
 import {
+  Ask,
+  Bid,
   BidShares,
   DecimalValue,
-  EIP712Signature,
   EIP712Domain,
+  EIP712Signature,
+  MediaData,
 } from "./types";
-import { Decimal } from "./decimal";
 
 export function validateBytes32(value: BytesLike) {
   if (typeof value === "string") {
@@ -58,13 +70,13 @@ export function validateBidShares(
   }
 }
 
-export function openARConstructBidShares(
+export const openARConstructBidShares = (
   platform: number,
   pool: number,
   creator: number,
   owner: number,
   prevOwner: number
-): BidShares {
+): BidShares => {
   const decimalPlatform = Decimal.new(parseFloat(platform.toFixed(4)));
   const decimalPool = Decimal.new(parseFloat(pool.toFixed(4)));
   const decimalCreator = Decimal.new(parseFloat(creator.toFixed(4)));
@@ -86,10 +98,31 @@ export function openARConstructBidShares(
     owner: decimalOwner,
     prevOwner: decimalPrevOwner,
   };
-}
+};
+
+export const createEIP712Signature = (
+  signature: string,
+  deadline: BigNumberish
+): EIP712Signature => {
+  invariant(typeof signature === "string", "Signature needs to be a string");
+  invariant(signature.length === 132, "Signature length needs to be 132");
+
+  const r = Buffer.from(signature.substring(2, 66), "hex");
+  const s = Buffer.from(signature.substring(66, 130), "hex");
+  // const r = signature.substring(2, 66);
+  // const s = signature.substring(66, 130);
+  const v = parseInt(signature.substring(130, 132)) + 27;
+
+  return {
+    deadline,
+    v,
+    r,
+    s,
+  };
+};
 
 /**
- * Signs a openAR MintWithSig Message as specified by EIP-712
+ * Signs a openAR MintWithSig Payload by EIP-712
  *
  * @param owner
  * @param contentHash
@@ -99,72 +132,45 @@ export function openARConstructBidShares(
  * @param deadline
  * @param domain
  */
-export async function signMintWithSigMessage(
-  owner: Wallet,
+export const generateSignMintWithSignMessageData = (
   contentHash: BytesLike,
   metadataHash: BytesLike,
   creatorShareBN: BigNumber,
   nonce: number,
   deadline: number,
   domain: EIP712Domain
-): Promise<EIP712Signature> {
-  try {
-    validateBytes32(contentHash);
-    validateBytes32(metadataHash);
-  } catch (err: any) {
-    return Promise.reject(err.message);
-  }
-
+) => {
   const creatorShare = creatorShareBN.toString();
 
-  return new Promise<EIP712Signature>((res, reject) => {
-    try {
-      const sig = signTypedData_v4(
-        Buffer.from(owner.privateKey.slice(2), "hex"),
-        {
-          data: {
-            types: {
-              EIP712Domain: [
-                { name: "name", type: "string" },
-                { name: "version", type: "string" },
-                { name: "chainId", type: "uint256" },
-                { name: "verifyingContract", type: "address" },
-              ],
-              MintWithSig: [
-                { name: "contentHash", type: "bytes32" },
-                { name: "metadataHash", type: "bytes32" },
-                { name: "creatorShare", type: "uint256" },
-                { name: "nonce", type: "uint256" },
-                { name: "deadline", type: "uint256" },
-              ],
-            },
-            primaryType: "MintWithSig",
-            domain,
-            message: {
-              contentHash,
-              metadataHash,
-              creatorShare,
-              nonce,
-              deadline,
-            },
-          },
-        }
-      );
-      const response = fromRpcSig(sig);
-      res({
-        r: response.r,
-        s: response.s,
-        v: response.v,
-        deadline: deadline.toString(),
-      });
-    } catch (e) {
-      console.error(e);
-      reject(e);
-    }
-  });
-}
+  return {
+    types: {
+      EIP712Domain: [
+        { name: "name", type: "string" },
+        { name: "version", type: "string" },
+        { name: "chainId", type: "uint256" },
+        { name: "verifyingContract", type: "address" },
+      ],
+      MintWithSig: [
+        { name: "contentHash", type: "bytes32" },
+        { name: "metadataHash", type: "bytes32" },
+        { name: "creatorShare", type: "uint256" },
+        { name: "nonce", type: "uint256" },
+        { name: "deadline", type: "uint256" },
+      ],
+    },
+    primaryType: "MintWithSig" as "MintWithSig" | "EIP712Domain",
+    domain,
+    message: {
+      contentHash,
+      metadataHash,
+      creatorShare,
+      nonce,
+      deadline,
+    },
+  };
+};
 
-export async function recoverSignatureFromMintWithSig(
+export const recoverSignatureFromMintWithSig = async (
   contentHash: BytesLike,
   metadataHash: BytesLike,
   creatorShareBN: BigNumber,
@@ -172,7 +178,7 @@ export async function recoverSignatureFromMintWithSig(
   deadline: number,
   domain: EIP712Domain,
   eipSig: EIP712Signature
-) {
+) => {
   const r = arrayify(eipSig.r);
   const s = arrayify(eipSig.s);
   const creatorShare = creatorShareBN.toString();
@@ -207,4 +213,337 @@ export async function recoverSignatureFromMintWithSig(
     sig: toRpcSig(eipSig.v, Buffer.from(r), Buffer.from(s)),
   });
   return recovered;
+};
+
+/**
+ * Signs a openAR MintWithSig Message as specified by EIP-712
+ *
+ * @param owner
+ * @param contentHash
+ * @param metadataHash
+ * @param creatorShareBN
+ * @param nonce
+ * @param deadline
+ * @param domain
+ */
+export const signMintWithSigMessageFromWallet = async (
+  owner: Wallet,
+  contentHash: BytesLike,
+  metadataHash: BytesLike,
+  creatorShareBN: BigNumber,
+  nonce: number,
+  deadline: number,
+  domain: EIP712Domain
+): Promise<EIP712Signature> => {
+  try {
+    validateBytes32(contentHash);
+    validateBytes32(metadataHash);
+  } catch (err: any) {
+    return Promise.reject(err.message);
+  }
+
+  return new Promise<EIP712Signature>((res, reject) => {
+    try {
+      const sig = signTypedData_v4(
+        Buffer.from(owner.privateKey.slice(2), "hex"),
+        {
+          data: generateSignMintWithSignMessageData(
+            contentHash,
+            metadataHash,
+            creatorShareBN,
+            nonce,
+            deadline,
+            domain
+          ),
+        }
+      );
+      const response = fromRpcSig(sig);
+      res({
+        r: response.r,
+        s: response.s,
+        v: response.v,
+        deadline: deadline.toString(),
+      });
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      reject(e);
+    }
+  });
+};
+
+/*
+ * Signs a openAR MintArObject Payload by EIP-712
+ *
+ * @param owner
+ * @param contentHash
+ * @param metadataHash
+ * @param creatorShareBN
+ * @param nonce (use UNIX timestamp)
+ * @param deadline
+ * @param domain
+ */
+export const generateMintArObjectSignMessageData = (
+  keyHash: BytesLike,
+  editionOfBN: BigNumber,
+  setInitialAsk: boolean,
+  initialAskBN: BigNumber,
+  nonce: number,
+  deadline: number,
+  domain: EIP712Domain
+) => {
+  const editionOf = editionOfBN.toString();
+  const initialAsk = initialAskBN.toString();
+
+  return {
+    types: {
+      EIP712Domain: [
+        { name: "name", type: "string" },
+        { name: "version", type: "string" },
+        { name: "chainId", type: "uint256" },
+        { name: "verifyingContract", type: "address" },
+      ],
+      MintArObject: [
+        { name: "keyHash", type: "bytes32" },
+        { name: "editionOf", type: "uint256" },
+        { name: "setInitialAsk", type: "bool" },
+        { name: "initialAsk", type: "uint256" },
+        { name: "nonce", type: "uint256" },
+        { name: "deadline", type: "uint256" },
+      ],
+    },
+    primaryType: "MintArObject" as "MintArObject" | "EIP712Domain",
+    domain,
+    message: {
+      keyHash,
+      editionOf,
+      setInitialAsk,
+      initialAsk,
+      nonce,
+      deadline,
+    },
+  };
+};
+
+export const recoverSignatureFromMintArObject = async (
+  keyHash: BytesLike,
+  editionOfBN: BigNumber,
+  setInitialAsk: boolean,
+  initialAskBN: BigNumber,
+  nonce: number,
+  deadline: number,
+  domain: EIP712Domain,
+  sig: string
+) => {
+  const recovered = recoverTypedSignature_v4({
+    data: generateMintArObjectSignMessageData(
+      keyHash,
+      editionOfBN,
+      setInitialAsk,
+      initialAskBN,
+      nonce,
+      deadline,
+      domain
+    ),
+    sig: sig,
+  });
+
+  return recovered;
+};
+
+/**
+ * Signs a openAR MintWithSig Message as specified by EIP-712
+ *
+ * @param owner
+ * @param contentHash
+ * @param metadataHash
+ * @param nonce
+ * @param deadline
+ * @param domain
+ */
+export const signMintArObjectMessageFromWallet = async (
+  owner: Wallet,
+  keyHash: BytesLike,
+  editionOfBN: BigNumber,
+  setInitialAsk: boolean,
+  initialAskBN: BigNumber,
+  nonce: number,
+  deadline: number,
+  domain: EIP712Domain
+): Promise<EIP712Signature> => {
+  return new Promise<EIP712Signature>((res, reject) => {
+    try {
+      const sig = signTypedData_v4(
+        Buffer.from(owner.privateKey.slice(2), "hex"),
+        {
+          data: generateMintArObjectSignMessageData(
+            keyHash,
+            editionOfBN,
+            setInitialAsk,
+            initialAskBN,
+            nonce,
+            deadline,
+            domain
+          ),
+        }
+      );
+      const response = fromRpcSig(sig);
+      res({
+        r: response.r,
+        s: response.s,
+        v: response.v,
+        deadline: deadline.toString(),
+      });
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      reject(e);
+    }
+  });
+};
+
+/**
+ * Returns the proper network name for the specified chainId
+ *
+ * @param chainId
+ */
+export function chainIdToNetworkName(chainId: number): string {
+  switch (chainId) {
+    case 1337: {
+      return "localhost";
+    }
+    case 100: {
+      return "xDai";
+    }
+  }
+
+  invariant(
+    false,
+    `chainId ${chainId} not officially supported by the openAR Protocol`
+  );
+}
+
+/**
+ * Validates the URI is prefixed with `https://`
+ *
+ * @param uri
+ */
+export function validateURI(uri: string) {
+  if (!uri.match(/^https:\/\/(.*)/)) {
+    invariant(false, `${uri} must begin with \`https://\``);
+  }
+}
+
+/**
+ * Validates and returns the checksummed address
+ *
+ * @param address
+ */
+export function validateAndParseAddress(address: string): string {
+  try {
+    const checksummedAddress = getAddress(address);
+    warning(address === checksummedAddress, `${address} is not checksummed.`);
+    return checksummedAddress;
+  } catch (error) {
+    invariant(false, `${address} is not a valid address.`);
+  }
+}
+
+/**
+ * Constructs a MediaData type.
+ *
+ * @param tokenURI
+ * @param metadataURI
+ * @param contentHash
+ * @param metadataHash
+ */
+export function constructMediaData(
+  tokenURI: string,
+  metadataURI: string,
+  contentHash: BytesLike,
+  metadataHash: BytesLike
+): MediaData {
+  // validate the hash to ensure it fits in bytes32
+  validateBytes32(contentHash);
+  validateBytes32(metadataHash);
+  validateURI(tokenURI);
+  validateURI(metadataURI);
+
+  return {
+    tokenURI: tokenURI,
+    metadataURI: metadataURI,
+    contentHash: contentHash,
+    metadataHash: metadataHash,
+  };
+}
+
+/********************
+ * Hashing Utilities
+ ********************
+ */
+
+/**
+ * Generates the sha256 hash from a buffer and returns the hash hex-encoded
+ *
+ * @param buffer
+ */
+export function sha256FromBuffer(buffer: Buffer): string {
+  const bitArray = sjcl.codec.hex.toBits(buffer.toString("hex"));
+  const hashArray = sjcl.hash.sha256.hash(bitArray);
+  return "0x".concat(sjcl.codec.hex.fromBits(hashArray));
+}
+
+/**
+ * Returns the `verified` status of a uri.
+ * A uri is only considered `verified` if its content hashes to its expected hash
+ *
+ * @param uri
+ * @param expectedHash
+ * @param timeout
+ */
+export async function isURIHashVerified(
+  uri: string,
+  expectedHash: BytesLike,
+  timeout: number = 10
+): Promise<boolean> {
+  try {
+    validateURI(uri);
+
+    const resp = await axios.get(uri, {
+      timeout: timeout,
+      responseType: "arraybuffer",
+    });
+    const uriHash = sha256FromBuffer(resp.data);
+    const normalizedExpectedHash = hexlify(expectedHash);
+
+    return uriHash == normalizedExpectedHash;
+  } catch (err: any) {
+    return Promise.reject(err.message);
+  }
+}
+
+/**
+ * Returns the `verified` status of some MediaData.
+ * MediaData is only considered `verified` if the content of its URIs hash to their respective hash
+ *
+ * @param mediaData
+ * @param timeout
+ */
+export async function isMediaDataVerified(
+  mediaData: MediaData,
+  timeout: number = 10
+): Promise<boolean> {
+  const isTokenURIVerified = await isURIHashVerified(
+    mediaData.tokenURI,
+    mediaData.contentHash,
+    timeout
+  );
+
+  const isMetadataURIVerified = await isURIHashVerified(
+    mediaData.metadataURI,
+    mediaData.metadataHash,
+    timeout
+  );
+
+  return isTokenURIVerified && isMetadataURIVerified;
 }

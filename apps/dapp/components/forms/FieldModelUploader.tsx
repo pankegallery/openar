@@ -38,7 +38,6 @@ export type ApiArModelProps = {
   placeholder?: string;
 };
 
-
 const humanFileSize = (
   size: number | undefined,
   decimalPlaces: number = 0
@@ -123,6 +122,7 @@ export const FieldModelUploader = ({
   type,
   isRequired,
   isDisabled,
+  canDelete = true,
   deleteButtonGQL,
   onDelete,
   onUpload,
@@ -136,6 +136,7 @@ export const FieldModelUploader = ({
   id: string;
   isRequired?: boolean;
   isDisabled?: boolean;
+  canDelete?: boolean;
   shouldSetFormDirtyOnUpload?: boolean;
   shouldSetFormDirtyOnDelete?: boolean;
   label: string;
@@ -239,7 +240,7 @@ export const FieldModelUploader = ({
                 if (data?.id) {
                   clearErrors(name);
                   setUploadedImgId(data?.id ?? undefined);
-                  setUploadedModelUrl(data?.meta?.originalFileUrl)
+                  setUploadedModelUrl(data?.meta?.originalFileUrl);
                   setValue(name, data?.id, {
                     shouldDirty: shouldSetFormDirtyOnDelete,
                   });
@@ -297,8 +298,9 @@ export const FieldModelUploader = ({
     settings?.model && settings?.model?.id ? settings.model : {};
 
   if (arModelIsDeleted) currentModel = {};
-  
-  const showModel = (currentModel && currentModel?.id) || uploadedModelUrl !== "";
+
+  const showModel =
+    (currentModel && currentModel?.id) || uploadedModelUrl !== "";
 
   const hasMin = settings?.minFileSize && settings?.minFileSize > 0;
   const hasMax = settings?.maxFileSize && settings?.maxFileSize > 0;
@@ -344,7 +346,7 @@ export const FieldModelUploader = ({
 
   let urlGlb;
   if (type === "glb")
-  urlGlb = uploadedModelUrl || currentModel?.meta?.originalFileUrl;
+    urlGlb = uploadedModelUrl || currentModel?.meta?.originalFileUrl;
 
   let urlUsdz;
   if (type === "usdz")
@@ -362,10 +364,9 @@ export const FieldModelUploader = ({
         </FormLabel>
         {showModel && (
           <Box position="relative">
-
             <ApiArModel
-              urlGlb={(type === "glb" && urlGlb) ? urlGlb : undefined}
-              urlUsdz={(type === "usdz" && urlUsdz) ? urlUsdz  : undefined}
+              urlGlb={type === "glb" && urlGlb ? urlGlb : undefined}
+              urlUsdz={type === "usdz" && urlUsdz ? urlUsdz : undefined}
               alt={`AR Model ${type}`}
               loading="eager"
               reveal="auto"
@@ -373,18 +374,20 @@ export const FieldModelUploader = ({
               enforceAspectRatio={true}
             />
 
-            <IconButton
-              position="absolute"
-              top="3"
-              right="3"
-              fontSize="xl"
-              icon={<HiOutlineTrash />}
-              onClick={() => {
-                deleteButtonOnClick(uploadedModelId ?? currentModel?.id);
-              }}
-              aria-label="Delete model"
-              title="Delete model"
-            />
+            {canDelete && (
+              <IconButton
+                position="absolute"
+                top="3"
+                right="3"
+                fontSize="xl"
+                icon={<HiOutlineTrash />}
+                onClick={() => {
+                  deleteButtonOnClick(uploadedModelId ?? currentModel?.id);
+                }}
+                aria-label="Delete model"
+                title="Delete model"
+              />
+            )}
           </Box>
         )}
         {isDeleteError && (
@@ -399,12 +402,7 @@ export const FieldModelUploader = ({
           <>
             <input name={`${name}_dropzone`} {...getInputProps()} />
 
-            <Box
-              position="relative"
-              pb="100%"
-              h="0"
-              w="100%"
-            >
+            <Box position="relative" pb="100%" h="0" w="100%">
               <Flex
                 {...getRootProps({ className: "dropzone" })}
                 justifyContent="center"

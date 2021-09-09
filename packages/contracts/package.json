@@ -1,7 +1,7 @@
 {
   "name": "@openar/contracts",
   "description": "Makes the openAR contract typechain build available for other packages/apps",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "contributors": [
     {
@@ -10,7 +10,7 @@
   ],
   "type": "module",
   "license": "MIT",
-  "source": "typechain/index.ts",
-  "main": "typechain/index.js",
-  "typings": "typechain/index.d.ts"
+  "source": "src/index.ts",
+  "main": "dist/index.js",
+  "typings": "src/index.d.ts"
 }

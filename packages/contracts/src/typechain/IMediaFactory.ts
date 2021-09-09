@@ -150,6 +150,25 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "creator",
+        type: "address",
+      },
+    ],
+    name: "creatorBalanceOf",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         components: [
           {
             internalType: "string",
@@ -257,6 +276,170 @@ const _abi = [
         type: "address",
       },
       {
+        internalType: "string[]",
+        name: "tokenURI",
+        type: "string[]",
+      },
+      {
+        internalType: "string[]",
+        name: "metadataURI",
+        type: "string[]",
+      },
+      {
+        internalType: "bytes32[]",
+        name: "contentHash",
+        type: "bytes32[]",
+      },
+      {
+        internalType: "bytes32[]",
+        name: "metadataHash",
+        type: "bytes32[]",
+      },
+      {
+        components: [
+          {
+            internalType: "bytes32",
+            name: "keyHash",
+            type: "bytes32",
+          },
+          {
+            internalType: "uint256",
+            name: "editionOf",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "initialAsk",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "mintArObjectNonce",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "currency",
+            type: "address",
+          },
+          {
+            internalType: "bool",
+            name: "setInitialAsk",
+            type: "bool",
+          },
+        ],
+        internalType: "struct IMedia.MintArObjectData",
+        name: "data",
+        type: "tuple",
+      },
+      {
+        components: [
+          {
+            components: [
+              {
+                internalType: "uint256",
+                name: "value",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct Decimal.D256",
+            name: "platform",
+            type: "tuple",
+          },
+          {
+            components: [
+              {
+                internalType: "uint256",
+                name: "value",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct Decimal.D256",
+            name: "pool",
+            type: "tuple",
+          },
+          {
+            components: [
+              {
+                internalType: "uint256",
+                name: "value",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct Decimal.D256",
+            name: "creator",
+            type: "tuple",
+          },
+          {
+            components: [
+              {
+                internalType: "uint256",
+                name: "value",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct Decimal.D256",
+            name: "owner",
+            type: "tuple",
+          },
+          {
+            components: [
+              {
+                internalType: "uint256",
+                name: "value",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct Decimal.D256",
+            name: "prevOwner",
+            type: "tuple",
+          },
+        ],
+        internalType: "struct IMarket.BidShares",
+        name: "bidShares",
+        type: "tuple",
+      },
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "deadline",
+            type: "uint256",
+          },
+          {
+            internalType: "uint8",
+            name: "v",
+            type: "uint8",
+          },
+          {
+            internalType: "bytes32",
+            name: "r",
+            type: "bytes32",
+          },
+          {
+            internalType: "bytes32",
+            name: "s",
+            type: "bytes32",
+          },
+        ],
+        internalType: "struct IMedia.EIP712Signature",
+        name: "sig",
+        type: "tuple",
+      },
+    ],
+    name: "mintArObject",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "creator",
+        type: "address",
+      },
+      {
         components: [
           {
             internalType: "string",
@@ -349,6 +532,11 @@ const _abi = [
         internalType: "struct IMarket.BidShares",
         name: "bidShares",
         type: "tuple",
+      },
+      {
+        internalType: "uint256",
+        name: "mintWithSigNonce",
+        type: "uint256",
       },
       {
         components: [
@@ -563,6 +751,30 @@ const _abi = [
         internalType: "string",
         name: "",
         type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "creator",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "index",
+        type: "uint256",
+      },
+    ],
+    name: "tokenOfCreatorByIndex",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",

@@ -208,8 +208,6 @@ export const ArtworkQueries = extendType({
               },
             };
 
-          console.log(include);
-
           artworks = await daoArtworkQuery(
             where,
             Object.keys(include).length > 0 ? include : undefined,

@@ -88,7 +88,8 @@ model ArObject {
   
   title         String?
   description   String?
-  orderNumber     Int? @default(0)
+  mintSignature  String?
+  orderNumber   Int? @default(0)
   editionOf     Int?
   
   lat           Float?

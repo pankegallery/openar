@@ -20,26 +20,34 @@ import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 
-interface IMarketInterface extends ethers.utils.Interface {
+interface MarketInterface extends ethers.utils.Interface {
   functions: {
     "acceptBid(uint256,tuple)": FunctionFragment;
     "bidForTokenBidder(uint256,address)": FunctionFragment;
     "bidSharesForToken(uint256)": FunctionFragment;
     "configure(address)": FunctionFragment;
-    "configureOpenAREnforcePlatformCuts(bool)": FunctionFragment;
-    "configureOpenARPlaformMaintenanceAddress(address)": FunctionFragment;
-    "configureOpenARPlatformCuts(tuple)": FunctionFragment;
-    "configureOpenARPlatformPoolAddress(address)": FunctionFragment;
+    "configureEnforcePlatformCuts(bool)": FunctionFragment;
     "configurePausedUnpaused(bool)": FunctionFragment;
+    "configurePlatformAddress(address)": FunctionFragment;
+    "configurePlatformCuts(tuple)": FunctionFragment;
+    "configurePoolAddress(address)": FunctionFragment;
     "currentAskForToken(uint256)": FunctionFragment;
+    "enforcePlatformCuts()": FunctionFragment;
     "isValidBid(uint256,uint256)": FunctionFragment;
     "isValidBidShares(tuple)": FunctionFragment;
+    "mediaContract()": FunctionFragment;
+    "openARPlatform()": FunctionFragment;
+    "openARPool()": FunctionFragment;
+    "owner()": FunctionFragment;
+    "platformCuts()": FunctionFragment;
     "removeAsk(uint256)": FunctionFragment;
     "removeBid(uint256,address)": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
     "setAsk(uint256,tuple)": FunctionFragment;
     "setBid(uint256,tuple,address)": FunctionFragment;
     "setBidShares(uint256,tuple)": FunctionFragment;
     "splitShare(tuple,uint256)": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -65,15 +73,19 @@ interface IMarketInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "configure", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "configureOpenAREnforcePlatformCuts",
+    functionFragment: "configureEnforcePlatformCuts",
     values: [boolean]
   ): string;
   encodeFunctionData(
-    functionFragment: "configureOpenARPlaformMaintenanceAddress",
+    functionFragment: "configurePausedUnpaused",
+    values: [boolean]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "configurePlatformAddress",
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "configureOpenARPlatformCuts",
+    functionFragment: "configurePlatformCuts",
     values: [
       {
         firstSalePlatform: { value: BigNumberish };
@@ -85,16 +97,16 @@ interface IMarketInterface extends ethers.utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "configureOpenARPlatformPoolAddress",
+    functionFragment: "configurePoolAddress",
     values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "configurePausedUnpaused",
-    values: [boolean]
   ): string;
   encodeFunctionData(
     functionFragment: "currentAskForToken",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "enforcePlatformCuts",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "isValidBid",
@@ -113,12 +125,33 @@ interface IMarketInterface extends ethers.utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "mediaContract",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "openARPlatform",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "openARPool",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "platformCuts",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "removeAsk",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "removeBid",
     values: [BigNumberish, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "renounceOwnership",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "setAsk",
@@ -155,6 +188,10 @@ interface IMarketInterface extends ethers.utils.Interface {
     functionFragment: "splitShare",
     values: [{ value: BigNumberish }, BigNumberish]
   ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [string]
+  ): string;
 
   decodeFunctionResult(functionFragment: "acceptBid", data: BytesLike): Result;
   decodeFunctionResult(
@@ -167,19 +204,7 @@ interface IMarketInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "configure", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "configureOpenAREnforcePlatformCuts",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "configureOpenARPlaformMaintenanceAddress",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "configureOpenARPlatformCuts",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "configureOpenARPlatformPoolAddress",
+    functionFragment: "configureEnforcePlatformCuts",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -187,7 +212,23 @@ interface IMarketInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "configurePlatformAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "configurePlatformCuts",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "configurePoolAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "currentAskForToken",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "enforcePlatformCuts",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "isValidBid", data: BytesLike): Result;
@@ -195,8 +236,26 @@ interface IMarketInterface extends ethers.utils.Interface {
     functionFragment: "isValidBidShares",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "mediaContract",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "openARPlatform",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "openARPool", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "platformCuts",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "removeAsk", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "removeBid", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "setAsk", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setBid", data: BytesLike): Result;
   decodeFunctionResult(
@@ -204,6 +263,10 @@ interface IMarketInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "splitShare", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
 
   events: {
     "AskCreated(uint256,tuple)": EventFragment;
@@ -212,6 +275,7 @@ interface IMarketInterface extends ethers.utils.Interface {
     "BidFinalized(uint256,tuple)": EventFragment;
     "BidRemoved(uint256,tuple)": EventFragment;
     "BidShareUpdated(uint256,tuple)": EventFragment;
+    "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address)": EventFragment;
     "PlatformCutsUpdated(tuple)": EventFragment;
     "Unpaused(address)": EventFragment;
@@ -223,12 +287,13 @@ interface IMarketInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "BidFinalized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BidRemoved"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "BidShareUpdated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PlatformCutsUpdated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
 }
 
-export class IMarket extends Contract {
+export class Market extends Contract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -239,7 +304,7 @@ export class IMarket extends Contract {
   removeAllListeners(eventName: EventFilter | string): this;
   removeListener(eventName: any, listener: Listener): this;
 
-  interface: IMarketInterface;
+  interface: MarketInterface;
 
   functions: {
     acceptBid(
@@ -350,55 +415,13 @@ export class IMarket extends Contract {
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
-    configureOpenAREnforcePlatformCuts(
+    configureEnforcePlatformCuts(
       flag: boolean,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
-    "configureOpenAREnforcePlatformCuts(bool)"(
+    "configureEnforcePlatformCuts(bool)"(
       flag: boolean,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    configureOpenARPlaformMaintenanceAddress(
-      openARPlaformMaintenanceAddress: string,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    "configureOpenARPlaformMaintenanceAddress(address)"(
-      openARPlaformMaintenanceAddress: string,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    configureOpenARPlatformCuts(
-      pCuts: {
-        firstSalePlatform: { value: BigNumberish };
-        firstSalePool: { value: BigNumberish };
-        furtherSalesPlatform: { value: BigNumberish };
-        furtherSalesPool: { value: BigNumberish };
-        furtherSalesCreator: { value: BigNumberish };
-      },
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    "configureOpenARPlatformCuts(tuple)"(
-      pCuts: {
-        firstSalePlatform: { value: BigNumberish };
-        firstSalePool: { value: BigNumberish };
-        furtherSalesPlatform: { value: BigNumberish };
-        furtherSalesPool: { value: BigNumberish };
-        furtherSalesCreator: { value: BigNumberish };
-      },
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    configureOpenARPlatformPoolAddress(
-      openARPlatformPoolAddess: string,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    "configureOpenARPlatformPoolAddress(address)"(
-      openARPlatformPoolAddess: string,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
@@ -409,6 +432,48 @@ export class IMarket extends Contract {
 
     "configurePausedUnpaused(bool)"(
       flag: boolean,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    configurePlatformAddress(
+      platformAddress: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "configurePlatformAddress(address)"(
+      platformAddress: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    configurePlatformCuts(
+      pCuts: {
+        firstSalePlatform: { value: BigNumberish };
+        firstSalePool: { value: BigNumberish };
+        furtherSalesPlatform: { value: BigNumberish };
+        furtherSalesPool: { value: BigNumberish };
+        furtherSalesCreator: { value: BigNumberish };
+      },
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "configurePlatformCuts(tuple)"(
+      pCuts: {
+        firstSalePlatform: { value: BigNumberish };
+        firstSalePool: { value: BigNumberish };
+        furtherSalesPlatform: { value: BigNumberish };
+        furtherSalesPool: { value: BigNumberish };
+        furtherSalesCreator: { value: BigNumberish };
+      },
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    configurePoolAddress(
+      openARPoolAddress: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "configurePoolAddress(address)"(
+      openARPoolAddress: string,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
@@ -424,6 +489,18 @@ export class IMarket extends Contract {
       overrides?: CallOverrides
     ): Promise<{
       0: { amount: BigNumber; currency: string; 0: BigNumber; 1: string };
+    }>;
+
+    enforcePlatformCuts(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: boolean;
+    }>;
+
+    "enforcePlatformCuts()"(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: boolean;
     }>;
 
     isValidBid(
@@ -468,6 +545,84 @@ export class IMarket extends Contract {
       0: boolean;
     }>;
 
+    mediaContract(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: string;
+    }>;
+
+    "mediaContract()"(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: string;
+    }>;
+
+    openARPlatform(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: string;
+    }>;
+
+    "openARPlatform()"(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: string;
+    }>;
+
+    openARPool(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: string;
+    }>;
+
+    "openARPool()"(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: string;
+    }>;
+
+    owner(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: string;
+    }>;
+
+    "owner()"(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: string;
+    }>;
+
+    platformCuts(
+      overrides?: CallOverrides
+    ): Promise<{
+      firstSalePlatform: { value: BigNumber; 0: BigNumber };
+      firstSalePool: { value: BigNumber; 0: BigNumber };
+      furtherSalesPlatform: { value: BigNumber; 0: BigNumber };
+      furtherSalesPool: { value: BigNumber; 0: BigNumber };
+      furtherSalesCreator: { value: BigNumber; 0: BigNumber };
+      0: { value: BigNumber; 0: BigNumber };
+      1: { value: BigNumber; 0: BigNumber };
+      2: { value: BigNumber; 0: BigNumber };
+      3: { value: BigNumber; 0: BigNumber };
+      4: { value: BigNumber; 0: BigNumber };
+    }>;
+
+    "platformCuts()"(
+      overrides?: CallOverrides
+    ): Promise<{
+      firstSalePlatform: { value: BigNumber; 0: BigNumber };
+      firstSalePool: { value: BigNumber; 0: BigNumber };
+      furtherSalesPlatform: { value: BigNumber; 0: BigNumber };
+      furtherSalesPool: { value: BigNumber; 0: BigNumber };
+      furtherSalesCreator: { value: BigNumber; 0: BigNumber };
+      0: { value: BigNumber; 0: BigNumber };
+      1: { value: BigNumber; 0: BigNumber };
+      2: { value: BigNumber; 0: BigNumber };
+      3: { value: BigNumber; 0: BigNumber };
+      4: { value: BigNumber; 0: BigNumber };
+    }>;
+
     removeAsk(
       tokenId: BigNumberish,
       overrides?: Overrides
@@ -489,6 +644,10 @@ export class IMarket extends Contract {
       bidder: string,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
+
+    renounceOwnership(overrides?: Overrides): Promise<ContractTransaction>;
+
+    "renounceOwnership()"(overrides?: Overrides): Promise<ContractTransaction>;
 
     setAsk(
       tokenId: BigNumberish,
@@ -567,6 +726,16 @@ export class IMarket extends Contract {
     ): Promise<{
       0: BigNumber;
     }>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "transferOwnership(address)"(
+      newOwner: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
   };
 
   acceptBid(
@@ -669,55 +838,13 @@ export class IMarket extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
-  configureOpenAREnforcePlatformCuts(
+  configureEnforcePlatformCuts(
     flag: boolean,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
-  "configureOpenAREnforcePlatformCuts(bool)"(
+  "configureEnforcePlatformCuts(bool)"(
     flag: boolean,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  configureOpenARPlaformMaintenanceAddress(
-    openARPlaformMaintenanceAddress: string,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  "configureOpenARPlaformMaintenanceAddress(address)"(
-    openARPlaformMaintenanceAddress: string,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  configureOpenARPlatformCuts(
-    pCuts: {
-      firstSalePlatform: { value: BigNumberish };
-      firstSalePool: { value: BigNumberish };
-      furtherSalesPlatform: { value: BigNumberish };
-      furtherSalesPool: { value: BigNumberish };
-      furtherSalesCreator: { value: BigNumberish };
-    },
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  "configureOpenARPlatformCuts(tuple)"(
-    pCuts: {
-      firstSalePlatform: { value: BigNumberish };
-      firstSalePool: { value: BigNumberish };
-      furtherSalesPlatform: { value: BigNumberish };
-      furtherSalesPool: { value: BigNumberish };
-      furtherSalesCreator: { value: BigNumberish };
-    },
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  configureOpenARPlatformPoolAddress(
-    openARPlatformPoolAddess: string,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  "configureOpenARPlatformPoolAddress(address)"(
-    openARPlatformPoolAddess: string,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
@@ -731,6 +858,48 @@ export class IMarket extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
+  configurePlatformAddress(
+    platformAddress: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "configurePlatformAddress(address)"(
+    platformAddress: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  configurePlatformCuts(
+    pCuts: {
+      firstSalePlatform: { value: BigNumberish };
+      firstSalePool: { value: BigNumberish };
+      furtherSalesPlatform: { value: BigNumberish };
+      furtherSalesPool: { value: BigNumberish };
+      furtherSalesCreator: { value: BigNumberish };
+    },
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "configurePlatformCuts(tuple)"(
+    pCuts: {
+      firstSalePlatform: { value: BigNumberish };
+      firstSalePool: { value: BigNumberish };
+      furtherSalesPlatform: { value: BigNumberish };
+      furtherSalesPool: { value: BigNumberish };
+      furtherSalesCreator: { value: BigNumberish };
+    },
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  configurePoolAddress(
+    openARPoolAddress: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "configurePoolAddress(address)"(
+    openARPoolAddress: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
   currentAskForToken(
     tokenId: BigNumberish,
     overrides?: CallOverrides
@@ -740,6 +909,10 @@ export class IMarket extends Contract {
     tokenId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<{ amount: BigNumber; currency: string; 0: BigNumber; 1: string }>;
+
+  enforcePlatformCuts(overrides?: CallOverrides): Promise<boolean>;
+
+  "enforcePlatformCuts()"(overrides?: CallOverrides): Promise<boolean>;
 
   isValidBid(
     tokenId: BigNumberish,
@@ -775,6 +948,52 @@ export class IMarket extends Contract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
+  mediaContract(overrides?: CallOverrides): Promise<string>;
+
+  "mediaContract()"(overrides?: CallOverrides): Promise<string>;
+
+  openARPlatform(overrides?: CallOverrides): Promise<string>;
+
+  "openARPlatform()"(overrides?: CallOverrides): Promise<string>;
+
+  openARPool(overrides?: CallOverrides): Promise<string>;
+
+  "openARPool()"(overrides?: CallOverrides): Promise<string>;
+
+  owner(overrides?: CallOverrides): Promise<string>;
+
+  "owner()"(overrides?: CallOverrides): Promise<string>;
+
+  platformCuts(
+    overrides?: CallOverrides
+  ): Promise<{
+    firstSalePlatform: { value: BigNumber; 0: BigNumber };
+    firstSalePool: { value: BigNumber; 0: BigNumber };
+    furtherSalesPlatform: { value: BigNumber; 0: BigNumber };
+    furtherSalesPool: { value: BigNumber; 0: BigNumber };
+    furtherSalesCreator: { value: BigNumber; 0: BigNumber };
+    0: { value: BigNumber; 0: BigNumber };
+    1: { value: BigNumber; 0: BigNumber };
+    2: { value: BigNumber; 0: BigNumber };
+    3: { value: BigNumber; 0: BigNumber };
+    4: { value: BigNumber; 0: BigNumber };
+  }>;
+
+  "platformCuts()"(
+    overrides?: CallOverrides
+  ): Promise<{
+    firstSalePlatform: { value: BigNumber; 0: BigNumber };
+    firstSalePool: { value: BigNumber; 0: BigNumber };
+    furtherSalesPlatform: { value: BigNumber; 0: BigNumber };
+    furtherSalesPool: { value: BigNumber; 0: BigNumber };
+    furtherSalesCreator: { value: BigNumber; 0: BigNumber };
+    0: { value: BigNumber; 0: BigNumber };
+    1: { value: BigNumber; 0: BigNumber };
+    2: { value: BigNumber; 0: BigNumber };
+    3: { value: BigNumber; 0: BigNumber };
+    4: { value: BigNumber; 0: BigNumber };
+  }>;
+
   removeAsk(
     tokenId: BigNumberish,
     overrides?: Overrides
@@ -796,6 +1015,10 @@ export class IMarket extends Contract {
     bidder: string,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
+
+  renounceOwnership(overrides?: Overrides): Promise<ContractTransaction>;
+
+  "renounceOwnership()"(overrides?: Overrides): Promise<ContractTransaction>;
 
   setAsk(
     tokenId: BigNumberish,
@@ -870,6 +1093,16 @@ export class IMarket extends Contract {
     amount: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
+
+  transferOwnership(
+    newOwner: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "transferOwnership(address)"(
+    newOwner: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
 
   callStatic: {
     acceptBid(
@@ -972,57 +1205,15 @@ export class IMarket extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    configureOpenAREnforcePlatformCuts(
+    configureEnforcePlatformCuts(
       flag: boolean,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    "configureOpenAREnforcePlatformCuts(bool)"(
+    "configureEnforcePlatformCuts(bool)"(
       flag: boolean,
       overrides?: CallOverrides
     ): Promise<boolean>;
-
-    configureOpenARPlaformMaintenanceAddress(
-      openARPlaformMaintenanceAddress: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "configureOpenARPlaformMaintenanceAddress(address)"(
-      openARPlaformMaintenanceAddress: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    configureOpenARPlatformCuts(
-      pCuts: {
-        firstSalePlatform: { value: BigNumberish };
-        firstSalePool: { value: BigNumberish };
-        furtherSalesPlatform: { value: BigNumberish };
-        furtherSalesPool: { value: BigNumberish };
-        furtherSalesCreator: { value: BigNumberish };
-      },
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "configureOpenARPlatformCuts(tuple)"(
-      pCuts: {
-        firstSalePlatform: { value: BigNumberish };
-        firstSalePool: { value: BigNumberish };
-        furtherSalesPlatform: { value: BigNumberish };
-        furtherSalesPool: { value: BigNumberish };
-        furtherSalesCreator: { value: BigNumberish };
-      },
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    configureOpenARPlatformPoolAddress(
-      openARPlatformPoolAddess: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "configureOpenARPlatformPoolAddress(address)"(
-      openARPlatformPoolAddess: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     configurePausedUnpaused(
       flag: boolean,
@@ -1033,6 +1224,48 @@ export class IMarket extends Contract {
       flag: boolean,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    configurePlatformAddress(
+      platformAddress: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "configurePlatformAddress(address)"(
+      platformAddress: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    configurePlatformCuts(
+      pCuts: {
+        firstSalePlatform: { value: BigNumberish };
+        firstSalePool: { value: BigNumberish };
+        furtherSalesPlatform: { value: BigNumberish };
+        furtherSalesPool: { value: BigNumberish };
+        furtherSalesCreator: { value: BigNumberish };
+      },
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "configurePlatformCuts(tuple)"(
+      pCuts: {
+        firstSalePlatform: { value: BigNumberish };
+        firstSalePool: { value: BigNumberish };
+        furtherSalesPlatform: { value: BigNumberish };
+        furtherSalesPool: { value: BigNumberish };
+        furtherSalesCreator: { value: BigNumberish };
+      },
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    configurePoolAddress(
+      openARPoolAddress: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "configurePoolAddress(address)"(
+      openARPoolAddress: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     currentAskForToken(
       tokenId: BigNumberish,
@@ -1053,6 +1286,10 @@ export class IMarket extends Contract {
       0: BigNumber;
       1: string;
     }>;
+
+    enforcePlatformCuts(overrides?: CallOverrides): Promise<boolean>;
+
+    "enforcePlatformCuts()"(overrides?: CallOverrides): Promise<boolean>;
 
     isValidBid(
       tokenId: BigNumberish,
@@ -1088,6 +1325,52 @@ export class IMarket extends Contract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    mediaContract(overrides?: CallOverrides): Promise<string>;
+
+    "mediaContract()"(overrides?: CallOverrides): Promise<string>;
+
+    openARPlatform(overrides?: CallOverrides): Promise<string>;
+
+    "openARPlatform()"(overrides?: CallOverrides): Promise<string>;
+
+    openARPool(overrides?: CallOverrides): Promise<string>;
+
+    "openARPool()"(overrides?: CallOverrides): Promise<string>;
+
+    owner(overrides?: CallOverrides): Promise<string>;
+
+    "owner()"(overrides?: CallOverrides): Promise<string>;
+
+    platformCuts(
+      overrides?: CallOverrides
+    ): Promise<{
+      firstSalePlatform: { value: BigNumber; 0: BigNumber };
+      firstSalePool: { value: BigNumber; 0: BigNumber };
+      furtherSalesPlatform: { value: BigNumber; 0: BigNumber };
+      furtherSalesPool: { value: BigNumber; 0: BigNumber };
+      furtherSalesCreator: { value: BigNumber; 0: BigNumber };
+      0: { value: BigNumber; 0: BigNumber };
+      1: { value: BigNumber; 0: BigNumber };
+      2: { value: BigNumber; 0: BigNumber };
+      3: { value: BigNumber; 0: BigNumber };
+      4: { value: BigNumber; 0: BigNumber };
+    }>;
+
+    "platformCuts()"(
+      overrides?: CallOverrides
+    ): Promise<{
+      firstSalePlatform: { value: BigNumber; 0: BigNumber };
+      firstSalePool: { value: BigNumber; 0: BigNumber };
+      furtherSalesPlatform: { value: BigNumber; 0: BigNumber };
+      furtherSalesPool: { value: BigNumber; 0: BigNumber };
+      furtherSalesCreator: { value: BigNumber; 0: BigNumber };
+      0: { value: BigNumber; 0: BigNumber };
+      1: { value: BigNumber; 0: BigNumber };
+      2: { value: BigNumber; 0: BigNumber };
+      3: { value: BigNumber; 0: BigNumber };
+      4: { value: BigNumber; 0: BigNumber };
+    }>;
+
     removeAsk(tokenId: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     "removeAsk(uint256)"(
@@ -1106,6 +1389,10 @@ export class IMarket extends Contract {
       bidder: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    "renounceOwnership()"(overrides?: CallOverrides): Promise<void>;
 
     setAsk(
       tokenId: BigNumberish,
@@ -1180,6 +1467,16 @@ export class IMarket extends Contract {
       amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "transferOwnership(address)"(
+      newOwner: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {
@@ -1194,6 +1491,11 @@ export class IMarket extends Contract {
     BidRemoved(tokenId: BigNumberish | null, bid: null): EventFilter;
 
     BidShareUpdated(tokenId: BigNumberish | null, bidShares: null): EventFilter;
+
+    OwnershipTransferred(
+      previousOwner: string | null,
+      newOwner: string | null
+    ): EventFilter;
 
     Paused(account: null): EventFilter;
 
@@ -1259,55 +1561,13 @@ export class IMarket extends Contract {
       overrides?: Overrides
     ): Promise<BigNumber>;
 
-    configureOpenAREnforcePlatformCuts(
+    configureEnforcePlatformCuts(
       flag: boolean,
       overrides?: Overrides
     ): Promise<BigNumber>;
 
-    "configureOpenAREnforcePlatformCuts(bool)"(
+    "configureEnforcePlatformCuts(bool)"(
       flag: boolean,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    configureOpenARPlaformMaintenanceAddress(
-      openARPlaformMaintenanceAddress: string,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    "configureOpenARPlaformMaintenanceAddress(address)"(
-      openARPlaformMaintenanceAddress: string,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    configureOpenARPlatformCuts(
-      pCuts: {
-        firstSalePlatform: { value: BigNumberish };
-        firstSalePool: { value: BigNumberish };
-        furtherSalesPlatform: { value: BigNumberish };
-        furtherSalesPool: { value: BigNumberish };
-        furtherSalesCreator: { value: BigNumberish };
-      },
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    "configureOpenARPlatformCuts(tuple)"(
-      pCuts: {
-        firstSalePlatform: { value: BigNumberish };
-        firstSalePool: { value: BigNumberish };
-        furtherSalesPlatform: { value: BigNumberish };
-        furtherSalesPool: { value: BigNumberish };
-        furtherSalesCreator: { value: BigNumberish };
-      },
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    configureOpenARPlatformPoolAddress(
-      openARPlatformPoolAddess: string,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    "configureOpenARPlatformPoolAddress(address)"(
-      openARPlatformPoolAddess: string,
       overrides?: Overrides
     ): Promise<BigNumber>;
 
@@ -1321,6 +1581,48 @@ export class IMarket extends Contract {
       overrides?: Overrides
     ): Promise<BigNumber>;
 
+    configurePlatformAddress(
+      platformAddress: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "configurePlatformAddress(address)"(
+      platformAddress: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    configurePlatformCuts(
+      pCuts: {
+        firstSalePlatform: { value: BigNumberish };
+        firstSalePool: { value: BigNumberish };
+        furtherSalesPlatform: { value: BigNumberish };
+        furtherSalesPool: { value: BigNumberish };
+        furtherSalesCreator: { value: BigNumberish };
+      },
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "configurePlatformCuts(tuple)"(
+      pCuts: {
+        firstSalePlatform: { value: BigNumberish };
+        firstSalePool: { value: BigNumberish };
+        furtherSalesPlatform: { value: BigNumberish };
+        furtherSalesPool: { value: BigNumberish };
+        furtherSalesCreator: { value: BigNumberish };
+      },
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    configurePoolAddress(
+      openARPoolAddress: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "configurePoolAddress(address)"(
+      openARPoolAddress: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
     currentAskForToken(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -1330,6 +1632,10 @@ export class IMarket extends Contract {
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    enforcePlatformCuts(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "enforcePlatformCuts()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     isValidBid(
       tokenId: BigNumberish,
@@ -1365,6 +1671,26 @@ export class IMarket extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    mediaContract(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "mediaContract()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    openARPlatform(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "openARPlatform()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    openARPool(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "openARPool()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "owner()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    platformCuts(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "platformCuts()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     removeAsk(tokenId: BigNumberish, overrides?: Overrides): Promise<BigNumber>;
 
     "removeAsk(uint256)"(
@@ -1383,6 +1709,10 @@ export class IMarket extends Contract {
       bidder: string,
       overrides?: Overrides
     ): Promise<BigNumber>;
+
+    renounceOwnership(overrides?: Overrides): Promise<BigNumber>;
+
+    "renounceOwnership()"(overrides?: Overrides): Promise<BigNumber>;
 
     setAsk(
       tokenId: BigNumberish,
@@ -1456,6 +1786,16 @@ export class IMarket extends Contract {
       sharePercentage: { value: BigNumberish },
       amount: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "transferOwnership(address)"(
+      newOwner: string,
+      overrides?: Overrides
     ): Promise<BigNumber>;
   };
 
@@ -1516,55 +1856,13 @@ export class IMarket extends Contract {
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
-    configureOpenAREnforcePlatformCuts(
+    configureEnforcePlatformCuts(
       flag: boolean,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
-    "configureOpenAREnforcePlatformCuts(bool)"(
+    "configureEnforcePlatformCuts(bool)"(
       flag: boolean,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    configureOpenARPlaformMaintenanceAddress(
-      openARPlaformMaintenanceAddress: string,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    "configureOpenARPlaformMaintenanceAddress(address)"(
-      openARPlaformMaintenanceAddress: string,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    configureOpenARPlatformCuts(
-      pCuts: {
-        firstSalePlatform: { value: BigNumberish };
-        firstSalePool: { value: BigNumberish };
-        furtherSalesPlatform: { value: BigNumberish };
-        furtherSalesPool: { value: BigNumberish };
-        furtherSalesCreator: { value: BigNumberish };
-      },
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    "configureOpenARPlatformCuts(tuple)"(
-      pCuts: {
-        firstSalePlatform: { value: BigNumberish };
-        firstSalePool: { value: BigNumberish };
-        furtherSalesPlatform: { value: BigNumberish };
-        furtherSalesPool: { value: BigNumberish };
-        furtherSalesCreator: { value: BigNumberish };
-      },
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    configureOpenARPlatformPoolAddress(
-      openARPlatformPoolAddess: string,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    "configureOpenARPlatformPoolAddress(address)"(
-      openARPlatformPoolAddess: string,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
@@ -1578,6 +1876,48 @@ export class IMarket extends Contract {
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
+    configurePlatformAddress(
+      platformAddress: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "configurePlatformAddress(address)"(
+      platformAddress: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    configurePlatformCuts(
+      pCuts: {
+        firstSalePlatform: { value: BigNumberish };
+        firstSalePool: { value: BigNumberish };
+        furtherSalesPlatform: { value: BigNumberish };
+        furtherSalesPool: { value: BigNumberish };
+        furtherSalesCreator: { value: BigNumberish };
+      },
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "configurePlatformCuts(tuple)"(
+      pCuts: {
+        firstSalePlatform: { value: BigNumberish };
+        firstSalePool: { value: BigNumberish };
+        furtherSalesPlatform: { value: BigNumberish };
+        furtherSalesPool: { value: BigNumberish };
+        furtherSalesCreator: { value: BigNumberish };
+      },
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    configurePoolAddress(
+      openARPoolAddress: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "configurePoolAddress(address)"(
+      openARPoolAddress: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
     currentAskForToken(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -1585,6 +1925,14 @@ export class IMarket extends Contract {
 
     "currentAskForToken(uint256)"(
       tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    enforcePlatformCuts(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "enforcePlatformCuts()"(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1622,6 +1970,28 @@ export class IMarket extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    mediaContract(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "mediaContract()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    openARPlatform(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "openARPlatform()"(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    openARPool(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "openARPool()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "owner()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    platformCuts(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "platformCuts()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     removeAsk(
       tokenId: BigNumberish,
       overrides?: Overrides
@@ -1643,6 +2013,10 @@ export class IMarket extends Contract {
       bidder: string,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
+
+    renounceOwnership(overrides?: Overrides): Promise<PopulatedTransaction>;
+
+    "renounceOwnership()"(overrides?: Overrides): Promise<PopulatedTransaction>;
 
     setAsk(
       tokenId: BigNumberish,
@@ -1716,6 +2090,16 @@ export class IMarket extends Contract {
       sharePercentage: { value: BigNumberish },
       amount: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "transferOwnership(address)"(
+      newOwner: string,
+      overrides?: Overrides
     ): Promise<PopulatedTransaction>;
   };
 }
