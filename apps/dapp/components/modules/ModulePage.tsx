@@ -5,10 +5,12 @@ import { LoadingIcon } from "~/components/ui";
 export const ModulePage = ({
   isLoading = false,
   isError = false,
+  isAccessDenied = false,
   errorInfo,
   children,
 }: {
   isLoading?: boolean;
+  isAccessDenied?: boolean;
   isError?: boolean;
   errorInfo?: React.ReactNode | string;
   children: React.ReactNode;
@@ -29,6 +31,7 @@ export const ModulePage = ({
         position="relative"
       >
         {isLoading && <LoadingIcon type="inline" position="fixed" />}
+        {isAccessDenied && <>Access denied</>}
         {isError && (errorInfo ? errorInfo : <>{err}</>)}
         {!isLoading && !isError && <>{children}</>}
       </Box>
