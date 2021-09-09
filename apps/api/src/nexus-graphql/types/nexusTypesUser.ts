@@ -240,11 +240,19 @@ export const UserQueries = extendType({
                 url: true,
                 video: true,
                 createdAt: true,
+                isPublic: true,
                 heroImage: {
                   select: {
                     id: true,
                     meta: true,
                     status: true,
+                  },
+                },
+                creator: {
+                  select: {
+                    id: true,
+                    ethAddress: true,
+                    pseudonym: true,
                   },
                 },
                 arObjects: {
@@ -256,6 +264,7 @@ export const UserQueries = extendType({
                     title: true,
                     askPrice: true,
                     editionOf: true,
+                    isPublic: true,
                     heroImage: {
                       select: {
                         id: true,
@@ -268,9 +277,12 @@ export const UserQueries = extendType({
                   where: {
                     isBanned: false,
                     isPublic: true,
+
                     status: {
                       in: [
                         ArObjectStatusEnum.PUBLISHED,
+                        ArObjectStatusEnum.MINTSIGNATUREREQUIRED,
+                        ArObjectStatusEnum.MINT,
                         ArObjectStatusEnum.MINTING,
                         ArObjectStatusEnum.MINTED,
                       ],
@@ -289,6 +301,19 @@ export const UserQueries = extendType({
                     ArtworkStatusEnum.PUBLISHED,
                     ArtworkStatusEnum.HASMINTEDOBJECTS,
                   ],
+                },
+                arObjects: {
+                  some: {
+                    status: {
+                      in: [
+                        ArObjectStatusEnum.PUBLISHED,
+                        ArObjectStatusEnum.MINTSIGNATUREREQUIRED,
+                        ArObjectStatusEnum.MINT,
+                        ArObjectStatusEnum.MINTING,
+                        ArObjectStatusEnum.MINTED,
+                      ],
+                    },
+                  },
                 },
               },
               orderBy: {
@@ -371,16 +396,25 @@ export const UserQueries = extendType({
             artworks: {
               select: {
                 id: true,
+                key: true,
                 title: true,
                 description: true,
                 url: true,
                 video: true,
                 createdAt: true,
+                isPublic: true,
                 heroImage: {
                   select: {
                     id: true,
                     meta: true,
                     status: true,
+                  },
+                },
+                creator: {
+                  select: {
+                    id: true,
+                    ethAddress: true,
+                    pseudonym: true,
                   },
                 },
                 arObjects: {
@@ -392,6 +426,7 @@ export const UserQueries = extendType({
                     title: true,
                     askPrice: true,
                     editionOf: true,
+                    isPublic: true,
                     heroImage: {
                       select: {
                         id: true,
@@ -412,6 +447,11 @@ export const UserQueries = extendType({
               },
               where: {
                 isBanned: false,
+                status: {
+                  not: {
+                    in: [ArtworkStatusEnum.TRASHED, ArtworkStatusEnum.DELETED],
+                  },
+                },
               },
               orderBy: {
                 createdAt: "desc",

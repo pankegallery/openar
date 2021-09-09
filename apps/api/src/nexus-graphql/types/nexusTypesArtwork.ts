@@ -124,6 +124,19 @@ export const ArtworkQueries = extendType({
               ArtworkStatusEnum.HASMINTEDOBJECTS,
             ],
           },
+          arObjects: {
+            some: {
+              status: {
+                in: [
+                  ArObjectStatusEnum.PUBLISHED,
+                  ArObjectStatusEnum.MINTSIGNATUREREQUIRED,
+                  ArObjectStatusEnum.MINT,
+                  ArObjectStatusEnum.MINTING,
+                  ArObjectStatusEnum.MINTED,
+                ],
+              },
+            },
+          },
         };
 
         if ((pRI?.fieldsByTypeName?.ArtworkQueryResult as any)?.totalCount) {
@@ -177,6 +190,7 @@ export const ArtworkQueries = extendType({
                   title: true,
                   askPrice: true,
                   editionOf: true,
+                  isPublic: true,
                 },
                 where: {
                   isBanned: false,
@@ -247,6 +261,19 @@ export const ArtworkQueries = extendType({
               ArtworkStatusEnum.HASMINTEDOBJECTS,
             ],
           },
+          arObjects: {
+            some: {
+              status: {
+                in: [
+                  ArObjectStatusEnum.PUBLISHED,
+                  ArObjectStatusEnum.MINTSIGNATUREREQUIRED,
+                  ArObjectStatusEnum.MINT,
+                  ArObjectStatusEnum.MINTING,
+                  ArObjectStatusEnum.MINTED,
+                ],
+              },
+            },
+          },
         };
 
         if ((pRI?.fieldsByTypeName?.Artwork as any)?.heroImage) {
@@ -302,6 +329,7 @@ export const ArtworkQueries = extendType({
                 title: true,
                 askPrice: true,
                 editionOf: true,
+                isPublic: true,
                 heroImage: {
                   select: {
                     id: true,
@@ -434,6 +462,7 @@ export const ArtworkQueries = extendType({
                   title: true,
                   askPrice: true,
                   editionOf: true,
+                  isPublic: true,
                   heroImage: {
                     select: {
                       meta: true,
@@ -515,6 +544,7 @@ export const ArtworkQueries = extendType({
                 title: true,
                 askPrice: true,
                 editionOf: true,
+                isPublic: true,
                 heroImage: {
                   select: {
                     meta: true,
