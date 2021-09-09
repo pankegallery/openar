@@ -56,6 +56,7 @@ export const Artwork = objectType({
     t.string("video");
     t.float("lat");
     t.float("lng");
+    t.boolean("isPublic");
 
     t.field("heroImage", {
       type: "Image",
