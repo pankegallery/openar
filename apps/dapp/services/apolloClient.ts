@@ -44,8 +44,6 @@ const retryWithRefreshTokenLink = onError(
         (observables, graphQLError) => {
           const { message, extensions } = graphQLError;
 
-          console.log(123, message, extensions, 123);
-
           if (message === "Access Denied" && extensions?.code === "FORBIDDEN") {
             const observableForbidden = new Observable((observer) => {
               new Promise(async (resolve) => {

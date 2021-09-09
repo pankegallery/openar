@@ -57,7 +57,7 @@ export const Artwork = objectType({
     t.float("lat");
     t.float("lng");
     t.boolean("isPublic");
-    
+
     t.field("heroImage", {
       type: "Image",
     });

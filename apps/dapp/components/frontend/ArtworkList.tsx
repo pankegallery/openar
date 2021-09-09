@@ -64,6 +64,8 @@ export const ArtworkList = ({
         {artworks.length > 0 && (
           <Flex width="100%" flexWrap="wrap">
             {artworks.map((artwork) => {
+              // TODO: check if one object is at least published ... 
+
               if (!isArtworkAccessible(artwork, appUser)) return <></>;
 
               return (
