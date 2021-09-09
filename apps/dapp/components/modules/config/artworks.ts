@@ -1,1 +1,1 @@
-export const rootPath = "/openar/artworks";
+export const rootPath = "/x/a/";

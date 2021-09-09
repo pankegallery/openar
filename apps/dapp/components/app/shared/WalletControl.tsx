@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 
 import {
   Box,
@@ -18,7 +18,7 @@ import Image from "next/image";
 import { useOpenARDappWeb3InjectedContext } from "~/providers";
 import { useTypedSelector, useWalletLogin } from "~/hooks";
 
-export const WalletControl = () => {
+export const WalletControl = ({ color = "white" }: { color?: string }) => {
   const stateUser = useTypedSelector(({ user }) => user);
   const stateCrypto = useTypedSelector(({ crypto }) => crypto);
 
@@ -32,28 +32,33 @@ export const WalletControl = () => {
     account,
     active,
     isLoggingIn,
-    library
+    library,
   } = useWalletLogin();
 
   const walletDisclosure = useDisclosure();
 
   // TODO: change this to keep the disclosure open until signature has been provided
   useEffect(() => {
-    if ((stateUser.authenticated || stateCrypto.signatureRequired) && walletDisclosure.isOpen && library) {
+    if (
+      (stateUser.authenticated || stateCrypto.signatureRequired) &&
+      walletDisclosure.isOpen &&
+      library
+    ) {
       walletDisclosure.onClose();
-    }    
-  }, [stateUser.authenticated, stateCrypto.signatureRequired, walletDisclosure, library])
+    }
+  }, [
+    stateUser.authenticated,
+    stateCrypto.signatureRequired,
+    walletDisclosure,
+    library,
+  ]);
 
   return (
     <Box>
       {/* ------- Buttons ------- */}
       <Box>
         {(!account || !stateUser.authenticated) && (
-          <Button
-            variant="menuLink"
-            onClick={walletDisclosure.onOpen}
-
-          >
+          <Button variant="menuLink" onClick={walletDisclosure.onOpen} color={color}>
             Login
           </Button>
         )}
@@ -64,6 +69,7 @@ export const WalletControl = () => {
             onClick={async () => {
               await walletDisconnect();
             }}
+            color={color}
           >
             Logout
           </Button>
@@ -109,7 +115,8 @@ export const WalletControl = () => {
               variant="outline"
               isDisabled={!web3Injected}
               isLoading={
-                isLoggingIn && awaitingUserInteraction &&
+                isLoggingIn &&
+                awaitingUserInteraction &&
                 awaitingUserInteraction === "injected"
               }
               rightIcon={
@@ -134,7 +141,8 @@ export const WalletControl = () => {
               size="lg"
               variant="outline"
               isLoading={
-                isLoggingIn && awaitingUserInteraction &&
+                isLoggingIn &&
+                awaitingUserInteraction &&
                 awaitingUserInteraction === "walletconnect"
               }
               rightIcon={

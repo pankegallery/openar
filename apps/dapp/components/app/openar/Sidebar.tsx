@@ -30,20 +30,10 @@ export const Sidebar = () => {
 
   const mainNavLinks = [
     {
-      title: "My Profile",
-      path: `/u/${appUser.ethAddress}`,
-      exact: true,
-    },
-    {
-      title: "Artworks",
-      path: "/openar/artworks",
+      title: "+ Artworks",
+      path: "/x/a/create",
       exact: false,
     },
-    // {
-    //   title: "Collection",
-    //   path: "/openar/collection",
-    //   exact: false,
-    // },
   ];
 
   return (
@@ -52,12 +42,20 @@ export const Sidebar = () => {
         <Box  position="sticky" top="0" p="4">
           <NavItem
             title="My profile"
-            path={`/u/${appUser.ethAddress}`}
+            path={`/x/`}
             exact
           />
+          <Box mt="12">
+          Add
+          </Box>
           {mainNavLinks.map((link) => {
             return <NavItem key={link.path} {...link} />;
           })}
+        </Box>
+
+
+        <Box>
+          Footer navigation ... 
         </Box>
       </Box>
     </>

@@ -3,7 +3,7 @@ import type { ReactElement } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import { LayoutOpenAR } from "~/components/app";
+import { LayoutBlank } from "~/components/app";
 import { Box, Text, Button } from "@chakra-ui/react";
 import { useConfigContext } from "~/providers";
 import { useAuthentication, useTypedSelector, useWalletLogin} from "~/hooks";
@@ -20,7 +20,7 @@ const OpenARLogin = () => {
   let navigating = false;
 
   if (appUser && stateUser.authenticated) {
-    router.push("/openar/");
+    router.push("/x/");
     navigating = true;
   }
 
@@ -36,7 +36,9 @@ const OpenARLogin = () => {
       
 
   }, [library, walletDisconnect, stateCrypto.signatureRequired])
-    
+  // TODO: Functionality add T&S The loginbutton below needs to be a black version of the white one ... 
+
+  // TODO: CSS The loginbutton below needs to be a black version of the white one ... 
   return (
     <Box p="6">
       <Head>
@@ -60,6 +62,7 @@ const OpenARLogin = () => {
               await walletLoginRequestSignature(stateCrypto.loginMessage, account);
 
             }}
+            color="black"
           >
             Sign login request
           </Button>
@@ -78,7 +81,7 @@ const OpenARLogin = () => {
 };
 
 OpenARLogin.getLayout = function getLayout(page: ReactElement) {
-  return <LayoutOpenAR>{page}</LayoutOpenAR>;
+  return <LayoutBlank>{page}</LayoutBlank>;
 };
 
 export default OpenARLogin;

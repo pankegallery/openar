@@ -54,7 +54,7 @@ export const ArtworkListItem = ({
 
   // TODO: change a-detail to a once opening exhibition done
   const baseURL = cameFromExhibition ? router.asPath : "/a-detail"
-  const href = isAdmin ? `/openar/artworks/${id}/update` : `${baseURL}/${urlKey}/`;
+  const href = isAdmin ? `/x/a/${id}/update` : `${baseURL}/${urlKey}/`;
 
   return (
     <LinkBox

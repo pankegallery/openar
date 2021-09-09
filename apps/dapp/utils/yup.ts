@@ -85,6 +85,9 @@ addMethod(
 
       try {
         const str = htmlToString(value ?? "");
+
+        console.log(str);
+        
         const length = str ? str.length : 0;
 
         if (
@@ -108,7 +111,7 @@ addMethod(
             },
           });
 
-        return (dom?.body?.textContent ?? "").length > (min ?? 0);
+        return length > (min ?? 0);
       } catch (err) {
         return false;
       }

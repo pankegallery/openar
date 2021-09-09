@@ -9,7 +9,6 @@ export const ModuleArtworkCreateSchema = object().shape({
 
 export const ModuleArtworkUpdateSchema = ModuleArtworkCreateSchema.concat(
   object().shape({
-    key: string().required().length(16),
     status: number().required().typeError("Please select the publish state"),
   })
 );

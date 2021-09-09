@@ -54,7 +54,7 @@ export const WalletConnectGate = ({
   useEffect(() => {
     if (
       loginStatus === "logged-out" &&
-      !["/", "/openar/connect", "/openar/login"].includes(Router.asPath) &&
+      Router.asPath.indexOf('/x/') > -1 &&
       !isLoggingIn
     ) {
       console.log("trigger redirect to /");

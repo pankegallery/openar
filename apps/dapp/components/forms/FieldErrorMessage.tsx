@@ -7,7 +7,6 @@ type TypeErrorMessage = {
 
 import { RiAlertFill } from "react-icons/ri";
 
-
 export const FieldErrorMessage = ({
   error,
 }: {
@@ -26,23 +25,27 @@ export const FieldErrorMessage = ({
   // make sure first character is uppder case
   message = message.charAt(0).toUpperCase() + message.slice(1);
 
-  return <>
+  return (
+    <>
       <FormErrorIcon
         icon={<RiAlertFill />}
         mr="2"
         color="openar.error"
-        fontSize="xs"/>
+        fontSize="xs"
+      />
       <FormErrorMessage
-            mt="0"
-            color="openar.error"
-            fontSize="xs"
-            textTransform="uppercase"
-            letterSpacing="0.02em"
-            fontWeight="700"
-            display="inline-block"
-            errorIcon='alert'
-         >{message}</FormErrorMessage>
-    </>;
+        mt="0"
+        color="openar.error"
+        fontSize="xs"
+        textTransform="uppercase"
+        letterSpacing="0.02em"
+        fontWeight="700"
+        display="inline-block"
+      >
+        {message}
+      </FormErrorMessage>
+    </>
+  );
 };
 
 export default FieldErrorMessage;

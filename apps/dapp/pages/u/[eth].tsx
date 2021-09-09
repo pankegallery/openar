@@ -1,5 +1,6 @@
 import type { ReactElement } from "react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { gql } from "@apollo/client";
 
 import { LayoutBlank } from "~/components/app";
@@ -14,22 +15,32 @@ import {
   ArtworkListItem,
   CollectionList,
   ArtworkList,
-  UserDetails
+  UserDetails,
 } from "~/components/frontend";
 import { ArrowLink } from "~/components/ui";
-import { useSSRSaveMediaQuery } from "~/hooks";
+import { useAuthentication, useSSRSaveMediaQuery } from "~/hooks";
 
-export const User = ({ user }: { user: any }) => {
+export const PublicUserProfile = ({ user }: { user: any }) => {
   //  user = {
   //    ethAdress: "0x61e323d9Ad70d40474Cb3e0FE1Cf132Dd5049584",
   //    psydonym: "crosssenses",
   //    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
   //  }
 
+  const router = useRouter();
+  const [appUser] = useAuthentication();
+
+  console.log(appUser, user);
+
+  if (appUser && appUser.ethAddress === user.ethAddress) {
+    console.log("PublicUserProfile Redirect to /x/");
+    router.replace("/x/");
+  }
+
   console.log("[Profile] User", user);
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
   const isTablet = useSSRSaveMediaQuery(
-    "(min-width: 45rem) and (max-width: 75rem)"
+    "(min-width: 45.000001rem) and (max-width: 74.9999rem)"
   );
   const isMobile = useSSRSaveMediaQuery("(max-width: 45rem)");
 
@@ -46,6 +57,28 @@ export const User = ({ user }: { user: any }) => {
 
   const showCollectionColumn = hasCollection;
   const showCollectionPlaceholder = !hasCollection && !hasArtworks && !isMobile;
+
+  let collectionColumnWidth = "100%";
+  if (isTablet && hasArtworks) {
+    collectionColumnWidth = "50%";
+  } else if (isDesktop) {
+    if (hasArtworks) {
+      collectionColumnWidth = "33.33%";
+    } else {
+      collectionColumnWidth = "66.66%";
+    }
+  }
+
+  let artworksColumnWidth = "100%";
+  if (isTablet && hasCollection) {
+    artworksColumnWidth = "50%";
+  } else if (isDesktop) {
+    if (hasCollection) {
+      artworksColumnWidth = "33.33%";
+    } else {
+      artworksColumnWidth = "66.66%";
+    }
+  }
 
   return (
     <>
@@ -89,23 +122,34 @@ export const User = ({ user }: { user: any }) => {
           <CollectionList
             userName={name}
             artworks={user.artworks}
-            col={hasArtworks ? 1 : isDesktop ? 2 : 1}
+            width={collectionColumnWidth}
+            col={!hasArtworks ? 2 : 1}
           />
         )}
 
         {showCollectionPlaceholder && (
-          <CollectionList userName={name} col={isDesktop ? 2 : 1} />
+          <CollectionList
+            userName={name}
+            width={collectionColumnWidth}
+            col={!hasArtworks ? 2 : 1}
+          />
         )}
         {/* --------- COL: Artworks --------- */}
         {showArtworksColumn && (
           <ArtworkList
+            isPublic
             artworks={user.artworks}
-            col={hasCollection ? 1 : isDesktop ? 2 : 1}
+            width={artworksColumnWidth}
+            col={!hasCollection ? 2 : 1}
           />
         )}
 
         {/* --------- COL: Artwork details) --------- */}
-        <UserDetails user={user} showArtworks={showArtworksUnderDetails} />
+        <UserDetails
+          isPublic
+          user={user}
+          showArtworks={showArtworksUnderDetails}
+        />
       </Flex>
       {/* Column Layout close*/}
     </>
@@ -174,8 +218,8 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   };
 };
 
-User.getLayout = function getLayout(page: ReactElement) {
+PublicUserProfile.getLayout = function getLayout(page: ReactElement) {
   return <LayoutBlank>{page}</LayoutBlank>;
 };
 
-export default User;
+export default PublicUserProfile;

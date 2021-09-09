@@ -5,59 +5,62 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/router";
 import { Text } from "@chakra-ui/react";
 import { useQuery, gql } from "@apollo/client";
-import Head from "next/head";
+
 import { LayoutOpenAR } from "~/components/app";
 import { FormNavigationBlock } from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
-import { ModuleArtworkArObjectForm } from "~/components/modules/forms";
-import { ModuleArObjectUpdateSchema, ModuleArObjectMintableSchema } from "~/components/modules/validation";
+import { ModuleArtworkForm } from "~/components/modules/forms";
+import { ModuleArtworkUpdateSchema } from "~/components/modules/validation";
 import { RestrictPageAccess } from "~/components/utils";
-import { BeatLoader } from "react-spinners";
-import pick from "lodash/pick";
 
 import { useAuthentication, useSuccessfullySavedToast } from "~/hooks";
-import { useArObjectUpdateMutation } from "~/hooks/mutations";
+import { useArtworkUpdateMutation } from "~/hooks/mutations";
 import {
   ModuleSubNav,
   ModulePage,
   ButtonListElement,
 } from "~/components/modules";
 
-import { filteredOutputByWhitelist, ArObjectStatusEnum } from "~/utils";
+import { filteredOutputByWhitelist, ArtworkStatusEnum } from "~/utils";
 
 // TODO
-export const arObjectReadOwnQueryGQL = gql`
-  query arObjectReadOwn($id: Int!, $aid: Int!) {
-    arObjectReadOwn(id: $id) {
+export const artworkReadOwnQueryGQL = gql`
+  query artworkReadOwn($id: Int!) {
+    artworkReadOwn(id: $id) {
       id
+      type
+      key
       status
       title
       description
-      editionOf
-      orderNumber
-      askPrice
-      key
+      url
+      video
       # isBanned TODO: make good use of this
       lat
       lng
       # images {
       # }
-      arModels {
+      arObjects {
         id
-        type
-        meta
+        key
+        title
+        orderNumber
         status
+        askPrice
+        editionOf
+        heroImage {
+          id
+          meta
+          status
+        }
       }
+      # files {
+      # }
       heroImage {
         id
         meta
         status
       }
-    }
-    artworkReadOwn(id: $aid) {
-      id
-      title
-      description
     }
   }
 `;
@@ -68,63 +71,65 @@ const Update = () => {
   const [appUser] = useAuthentication();
   const successToast = useSuccessfullySavedToast();
   const [disableNavigation, setDisableNavigation] = useState(false);
+  const [isNavigatingAway, setIsNavigatingAway] = useState(false);
   const [activeUploadCounter, setActiveUploadCounter] = useState<number>(0);
-  const [isNavigatingAway, setIsNavigatingAway] = useState(false)
 
-  const [couldMint, setCouldMint] = useState(false)
-  const [firstMutation, firstMutationResults] = useArObjectUpdateMutation();
+  const [firstMutation, firstMutationResults] = useArtworkUpdateMutation();
   const [isFormError, setIsFormError] = useState(false);
 
   const disableForm = firstMutationResults.loading;
 
   const formMethods = useForm({
     mode: "onTouched",
-    resolver: yupResolver(ModuleArObjectUpdateSchema),    
+    resolver: yupResolver(ModuleArtworkUpdateSchema),
+    defaultValues: {
+      status: ArtworkStatusEnum.DRAFT,
+    },
   });
   const {
     handleSubmit,
     reset,
+    clearErrors,
     setValue,
-    getValues,
-    watch,
-    formState: { isSubmitting, isDirty, isSubmitSuccessful },
+    formState: { isSubmitting, isDirty },
   } = formMethods;
 
-  const { data, loading, error } = useQuery(arObjectReadOwnQueryGQL, {
+  const { data, loading, error } = useQuery(artworkReadOwnQueryGQL, {
     variables: {
-      id: parseInt(router.query.oid as string, 10),
-      aid: parseInt(router.query.aid as string, 10),
+      id: parseInt(router.query.aid as string, 10),
     },
   });
 
   useEffect(() => {
-    if (!data || !data.arObjectReadOwn) return;
+    if (!data || !data.artworkReadOwn) return;
 
     reset({
-      ...filteredOutputByWhitelist(data.arObjectReadOwn, [
+      ...filteredOutputByWhitelist(data.artworkReadOwn, [
         "title",
         "description",
-        "orderNumber",
+        "url",
+        "video",
         "status",
       ]),
     });
   }, [reset, data]);
 
   const onSubmit = async (
-    newData: yup.InferType<typeof ModuleArObjectUpdateSchema>
+    newData: yup.InferType<typeof ModuleArtworkUpdateSchema>
   ) => {
     setIsFormError(false);
     setIsNavigatingAway(false);
     try {
       if (appUser) {
         const { data, errors } = await firstMutation(
-          parseInt(router.query.oid as string, 10),
+          parseInt(router.query.aid as string),
           {
             title: newData.title,
             description: newData.description,
-            // TODO: remove order number
-            orderNumber: newData.orderNumber ?? null,
-            status: newData.status ?? null,
+            video: newData.video ?? "",
+            url: newData.url ?? "",
+            status: newData.status ?? "",
+
             creator: {
               connect: {
                 id: appUser.id,
@@ -134,9 +139,12 @@ const Update = () => {
         );
 
         if (!errors) {
+          clearErrors();
           successToast();
           setIsNavigatingAway(true);
-          router.push(`${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`);
+          router.push(
+            `${moduleConfig.rootPath}/${data?.artworkUpdate?.id}/update`
+          );
         } else {
           setIsFormError(true);
         }
@@ -148,62 +156,24 @@ const Update = () => {
     }
   };
 
-  // TODO: make more general
-  const trimTitle = (str: string) =>
-    str.length > 13 ? `${str.substr(0, 10)}...` : str;
-
   const breadcrumb = [
     {
-      path: moduleConfig.rootPath,
-      title: "Artworks",
+      path: "/x/",
+      title: "Profile",
+      userCan: "artworkReadOwn",
     },
     {
-      path: `${moduleConfig.rootPath}/${router.query.aid}/update`,
-      title:
-        data &&
-        (data.artworkReadOwn?.title ? (
-          trimTitle(data.artworkReadOwn?.title)
-        ) : (
-          <BeatLoader size="10px" color="#fff" />
-        )),
-    },
-    {
-      title: "Update object",
+      title: "Update artwork",
     },
   ];
 
-  useEffect(() => {
-    if (!data || !data.arObjectReadOwn) return;
-
-    const uploadedFiles = data.arObjectReadOwn?.arModels.reduce(
-      (acc, model) => ({
-        ...acc,
-        [model.type]: pick(model, ["status", "meta", "id"]),
-      }),
-      {}
-    );
-
-    const checkValues = {
-      ...getValues(),
-      heroImage: data.arObjectReadOwn?.heroImage?.id,
-      modelGlb: uploadedFiles?.glb?.id,
-      modelUsdz: uploadedFiles?.usdz?.id
-    }
-
-    if (ModuleArObjectUpdateSchema.isValidSync(checkValues)) {
-      setCouldMint(true);
-    } else {
-      setCouldMint(false);
-    }
-  }, [setCouldMint, isSubmitSuccessful, getValues, data])
-  
   // TODO: this makes some trouble on SSR as the buttons look differently
   // as the user can't do thing on the server
   const buttonList: ButtonListElement[] = [
     {
       type: "back",
-      to: `${moduleConfig.rootPath}/${router.query.aid}/update`,
-      label: "Back to artwork",
+      to: "/x/",
+      label: "Cancel",
       isDisabled: disableNavigation || activeUploadCounter > 0,
       userCan: "artworkReadOwn",
     },
@@ -211,11 +181,11 @@ const Update = () => {
       type: "button",
       isLoading: isSubmitting,
       onClick: () => {
-        setValue("status", ArObjectStatusEnum.DRAFT);
+        setValue("status", ArtworkStatusEnum.DRAFT);
         handleSubmit(onSubmit)();
       },
       label:
-        data?.arObjectReadOwn?.status === ArObjectStatusEnum.DRAFT
+        data?.artworkReadOwn?.status === ArtworkStatusEnum.DRAFT
           ? "Save draft"
           : "Unpublish",
       isDisabled: disableNavigation || activeUploadCounter > 0,
@@ -225,34 +195,25 @@ const Update = () => {
       type: "button",
       isLoading: isSubmitting,
       onClick: () => {
-        setValue("status", ArObjectStatusEnum.PUBLISHED);
+        setValue("status", ArtworkStatusEnum.PUBLISHED);
         handleSubmit(onSubmit)();
       },
       label:
-        data?.arObjectReadOwn?.status === ArObjectStatusEnum.PUBLISHED
+        data?.artworkReadOwn?.status === ArtworkStatusEnum.PUBLISHED
           ? "Save"
           : "Publish",
       isDisabled: disableNavigation || activeUploadCounter > 0,
       userCan: "artworkUpdateOwn",
     },
-    {
-      type: "navigation",
-      to: `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/mint`,
-      label: "Mint as NFT",
-      isDisabled: !couldMint,
-      userCan: "artworkUpdateOwn",
-    },
   ];
-
-  
-  const errorMessage = firstMutationResults.error
-    ? firstMutationResults?.error?.message
-    : "";
 
   return (
     <>
       <FormNavigationBlock
-        shouldBlock={!isNavigatingAway && ((isDirty && !isSubmitting) || activeUploadCounter > 0)}
+        shouldBlock={
+          !isNavigatingAway &&
+          ((isDirty && !isSubmitting) || activeUploadCounter > 0)
+        }
       />
       <FormProvider {...formMethods}>
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -260,9 +221,7 @@ const Update = () => {
             <ModuleSubNav breadcrumb={breadcrumb} buttonList={buttonList} />
             <ModulePage
               isLoading={loading}
-              isError={
-                !!error || (!error && !loading && !data?.arObjectReadOwn)
-              }
+              isError={!!error || (!error && !loading && !data?.artworkReadOwn)}
             >
               {isFormError && (
                 <Text
@@ -272,16 +231,16 @@ const Update = () => {
                   borderBottom="1px solid #fff"
                   color="openar.error"
                 >
-                  Unfortunately, we could not save your object. Please try again
-                  in a little bit.
+                  Unfortunately, we could not save your artwork. Please try
+                  again in a little bit.
                 </Text>
               )}
-              <ModuleArtworkArObjectForm
+              <ModuleArtworkForm
                 action="update"
                 data={data}
                 setActiveUploadCounter={setActiveUploadCounter}
                 disableNavigation={setDisableNavigation}
-                validationSchema={ModuleArObjectUpdateSchema}
+                validationSchema={ModuleArtworkUpdateSchema}
               />
             </ModulePage>
           </fieldset>

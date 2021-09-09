@@ -10,29 +10,28 @@ import { useAuthentication } from "~/hooks";
 import { isArtworkAccessible } from "~/utils";
 
 export const ArtworkList = ({
+  isPublic = true,
   artworks,
+  width,
   col,
 }: {
   artworks: any;
-  col?: any;
+  width?: string;
+  col: number;
+  isPublic: boolean;
 }) => {
   const [appUser] = useAuthentication();
 
-  let colW = col === 2 ? "66.6vw" : "33.3vw";
   return (
     <Flex
       direction="column"
       className="artworkColumn"
       color="white"
       layerStyle="backdropMud"
-      w={{
-        base: "100vw",
-        t: "50vw",
-        d: `${colW}`,
-      }}
+      w={width}
       h={{
         base: "auto",
-        t: "100%",
+        t: isPublic ? "100%" : "auto",
       }}
       sx={{
         ".userDetails &": {
@@ -64,13 +63,11 @@ export const ArtworkList = ({
         {artworks.length > 0 && (
           <Flex width="100%" flexWrap="wrap">
             {artworks.map((artwork) => {
-              // TODO: check if one object is at least published ... 
-
-              if (!isArtworkAccessible(artwork, appUser)) return <></>;
+              if (isPublic && !isArtworkAccessible(artwork, appUser)) return;
 
               return (
                 <ArtworkListItem
-                  isAdmin={false}
+                  isAdmin={!isPublic}
                   urlKey={artwork.key}
                   col={col}
                   key={artwork.key}

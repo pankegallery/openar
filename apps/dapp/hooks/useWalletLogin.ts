@@ -173,7 +173,7 @@ export function useWalletLogin() {
     setIsLoggingIn(false);
     triggerToast();
 
-    Router.push("/openar/");
+    Router.push("/x/");
   }, [triggerToast, setIsLoggingIn, setWalletLoginError]);
 
   const walletLoginLogin = useCallback(
@@ -296,8 +296,8 @@ export function useWalletLogin() {
           // ) {
           //   await walletLoginRequestSignature(payload?.message, account);
           // } else {
-          console.log("walletLoginPreLogin push /openar/login");
-          Router.push("/openar/login");
+          console.log("walletLoginPreLogin push /login");
+          Router.push("/login");
           //}
         } else if (errors) {
           throw errors[0];

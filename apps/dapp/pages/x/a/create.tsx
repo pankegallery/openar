@@ -1,36 +1,24 @@
-
 import { useState, ReactElement } from "react";
 import type * as yup from "yup";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/router";
 import { Text } from "@chakra-ui/react";
-import { useQuery, gql } from "@apollo/client";
 
 import { LayoutOpenAR } from "~/components/app";
 import { FormNavigationBlock } from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
-import { ModuleArtworkArObjectForm } from "~/components/modules/forms";
-import { ModuleArObjectCreateSchema } from "~/components/modules/validation";
+import { ModuleArtworkForm } from "~/components/modules/forms";
+import { ModuleArtworkCreateSchema } from "~/components/modules/validation";
 import { RestrictPageAccess } from "~/components/utils";
-import { BeatLoader } from "react-spinners";
 
 import { useAuthentication, useSuccessfullySavedToast } from "~/hooks";
-import { useArObjectCreateMutation } from "~/hooks/mutations";
+import { useArtworkCreateMutation } from "~/hooks/mutations";
 import {
   ModuleSubNav,
   ModulePage,
   ButtonListElement,
 } from "~/components/modules";
-
-export const artworkReadOwnQueryGQL = gql`
-  query artworkReadOwn($id: Int!) {
-    artworkReadOwn(id: $id) {
-      id
-      title      
-    }
-  }
-`;
 
 const Create = () => {
   const router = useRouter();
@@ -39,51 +27,35 @@ const Create = () => {
   const successToast = useSuccessfullySavedToast();
   const [disableNavigation, setDisableNavigation] = useState(false);
   const [isNavigatingAway, setIsNavigatingAway] = useState(false)
-  const [firstMutation, firstMutationResults] = useArObjectCreateMutation();
+  const [firstMutation, firstMutationResults] = useArtworkCreateMutation();
   const [isFormError, setIsFormError] = useState(false);
 
   const disableForm = firstMutationResults.loading;
 
   const formMethods = useForm({
     mode: "onTouched",
-    resolver: yupResolver(ModuleArObjectCreateSchema),
+    resolver: yupResolver(ModuleArtworkCreateSchema),
   });
-
-
-  const { data, loading, error } = useQuery(
-    artworkReadOwnQueryGQL,
-    {
-      variables: {
-        id: parseInt(router.query.aid as string, 10),
-      },
-    }
-  );
-
 
   const {
     handleSubmit,
-    formState: { isSubmitting, isDirty },
+    formState: { isSubmitting, isDirty, errors },
   } = formMethods;
 
   const onSubmit = async (
-    newData: yup.InferType<typeof ModuleArObjectCreateSchema>
+    newData: yup.InferType<typeof ModuleArtworkCreateSchema>
   ) => {
     setIsFormError(false);
     setIsNavigatingAway(false);
+
     try {
       if (appUser) {
         const { data, errors } = await firstMutation({
           title: newData.title,
           description: newData.description,
-          editionOf: newData.editionOf ?? null,
-          orderNumber: newData.orderNumber ?? null,
-          askPrice: newData.editionOf ?? null,
+          video: newData.video ?? "",
+          url: newData.url ?? "",
 
-          artwork: {
-            connect: {
-              id: parseInt(router.query.aid as string, 10),
-            }
-          },
           creator: {
             connect: {
               id: appUser.id,
@@ -94,7 +66,7 @@ const Create = () => {
         if (!errors) {
           successToast();
           setIsNavigatingAway(true);
-          router.push(`${moduleConfig.rootPath}/${parseInt(router.query.aid as string, 10)}/${data?.arObjectCreate?.id}/update`);
+          router.push(`${moduleConfig.rootPath}/${data?.artworkCreate?.id}/update`);
         } else {
           setIsFormError(true);
         }
@@ -106,27 +78,21 @@ const Create = () => {
     }
   };
 
-  const trimTitle = (str: string) => (str.length > 13) ? `${str.substr(0,10)}...` : str; 
-
   const breadcrumb = [
     {
-      path: `${moduleConfig.rootPath}/${router.query.aid}/update`,
-      title: "Artworks",
+      path: "/x/",
+      title: "Profile",
     },
     {
-      path: `${moduleConfig.rootPath}/${router.query.aid}/update`,
-      title: data && (data.artworkReadOwn?.title ? trimTitle(data.artworkReadOwn?.title) : <BeatLoader size="10px" color="#fff"/>),
-    },
-    {
-      title: "Create object ",
+      title: "Create artwork",
     },
   ];
 
   const buttonList: ButtonListElement[] = [
     {
       type: "back",
-      to: `${moduleConfig.rootPath}/${router.query.aid}/update`,
-      label: "Back to artwork",
+      to: "/x/",
+      label: "Cancel",
       userCan: "artworkReadOwn",
       isDisabled: disableNavigation,
     },
@@ -139,9 +105,7 @@ const Create = () => {
     },
   ];
 
-  const errorMessage = firstMutationResults.error
-    ? firstMutationResults?.error?.message
-    : "";
+  console.log(errors);
 
   return (
     <>
@@ -150,12 +114,7 @@ const Create = () => {
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={disableForm}>
             <ModuleSubNav breadcrumb={breadcrumb} buttonList={buttonList} />
-            <ModulePage
-              isLoading={loading}
-              isError={
-                !!error || (!error && !loading && !data?.artworkReadOwn)
-              }
-            >
+            <ModulePage>
               {isFormError && (
                 <Text
                   width="100%"
@@ -164,14 +123,14 @@ const Create = () => {
                   borderBottom="1px solid #fff"
                   color="openar.error"
                 >
-                  Unfortunately, we could not save your object. Please try
+                  Unfortunately, we could not save your artwork. Please try
                   again in a little bit.
                 </Text>
               )}
-              <ModuleArtworkArObjectForm
+              <ModuleArtworkForm
                 action="create"
                 disableNavigation={setDisableNavigation}
-                validationSchema={ModuleArObjectCreateSchema}
+                validationSchema={ModuleArtworkCreateSchema}
               />
             </ModulePage>
           </fieldset>

@@ -3,7 +3,7 @@ import type { ReactElement } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import { LayoutOpenAR } from "~/components/app";
+import { LayoutBlank } from "~/components/app";
 import { Box, Text, Button } from "@chakra-ui/react";
 import { useAuthentication, useTypedSelector, useWalletLogin } from "~/hooks";
 import { WalletControl } from "~/components/app/shared";
@@ -24,7 +24,7 @@ const OpenARLogin = () => {
     appUser &&
     stateUser.authenticated
   ) {
-    router.push("/openar/");
+    router.push("/x/");
     navigating = true;
   }
 
@@ -44,7 +44,7 @@ const OpenARLogin = () => {
   useEffect(() => {
     if (library || library?.provider) {
       if (stateUser.justConnected && stateCrypto.signatureRequired) {
-        router.push("/openar/login");
+        router.push("/login");
       }
     }
   }, [
@@ -69,7 +69,7 @@ const OpenARLogin = () => {
         !navigating) ||
         !account) && (
         <Box mt="6">
-          <WalletControl />
+          <WalletControl color="black" />
         </Box>
       )}
     </Box>
@@ -77,7 +77,7 @@ const OpenARLogin = () => {
 };
 
 OpenARLogin.getLayout = function getLayout(page: ReactElement) {
-  return <LayoutOpenAR>{page}</LayoutOpenAR>;
+  return <LayoutBlank>{page}</LayoutBlank>;
 };
 
 export default OpenARLogin;

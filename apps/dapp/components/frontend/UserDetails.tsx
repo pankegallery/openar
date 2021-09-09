@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 import { Box, Grid, Flex, chakra } from "@chakra-ui/react";
 import {ArrowLink} from "~/components/ui";
@@ -7,7 +8,7 @@ import {CornerButton, RoleBadgeControl, ArtworkList} from "~/components/frontend
 import { useSSRSaveMediaQuery } from "~/hooks";
 
 
-export const UserDetails = ({ user, showArtworks }: {user: any; showArtworks: Boolean;}) => {
+export const UserDetails = ({ user, showArtworks, isPublic = true }: {user: any; showArtworks: boolean; isPublic: boolean;}) => {
 
   let name = user?.pseudonym ? user?.pseudonym : user?.ethAddress;
 
@@ -69,13 +70,16 @@ export const UserDetails = ({ user, showArtworks }: {user: any; showArtworks: Bo
       {/* ======== BOX: Profile title  ======== */}
       <Box
         className="artworkTitle"
+        position="relative"
         borderBottom="1px solid white"
         p="6"
         pt="20"
       >
+        {!isPublic && <CornerButton label="Update profile" href="/x/profile/update"/>}
         <chakra.p textStyle="label" className="label">Profile</chakra.p>
         <chakra.h1 textStyle="pagetitle" maxWidth="80%">{name}</chakra.h1>
 
+        <chakra.h2 fontSize="xs" maxWidth="80%">{user?.ethAddress}</chakra.h2>
       </Box>
 
       <Box
@@ -93,6 +97,8 @@ export const UserDetails = ({ user, showArtworks }: {user: any; showArtworks: Bo
           borderBottom="1px solid white"
           p="6"
         >
+          
+
           <chakra.p textStyle="label" className="label">About</chakra.p>
           <div dangerouslySetInnerHTML={{__html: user.bio}} />
 

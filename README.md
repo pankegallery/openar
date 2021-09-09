@@ -56,3 +56,23 @@ npm run app:dapp:build #to build the next.js dApp
 npm run app:dapp:start #to start the next.js dApp
 npm run app:dapp:lint #to lint the next js dApp
 ```
+
+## Dapp /pages/ Folder Structure
+
+/pages/...
+
+/connect - conect to wallet
+/login - once connected this screen does allow to sign the login
+/artworks - the artwork listing
+/a/ - Artworks detail [temporarily used for exhibition]
+/a-detail/ - Artworks detail [will be replacing /a/], using dynamic [...keys] to also allow access to individual objects of the artwork /a/[akey]/[okey]
+/e/ - The exhibtion detail page
+/o/ - Object deep link not sure if we're going to use it
+/p/ - Pages using markup in /content/
+/u/ - Public user profile
+/x/ - Authenticated only "My" user profile
+/x/a/create - Create artwork
+/x/a/[aid]/update - Update artwork
+/x/a/[aid]/create - Create arObject
+/x/a/[aid]/[oid]/update - Create arObject
+/x/profile/update - Update user profile

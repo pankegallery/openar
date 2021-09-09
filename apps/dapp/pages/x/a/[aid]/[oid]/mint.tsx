@@ -140,7 +140,7 @@ const Update = () => {
         if (!errors) {
           successToast();
           setIsNavigatingAway(true);
-          router.push(`${moduleConfig.rootPath}/${router.query.aid}/update`);
+          router.push(`${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`);
         } else {
           setIsFormError(true);
         }
@@ -186,10 +186,6 @@ const Update = () => {
       userCan: "artworkReadOwn",
     },
   ];
-
-  const errorMessage = firstMutationResults.error
-    ? firstMutationResults?.error?.message
-    : "";
 
   return (
     <>
