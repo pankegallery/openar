@@ -50,8 +50,7 @@ export const ArObject = objectType({
     t.nonNull.int("status");
 
     t.float("askPrice");
-    t.boolean("public");
-
+    
     t.int("orderNumber");
     t.int("editionOf");
 
@@ -76,6 +75,7 @@ export const ArObject = objectType({
 
     // TODO: make good use of this
     t.boolean("isBanned");
+    t.boolean("isPublic");
 
     t.field("heroImage", {
       type: "Image",
@@ -135,7 +135,7 @@ export const ArObjectQueries = extendType({
         where = {
           ...where,
           isBanned: false,
-          public: true,
+          isPublic: true,
           status: {
             in: [
               ArObjectStatusEnum.PUBLISHED,

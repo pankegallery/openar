@@ -267,7 +267,7 @@ export const UserQueries = extendType({
                   },
                   where: {
                     isBanned: false,
-                    public: true,
+                    isPublic: true,
                     status: {
                       in: [
                         ArObjectStatusEnum.PUBLISHED,
@@ -283,7 +283,7 @@ export const UserQueries = extendType({
               },
               where: {
                 isBanned: false,
-                public: true,
+                isPublic: true,
                 status: {
                   in: [
                     ArtworkStatusEnum.PUBLISHED,

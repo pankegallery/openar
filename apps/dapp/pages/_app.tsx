@@ -1,5 +1,9 @@
 import "../styles/globals.scss";
 import { Provider } from "react-redux";
+<<<<<<< HEAD
+=======
+// import { useLayoutEffect } from "react";
+>>>>>>> main
 import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
@@ -31,40 +35,39 @@ type AppPropsWithLayout = AppProps & {
 function OpenARApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
 
-  useIsomorphicLayoutEffect(() => {
-    const calculateScrollbarWidth = () => {
-      var outer = document.createElement("div");
-      outer.style.visibility = "hidden";
-      outer.style.width = "100px";
+  // TODO: Still needed? VVU: 
+  // useIsomorphicLayoutEffect(() => {
+  //   const calculateScrollbarWidth = () => {
+  //     var outer = document.createElement("div");
+  //     outer.style.visibility = "hidden";
+  //     outer.style.width = "100px";
 
-      document.body.appendChild(outer);
+  //     document.body.appendChild(outer);
 
-      var widthNoScroll = outer.offsetWidth;
-      // force scrollbars
-      outer.style.overflow = "scroll";
+  //     var widthNoScroll = outer.offsetWidth;
+  //     // force scrollbars
+  //     outer.style.overflow = "scroll";
 
-      // add innerdiv
-      var inner = document.createElement("div");
-      inner.style.width = "100%";
-      outer.appendChild(inner);
+  //     // add innerdiv
+  //     var inner = document.createElement("div");
+  //     inner.style.width = "100%";
+  //     outer.appendChild(inner);
 
-      var widthWithScroll = inner.offsetWidth;
+  //     var widthWithScroll = inner.offsetWidth;
 
-      // remove divs
-      outer.parentNode.removeChild(outer);
+  //     // remove divs
+  //     outer.parentNode.removeChild(outer);
 
-      return widthNoScroll - widthWithScroll;
-    };
+  //     return widthNoScroll - widthWithScroll;
+  //   };
 
-    if (!document) return;
+  //   if (!document) return;
 
-
-    document.documentElement.style.setProperty(
-      "--sbw",
-      `${calculateScrollbarWidth()}px`
-    );
-
-  }, []);
+  //   // document.documentElement.style.setProperty(
+  //   //   "--sbw",
+  //   //   `${calculateScrollbarWidth()}px`
+  //   // );
+  // }, []);
 
   return (
     <ConfigContextProvider>

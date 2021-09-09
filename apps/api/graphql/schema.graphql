@@ -31,12 +31,12 @@ type ArObject {
   id: Int!
   images: [Image]
   isBanned: Boolean
+  isPublic: Boolean
   key: String
   lat: Float
   lng: Float
   orderNumber: Int
   ownerEthAddress: String
-  public: Boolean
   status: Int!
   title: String
   type: Int
