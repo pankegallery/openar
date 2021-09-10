@@ -227,7 +227,7 @@ export const components = {
       track: {
         bg: "transparent",
         border: "1px solid white",
-        width: "3rem",
+        width: "2.5rem",
         padding: "2px 1px",
         _invalid: {
           bg: "openar.error",
@@ -238,7 +238,7 @@ export const components = {
       },
       thumb: {
         bg: "transparent linear-gradient(330deg, #FFFFFF50 0%, #FFFFFFfa 50%) 0% 0% no-repeat padding-box",
-        width: "2rem",
+        width: "1.5rem",
       },
       label: {
         marginLeft: "0",
