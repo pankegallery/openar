@@ -11,7 +11,7 @@ import "@fontsource/source-code-pro";
 import { OverlayMenu } from "../frontend";
 
 export const LayoutOpenAR = ({ children }: { children: ReactNode }) => {
-  const isMobile = useSSRSaveMediaQuery("(max-width: 55em)");
+  const isMobile = useSSRSaveMediaQuery("(max-width: 45em)");
 
   return (
     <>
@@ -29,7 +29,7 @@ export const LayoutOpenAR = ({ children }: { children: ReactNode }) => {
               templateColumns={
                 isMobile
                   ? "100%"
-                  : "calc(100% - max(350px, 20vw)) max(350px, 20vw) "
+                  : "calc(100% - max(230px, 17vw)) max(230px, 17vw) "
               }
               templateRows="1fr"
               alignItems="start"

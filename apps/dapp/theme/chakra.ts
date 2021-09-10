@@ -246,7 +246,7 @@ const themeConfig = {
       }
     },
     backdropGradient: {
-      bg: "linear-gradient(-256deg, rgba(0,0,0,0), rgba(0,0,0,0.4));"
+      bg: "linear-gradient(-256deg, rgba(0,0,0,0) 50% ,rgba(0,0,0,0.1) 100% );"
     },
     pageContainerGray: {
       bg: "gray.100",

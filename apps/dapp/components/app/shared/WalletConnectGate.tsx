@@ -85,7 +85,7 @@ export const WalletConnectGate = ({
     };
 
     needToReconnectToWalletConnect();
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <>{children}</>;

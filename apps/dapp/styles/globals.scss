@@ -229,6 +229,11 @@ a {
 
   &:nth-child(2n) {
     flex-direction: row-reverse;
+
+    .editArtworkButton{
+      order: -1;
+      z-index: 210;
+    }
   }
 
   &:nth-child(2n) {
@@ -344,7 +349,7 @@ a {
 //     }
 // }
 
-.artworkDetails{
+.artworkDetails, .userDetails{
     .label{
         margin-bottom: 0.5em;
     }

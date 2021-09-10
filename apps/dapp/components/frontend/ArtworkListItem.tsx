@@ -6,6 +6,7 @@ import {
   LinkOverlay,
   chakra,
   Heading,
+  Button
 } from "@chakra-ui/react";
 import { ApiImage } from "../ui";
 import { ArtworkStatusEnum } from "~/utils";
@@ -54,20 +55,23 @@ export const ArtworkListItem = ({
 
   // TODO: change a-detail to a once opening exhibition done
   const baseURL = cameFromExhibition ? router.asPath : "/a-detail"
-  const href = isAdmin ? `/x/a/${id}/update` : `${baseURL}/${urlKey}/`;
+
+  // CHANGED: There is an edit button now when logged in.
+  //  const href = isAdmin ? `/x/a/${id}/update` : `${baseURL}/${urlKey}/`;
+  const href = `${baseURL}/${urlKey}/`;
 
   return (
     <LinkBox
       as="article"
       className={`${isWhite ? "white" : ""} artwork list item col-${col}`}
       key={`artwork-${id}`}
+      borderBottom="1px solid white"
     >
       <Box className="info" p="4">
         <chakra.h2
           className="title"
           fontWeight="600"
         >
-          
           <Link  href={href} passHref><LinkOverlay>{title}</LinkOverlay></Link>
         </chakra.h2>
         <chakra.span
@@ -96,6 +100,16 @@ export const ArtworkListItem = ({
           />
         </AspectRatio>
       </Box>
+      {isAdmin &&
+        <Link href={`/x/a/${id}/update`} passHref>
+        <Button
+          className="editArtworkButton"
+          mx="10"
+          my="4"
+          px="6"
+          alignSelf="end"
+        >Edit artwork</Button></Link>
+      }
     </LinkBox>
   );
 };

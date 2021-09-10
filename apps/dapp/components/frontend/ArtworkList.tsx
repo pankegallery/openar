@@ -22,6 +22,8 @@ export const ArtworkList = ({
 }) => {
   const [appUser] = useAuthentication();
 
+//  if (!isPublic) { width={base: "66vw", d: "33vw"}}
+
   return (
     <Flex
       direction="column"
@@ -29,6 +31,7 @@ export const ArtworkList = ({
       color="white"
       layerStyle="backdropMud"
       w={width}
+      flex="auto 1 0"
       h={{
         base: "auto",
         t: isPublic ? "100%" : "auto",
@@ -51,6 +54,7 @@ export const ArtworkList = ({
         w="100%"
         textAlign="left"
         flexDirection="column"
+        layerStyle="backdropGradient"
       >
         <chakra.p textStyle="bigLabel">Own artworks</chakra.p>
         <Box ml="-6">

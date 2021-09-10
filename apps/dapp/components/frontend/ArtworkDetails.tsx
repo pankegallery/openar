@@ -60,6 +60,13 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
         >
           <chakra.p textStyle="label" className="label">Artwork description</chakra.p>
           <div dangerouslySetInnerHTML={{__html: artwork.description}} />
+
+          {object.description &&
+            <>
+              <chakra.p textStyle="label" className="label">Object description</chakra.p>
+              <div dangerouslySetInnerHTML={{__html: object.description}} />
+            </>
+          }
         </Box>
 
         {/* ======== BOX: Artwork purchase  ======== */}
@@ -72,7 +79,7 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
           >
             <CornerButton label="Buy" position="top" emphasis onClick={() => { console.log("TODO:")}}/>
             <chakra.p textStyle="subtitle" mb="10" sx={{svg:{display: "inline-block"}}}>
-              <LogoXDAI width="30px" height="20px" viewBox="40 0 150 150"/>{artwork.arObjects[0].askPrice} xDai
+              <LogoXDAI width="30px" height="20px" viewBox="40 0 150 150"/>{object.askPrice} xDai
             </chakra.p>
             {/* ======== TODO: Edition number  ======== */}
             <chakra.p mb="0 !important" textStyle="label" className="label">Edition <chakra.span fontWeight="300" pl="1rem">3/{object.editionOf}</chakra.span></chakra.p>

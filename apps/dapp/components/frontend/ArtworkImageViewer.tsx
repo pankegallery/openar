@@ -71,6 +71,7 @@ export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, objec
     <Button
       borderColor="openar.dark"
       color="openar.dark"
+      m="6"
       onClick={() => console.log("MAKE IT HAPPNE TODO: ")}
     >
       View in AR <BoxIcon viewBox="-10 -7 50 50" width="30px" height="25px"/>
@@ -80,7 +81,7 @@ export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, objec
   if (artwork.arObjects.length > 1) {
     // Single object view
     return(
-      <Box w="calc(100% + calc(var(--chakra-space-6) * 2))" mx="-6" mb="-6" direction="column" >
+      <Box w="100%" direction="column" >
         <Flex
           w="100%"
           h="80vh"
@@ -88,14 +89,14 @@ export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, objec
           alignItems="center"
           direction="column"
           overflow="auto"
-          p="6"
         >
           {modelViewer}
           {arButton}
           <chakra.p
             textStyle="copyDark"
             alignSelf="flex-start"
-            my="6"
+            p="6"
+            pt="0"
           >{arObject.title}</chakra.p>
         </Flex>
         <Box

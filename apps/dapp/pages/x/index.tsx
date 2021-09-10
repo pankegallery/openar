@@ -46,6 +46,9 @@ const userProfileQuery = gql`
 `;
 
 export const User = () => {
+
+  // ___________________ Query user data __________________
+
   const [appUser] = useAuthentication();
 
   const { data, loading, error } = useQuery(userProfileQuery, {
@@ -55,45 +58,41 @@ export const User = () => {
     },
   });
 
-  //  user = {
-  //    ethAdress: "0x61e323d9Ad70d40474Cb3e0FE1Cf132Dd5049584",
-  //    psydonym: "crosssenses",
-  //    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-  //  }
-
+  const { userProfileRead } = data ?? {};
   console.log("[Profile] User", data?.userProfileRead);
+
+  const name = userProfileRead?.pseudonym ?? userProfileRead?.ethAddress;
+
+
+  // ___________________ Set MediaQuery const __________________
+
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
   const isTablet = useSSRSaveMediaQuery(
     "(min-width: 45.00001rem) and (max-width: 74.9999rem)"
   );
   const isMobile = useSSRSaveMediaQuery("(max-width: 45rem)");
 
-  const { userProfileRead } = data ?? {};
+  // ___________________ Build page module logic __________________
+
 
   const hasArtworks = userProfileRead?.artworks.length > 0;
-
   const hasCollection = false;
-  const name = userProfileRead?.pseudonym ?? userProfileRead?.ethAddress;
 
-  const showArtworksUnderDetails =
-    (hasArtworks && !isDesktop && hasCollection) || (hasArtworks && isMobile);
-
-  const showArtworksColumn =
-    (hasArtworks && isDesktop) || (hasArtworks && isTablet && !hasCollection);
+  const showArtworksUnderDetails = true
 
   const showCollectionColumn = hasCollection;
-  const showCollectionPlaceholder = !hasCollection && !hasArtworks && !isMobile;
+  const showCollectionPlaceholder = !hasCollection && isDesktop;
 
   // TODO: this code here should probably take the sidebar into account
   // TODO: this also needs to take a tablet solution into account
   let collectionColumnWidth = "100%";
-  if (!isMobile) {
-    collectionColumnWidth = "33.33%";
+  if (isDesktop) {
+    collectionColumnWidth = "33.33vw";
   }
 
-  let artworksColumnWidth = "100%";
+  let detailsColumnWidth = "100%";
   if (!isMobile) {
-    artworksColumnWidth = "66.66%";
+    detailsColumnWidth = "auto";
   }
 
   return (
@@ -111,7 +110,10 @@ export const User = () => {
       >
         {userProfileRead && (
           <Flex
-            flexWrap="wrap"
+            flexWrap={{
+              base: "nowrap",
+              d: "wrap",
+            }}
             className="user"
             top="0"
             left="0"
@@ -119,7 +121,7 @@ export const User = () => {
             p=""
             h={{
               base: "auto",
-              t: "100vh",
+              d: "100vh",
             }}
             minHeight={{
               base: "100vh",
@@ -128,11 +130,11 @@ export const User = () => {
             color="white"
             overflow={{
               base: "show",
-              t: "hidden",
+              d: "hidden",
             }}
             flexDirection={{
               base: "column-reverse",
-              t: "row",
+              d: "row",
             }}
             layerStyle="backdropMud"
           >
@@ -149,33 +151,21 @@ export const User = () => {
             {showCollectionPlaceholder && (
               <CollectionList
                 userName={name}
+                isPublic={false}
                 width={collectionColumnWidth}
                 col={1}
               />
             )}
 
-            {/* TODO: this box is a quick hack and probably should not be here I also had to flip UserDetails and AW List as UserDetails is 100% high*/}
-            <Box>
-               {/* --------- COL: Artworks --------- */}
-               {showArtworksColumn && (
-                <ArtworkList
-                  isPublic={false}
-                  artworks={userProfileRead.artworks}
-                  width={artworksColumnWidth}
-                  col={1}
-                />
-              )}
+            {/* --------- COL: User details (+ artworks below)  */}
 
-              <UserDetails
-                isPublic={false}
-                user={userProfileRead}
-                showArtworks={showArtworksUnderDetails}
-              />
+            <UserDetails
+              isPublic={false}
+              user={userProfileRead}
+              showArtworks={showArtworksUnderDetails}
+            />
 
-             
-            </Box>
 
-            {/* --------- COL: Artwork details) --------- */}
           </Flex>
         )}
       </ModulePage>
