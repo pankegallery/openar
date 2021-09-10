@@ -221,12 +221,28 @@ export const components = {
   },
   Switch: {
     baseStyle: {
+      flexDirection: "row-reverse",
+      width: "100%",
+      justifyContent: "space-between",
       track: {
-        bg: "gray.400",
+        bg: "transparent",
+        border: "1px solid white",
+        width: "3rem",
+        padding: "2px 1px",
         _invalid: {
           bg: "openar.error",
         },
+        _checked: {
+          bg: "openar.muddydark",
+        }
       },
+      thumb: {
+        bg: "transparent linear-gradient(330deg, #FFFFFF50 0%, #FFFFFFfa 50%) 0% 0% no-repeat padding-box",
+        width: "2rem",
+      },
+      label: {
+        marginLeft: "0",
+      }
     },
   },
   FormLabel: {
@@ -234,7 +250,7 @@ export const components = {
       fontSize: "sm",
       textTransform: "uppercase",
       letterSpacing: "0.02em",
-      fontWeight: "600",
+      fontWeight: "700",
     },
   },
   FormErrorMessage: {
@@ -246,6 +262,30 @@ export const components = {
       color: "openar.error"
     }
   },
+  Form:{
+    baseStyle: {
+      helperText: {
+        color: "inherit",
+        opacity: "0.6",
+        marginBottom: "0.5rem",
+        marginTop: "0.1rem",
+        fontSize: "0.8rem",
+      },
+      requiredIndicator: {
+        color: "white",
+      },
+    },
+  },
+  // Not working
+  HelperText: {
+    baseStyle: {
+      fontSize: "sm",
+      fontWeight: "300",
+      color: "inherit",
+      opacity: "0.6",
+    }
+  },
+  // Not working
   FormRequiredIndicator: {
     color: "openar.error"
   }

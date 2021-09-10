@@ -155,7 +155,7 @@ export const ModuleSubNav = ({
         position="sticky"
         top={0}
         zIndex="200"
-        height="4rem"
+        height="5rem"
         borderBottom="1px solid #fff"
         bg="openar.muddygreen"
       >
@@ -164,7 +164,7 @@ export const ModuleSubNav = ({
           alignItems={{ base: "flex-start", mw: "center" }}
           direction={{ base: "column", mw: "row" }}
           height="100%"
-          px="3"
+          px="6"
         >
           <Heading as="h2" fontSize={{ base: "md", t: "2xl" }}>
             {breadcrumb.map((element, index) => {
@@ -185,7 +185,7 @@ export const ModuleSubNav = ({
                       <>{element?.title}</>
                     )}
 
-                    <ChevronRightIcon fontSize="1.2em" mt="-0.1em" />
+                    <ChevronRightIcon fontSize="0.8em"  mt="-0.1em" />
                   </span>
                 );
               }
@@ -194,7 +194,7 @@ export const ModuleSubNav = ({
           </Heading>
           <Box>
             {permissisionedButtonList && permissisionedButtonList.length > 0 && (
-              <HStack spacing="2" key="">
+              <HStack spacing="3" key="">
                 {permissisionedButtonList}
               </HStack>
             )}

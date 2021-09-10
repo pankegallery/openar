@@ -133,6 +133,7 @@ const themeConfig = {
   colors: {
     openar: {
       muddygreen: "#bab79f",
+      muddydark: "#95927F",
       light: "#F7F7F7",
       dark: "#555555",
       error: "#FF3E88",

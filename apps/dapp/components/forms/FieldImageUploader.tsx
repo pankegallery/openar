@@ -7,6 +7,7 @@ import {
   Flex,
   FormControl,
   FormLabel,
+  FormHelperText,
   chakra,
   IconButton,
   Text,
@@ -48,7 +49,7 @@ const baseStyle = {
   l: 0,
   w: "100%",
   h: "100%",
-  borderWidth: 4,
+  borderWidth: 6,
   borderColor: "white",
   borderStyle: "dashed",
   backgroundColor: "transparent",
@@ -56,9 +57,19 @@ const baseStyle = {
   outline: "none",
   transition: "all .24s ease-in-out",
   cursor: "pointer",
-
+  _before: {
+    content: "''",
+    position: "absolute",
+    border: "4px solid var(--chakra-colors-openar-muddygreen)",
+    width: "calc(100% + 4px)",
+    height: "calc(100% + 4px)",
+    transition: "all .24s ease-in-out",
+    bgColor: "#ffffff22",
+  },
   _hover: {
-    bg: "openarGreen.400",
+    _before: {
+      bg: "linear-gradient(162deg, #FFF0 60%, #FFFFFF24 60%, #FFFA 100%), #ffffff22",
+    },
   },
 };
 
@@ -303,6 +314,8 @@ export const FieldImageUploader = ({
     fileSizeInfo = `Size min. ${humanFileSize(settings?.minFileSize, 1)}`;
   }
 
+//`
+
   useEffect(() => {
     if (fileDropError === "") return;
 
@@ -340,6 +353,10 @@ export const FieldImageUploader = ({
         <FormLabel htmlFor={id} mb="0.5">
           {label}
         </FormLabel>
+
+        {settings?.helptext && (
+          <FormHelperText mb="4">{settings?.helptext}</FormHelperText>
+        )}
 
         {showImage && (
           <Box position="relative">

@@ -120,18 +120,18 @@ export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibitio
             direction="column"
             className="exhibitionColumn"
           >
-                      {/* --------- ROW: Header row --------- */}
+          {/* --------- ROW: Header row --------- */}
 
-         <Flex
-           w="33.33vw"
-           h="var(--openar-header-height-desktop)"
-           p="10"
-         >
-           <Link href={`/e/openar-art`}>
-             <a>
-               <Arrow className="arrow" />
-             </a>
-           </Link>
+            <Flex
+               w="33.33vw"
+               h="var(--openar-header-height-desktop)"
+               p="10"
+            >
+              <Link href={`/e/openar-art`}>
+                <a>
+                  <Arrow className="arrow" />
+                </a>
+              </Link>
             </Flex>
 
             {/* --------- Exhibition title  --------- */}

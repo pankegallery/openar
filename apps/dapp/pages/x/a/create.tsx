@@ -84,7 +84,7 @@ const Create = () => {
       title: "Profile",
     },
     {
-      title: "Create artwork",
+      title: "New artwork",
     },
   ];
 

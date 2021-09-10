@@ -1,15 +1,18 @@
 import { imageDeleteMutationGQL } from "~/graphql/mutations";
 
-import { AspectRatio, Box, Grid } from "@chakra-ui/react";
+import { AspectRatio, Box, Grid, chakra, FormLabel, Flex, Button } from "@chakra-ui/react";
 
 import {
   FieldInput,
   FieldRow,
   FieldTextEditor,
+  FieldSwitch,
   FieldImageUploader,
 } from "~/components/forms";
 
 import { ModuleArtworkArObjectsList } from ".";
+
+import { MdContentCopy } from "react-icons/md";
 
 import { yupIsFieldRequired } from "../validation";
 
@@ -45,11 +48,11 @@ export const ModuleArtworkForm = ({
             name="title"
             id="title"
             type="title"
-            label="Title"
+            label="Artwork title"
             isRequired={yupIsFieldRequired("title", validationSchema)}
             settings={{
               // defaultValue: data.abc.key
-              placeholder: "What is the title of your artwork?",
+              placeholder: "Insert artwork title…",
             }}
           />
         </FieldRow>
@@ -58,14 +61,14 @@ export const ModuleArtworkForm = ({
             id="description"
             type="basic"
             name="description"
-            label="Description"
+            label="Artwork description"
             isRequired={yupIsFieldRequired("description", validationSchema)}
             settings={{
               maxLength: 500,
               defaultValue: artworkReadOwn?.description
                 ? artworkReadOwn?.description
                 : undefined,
-              placeholder: "Please describe your artwork in a few words",
+              placeholder: "Please describe your artwork in a few words…",
             }}
           />
         </FieldRow>
@@ -74,11 +77,12 @@ export const ModuleArtworkForm = ({
             name="url"
             id="url"
             type="url"
-            label="Url"
+            label="Further information"
             isRequired={yupIsFieldRequired("url", validationSchema)}
             settings={{
               // defaultValue: data.abc.key
               placeholder: "Can people find more information somewhere else?",
+              helptext: "Add URL…",
             }}
           />
         </FieldRow>
@@ -87,38 +91,109 @@ export const ModuleArtworkForm = ({
             name="video"
             id="video"
             type="video"
-            label="Video"
+            label="Artwork video"
             isRequired={yupIsFieldRequired("video", validationSchema)}
             settings={{
               // defaultValue: data.abc.key
-              placeholder: "https://vimeo.com/... or https://youtube.com/...",
+              placeholder: "Add video URL (https://vimeo.com/... or https://youtube.com/...)",
+              helptext: "Documentation of artwork creation, performances or additional background information",
             }}
           />
+        </FieldRow>
+        <FieldRow>
+          <FieldSwitch
+            name="private"
+            id="private"
+            label="Artwork is private"
+            isRequired={yupIsFieldRequired("private", validationSchema)}
+            isChecked
+            hint="Showcase and sell your artwork through this link:"
+          />
+          <chakra.p p="6" pt="0" mt="-4"
+            sx={{
+              "svg": {
+                display: "inline-block",
+                marginTop: "-0.2rem",
+              }
+            }}>
+            <chakra.span textStyle="label" className="muted" mr="2">Link to artwork</chakra.span>
+            <chakra.span mr="2">https://www.openar.art/a/0x87dsfs0d98fs09df8</chakra.span>
+
+            <MdContentCopy />
+          </chakra.p>
         </FieldRow>
       </Box>
       <Box
         w={{ base: "50%", t: "auto" }}
         minH="100%"
         borderLeft="1px solid #fff"
-        p="3"
+        p="6"
       >
         {action === "create" && (
-          <AspectRatio
-            ratio={1}
-            border="5px dashed var(--chakra-colors-openarGreen-400)"
-          >
-            <Box textAlign="center" p="10" color="openarGreen.500">
-              Please save a draft to unlock image and model upload
-            </Box>
-          </AspectRatio>
-        )}
+          <>
+
+            {/* ---- OVERLAY: Save to upload --- */}
+            <Flex
+              layerStyle="backdropBlurred"
+              w="100%"
+              h="100%"
+              position="absolute"
+              clipPath="polygon(10rem 0%, 100% 0, 100% 100%, 0 100%, 0 10rem)"
+              z-index="10"
+              display="flex"
+              direction="column"
+              _before={{
+                bg: "#00000020",
+              }}
+              top="0"
+              left="0"
+              _after={{
+                content: "''",
+                bg: "white",
+                clipPath:
+                  "polygon(10rem 0, calc(10rem + 2px) 0%, 0 calc(10rem + 2px), 0 10rem)",
+                zIndex: "100",
+                position: "absolute",
+                width: "100%",
+                height: "100%",
+                display: "block"
+              }}
+              before={{
+                bg: "#95927fc0"
+              }}
+            >
+              <Box mx="20" mb="10" mt="40">
+                <chakra.p textStyle="subtitle">
+                  Save draft to upload material.
+                </chakra.p>
+                <chakra.p pb="6">
+                  Please save as draft to unlock image and model uplodad.
+                </chakra.p>
+                <Button>Save draft</Button>
+              </Box>
+            </Flex>
+
+            {/* ---- BOX: Fake content behind --- */}
+
+            <chakra.p textStyle="label">Featured image</chakra.p>
+            <chakra.p textStyle="small">The featured image is shown in artwork streams and exhibitions.</chakra.p>
+            <AspectRatio
+              ratio={1}
+              border="4px dashed white" mt="6"
+              position="static"
+            >
+              <Box textAlign="center" position="static">
+              </Box>
+            </AspectRatio>
+          </>
+          )}
         {action === "update" && (
           <>
             <FieldImageUploader
               route="image"
               id="heroImage"
               name="heroImage"
-              label="Featured Image (leave empty to start with first object)"
+              label="Featured Image"
               isRequired={yupIsFieldRequired("heroImage", validationSchema)}
               setActiveUploadCounter={setActiveUploadCounter}
               deleteButtonGQL={imageDeleteMutationGQL}
@@ -143,6 +218,7 @@ export const ModuleArtworkForm = ({
                   showPlaceholder: true,
                   sizes: "(min-width: 45em) 20v, 95vw",
                 },
+                helptext: "The featured image is shown in artwork streams and exhibitions. Leave empty to use the first object’s featured image."
               }}
             />
           </>

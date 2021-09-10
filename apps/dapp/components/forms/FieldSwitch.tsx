@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, FormControl, Flex, Text } from "@chakra-ui/react";
+import { Switch, FormControl, Flex, Text, FormLabel, FormHelperText } from "@chakra-ui/react";
 import { useFormContext } from "react-hook-form";
 
 import { FieldErrorMessage } from ".";
@@ -36,7 +36,7 @@ export const FieldSwitch = ({
       mt="1"
       {...{ isRequired, isDisabled, isReadOnly }}
       isInvalid={!!errors[name]?.message}
-      p="3"
+      p="6"
     >
       <Flex alignItems="center">
         <Switch
@@ -56,11 +56,11 @@ export const FieldSwitch = ({
           {...register(name, { required: isRequired })}
           display="flex"
         >
-          {label}
+          <FormLabel>{label}</FormLabel>
         </Switch>
         
       </Flex>
-      {hint && <Text fontSize="sm">{hint}</Text>}
+      {hint && <FormHelperText fontSize="sm">{hint}</FormHelperText>}
       <FieldErrorMessage error={errors[name]?.message} />
     </FormControl>
   );

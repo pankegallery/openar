@@ -44,7 +44,7 @@ export const FieldTextEditor = ({
       {...{ isRequired, isDisabled }}
       borderBottom="1px solid #fff"
     >
-      <Flex direction={{ base: "column", mw: "row", t: "column" }} p="3">
+      <Flex direction={{ base: "column", mw: "row", t: "column" }} p="6" pb="4">
         <FormLabel
           htmlFor={id}
           mb="0.5"

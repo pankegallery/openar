@@ -11,6 +11,7 @@ import { useFormContext } from "react-hook-form";
 import {
   FormControl,
   FormLabel,
+  FormHelperText,
   Input,
   InputGroup,
   InputRightElement,
@@ -190,20 +191,21 @@ export const FieldInput = ({
     >
       <Box
         alignItems="center"
-        p="3"
+        p="6"
+        pb="4"
         borderBottom="1px solid #fff"
         borderLeft={errors[name]?.message ? "4px solid " : "0px"}
         borderLeftColor="openar.error"
-        pl={errors[name]?.message ? "calc(var(--chakra-space-3) - 4px)" : "3"}
+        pl={errors[name]?.message ? "calc(var(--chakra-space-6) - 4px)" : "6"}
       >
-      {errors[name]?.message && (
+        {errors[name]?.message && (
           <Box
             m={0}
             position="absolute"
             top="0"
             right="0"
-            pt="3"
-            pr="3"
+            pt="5"
+            pr="6"
           >
             <FieldErrorMessage error={errors[name]?.message} />
           </Box>
@@ -214,8 +216,10 @@ export const FieldInput = ({
         >
           {label}
         </FormLabel>
+        {settings?.helptext &&
+        <FormHelperText>{settings?.helptext}</FormHelperText>}
         {input}
-        
+
       </Box>
     </FormControl>
   );
