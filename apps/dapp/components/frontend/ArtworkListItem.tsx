@@ -78,8 +78,8 @@ export const ArtworkListItem = ({
           width="2em"
           overflow="hidden"
           display="block"
-          text-overflow="ellipsis"
-          white-space="nowrap"
+          textOverflow="ellipsis"
+          whiteSpace="nowrap"
           className="artist"
           textStyle="meta">{artist}</chakra.span>
       </Box>

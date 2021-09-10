@@ -206,7 +206,7 @@ a {
 
   .info {
     width: 33.333%;
-    height: calc(66.66vw - var(--sbw));
+    height: 66.66vw;
 //    padding: 0.5rem;
     writing-mode:vertical-rl;
     transform: rotate(180deg);
@@ -256,7 +256,7 @@ a {
     flex-direction: row-reverse;
 
     .info {
-      height: calc(33.333vw - (var(--sbw) * 0.5));
+      height: 33.333vw;
     } 
 
     &:nth-child(4n + 1),
@@ -298,7 +298,7 @@ a {
       width: 100%;
 
       .info {
-        height: calc(22.19vw - var(--sbw));
+        height: 22.19vw;
       }
 
       &.col-2{

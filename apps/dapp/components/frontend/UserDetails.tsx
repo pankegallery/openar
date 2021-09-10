@@ -144,9 +144,9 @@ export const UserDetails = ({ user, showArtworks, isPublic = true }: {user: any;
 
         {/* ======== BOX: User bio  ======== */}
 
-        {user.bio || user.url && (
+        {(user.bio || user.url) && (
           <Box
-            className="artworkDescription"
+            className="bio"
             borderBottom="1px solid white"
             p="6"
           >
@@ -163,7 +163,7 @@ export const UserDetails = ({ user, showArtworks, isPublic = true }: {user: any;
             {user.url && (
               <>
                 <chakra.p textStyle="label" className="label" mt="6">More information</chakra.p>
-              <ArrowLink href="user.url">{user.url}</ArrowLink>
+                <ArrowLink href="user.url">{user.url}</ArrowLink>
               </>
             )}
 
@@ -173,7 +173,7 @@ export const UserDetails = ({ user, showArtworks, isPublic = true }: {user: any;
 
         {/* ======== BOX: User badges  ======== */}
         <Box
-          className="artworkURL"
+          className="badges"
           position="relative"
           borderBottom="1px solid white"
           p="6"
@@ -202,7 +202,7 @@ yourself. Start collecting, add your own artworks or write reviews to
         {/* ======== BOX: User reviews  ======== */}
         {user.reviews&&
           <Box
-            className="artworkURL"
+            className="reviews"
             borderBottom="1px solid white"
             p="6"
           >

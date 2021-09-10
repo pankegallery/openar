@@ -23,6 +23,27 @@ export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibitio
 
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
 
+  // _____________ Get prev/next artwork _____________
+
+
+  const thisArtworkIndex = exhibition.artworks.findIndex((a) => a.key === artwork.key)
+      console.log("[... key] index: ", thisArtworkIndex)
+
+  let nextArtworkKey
+  (thisArtworkIndex == exhibition.artworks.length - 1) ?
+    nextArtworkKey =  exhibition.artworks[0].key :
+    nextArtworkKey =  exhibition.artworks[thisArtworkIndex + 1].key
+    console.log("[... key] next: ",  nextArtworkKey)
+
+  let prevArtworkKey
+  (thisArtworkIndex === 0) ?
+    prevArtworkKey =  exhibition.artworks[exhibition.artworks.length].key :
+    prevArtworkKey =  exhibition.artworks[thisArtworkIndex + -1].key
+    console.log("[... key] prev: ", prevArtworkKey)
+
+
+  // _____________ Get initial or selected object _____________
+
   let selectedObject = {}
   if (okey === "initial"){
     selectedObject = artwork.arObjects[0]
@@ -30,15 +51,19 @@ export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibitio
     selectedObject = artwork.arObjects.find(o => o.key === okey)
   }
 
+  // _____________ Debugging logs _____________
+
 //  console.log("[... key] sel obj: ", selectedObject)
 //  console.log("[... key] artwork: ", artwork)
-//  console.log("[... key] ex: ", exhibition)
+  console.log("[... key] ex: ", exhibition)
 
+
+  // _____________ RETURN _____________
 
   return (
     <>
       <Head>
-        <title>{artwork.title} · OpenAR</title>
+        <title>{artwork.title} · Ope  nAR</title>
         <meta
           property="og:title"
           content={`${artwork.title} · OpenAR`}
@@ -145,12 +170,12 @@ export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibitio
             mb="10"
             px="6"
           >
-            <Link href="/prev">
+            <Link href={`/e/${exhibition.slug}/${prevArtworkKey}`}>
               <a>
                 <Arrow className="arrow" />
               </a>
             </Link>
-            <Link href="/next" passHref>
+            <Link href={`/e/${exhibition.slug}/${nextArtworkKey}`} passHref>
               <chakra.a ml="6">
                 <Arrow className="arrow right" />
               </chakra.a>
@@ -231,6 +256,11 @@ export const getStaticProps = async ({ params }: { params: any }) => {
         dateBegin
         dateEnd
         status
+        artworks {
+          id
+          key
+          title
+        }
         curators {
           pseudonym
           id

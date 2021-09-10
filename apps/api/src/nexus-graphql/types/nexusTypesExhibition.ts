@@ -93,6 +93,7 @@ export const EventQueries = extendType({
         return {
           id: 1,
           title: "OpenAR.art",
+          slug: "openar-art"
           subtitle: "A groupshow curated by Sakrowski and Jeremy Bailey",
           dateBegin: new Date("2021-08-29 12:00"),
           dateEnd: new Date("2021-10-04 12:00"),
