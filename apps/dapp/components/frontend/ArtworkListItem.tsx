@@ -101,7 +101,7 @@ export const ArtworkListItem = ({
         </AspectRatio>
       </Box>
       {isAdmin &&
-        <Link href={`/x/a/${id}/update`} passhref>
+        <Link href={`/x/a/${id}/update`} passHref>
         <Button
           className="editArtworkButton"
           mx="10"
