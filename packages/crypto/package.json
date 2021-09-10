@@ -21,6 +21,7 @@
     "@ethersproject/contracts": "^5.4.1",
     "@ethersproject/providers": "^5.4.5",
     "@openar/contracts": "^1.0.0",
+    "ethereumjs-util": "^5.2.1",
     "axios": "^0.21.1",
     "eth-sig-util": "^3.0.1",
     "ethers": "^5.4.6",
@@ -31,8 +32,7 @@
   },
   "devDependencies": {
     "@types/eth-sig-util": "^2.1.1",
-    "@types/ethereumjs-util": "^6.1.0",
-    "@types/sjcl": "^1.0.30",
-    "ethereumjs-util": "^5.2.1"
+    "@types/sjcl": "^1.0.30"
+    
   }
 }
