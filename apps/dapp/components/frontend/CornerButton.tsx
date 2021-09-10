@@ -7,10 +7,10 @@ export const CornerButton = ({
   position = "bottom",
   href
 }: {
-  label?: String,
+  label?: string,
   emphasis?: boolean,
-  position?: String,
-  href?: String,
+  position?: string,
+  href?: string,
   onClick?: () => void
 }) => {
 
