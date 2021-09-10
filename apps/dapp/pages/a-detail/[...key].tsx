@@ -94,7 +94,6 @@ export const Artwork = ({
           h="100%"
           bg="white"
           color="var(--chakra-colors-openar-dark)"
-          p="6"
           pt="10"
           overflow="auto"
         >
@@ -152,6 +151,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           status
           askPrice
           editionOf
+          description
           heroImage {
             id
             meta

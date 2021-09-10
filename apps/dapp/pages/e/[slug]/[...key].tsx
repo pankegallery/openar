@@ -137,13 +137,13 @@ export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibitio
           h="100%"
           bg="white"
           color="var(--chakra-colors-openar-dark)"
-          p="6"
           pt="10"
           overflow="auto"
         >
           <Flex
             w="auto"
             mb="10"
+            px="6"
           >
             <Link href="/prev">
               <a>
@@ -204,6 +204,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           id
           key
           createdAt
+          description
           title
           orderNumber
           status
