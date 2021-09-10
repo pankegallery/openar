@@ -21,11 +21,6 @@ import { ArrowLink } from "~/components/ui";
 import { useAuthentication, useSSRSaveMediaQuery } from "~/hooks";
 
 export const PublicUserProfile = ({ user }: { user: any }) => {
-  //  user = {
-  //    ethAdress: "0x61e323d9Ad70d40474Cb3e0FE1Cf132Dd5049584",
-  //    psydonym: "crosssenses",
-  //    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-  //  }
 
   const router = useRouter();
   const [appUser] = useAuthentication();
@@ -130,6 +125,7 @@ export const PublicUserProfile = ({ user }: { user: any }) => {
         {showCollectionPlaceholder && (
           <CollectionList
             userName={name}
+            isPublic
             width={collectionColumnWidth}
             col={!hasArtworks ? 2 : 1}
           />

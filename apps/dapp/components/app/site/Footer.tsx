@@ -1,4 +1,5 @@
 import { ActiveLink } from "~/components/ui";
+import { Menu } from "~/components/frontend";
 import {
   Box,
   chakra
@@ -36,16 +37,7 @@ export const Footer = (/* props */) => {
           }
         }}
       >
-        {
-          footerMenu.map(menuItem => (
-            <ActiveLink
-              key={menuItem.slug}
-              href={`/${menuItem.url}`}
-            >
-              {menuItem.label}
-            </ActiveLink>
-          ))
-        }
+        <Menu pages={footerMenu} />
       </chakra.nav>
     </Box>
     );

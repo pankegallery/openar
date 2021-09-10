@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 import { Box, Flex, chakra } from "@chakra-ui/react";
 
@@ -12,11 +13,13 @@ export const CollectionList = ({
   artworks,
   width,
   userName,
+  isPublic,
   col,
 }: {
   artworks?: any[],
   width: string,
   userName: string,
+  isPublic?: Boolean,
   col: number,
 }) => {
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
@@ -86,6 +89,8 @@ export const CollectionList = ({
           position="absolute"
           clipPath="polygon(10rem 0%, 100% 0, 100% 100%, 0 100%, 0 10rem)"
           z-index="10"
+          display="flex"
+          direction="column"
           _before={{
             bg: "#00000010",
           }}
@@ -98,19 +103,68 @@ export const CollectionList = ({
             position: "absolute",
             width: "100%",
             height: "100%",
-            display: "block",
+            display: "block"
           }}
         >
-          <Box m="auto" w="60%" pb="10">
-            <chakra.p textStyle="subtitle">
-              {userName ? userName : "The user"} hasn’t started collecting yet.
-            </chakra.p>
-            <chakra.p>
-              It’s not too late. There is still a chance for{" "}
-              {userName ? userName : "the user"} to receive this year’s
-              collectors badge.
-            </chakra.p>
-          </Box>
+          {isPublic &&
+            <Box m="auto" w="60%" pb="10">
+              <chakra.p textStyle="subtitle">
+                {userName ? userName : "The user"} hasn’t started collecting yet.
+              </chakra.p>
+              <chakra.p>
+                It’s not too late. There is still a chance for{" "}
+                {userName ? userName : "the user"} to receive this year’s
+                collectors badge.
+              </chakra.p>
+            </Box>
+          }
+          {!isPublic && (
+            <>
+              <Box mt="auto" w="60%" pb="10" mb="10" mx="auto">
+                <chakra.p textStyle="subtitle">
+                  Seems like you haven’t started collecting yet.
+                </chakra.p>
+                <chakra.p>
+                  Purchase artworks to build up your collection and receive your first collector badge.
+                </chakra.p>
+              </Box>
+              <Box
+                as="article"
+                className="artwork item"
+                w="100%"
+                bg="openar.light"
+                borderTop="1px solid white"
+              >
+                <Box className="info" p="4">
+                  <chakra.h2
+                    className="title"
+                    fontWeight="600"
+                  >
+                    Collector’s Badge 2021
+                  </chakra.h2>
+                  <chakra.span
+                    width="2em"
+                    overflow="hidden"
+                    display="block"
+                    text-overflow="ellipsis"
+                    white-space="nowrap"
+                    className="artist"
+                    textStyle="meta">Anna Luise Lorenz</chakra.span>
+                </Box>
+                <Box
+                  className="img"
+                >
+                  <Image
+                    src="/images/collector-blurred.png"
+                    width="66.66%"
+                    height="66.66%"
+                    layout="responsive"
+                    alt="Colector badge image"
+                  />
+                </Box>
+              </Box>
+            </>
+          )}
         </Flex>
       )}
     </Flex>

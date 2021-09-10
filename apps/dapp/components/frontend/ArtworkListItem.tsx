@@ -6,6 +6,7 @@ import {
   LinkOverlay,
   chakra,
   Heading,
+  Button
 } from "@chakra-ui/react";
 import { ApiImage } from "../ui";
 import { ArtworkStatusEnum } from "~/utils";
@@ -61,13 +62,13 @@ export const ArtworkListItem = ({
       as="article"
       className={`${isWhite ? "white" : ""} artwork list item col-${col}`}
       key={`artwork-${id}`}
+      borderBottom="1px solid white"
     >
       <Box className="info" p="4">
         <chakra.h2
           className="title"
           fontWeight="600"
         >
-          
           <Link  href={href} passHref><LinkOverlay>{title}</LinkOverlay></Link>
         </chakra.h2>
         <chakra.span
@@ -96,6 +97,16 @@ export const ArtworkListItem = ({
           />
         </AspectRatio>
       </Box>
+      {isAdmin &&
+        <Button
+          className="editArtworkButton"
+          href={href}
+          mx="10"
+          my="4"
+          px="6"
+          alignSelf="end"
+        >Edit artwork</Button>
+      }
     </LinkBox>
   );
 };
