@@ -55,7 +55,10 @@ export const ArtworkListItem = ({
 
   // TODO: change a-detail to a once opening exhibition done
   const baseURL = cameFromExhibition ? router.asPath : "/a-detail"
-  const href = isAdmin ? `/x/a/${id}/update` : `${baseURL}/${urlKey}/`;
+
+  // CHANGED: There is an edit button now when logged in.
+  //  const href = isAdmin ? `/x/a/${id}/update` : `${baseURL}/${urlKey}/`;
+  const href = `${baseURL}/${urlKey}/`;
 
   return (
     <LinkBox
@@ -98,14 +101,14 @@ export const ArtworkListItem = ({
         </AspectRatio>
       </Box>
       {isAdmin &&
+        <Link href={`/x/a/${id}/update`} passhref>
         <Button
           className="editArtworkButton"
-          href={href}
           mx="10"
           my="4"
           px="6"
           alignSelf="end"
-        >Edit artwork</Button>
+        >Edit artwork</Button></Link>
       }
     </LinkBox>
   );
