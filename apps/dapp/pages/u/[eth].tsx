@@ -40,6 +40,8 @@ export const PublicUserProfile = ({ user }: { user: any }) => {
   const isMobile = useSSRSaveMediaQuery("(max-width: 45rem)");
 
   const hasArtworks = user.artworks.length > 0;
+  console.log("[Profile] hasArtworks", hasArtworks);
+
 
   const hasCollection = false;
   const name = user.pseudonym ?? user.ethAddress;

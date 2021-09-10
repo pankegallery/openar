@@ -78,8 +78,6 @@ export const User = () => {
   const hasArtworks = userProfileRead?.artworks.length > 0;
   const hasCollection = false;
 
-  const showArtworksUnderDetails = true
-
   const showCollectionColumn = hasCollection;
   const showCollectionPlaceholder = !hasCollection && isDesktop;
 
@@ -162,7 +160,7 @@ export const User = () => {
             <UserDetails
               isPublic={false}
               user={userProfileRead}
-              showArtworks={showArtworksUnderDetails}
+              showArtworks={true}
             />
 
 

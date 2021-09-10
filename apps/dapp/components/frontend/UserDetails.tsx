@@ -11,7 +11,7 @@ import { useSSRSaveMediaQuery } from "~/hooks";
 export const UserDetails = ({ user, showArtworks, isPublic = true }: {user: any; showArtworks: boolean; isPublic: boolean;}) => {
 
   let name = user?.pseudonym ? user?.pseudonym : user?.ethAddress;
-  const isIncomplete = user?.pseudonym ? false : true;
+  const isIncomplete = user?.pseudonym || isPublic ? false : true;
 //  const isIncomplete = true
 
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
@@ -95,7 +95,8 @@ export const UserDetails = ({ user, showArtworks, isPublic = true }: {user: any;
         <chakra.h2 fontSize="xs" maxWidth="80%">{user?.ethAddress}</chakra.h2>
       </Box>
 
-      {isIncomplete && (
+      {/* ======== OVERLAY: Incomplete profile  ======== */}
+      {isIncomplete &&  (
         <Flex
           layerStyle="backdropBlurred"
           w="100%"
@@ -128,7 +129,7 @@ export const UserDetails = ({ user, showArtworks, isPublic = true }: {user: any;
             <chakra.p pb="6">
               Add some details about yourself to receive your first badge.
             </chakra.p>
-            <Button href="/x/profile/update">Complete Profile</Button>
+            <Link href="/x/profile/update" passHref><Button>Complete Profile</Button></Link>
           </Box>
         </Flex>
       )}
@@ -142,23 +143,33 @@ export const UserDetails = ({ user, showArtworks, isPublic = true }: {user: any;
       >
 
         {/* ======== BOX: User bio  ======== */}
-        <Box
-          className="artworkDescription"
-          borderBottom="1px solid white"
-          p="6"
-        >
-          
 
-          <chakra.p textStyle="label" className="label">About</chakra.p>
-          <div dangerouslySetInnerHTML={{__html: user.bio}} />
+        {user.bio || user.url && (
+          <Box
+            className="artworkDescription"
+            borderBottom="1px solid white"
+            p="6"
+          >
 
+            {user.bio && (
+              <>
+                <chakra.p textStyle="label" className="label">About</chakra.p>
+                <div dangerouslySetInnerHTML={{__html: user.bio}} />
+              </>
+            )}
 
-        {/* ======== BOX: User link  ======== */}
+            {/* ======== BOX: User link  ======== */}
 
-          <chakra.p textStyle="label" className="label" mt="6">More information</chakra.p>
-          <ArrowLink href="user.url">{user.url}</ArrowLink>
-        </Box>
+            {user.url && (
+              <>
+                <chakra.p textStyle="label" className="label" mt="6">More information</chakra.p>
+              <ArrowLink href="user.url">{user.url}</ArrowLink>
+              </>
+            )}
 
+          </Box>
+
+        )}
 
         {/* ======== BOX: User badges  ======== */}
         <Box

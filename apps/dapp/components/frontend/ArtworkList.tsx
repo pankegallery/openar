@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-import { Box, Flex, chakra } from "@chakra-ui/react";
+import { Box, Flex, chakra, Button } from "@chakra-ui/react";
 
 import Arrow from "~/assets/img/arrow.svg";
 import { ArtworkListItem } from "~/components/frontend";
@@ -60,6 +60,14 @@ export const ArtworkList = ({
         <Box ml="-6">
           <Arrow className="arrow down" />
         </Box>
+        {artworks.length == 0 && !isPublic && (
+          <Box mx="14" mt="20">
+            <chakra.p pb="6">
+              Looks like you haven’t added an artwork yet. Add one of your works to earn the artist badge.
+            </chakra.p>
+            <Link href="/x/a/create" passHref><Button>Add artwork</Button></Link>
+          </Box>
+        )}
       </Box>
 
       {/* --------- ROW: Artworks --------- */}
