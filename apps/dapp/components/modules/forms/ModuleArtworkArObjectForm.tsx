@@ -45,6 +45,8 @@ import {
   FieldSwitch,
 } from "~/components/forms";
 
+import {IncompleteOverlay} from "~/components/frontend"
+
 import { ArObjectStatusEnum } from "~/utils";
 
 import { yupIsFieldRequired } from "../validation";
@@ -442,8 +444,23 @@ export const ModuleArtworkArObjectForm = ({
           w={{ base: "50%", t: "auto" }}
           minH="100%"
           borderLeft="1px solid #fff"
-          p="3"
+          position="relative"
         >
+          {action === "create" && (
+            <IncompleteOverlay
+            headline="Save draft to upload material."
+            subline=" Please save as draft to unlock image and model uplodad."
+            button={true}
+            buttonLabel="Save draft"
+            href=""
+            height="100%"
+            marginLeft="20"
+            marginTop="60"
+          />
+
+          )}
+
+
           {action === "create" && (
             <AspectRatio
               ratio={1}

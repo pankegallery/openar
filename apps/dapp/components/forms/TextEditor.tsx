@@ -29,6 +29,8 @@ import HardBreak from "@tiptap/extension-hard-break";
 import History from "@tiptap/extension-history";
 import Italic from "@tiptap/extension-italic";
 
+import { RiAlertFill } from "react-icons/ri";
+
 import {
   RiTextWrap,
   RiLink,
@@ -389,10 +391,13 @@ export const TextEditor = ({
       </Box>
       {maxLength && maxLength > 0 && editor && (
         <Box className="char-count">
+          {(editor.getCharacterCount() > maxLength) &&
+            <RiAlertFill />
+          }
           <Badge
             variant="subtle"
-            colorScheme={
-              editor.getCharacterCount() > maxLength ? "red" : "green"
+            className={
+              editor.getCharacterCount() > maxLength ? "exceeded" : "valid"
             }
           >
             {editor.getCharacterCount()}/{maxLength} characters
