@@ -179,7 +179,7 @@ export const ModuleArtworkForm = ({
 
         {action === "create" && (
           <>
-              <Box
+            <Box
               p="6"
               borderBottom="1px solid #fff"
             >
@@ -228,7 +228,8 @@ export const ModuleArtworkForm = ({
 
         {action === "update" && (
 
-          <>
+          <Box borderBottom="1px solid #fff"
+          p="6">
             <FieldImageUploader
               route="image"
               id="heroImage"
@@ -261,7 +262,7 @@ export const ModuleArtworkForm = ({
                 helptext: "The featured image is shown in artwork streams and exhibitions. Leave empty to use the first object’s featured image."
               }}
             />
-          </>
+          </Box>
         )}
         {action === "update" && (
           <>
