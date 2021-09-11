@@ -128,55 +128,61 @@ export const ModuleArtworkForm = ({
         w={{ base: "50%", t: "auto" }}
         minH="100%"
         borderLeft="1px solid #fff"
+        position="relative"
       >
-        <Box borderBottom="1px solid #fff"
-        p="6">
-          {action === "create" && (
-            <>
+        {/* ---- OVERLAY: Save to upload --- */}
+        {action === "create" && (
 
-              {/* ---- OVERLAY: Save to upload --- */}
-              <Flex
-                layerStyle="backdropBlurred"
-                w="100%"
-                h="100%"
-                position="absolute"
-                clipPath="polygon(10rem 0%, 100% 0, 100% 100%, 0 100%, 0 10rem)"
-                z-index="10"
-                display="flex"
-                direction="column"
-                _before={{
-                  bg: "#00000020",
-                }}
-                top="0"
-                left="0"
-                _after={{
-                  content: "''",
-                  bg: "white",
-                  clipPath:
-                    "polygon(10rem 0, calc(10rem + 2px) 0%, 0 calc(10rem + 2px), 0 10rem)",
-                  zIndex: "100",
-                  position: "absolute",
-                  width: "100%",
-                  height: "100%",
-                  display: "block"
-                }}
-                before={{
-                  bg: "#95927fc0"
-                }}
-              >
-                <Box mx="20" mb="10" mt="40">
-                  <chakra.p textStyle="subtitle">
-                    Save draft to upload material.
-                  </chakra.p>
-                  <chakra.p pb="6">
-                    Please save as draft to unlock image and model uplodad.
-                  </chakra.p>
-                  <Button>Save draft</Button>
-                </Box>
-              </Flex>
+          <Flex
+            layerStyle="backdropBlurred"
+            w="100%"
+            h="100%"
+            position="absolute"
+            clipPath="polygon(10rem 0%, 100% 0, 100% 100%, 0 100%, 0 10rem)"
+            z-index="10"
+            display="flex"
+            direction="column"
+            _before={{
+              bg: "#00000020",
+            }}
+            top="0"
+            left="0"
+            _after={{
+              content: "''",
+              bg: "white",
+              clipPath:
+                "polygon(10rem 0, calc(10rem + 2px) 0%, 0 calc(10rem + 2px), 0 10rem)",
+              zIndex: "100",
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              display: "block"
+            }}
+            before={{
+              bg: "#95927fc0"
+            }}
+          >
+            <Box mx="20" mb="10" mt="60">
+              <chakra.p textStyle="subtitle">
+                Save draft to upload material.
+              </chakra.p>
+              <chakra.p pb="6">
+                Please save as draft to unlock image and model uplodad.
+              </chakra.p>
+              <Button>Save draft</Button>
+            </Box>
+          </Flex>
 
-              {/* ---- BOX: Fake content behind --- */}
+        )}
 
+        {/* ---- BOX: Fake content behind --- */}
+
+        {action === "create" && (
+          <>
+              <Box
+              p="6"
+              borderBottom="1px solid #fff"
+            >
               <chakra.p textStyle="label">Featured image</chakra.p>
               <chakra.p textStyle="small">The featured image is shown in artwork streams and exhibitions.</chakra.p>
               <AspectRatio
@@ -187,71 +193,104 @@ export const ModuleArtworkForm = ({
                 <Box textAlign="center" position="static">
                 </Box>
               </AspectRatio>
-            </>
-          )}
-          {action === "update" && (
-            <>
-              <FieldImageUploader
-                route="image"
-                id="heroImage"
-                name="heroImage"
-                label="Featured Image"
-                isRequired={yupIsFieldRequired("heroImage", validationSchema)}
-                setActiveUploadCounter={setActiveUploadCounter}
-                deleteButtonGQL={imageDeleteMutationGQL}
-                connectWith={{
-                  heroImageArtworks: {
-                    connect: {
-                      id: artworkReadOwn.id,
-                    },
-                  },
-                }}
-                settings={{
-                  // minFileSize: 1024 * 1024 * 0.0488,
-                  maxFileSize: 1024 * 1024 * 5,
-                  aspectRatioPB: 100, // % bottom padding
+            </Box>
+            <Box
+              p="6"
+              borderBottom="1px solid #fff"
+            >
+              <chakra.p textStyle="label">Artwork objects</chakra.p>
+              <chakra.p textStyle="small">Click to edit, drag to change order.</chakra.p>
+              <AspectRatio
+                ratio={1}
+                border="4px dashed white" mt="6"
+                position="static"
+                display="inline-flex"
+                width="48%"
+                mr="4%"
+              >
+                <Box textAlign="center" position="static">
+                </Box>
+              </AspectRatio>
+              <AspectRatio
+                ratio={1}
+                display="inline-flex"
+                border="4px dashed white" mt="6"
+                position="static"
+                display="inline-flex"
+                width="48%"
+              >
+                <Box textAlign="center" position="static">
+                </Box>
+              </AspectRatio>
+            </Box>
+          </>
+        )}
 
-                  image: {
-                    status: artworkReadOwn?.heroImage?.status,
-                    id: artworkReadOwn?.heroImage?.id,
-                    meta: artworkReadOwn?.heroImage?.meta,
-                    alt: `Featured Image`,
-                    forceAspectRatioPB: 100,
-                    showPlaceholder: true,
-                    sizes: "(min-width: 45em) 20v, 95vw",
+        {action === "update" && (
+
+          <>
+            <FieldImageUploader
+              route="image"
+              id="heroImage"
+              name="heroImage"
+              label="Featured Image"
+              isRequired={yupIsFieldRequired("heroImage", validationSchema)}
+              setActiveUploadCounter={setActiveUploadCounter}
+              deleteButtonGQL={imageDeleteMutationGQL}
+              connectWith={{
+                heroImageArtworks: {
+                  connect: {
+                    id: artworkReadOwn.id,
                   },
-                  helptext: "The featured image is shown in artwork streams and exhibitions. Leave empty to use the first object’s featured image."
-                }}
-              />
-            </>
-          )}
-        </Box>
-        <Box
-          borderBottom="1px solid #fff">
-          <FieldRow>
-            <FieldSwitch
-              name="multipleObjects"
-              id="multipleObjects"
-              label="Mulitple object"
-              isRequired={yupIsFieldRequired("private", validationSchema)}
-              hint="The artwork consists of multiple objects."
-            />
-          </FieldRow>
-        </Box>
-        <Box borderBottom="1px solid #fff"
-        p="6">
-          {action === "update" && (
-            <ModuleArtworkArObjectsList
-              {...{
-                data,
-                errors,
-                validationSchema,
-                disableNavigation,
-                setActiveUploadCounter,
+                },
+              }}
+              settings={{
+                // minFileSize: 1024 * 1024 * 0.0488,
+                maxFileSize: 1024 * 1024 * 5,
+                aspectRatioPB: 100, // % bottom padding
+
+                image: {
+                  status: artworkReadOwn?.heroImage?.status,
+                  id: artworkReadOwn?.heroImage?.id,
+                  meta: artworkReadOwn?.heroImage?.meta,
+                  alt: `Featured Image`,
+                  forceAspectRatioPB: 100,
+                  showPlaceholder: true,
+                  sizes: "(min-width: 45em) 20v, 95vw",
+                },
+                helptext: "The featured image is shown in artwork streams and exhibitions. Leave empty to use the first object’s featured image."
               }}
             />
-          )}
-        </Box>
+          </>
+        )}
+        {action === "update" && (
+          <>
+            <Box
+              borderBottom="1px solid #fff">
+              <FieldRow>
+                <FieldSwitch
+                  name="multipleObjects"
+                  id="multipleObjects"
+                  label="Mulitple object"
+                  isRequired={yupIsFieldRequired("private", validationSchema)}
+                  hint="The artwork consists of multiple objects."
+                />
+              </FieldRow>
+            </Box>
+            <Box borderBottom="1px solid #fff"
+          p="6">
+              <ModuleArtworkArObjectsList
+                {...{
+                  data,
+                  errors,
+                  validationSchema,
+                  disableNavigation,
+                  setActiveUploadCounter,
+                }}
+              />
+            </Box>
+          </>
+        )}
       </Box>
     </Grid>
   );
