@@ -22,6 +22,7 @@ import {
 } from "@chakra-ui/react";
 
 import { HiOutlineEyeOff, HiOutlineEye } from "react-icons/hi";
+import LogoXDAI from "~/assets/img/xdai/xdai-white.svg"
 
 import FieldErrorMessage from "./FieldErrorMessage";
 
@@ -35,6 +36,7 @@ export interface FieldSettings {
   type?: string;
   className?: string;
   placeholder?: string;
+  helpText?: string;
   defaultValue?: any;
   valid?: boolean;
   autoResize?: {
@@ -62,6 +64,16 @@ export const FieldInput = ({
 }) => {
   const fieldRef = useRef<HTMLInputElement | null>(null);
   const [revealFlag, setRevealFlag] = useBoolean();
+
+  let Icon;
+  switch (settings?.icon){
+    case "price":
+      Icon = <LogoXDAI className="field-icon price-icon" width="20px" height="20px" viewBox="0 0 150 150"/>;
+      break;
+    default:
+      Icon = <></>;
+  }
+
 
   const {
     formState: { errors },
@@ -214,7 +226,7 @@ export const FieldInput = ({
           htmlFor={id}
           m={0}
         >
-          {label}
+          {label}{settings?.icon && Icon}
         </FormLabel>
         {settings?.helptext &&
         <FormHelperText>{settings?.helptext}</FormHelperText>}

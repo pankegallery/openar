@@ -52,6 +52,8 @@ import { ArObjectStatusEnum } from "~/utils";
 
 import { yupIsFieldRequired } from "../validation";
 
+
+
 export const ModuleArtworkArObjectForm = ({
   action,
   data,
@@ -72,6 +74,7 @@ export const ModuleArtworkArObjectForm = ({
 
   const columns = { base: "100%", t: "50% 50%" };
   const rows = { base: "auto 1fr", t: "1fr" };
+
 
   const uploadedFiles = arObjectReadOwn?.arModels.reduce(
     (acc, model) => ({
@@ -460,6 +463,7 @@ export const ModuleArtworkArObjectForm = ({
                 // defaultValue: data.abc.key
                 placeholder: "Insert price here…",
                 helptext: "Initial price for object in xDai",
+                icon: "price",
               }}
             />
           </FieldRow>
