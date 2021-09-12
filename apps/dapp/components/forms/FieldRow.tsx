@@ -3,9 +3,11 @@ import { Flex, Text, Box } from "@chakra-ui/react";
 
 export const FieldRow = ({
   children,
+  col,
   isDangerZone,
 }: {
   children: React.ReactNode;
+  col?  : Boolean;
   isDangerZone?: string;
 }): JSX.Element | null => {
   if (isDangerZone)
@@ -26,7 +28,16 @@ export const FieldRow = ({
     );
 
   return (
-    <Box _first={{ mt: 0 }} w="100%" className="fieldRow">
+    <Box 
+      _first={{ mt: 0 }} 
+      w="100%" 
+      className="fieldRow" 
+      display={col? "flex" : "block"}
+      sx={{
+        "& > *":{ borderLeft: "1px solid white"},
+        "& > *:first-child":{ borderLeft: "none"},
+      }}
+    >
       {children}
     </Box>
   );

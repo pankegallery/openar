@@ -10,3 +10,4 @@ export * from "./Menu";
 export * from "./OverlayMenu";
 export * from "./RoleBadgeControl";
 export * from "./UserDetails";
+export * from "./IncompleteOverlay";

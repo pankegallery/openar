@@ -30,6 +30,7 @@ import {
   ModalBody,
   Text,
   Flex,
+  chakra
 } from "@chakra-ui/react";
 import { BeatLoader } from "react-spinners";
 import pick from "lodash/pick";
@@ -395,14 +396,14 @@ export const ModuleArtworkArObjectForm = ({
               isRequired={yupIsFieldRequired("title", validationSchema)}
               settings={{
                 // defaultValue: data.abc.key
-                placeholder: "What is the title of your artwork?",
+                placeholder: "Insert title here…",
               }}
             />
           </FieldRow>
           <FieldRow>
             
-            <Box px="3" pt="3" fontSize="sm">
-              <Text letterSpacing="0.02em"><b>ARTWORK DESCRIPTION</b></Text>
+            <Box px="6" pt="3" className="muted">
+              <Text textStyle="label">Artwork description</Text>
               <div dangerouslySetInnerHTML={{
                 __html: data?.artworkReadOwn.description
               }}/>
@@ -419,7 +420,7 @@ export const ModuleArtworkArObjectForm = ({
                 defaultValue: arObjectReadOwn?.description
                   ? arObjectReadOwn?.description
                   : undefined,
-                placeholder: "Please describe your artwork in a few words",
+                placeholder: "Insert object details…",
               }}
             />
           </FieldRow>
@@ -436,7 +437,44 @@ export const ModuleArtworkArObjectForm = ({
               }}
             />
           </FieldRow>
-          
+          <FieldRow col>
+            <FieldInput
+              name="edition"
+              id="edition"
+              type="edition"
+              label="Edition"
+              isRequired={yupIsFieldRequired("edition", validationSchema)}
+              settings={{
+                // defaultValue: data.abc.key
+                placeholder: "Insert number here…",
+                helptext: "Number of units to be sold"
+              }}
+            />
+            <FieldInput
+              name="price"
+              id="price"
+              type="price"
+              label="Price per item"
+              isRequired={yupIsFieldRequired("price", validationSchema)}
+              settings={{
+                // defaultValue: data.abc.key
+                placeholder: "Insert price here…",
+                helptext: "Initial price for object in xDai",
+              }}
+            />
+          </FieldRow>
+          <FieldRow>
+            <FieldSwitch
+              name="mintObject"
+              id="mintObject"
+              label="Mint object"
+              isRequired={yupIsFieldRequired("private", validationSchema)}
+              hint="To sell this object as NFT, i.e. mint, the object will be written into the blockchain.
+This step cannot be undone. 
+
+Note: an object must be published within a published artwork to be minted."
+            />
+          </FieldRow>
          
           
         </Box>
@@ -459,18 +497,58 @@ export const ModuleArtworkArObjectForm = ({
           />
 
           )}
-
+          
+          {/* ---- BOX: Fake content behind --- */}
 
           {action === "create" && (
-            <AspectRatio
-              ratio={1}
-              border="5px dashed var(--chakra-colors-openarGreen-400)"
-            >
-              <Box textAlign="center" p="10" color="openarGreen.500">
-                Please save a draft to unlock image and model upload
+            <>
+              <Box
+                p="6"
+                borderBottom="1px solid #fff"
+              >
+                <chakra.p textStyle="label">Featured image</chakra.p>
+                <chakra.p textStyle="small">The featured image is shown in artwork streams and exhibitions.</chakra.p>
+                <AspectRatio
+                  ratio={1}
+                  border="4px dashed white" mt="6"
+                  position="static"
+                >
+                  <Box textAlign="center" position="static">
+                  </Box>
+                </AspectRatio>
               </Box>
-            </AspectRatio>
+              <Box
+                p="6"
+                borderBottom="1px solid #fff"
+              >
+                <chakra.p textStyle="label">Artwork objects</chakra.p>
+                <chakra.p textStyle="small">Click to edit, drag to change order.</chakra.p>
+                <AspectRatio
+                  ratio={1}
+                  border="4px dashed white" mt="6"
+                  position="static"
+                  display="inline-flex"
+                  width="48%"
+                  mr="4%"
+                >
+                  <Box textAlign="center" position="static">
+                  </Box>
+                </AspectRatio>
+                <AspectRatio
+                  ratio={1}
+                  display="inline-flex"
+                  border="4px dashed white" mt="6"
+                  position="static"
+                  display="inline-flex"
+                  width="48%"
+                >
+                  <Box textAlign="center" position="static">
+                  </Box>
+                </AspectRatio>
+              </Box>
+            </>
           )}
+
           {action === "update" && (
             <>
               <FieldRow>

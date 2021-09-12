@@ -10,6 +10,7 @@ import {
   FieldImageUploader,
 } from "~/components/forms";
 
+import { IncompleteOverlay } from "~/components/frontend";
 import { ModuleArtworkArObjectsList } from ".";
 
 import { MdContentCopy } from "react-icons/md";
@@ -133,45 +134,17 @@ export const ModuleArtworkForm = ({
         {/* ---- OVERLAY: Save to upload --- */}
         {action === "create" && (
 
-          <Flex
-            layerStyle="backdropBlurred"
-            w="100%"
-            h="100%"
-            position="absolute"
-            clipPath="polygon(10rem 0%, 100% 0, 100% 100%, 0 100%, 0 10rem)"
-            z-index="10"
-            display="flex"
-            direction="column"
-            _before={{
-              bg: "#00000020",
-            }}
-            top="0"
-            left="0"
-            _after={{
-              content: "''",
-              bg: "white",
-              clipPath:
-                "polygon(10rem 0, calc(10rem + 2px) 0%, 0 calc(10rem + 2px), 0 10rem)",
-              zIndex: "100",
-              position: "absolute",
-              width: "100%",
-              height: "100%",
-              display: "block"
-            }}
-            before={{
-              bg: "#95927fc0"
-            }}
-          >
-            <Box mx="20" mb="10" mt="60">
-              <chakra.p textStyle="subtitle">
-                Save draft to upload material.
-              </chakra.p>
-              <chakra.p pb="6">
-                Please save as draft to unlock image and model uplodad.
-              </chakra.p>
-              <Button>Save draft</Button>
-            </Box>
-          </Flex>
+          <IncompleteOverlay
+            headline="Save draft to upload material."
+            subline=" Please save as draft to unlock image and model uplodad."
+            button={true}
+            buttonLabel="Save draft"
+            href=""
+            height="100%"
+            marginLeft="20"
+            marginTop="60"
+          />
+
 
         )}
 

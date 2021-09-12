@@ -140,8 +140,21 @@ a {
   .char-count {
     position: absolute;
     bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    right: 0;
+//    left: 50%;
+//    transform: translateX(-50%);
+    .chakra-badge{
+      background: transparent;
+      color: #ffffff88;
+      &.exceeded{
+        color: var(--chakra-colors-openar-error);
+      }
+    }
+    svg {
+      display: inline-block;
+      color: var(--chakra-colors-openar-error);
+    }
+
   }
 }
 

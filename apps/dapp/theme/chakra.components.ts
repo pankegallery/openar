@@ -276,17 +276,4 @@ export const components = {
       },
     },
   },
-  // Not working
-  HelperText: {
-    baseStyle: {
-      fontSize: "sm",
-      fontWeight: "300",
-      color: "inherit",
-      opacity: "0.6",
-    }
-  },
-  // Not working
-  FormRequiredIndicator: {
-    color: "openar.error"
-  }
 };
