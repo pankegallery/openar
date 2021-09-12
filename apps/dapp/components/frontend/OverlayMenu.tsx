@@ -48,19 +48,19 @@ export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
   /* TODO: We define menu items here and in the pages header and footer elements, should be defined somewhere centrally */
 
   const mainMenu = [
-    { slug: "exhibitions", label: "Exhibitions", url: "" },
-    { slug: "artworks", label: "Artworks", url: "artworks" },
-    { slug: "about", label: "About", url: "p/about" },
-    { slug: "blog", label: "Blog", url: "p/blog" },
+    { slug: "exhibitions", label: "Exhibitions", url: "/" },
+    { slug: "artworks", label: "Artworks", url: "/artworks" },
+    { slug: "about", label: "About", url: "/p/about" },
+    { slug: "blog", label: "Blog", url: "/p/blog" },
   ];
 
   const secondaryMenu = [
     { slug: "discord", label: "Discord", url: "https://discord.gg/efGHVEKM" },
-    { slug: "badges", label: "Roles and Badges", url: "p/badges" },
+    { slug: "badges", label: "Roles and Badges", url: "/p/badges" },
     //    { slug: "funding", label: "Platform funding", url: "p/funding" },
-    { slug: "privpol", label: "Privacy policy", url: "p/privpol" },
+    { slug: "privpol", label: "Privacy policy", url: "/p/privpol" },
     //    { slug: "tandc", label: "Terms and Conditions", url: "p/tandc" },
-    { slug: "imprint", label: "Imprint", url: "p/imprint" },
+    { slug: "imprint", label: "Imprint", url: "/p/imprint" },
   ];
 
   useEffect(() => {

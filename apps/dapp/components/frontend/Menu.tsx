@@ -7,7 +7,7 @@ export const Menu = ({ pages }: { pages?: any }) => {
     <>
       {pages &&
         pages.map((menuItem) => (
-          <ActiveLink key={menuItem.slug} href={`/${menuItem.url}`}>
+          <ActiveLink key={menuItem.slug} href={`${menuItem.url}`}>
             {menuItem.label}
           </ActiveLink>
         ))}

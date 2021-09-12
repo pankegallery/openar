@@ -28,7 +28,7 @@ export const Sidebar = () => {
     {
       slug: "newArtwork",
       label:" + Artwork",
-      url:"x/a/create"
+      url:"/x/a/create"
     },
   ]
 
@@ -42,17 +42,17 @@ export const Sidebar = () => {
     {
       slug: "imprint",
       label:"Imprint",
-      url:"p/imprint"
+      url:"/p/imprint"
     },
     {
       slug: "tandc",
       label:"Terms and Conditions",
-      url:"p/tandc"
+      url:"/p/tandc"
     },
     {
       slug: "logout",
       label:"Logout" ,
-      url:"p/funding"},
+      url:"/p/funding"},
   ]
 
   return (

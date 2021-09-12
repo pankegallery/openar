@@ -8,10 +8,10 @@ import {
 export const Footer = (/* props */) => {
 
   const footerMenu = [
-    {slug: "discord",     label:"Discord"              , url:"discord"},
-    {slug: "imprint",     label:"Imprint"              , url:"p/imprint"},
-    {slug: "tandc",       label:"Terms and Conditions" , url:"p/tandc"},
-    {slug: "funding",     label:"Platform funding"     , url:"p/funding"},
+    {slug: "discord",     label:"Discord"              , url:"https://discord.gg/efGHVEKM"},
+    {slug: "imprint",     label:"Imprint"              , url:"/p/imprint"},
+    {slug: "tandc",       label:"Terms and Conditions" , url:"/p/tandc"},
+    {slug: "funding",     label:"Platform funding"     , url:"/p/funding"},
   ]
 
   return (

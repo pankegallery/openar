@@ -8,12 +8,36 @@ import {
 export const Header = (/* props */) => {
 
   const headerMenu = [
-    {slug: "exhibitions", label:"Exhibitions"      , url:""},
-    {slug: "artworks",    label:"Artworks"         , url:"artworks"},
-    {slug: "about",       label:"About"            , url:"p/about"},
-    {slug: "blog",        label:"Blog"             , url:"p/blog"},
-    {slug: "help",        label:"Help"             , url:"p/help"},
-    {slug: "badges",      label:"Roles and Badges" , url:"p/tandc"},
+    {
+      slug: "exhibitions",
+      label:"Exhibitions",
+      url:"/"
+    },
+    {
+      slug: "artworks",
+      label: "Artworks",
+      url: "/artworks"
+    },
+    {
+      slug: "about",
+      label: "About",
+      url: "/p/about"
+    },
+    {
+      slug: "blog",
+      label :"Blog",
+      url: "/p/blog"
+    },
+    {
+      slug: "help",
+      label: "Help",
+      url: "/p/help"
+    },
+    {
+      slug: "badges",
+      label: "Roles and Badges",
+      url: "/p/tandc"
+    },
   ]
 
   return (
