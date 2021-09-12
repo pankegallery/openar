@@ -7,12 +7,27 @@ import {LoadingBar} from "~/components/app/shared";
 import { OverlayMenu} from "../frontend";
 import { useSSRSaveMediaQuery} from "~/hooks";
 
-export const LayoutBlank = ({mode = "dark", modeSize, size, beta = false, children} : {mode?: String, modeSize?: String, size?: String, beta?: boolean, children: ReactNode}) => {
+export const LayoutBlank = ({
+  mode = "dark",
+  modeSize,
+  size,
+  beta = false,
+  children,
+} : {
+  mode?: String;
+  modeSize?: String;
+  size?: String;
+  beta?: boolean;
+  children: ReactNode;
+}) => {
 
   const isMobile = useSSRSaveMediaQuery("(max-width: 45rem)");
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
 
-  const finalMode = (isMobile && size === "mobile") || (isDesktop && size === "desktop") || !modeSize ? modeSize: mode;
+  let finalMode = mode
+  if (modeSize && ((isMobile && size === "mobile") || (isDesktop && size === "desktop"))){
+    finalMode == modeSize
+  }
 
   console.log("mode", finalMode)
 
