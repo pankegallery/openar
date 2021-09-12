@@ -15,6 +15,11 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
+import {
+  isMobile,
+  isChrome,
+  isMobileSafari,
+} from "react-device-detect";
 
 // TODO: is the url attribute actually used anywhere? 
 export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, object: any, url?: String}) => {
@@ -34,6 +39,8 @@ export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, objec
 
 
   const arObject = object ? object : artwork?.arObjects[0];
+
+  const showARButton = isMobile && (isChrome || isMobileSafari)
 
 
 //  console.log("[ArtworkImageViewer] artwork: ", artwork);
@@ -72,7 +79,7 @@ export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, objec
       borderColor="openar.dark"
       color="openar.dark"
       m="6"
-      onClick={() => console.log("MAKE IT HAPPNE TODO: ")}
+      onClick={() => console.log("MAKE IT HAPPEN TODO: ")}
     >
       View in AR <BoxIcon viewBox="-10 -7 50 50" width="30px" height="25px"/>
     </Button>
@@ -91,7 +98,7 @@ export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, objec
           overflow="auto"
         >
           {modelViewer}
-          {arButton}
+          {showARButton && arButton}
           <chakra.p
             textStyle="copyDark"
             alignSelf="flex-start"
@@ -146,7 +153,7 @@ export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, objec
       <Flex w="100%" h="100%" justifyContent="center"
         alignItems="center" direction="column">
         {modelViewer}
-        {arButton}
+        {showARButton && arButton}
       </Flex>
     );
   }

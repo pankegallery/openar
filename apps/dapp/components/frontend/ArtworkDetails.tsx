@@ -63,7 +63,7 @@ export const ArtworkDetails = ({ artwork, object }: {artwork: any, object: any})
 
           {object.description &&
             <>
-              <chakra.p textStyle="label" className="label">Object description</chakra.p>
+              <chakra.p textStyle="label" mt="4" className="label">Object description</chakra.p>
               <div dangerouslySetInnerHTML={{__html: object.description}} />
             </>
           }
