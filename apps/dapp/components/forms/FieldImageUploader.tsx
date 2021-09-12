@@ -419,7 +419,7 @@ export const FieldImageUploader = ({
                       </Text>
                     )}
                     {!showFileDropError && (
-                      <Text w="90%">
+                      <Text w="90%" fontWeight="600">
                         {"Drag & drop an image here, or click to select one"}
                       </Text>
                     )}

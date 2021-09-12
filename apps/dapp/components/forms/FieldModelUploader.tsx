@@ -49,6 +49,28 @@ const humanFileSize = (
   }`;
 };
 
+//const baseStyle = {
+//  boxSizing: "border-box",
+//  p: "4",
+//  position: "absolute",
+//  t: 0,
+//  l: 0,
+//  w: "100%",
+//  h: "100%",
+//  borderWidth: 4,
+//  borderColor: "white",
+//  borderStyle: "dashed",
+//  backgroundColor: "transparent",
+//  color: "white",
+//  outline: "none",
+//  transition: "all .24s ease-in-out",
+//  cursor: "pointer",
+//
+//  _hover: {
+//    bg: "openarGreen.400",
+//  },
+//};
+
 const baseStyle = {
   boxSizing: "border-box",
   p: "4",
@@ -57,7 +79,7 @@ const baseStyle = {
   l: 0,
   w: "100%",
   h: "100%",
-  borderWidth: 4,
+  borderWidth: 6,
   borderColor: "white",
   borderStyle: "dashed",
   backgroundColor: "transparent",
@@ -65,11 +87,22 @@ const baseStyle = {
   outline: "none",
   transition: "all .24s ease-in-out",
   cursor: "pointer",
-
+  _before: {
+    content: "''",
+    position: "absolute",
+    border: "4px solid var(--chakra-colors-openar-muddygreen)",
+    width: "calc(100% + 4px)",
+    height: "calc(100% + 4px)",
+    transition: "all .24s ease-in-out",
+    bgColor: "#ffffff22",
+  },
   _hover: {
-    bg: "openarGreen.400",
+    _before: {
+      bg: "linear-gradient(162deg, #FFF0 60%, #FFFFFF24 60%, #FFFA 100%), #ffffff22",
+    },
   },
 };
+
 
 const activeStyle = {
   bg: "orange.200",
@@ -317,6 +350,8 @@ export const FieldModelUploader = ({
     fileSizeInfo = `Size min. ${humanFileSize(settings?.minFileSize, 1)}`;
   }
 
+//`
+
   useEffect(() => {
     if (fileDropError === "") return;
 
@@ -359,7 +394,7 @@ export const FieldModelUploader = ({
         isInvalid={errors[name]?.message || isDragReject}
         {...{ isRequired, isDisabled }}
       >
-        <FormLabel htmlFor={id} mb="0.5">
+        <FormLabel htmlFor={id} mb="2" fontWeight="500">
           {label}
         </FormLabel>
         {showModel && (
@@ -419,7 +454,7 @@ export const FieldModelUploader = ({
                       </Text>
                     )}
                     {!showFileDropError && (
-                      <Text w="90%">
+                      <Text w="90%" fontWeight="600">
                         {"Drag & drop your model here, or click to select one"}
                       </Text>
                     )}

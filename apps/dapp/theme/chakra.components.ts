@@ -221,6 +221,7 @@ export const components = {
   },
   Switch: {
     baseStyle: {
+      display: "flex",
       flexDirection: "row-reverse",
       width: "100%",
       justifyContent: "space-between",

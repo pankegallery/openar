@@ -33,10 +33,12 @@ export const FieldRow = ({
       w="100%" 
       className="fieldRow" 
       display={col? "flex" : "block"}
-      sx={{
+      sx={col &&
+        {
         "& > *":{ borderLeft: "1px solid white"},
         "& > *:first-child":{ borderLeft: "none"},
-      }}
+        }
+      }
     >
       {children}
     </Box>

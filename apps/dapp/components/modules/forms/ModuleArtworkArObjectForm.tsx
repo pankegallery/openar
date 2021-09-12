@@ -30,7 +30,9 @@ import {
   ModalBody,
   Text,
   Flex,
-  chakra
+  chakra,
+  FormLabel,
+  FormHelperText,
 } from "@chakra-ui/react";
 import { BeatLoader } from "react-spinners";
 import pick from "lodash/pick";
@@ -555,12 +557,16 @@ Note: an object must be published within a published artwork to be minted."
 
           {action === "update" && (
             <>
+            <Box
+              p="6"
+              borderBottom="1px solid #fff"
+            >
               <FieldRow>
                 <FieldImageUploader
                   route="image"
                   id="heroImage"
                   name="heroImage"
-                  label="Poster"
+                  label="Featured image"
                   isRequired={yupIsFieldRequired("heroImage", validationSchema)}
                   setActiveUploadCounter={setActiveUploadCounter}
                   canDelete={arObjectReadOwn?.status === ArObjectStatusEnum.DRAFT}
@@ -586,10 +592,18 @@ Note: an object must be published within a published artwork to be minted."
                       showPlaceholder: true,
                       sizes: "(min-width: 45em) 20v, 95vw",
                     },
+                    helptext: "The featured image is shown for each image of the artwork",
                   }}
                 />
               </FieldRow>
+            </Box>
+            <Box
+              p="6"
+              borderBottom="1px solid #fff"
+            >
               <FieldRow>
+                <FormLabel>AR models</FormLabel>
+                <Text fontSize="xs" className="muted">Add one model each for iOS and Android</Text>
                 <Grid
                   w="100%"
                   mt="3"
@@ -605,7 +619,7 @@ Note: an object must be published within a published artwork to be minted."
                     id="modelGlb"
                     type="glb"
                     name="modelGlb"
-                    label="Ar Model (.glb/.gltf)"
+                    label=".glb/.gltf"
                     isRequired={yupIsFieldRequired(
                       "modelGlb",
                       validationSchema
@@ -636,7 +650,7 @@ Note: an object must be published within a published artwork to be minted."
                     id="modelUsdz"
                     type="usdz"
                     name="modelUsdz"
-                    label="Ar Model (.usdz)"
+                    label=".usdz"
                     isRequired={yupIsFieldRequired(
                       "modelUsdz",
                       validationSchema
@@ -664,6 +678,7 @@ Note: an object must be published within a published artwork to be minted."
                   />
                 </Grid>
               </FieldRow>
+            </Box>
             </>
           )}
         </Box>
