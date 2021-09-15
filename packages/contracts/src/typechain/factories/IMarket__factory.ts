@@ -5,9 +5,9 @@
 import { Contract, Signer } from "ethers";
 import { Provider } from "@ethersproject/providers";
 
-import type { IMarket } from "./IMarket";
+import type { IMarket } from "../IMarket";
 
-export class IMarketFactory {
+export class IMarket__factory {
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
@@ -463,7 +463,7 @@ const _abi = [
           },
         ],
         internalType: "struct IMarket.Bid",
-        name: "expectedBid",
+        name: "bid",
         type: "tuple",
       },
     ],
@@ -915,14 +915,22 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "uint256[]",
+        name: "tokenIds",
+        type: "uint256[]",
+      },
+    ],
+    name: "removeAskForBatch",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256",
         name: "tokenId",
         type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "bidder",
-        type: "address",
       },
     ],
     name: "removeBid",
@@ -956,6 +964,41 @@ const _abi = [
       },
     ],
     name: "setAsk",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256[]",
+        name: "tokenIds",
+        type: "uint256[]",
+      },
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "currency",
+            type: "address",
+          },
+        ],
+        internalType: "struct IMarket.Ask",
+        name: "ask",
+        type: "tuple",
+      },
+      {
+        internalType: "bytes32",
+        name: "objKeyHex",
+        type: "bytes32",
+      },
+    ],
+    name: "setAskForBatch",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -1006,15 +1049,10 @@ const _abi = [
         name: "bid",
         type: "tuple",
       },
-      {
-        internalType: "address",
-        name: "spender",
-        type: "address",
-      },
     ],
     name: "setBid",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function",
   },
   {
@@ -1093,6 +1131,36 @@ const _abi = [
       },
     ],
     name: "setBidShares",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "currency",
+            type: "address",
+          },
+        ],
+        internalType: "struct IMarket.Ask",
+        name: "ask",
+        type: "tuple",
+      },
+    ],
+    name: "setInitialAsk",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
