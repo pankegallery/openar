@@ -585,6 +585,7 @@ export const ArtworkUpsertInput = inputObjectType({
     t.nonNull.string("description");
     t.string("url");
     t.string("video");
+    t.boolean("isPublic");
     t.float("lat");
     t.float("lng");
     t.json("heroImage");
@@ -611,6 +612,7 @@ export const ArtworkMutations = extendType({
       async resolve(...[, args]) {
         const page = await daoArtworkCreate({
           ...args.data,
+          isPublic: typeof args.data.isPublic === "boolean" ? args.data.isPublic : true,
           key: daoNanoidCustom16(),
           type: 1, // TODO: make this dynamic
           status: ArtworkStatusEnum.DRAFT,
