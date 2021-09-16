@@ -31,6 +31,7 @@ export const artworkReadOwnQueryGQL = gql`
       type
       key
       status
+      isPublic
       title
       description
       url
@@ -110,6 +111,7 @@ const Update = () => {
         "url",
         "video",
         "status",
+        "isPublic",
       ]),
     });
   }, [reset, data]);
@@ -129,7 +131,7 @@ const Update = () => {
             video: newData.video ?? "",
             url: newData.url ?? "",
             status: newData.status ?? "",
-
+            isPublic: newData.isPublic,
             creator: {
               connect: {
                 id: appUser.id,

@@ -13,6 +13,7 @@ export const appConfig: AppConfig = {
   restrictedAccessRedirectUrl: "/",
   reauthenticateRedirectUrl: "/connect",
   apiUrl: `${process.env.NEXT_PUBLIC_API_URL}`,
+  baseUrl: `${process.env.NEXT_PUBLIC_BASE_URL}`,
   apiGraphQLUrl: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
   infuraApiKey: `${process.env.NEXT_PUBLIC_INFURA_ID}`,
   ankrXDaiRPCURL: `${process.env.NEXT_PUBLIC_ANKR_XDAI_RPC}`,

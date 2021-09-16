@@ -64,8 +64,7 @@ npm run app:dapp:lint #to lint the next js dApp
 /connect - conect to wallet
 /login - once connected this screen does allow to sign the login
 /artworks - the artwork listing
-/a/ - Artworks detail [temporarily used for exhibition]
-/a-detail/ - Artworks detail [will be replacing /a/], using dynamic [...keys] to also allow access to individual objects of the artwork /a/[akey]/[okey]
+/a/ - Artworks detail, using dynamic [...keys] to also allow access to individual objects of the artwork /a/[akey]/[okey]
 /e/ - The exhibtion detail page
 /o/ - Object deep link not sure if we're going to use it
 /p/ - Pages using markup in /content/

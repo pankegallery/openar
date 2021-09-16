@@ -1,1 +1,1 @@
-export const rootPath = "/x/a/";
+export const rootPath = "/x/a";

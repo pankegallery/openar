@@ -172,7 +172,7 @@ const Update = () => {
         )),
     },
     {
-      title: "Update object",
+      title: "Mint object",
     },
   ];
 

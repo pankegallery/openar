@@ -1,6 +1,15 @@
 import { imageDeleteMutationGQL } from "~/graphql/mutations";
 
-import { AspectRatio, Box, Grid, chakra, FormLabel, Flex, Button } from "@chakra-ui/react";
+import {
+  AspectRatio,
+  Box,
+  Grid,
+  chakra,
+  useClipboard,
+  Flex,
+  Button,
+  IconButton
+} from "@chakra-ui/react";
 
 import {
   FieldInput,
@@ -16,6 +25,8 @@ import { ModuleArtworkArObjectsList } from ".";
 import { MdContentCopy } from "react-icons/md";
 
 import { yupIsFieldRequired } from "../validation";
+import { useFormContext } from "react-hook-form";
+import { appConfig } from "~/config";
 
 export const ModuleArtworkForm = ({
   action,
@@ -34,8 +45,15 @@ export const ModuleArtworkForm = ({
 }) => {
   const { artworkReadOwn } = data ?? {};
 
+  const href = `${appConfig.baseUrl}/a/${data?.artworkReadOwn?.key}/`;
+  const { hasCopied, onCopy } = useClipboard(href);
+
   const columns = { base: "100%", t: "50% 50%" };
   const rows = { base: "auto 1fr", t: "1fr" };
+
+  const { watch } = useFormContext();
+
+  const [isPublic] = watch(["isPublic"]);
 
   return (
     <Grid
@@ -83,7 +101,7 @@ export const ModuleArtworkForm = ({
             settings={{
               // defaultValue: data.abc.key
               placeholder: "Can people find more information somewhere else?",
-              helptext: "Add URL…",
+              helpText: "Add URL…",
             }}
           />
         </FieldRow>
@@ -96,33 +114,54 @@ export const ModuleArtworkForm = ({
             isRequired={yupIsFieldRequired("video", validationSchema)}
             settings={{
               // defaultValue: data.abc.key
-              placeholder: "Add video URL (https://vimeo.com/... or https://youtube.com/...)",
-              helptext: "Documentation of artwork creation, performances or additional background information",
+              placeholder:
+                "Add video URL (https://vimeo.com/... or https://youtube.com/...)",
+              helpText:
+                "Documentation of artwork creation, performances or additional background information",
             }}
           />
         </FieldRow>
-        <Box
-          borderBottom="1px solid #fff">
+        <Box borderBottom="1px solid #fff">
           <FieldSwitch
-            name="private"
-            id="private"
-            label="Artwork is private"
-            isRequired={yupIsFieldRequired("private", validationSchema)}
-            isChecked
-            hint="Showcase and sell your artwork through this link:"
+            name="isPublic"
+            label="Artwork is public"
+            isRequired={yupIsFieldRequired("isPublic", validationSchema)}
+            defaultChecked={artworkReadOwn?.isPublic}
+            isChecked={isPublic}
+            hint={
+              isPublic ? "Your artwork is visible on openAR" : "Your artwork will be hidden on openAR. You can always access your artwork via:"
+            }
           />
-          <chakra.p p="6" pt="0" mt="-4"
-            sx={{
-              "svg": {
-                display: "inline-block",
-                marginTop: "-0.2rem",
-              }
-            }}>
-            <chakra.span textStyle="label" className="muted" mr="2">Link to artwork</chakra.span>
-            <chakra.span mr="2">https://www.openar.art/a/0x87dsfs0d98fs09df8</chakra.span>
-
-            <MdContentCopy />
-          </chakra.p>
+          {!isPublic && (
+            <Box px="6" pb="6">
+              <Flex mt="-1rem">
+                <a href={href} target="_blank" rel="noreferrer">
+                  {href}
+                </a>
+                <IconButton
+                  onClick={onCopy}
+                  ml={2}
+                  icon={<MdContentCopy />}
+                  aria-label="copy"
+                  border="none"
+                  bg="transparent"
+                  _hover={{
+                    bg: "none",
+                    opacity: 0.6,
+                  }}
+                  _active={{
+                    bg: "transparent",
+                    color: "green.300",
+                  }}
+                  h="30px"
+                  fontSize="lg"
+                  justifyContent="flex-start"
+                >
+                  {hasCopied ? "Copied" : "Copy"}
+                </IconButton>
+              </Flex>
+            </Box>
+          )}
         </Box>
       </Box>
       <Box
@@ -133,7 +172,6 @@ export const ModuleArtworkForm = ({
       >
         {/* ---- OVERLAY: Save to upload --- */}
         {action === "create" && (
-
           <IncompleteOverlay
             headline="Save draft to upload material."
             subline=" Please save as draft to unlock image and model uplodad."
@@ -144,65 +182,58 @@ export const ModuleArtworkForm = ({
             marginLeft="20"
             marginTop="60"
           />
-
-
         )}
 
         {/* ---- BOX: Fake content behind --- */}
 
         {action === "create" && (
           <>
-            <Box
-              p="6"
-              borderBottom="1px solid #fff"
-            >
+            <Box p="6" borderBottom="1px solid #fff">
               <chakra.p textStyle="label">Featured image</chakra.p>
-              <chakra.p textStyle="small">The featured image is shown in artwork streams and exhibitions.</chakra.p>
+              <chakra.p textStyle="small">
+                The featured image is shown in artwork streams and exhibitions.
+              </chakra.p>
               <AspectRatio
                 ratio={1}
-                border="4px dashed white" mt="6"
+                border="4px dashed white"
+                mt="6"
                 position="static"
               >
-                <Box textAlign="center" position="static">
-                </Box>
+                <Box textAlign="center" position="static"></Box>
               </AspectRatio>
             </Box>
-            <Box
-              p="6"
-              borderBottom="1px solid #fff"
-            >
+            <Box p="6" borderBottom="1px solid #fff">
               <chakra.p textStyle="label">Artwork objects</chakra.p>
-              <chakra.p textStyle="small">Click to edit, drag to change order.</chakra.p>
+              <chakra.p textStyle="small">
+                Click to edit, drag to change order.
+              </chakra.p>
               <AspectRatio
                 ratio={1}
-                border="4px dashed white" mt="6"
+                border="4px dashed white"
+                mt="6"
                 position="static"
                 display="inline-flex"
                 width="48%"
                 mr="4%"
               >
-                <Box textAlign="center" position="static">
-                </Box>
+                <Box textAlign="center" position="static"></Box>
               </AspectRatio>
               <AspectRatio
                 ratio={1}
                 display="inline-flex"
-                border="4px dashed white" mt="6"
+                border="4px dashed white"
+                mt="6"
                 position="static"
-                display="inline-flex"
                 width="48%"
               >
-                <Box textAlign="center" position="static">
-                </Box>
+                <Box textAlign="center" position="static"></Box>
               </AspectRatio>
             </Box>
           </>
         )}
 
         {action === "update" && (
-
-          <Box borderBottom="1px solid #fff"
-          p="6">
+          <Box borderBottom="1px solid #fff" p="6">
             <FieldImageUploader
               route="image"
               id="heroImage"
@@ -232,27 +263,28 @@ export const ModuleArtworkForm = ({
                   showPlaceholder: true,
                   sizes: "(min-width: 45em) 20v, 95vw",
                 },
-                helptext: "The featured image is shown in artwork streams and exhibitions. Leave empty to use the first object’s featured image."
+                helpText:
+                  "The featured image is shown in artwork streams and exhibitions. Leave empty to use the first object’s featured image.",
               }}
             />
           </Box>
         )}
         {action === "update" && (
           <>
-            <Box
-              borderBottom="1px solid #fff">
+            <Box borderBottom="1px solid #fff">
               <FieldRow>
                 <FieldSwitch
                   name="multipleObjects"
-                  id="multipleObjects"
                   label="Mulitple object"
-                  isRequired={yupIsFieldRequired("private", validationSchema)}
+                  isRequired={yupIsFieldRequired(
+                    "multipleObjects",
+                    validationSchema
+                  )}
                   hint="The artwork consists of multiple objects."
                 />
               </FieldRow>
             </Box>
-            <Box borderBottom="1px solid #fff"
-          p="6">
+            <Box borderBottom="1px solid #fff" p="6">
               <ModuleArtworkArObjectsList
                 {...{
                   data,

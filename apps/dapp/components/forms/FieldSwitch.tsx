@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, FormControl, Flex, Text, FormLabel, FormHelperText } from "@chakra-ui/react";
+import { Switch, FormControl, Flex, FormLabel, FormHelperText } from "@chakra-ui/react";
 import { useFormContext } from "react-hook-form";
 
 import { FieldErrorMessage } from ".";
@@ -28,7 +28,6 @@ export const FieldSwitch = ({
   const {
     register,
     formState: { errors },
-    getValues
   } = useFormContext();
 
   return (

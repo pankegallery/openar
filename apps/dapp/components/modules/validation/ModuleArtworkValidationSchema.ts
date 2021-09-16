@@ -16,14 +16,7 @@ export const ModuleArtworkUpdateSchema = ModuleArtworkCreateSchema.concat(
 export const ModuleArObjectCreateSchema = object().shape({
   title: string().required(),
   description: string().html({ max: 500 }),
-
-  // TODO: remove order number 
-
-  orderNumber: number()
-    .transform((v, o) => (o === "" ? null : v))
-    .nullable()
-    .typeError("should be a number > 0"),
-  
+  public: boolean(),  
 });
 
 export const ModuleArObjectUpdateSchema = ModuleArObjectCreateSchema.concat(

@@ -20,6 +20,7 @@ export type AppConfigSettings = {
   apiUrl?: string | undefined;
   restrictedAccessRedirectUrl?: string | undefined;
   apiDomain?: string | undefined;
+  baseUrl?: string | undefined;
   apiGraphQLUrl?: string | undefined;
   contactEmail?: string | undefined;
   infuraApiKey?: string | undefined;

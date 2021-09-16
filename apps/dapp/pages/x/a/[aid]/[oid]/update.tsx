@@ -10,7 +10,10 @@ import { LayoutOpenAR } from "~/components/app";
 import { FormNavigationBlock } from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
 import { ModuleArtworkArObjectForm } from "~/components/modules/forms";
-import { ModuleArObjectUpdateSchema, ModuleArObjectMintableSchema } from "~/components/modules/validation";
+import {
+  ModuleArObjectUpdateSchema,
+  ModuleArObjectMintableSchema,
+} from "~/components/modules/validation";
 import { RestrictPageAccess } from "~/components/utils";
 import { BeatLoader } from "react-spinners";
 import pick from "lodash/pick";
@@ -62,6 +65,30 @@ export const arObjectReadOwnQueryGQL = gql`
   }
 `;
 
+const isArObjectFormValid = (data, errors, getValues) => {
+  if (!data || !data.arObjectReadOwn) return;
+
+  const uploadedFiles = data.arObjectReadOwn?.arModels.reduce(
+    (acc, model) => ({
+      ...acc,
+      [model.type]: pick(model, ["status", "meta", "id"]),
+    }),
+    {}
+  );
+
+  const checkValues = {
+    ...getValues(),
+    heroImage: data.arObjectReadOwn?.heroImage?.id,
+    modelGlb: uploadedFiles?.glb?.id,
+    modelUsdz: uploadedFiles?.usdz?.id,
+  };
+
+  return (
+    Object.keys(errors).length === 0 &&
+    ModuleArObjectUpdateSchema.isValidSync(checkValues)
+  );
+};
+
 const Update = () => {
   const router = useRouter();
 
@@ -69,9 +96,9 @@ const Update = () => {
   const successToast = useSuccessfullySavedToast();
   const [disableNavigation, setDisableNavigation] = useState(false);
   const [activeUploadCounter, setActiveUploadCounter] = useState<number>(0);
-  const [isNavigatingAway, setIsNavigatingAway] = useState(false)
+  const [isNavigatingAway, setIsNavigatingAway] = useState(false);
 
-  const [couldMint, setCouldMint] = useState(false)
+  const [couldMint, setCouldMint] = useState(false);
   const [firstMutation, firstMutationResults] = useArObjectUpdateMutation();
   const [isFormError, setIsFormError] = useState(false);
 
@@ -79,7 +106,7 @@ const Update = () => {
 
   const formMethods = useForm({
     mode: "onTouched",
-    resolver: yupResolver(ModuleArObjectUpdateSchema),    
+    resolver: yupResolver(ModuleArObjectUpdateSchema),
   });
   const {
     handleSubmit,
@@ -87,7 +114,7 @@ const Update = () => {
     setValue,
     getValues,
     watch,
-    formState: { isSubmitting, isDirty, isSubmitSuccessful },
+    formState: { isSubmitting, isDirty, isSubmitSuccessful, errors, isValid },
   } = formMethods;
 
   const { data, loading, error } = useQuery(arObjectReadOwnQueryGQL, {
@@ -136,7 +163,9 @@ const Update = () => {
         if (!errors) {
           successToast();
           setIsNavigatingAway(true);
-          router.push(`${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`);
+          router.push(
+            `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`
+          );
         } else {
           setIsFormError(true);
         }
@@ -169,30 +198,13 @@ const Update = () => {
   ];
 
   useEffect(() => {
-    if (!data || !data.arObjectReadOwn) return;
-
-    const uploadedFiles = data.arObjectReadOwn?.arModels.reduce(
-      (acc, model) => ({
-        ...acc,
-        [model.type]: pick(model, ["status", "meta", "id"]),
-      }),
-      {}
-    );
-
-    const checkValues = {
-      ...getValues(),
-      heroImage: data.arObjectReadOwn?.heroImage?.id,
-      modelGlb: uploadedFiles?.glb?.id,
-      modelUsdz: uploadedFiles?.usdz?.id
-    }
-
-    if (ModuleArObjectUpdateSchema.isValidSync(checkValues)) {
+    if (isArObjectFormValid(data, errors, getValues)) {
       setCouldMint(true);
     } else {
       setCouldMint(false);
     }
-  }, [setCouldMint, isSubmitSuccessful, getValues, data])
-  
+  }, [setCouldMint, getValues, data, errors, isValid]);
+
   // TODO: this makes some trouble on SSR as the buttons look differently
   // as the user can't do thing on the server
   const buttonList: ButtonListElement[] = [
@@ -232,23 +244,37 @@ const Update = () => {
       userCan: "artworkUpdateOwn",
     },
     {
-      type: "navigation",
-      to: `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/mint`,
+      type: "button",
+      isLoading: false,
+      onClick: async () => {
+        console.log("123", isArObjectFormValid(data, errors, getValues));
+
+        if (isArObjectFormValid(data, errors, getValues)) {
+          router.push(
+            `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/check`
+          );
+        } else {
+          setValue("status", ArObjectStatusEnum.PUBLISHED);
+          handleSubmit(onSubmit)();
+        }
+      },
       label: "Mint as NFT",
-      isDisabled: !couldMint,
+      isDisabled:
+        !(data?.arObjectReadOwn?.status === ArObjectStatusEnum.PUBLISHED) ||
+        !couldMint ||
+        disableNavigation ||
+        activeUploadCounter > 0,
       userCan: "artworkUpdateOwn",
     },
   ];
 
-  
-  const errorMessage = firstMutationResults.error
-    ? firstMutationResults?.error?.message
-    : "";
-
   return (
     <>
       <FormNavigationBlock
-        shouldBlock={!isNavigatingAway && ((isDirty && !isSubmitting) || activeUploadCounter > 0)}
+        shouldBlock={
+          !isNavigatingAway &&
+          ((isDirty && !isSubmitting) || activeUploadCounter > 0)
+        }
       />
       <FormProvider {...formMethods}>
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
