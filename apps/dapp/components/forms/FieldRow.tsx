@@ -36,7 +36,7 @@ export const FieldRow = ({
       sx={col &&
         {
         "& > *":{ borderLeft: "1px solid white"},
-        "& > *:first-child":{ borderLeft: "none"},
+        "& > *:first-of-type":{ borderLeft: "none"},
         }
       }
     >
