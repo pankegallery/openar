@@ -95,6 +95,7 @@ export interface FieldImageUploaderSettings {
   onChange?: ChangeEventHandler;
   required?: boolean;
   className?: string;
+  helpText?: string;
   placeholder?: string;
   currentImage?: any;
   imageIdAsFieldValue?: boolean;
@@ -354,8 +355,8 @@ export const FieldImageUploader = ({
           {label}
         </FormLabel>
 
-        {settings?.helptext && (
-          <FormHelperText mb="4">{settings?.helptext}</FormHelperText>
+        {settings?.helpText && (
+          <FormHelperText mb="4">{settings?.helpText}</FormHelperText>
         )}
 
         {showImage && (

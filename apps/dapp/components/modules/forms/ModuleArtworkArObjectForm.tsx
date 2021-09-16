@@ -452,7 +452,7 @@ export const ModuleArtworkArObjectForm = ({
               settings={{
                 // defaultValue: data.abc.key
                 placeholder: "Insert number here…",
-                helptext: "Number of units to be sold"
+                helpText: "Number of units to be sold"
               }}
             />
             <FieldInput
@@ -464,7 +464,7 @@ export const ModuleArtworkArObjectForm = ({
               settings={{
                 // defaultValue: data.abc.key
                 placeholder: "Insert price here…",
-                helptext: "Initial price for object in xDai",
+                helpText: "Initial price for object in xDai",
                 icon: "price",
               }}
             />
@@ -472,7 +472,6 @@ export const ModuleArtworkArObjectForm = ({
           <FieldRow>
             <FieldSwitch
               name="mintObject"
-              id="mintObject"
               label="Mint object"
               isRequired={yupIsFieldRequired("private", validationSchema)}
               hint="To sell this object as NFT, i.e. mint, the object will be written into the blockchain.
@@ -545,7 +544,6 @@ Note: an object must be published within a published artwork to be minted."
                   display="inline-flex"
                   border="4px dashed white" mt="6"
                   position="static"
-                  display="inline-flex"
                   width="48%"
                 >
                   <Box textAlign="center" position="static">
@@ -571,6 +569,7 @@ Note: an object must be published within a published artwork to be minted."
                   setActiveUploadCounter={setActiveUploadCounter}
                   canDelete={arObjectReadOwn?.status === ArObjectStatusEnum.DRAFT}
                   deleteButtonGQL={imageDeleteMutationGQL}
+                  shouldSetFormDirtyOnDelete={true}
                   connectWith={{
                     heroImageArObjects: {
                       connect: {
@@ -592,7 +591,7 @@ Note: an object must be published within a published artwork to be minted."
                       showPlaceholder: true,
                       sizes: "(min-width: 45em) 20v, 95vw",
                     },
-                    helptext: "The featured image is shown for each image of the artwork",
+                    helpText: "The featured image is shown for each image of the artwork",
                   }}
                 />
               </FieldRow>

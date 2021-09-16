@@ -33,6 +33,7 @@ export interface FieldSettings {
   autoComplete?: string;
   key?: string;
   name?: string;
+  icon?: string;
   type?: string;
   className?: string;
   placeholder?: string;
@@ -228,8 +229,8 @@ export const FieldInput = ({
         >
           {label}{settings?.icon && Icon}
         </FormLabel>
-        {settings?.helptext &&
-        <FormHelperText>{settings?.helptext}</FormHelperText>}
+        {settings?.helpText &&
+        <FormHelperText>{settings?.helpText}</FormHelperText>}
         {input}
 
       </Box>
