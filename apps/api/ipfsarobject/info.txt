@@ -1,0 +1,28 @@
+-------------------------------- 
+---- OBJECT -------------------- 
+-------------------------------- 
+Title: {{title}}
+URL: https://openar.art/a/{{artworkKey}}/{{objKey}}
+Year: {{year}}
+Edition Of: {{editionOf}}
+Edition Number: {{editionNumber}}
+Description: 
+{{description}}
+
+-------------------------------- 
+---- ARTWORK -------------------
+-------------------------------- 
+Title: {{title}}
+Year: {{year}}
+URL: https://openar.art/a/{{artworkKey}}
+Description: 
+{{artworkDescription}}
+
+-------------------------------- 
+---- ARTIST --------------------
+-------------------------------- 
+Name: {{creator}}
+URL: https://openar.art/u/{{ethAddress}}
+Personal URL: {{creatorURL}}
+Biography: 
+{{bio}}

@@ -1,10 +1,10 @@
-import { Wallet, BigNumber, BigNumberish } from "ethers";
+import { Wallet, BigNumber } from "ethers";
 import sjcl from "sjcl";
 import warning from "tiny-warning";
 import invariant from "tiny-invariant";
 import { getAddress } from "@ethersproject/address";
 import {
-  BytesLike,
+  Bytes,
   hexDataLength,
   hexlify,
   arrayify,
@@ -28,10 +28,10 @@ import {
   DecimalValue,
   EIP712Domain,
   EIP712Signature,
-  MediaData,
+  MintData,
 } from "./types";
 
-export function validateBytes32(value: BytesLike) {
+export function validateBytes32(value: Bytes) {
   if (typeof value === "string") {
     if (isHexString(value) && hexDataLength(value) === 32) {
       return;
@@ -102,7 +102,7 @@ export const openARConstructBidShares = (
 
 export const createEIP712Signature = (
   signature: string,
-  deadline: BigNumberish
+  deadline: BigNumber
 ): EIP712Signature => {
   invariant(typeof signature === "string", "Signature needs to be a string");
   invariant(signature.length === 132, "Signature length needs to be 132");
@@ -133,8 +133,8 @@ export const createEIP712Signature = (
  * @param domain
  */
 export const generateSignMintWithSignMessageData = (
-  contentHash: BytesLike,
-  metadataHash: BytesLike,
+  contentHash: Bytes,
+  metadataHash: Bytes,
   creatorShareBN: BigNumber,
   nonce: number,
   deadline: number,
@@ -171,8 +171,8 @@ export const generateSignMintWithSignMessageData = (
 };
 
 export const recoverSignatureFromMintWithSig = async (
-  contentHash: BytesLike,
-  metadataHash: BytesLike,
+  contentHash: Bytes,
+  metadataHash: Bytes,
   creatorShareBN: BigNumber,
   nonce: number,
   deadline: number,
@@ -228,8 +228,8 @@ export const recoverSignatureFromMintWithSig = async (
  */
 export const signMintWithSigMessageFromWallet = async (
   owner: Wallet,
-  contentHash: BytesLike,
-  metadataHash: BytesLike,
+  contentHash: Bytes,
+  metadataHash: Bytes,
   creatorShareBN: BigNumber,
   nonce: number,
   deadline: number,
@@ -262,7 +262,7 @@ export const signMintWithSigMessageFromWallet = async (
         r: response.r,
         s: response.s,
         v: response.v,
-        deadline: deadline.toString(),
+        deadline: BigNumber.from(deadline),
       });
     } catch (e) {
       // eslint-disable-next-line no-console
@@ -284,7 +284,7 @@ export const signMintWithSigMessageFromWallet = async (
  * @param domain
  */
 export const generateMintArObjectSignMessageData = (
-  keyHash: BytesLike,
+  keyHash: Bytes,
   editionOfBN: BigNumber,
   setInitialAsk: boolean,
   initialAskBN: BigNumber,
@@ -326,7 +326,7 @@ export const generateMintArObjectSignMessageData = (
 };
 
 export const recoverSignatureFromMintArObject = async (
-  keyHash: BytesLike,
+  keyHash: Bytes,
   editionOfBN: BigNumber,
   setInitialAsk: boolean,
   initialAskBN: BigNumber,
@@ -363,7 +363,7 @@ export const recoverSignatureFromMintArObject = async (
  */
 export const signMintArObjectMessageFromWallet = async (
   owner: Wallet,
-  keyHash: BytesLike,
+  keyHash: Bytes,
   editionOfBN: BigNumber,
   setInitialAsk: boolean,
   initialAskBN: BigNumber,
@@ -392,7 +392,7 @@ export const signMintArObjectMessageFromWallet = async (
         r: response.r,
         s: response.s,
         v: response.v,
-        deadline: deadline.toString(),
+        deadline: BigNumber.from(deadline),
       });
     } catch (e) {
       // eslint-disable-next-line no-console
@@ -450,30 +450,40 @@ export function validateAndParseAddress(address: string): string {
 }
 
 /**
- * Constructs a MediaData type.
+ * Constructs a MintData type.
  *
  * @param tokenURI
  * @param metadataURI
  * @param contentHash
  * @param metadataHash
  */
-export function constructMediaData(
+export function constructMintData(
+  awKeyHex: Bytes,
+  objKeyHex: Bytes,
   tokenURI: string,
   metadataURI: string,
-  contentHash: BytesLike,
-  metadataHash: BytesLike
-): MediaData {
+  contentHash: Bytes,
+  metadataHash: Bytes,
+  editionOf: BigNumber,
+  editionNumber: BigNumber
+): MintData {
   // validate the hash to ensure it fits in bytes32
+  validateBytes32(awKeyHex);
+  validateBytes32(objKeyHex);
   validateBytes32(contentHash);
   validateBytes32(metadataHash);
   validateURI(tokenURI);
   validateURI(metadataURI);
 
   return {
-    tokenURI: tokenURI,
-    metadataURI: metadataURI,
-    contentHash: contentHash,
-    metadataHash: metadataHash,
+    awKeyHex,
+    objKeyHex,
+    tokenURI,
+    metadataURI,
+    contentHash,
+    metadataHash,
+    editionOf,
+    editionNumber,
   };
 }
 
@@ -503,7 +513,7 @@ export function sha256FromBuffer(buffer: Buffer): string {
  */
 export async function isURIHashVerified(
   uri: string,
-  expectedHash: BytesLike,
+  expectedHash: Bytes,
   timeout: number = 10
 ): Promise<boolean> {
   try {
@@ -523,25 +533,25 @@ export async function isURIHashVerified(
 }
 
 /**
- * Returns the `verified` status of some MediaData.
- * MediaData is only considered `verified` if the content of its URIs hash to their respective hash
+ * Returns the `verified` status of some MintData.
+ * MintData is only considered `verified` if the content of its URIs hash to their respective hash
  *
- * @param mediaData
+ * @param MintData
  * @param timeout
  */
-export async function isMediaDataVerified(
-  mediaData: MediaData,
+export async function isMintDataVerified(
+  mintData: MintData,
   timeout: number = 10
 ): Promise<boolean> {
   const isTokenURIVerified = await isURIHashVerified(
-    mediaData.tokenURI,
-    mediaData.contentHash,
+    mintData.tokenURI,
+    mintData.contentHash,
     timeout
   );
 
   const isMetadataURIVerified = await isURIHashVerified(
-    mediaData.metadataURI,
-    mediaData.metadataHash,
+    mintData.metadataURI,
+    mintData.metadataHash,
     timeout
   );
 

@@ -68,7 +68,7 @@ const createArModelMetaInfo = (
   // TODO: what to do about the image type?
   const metainfo: ApiArModelMetaInformation = {
     uploadFolder,
-    originalFileName: file.originalname,
+    originalFileName: file.filename,
     originalFileUrl: `${apiConfig.baseUrl.api}${uploadFolder}/${file.filename}`,
     originalFilePath: file.path,
     mimeType: file.mimetype,

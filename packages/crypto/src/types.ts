@@ -37,13 +37,44 @@ export type Bid = {
 };
 
 /**
- * Zora Media Protocol MediaData
+ * openAR Media Protocol MediaData stored on chain
  */
-export type MediaData = {
+
+ export type MediaData = {
+  awKeyHex: BytesLike;
+  objKeyHex: BytesLike;
+  editionOf: BigNumberish;
+  editionNumber: BigNumberish;
+};
+
+/**
+ * openAR Media Protocol MintData for mint() and mintWithSig()
+ */
+
+export type MintData = {
+  awKeyHex: BytesLike;
+  objKeyHex: BytesLike;
   tokenURI: string;
   metadataURI: string;
   contentHash: BytesLike;
   metadataHash: BytesLike;
+  editionOf: BigNumberish;
+  editionNumber: BigNumberish;
+};
+
+/**
+ * openAR Media Protocol MintData for mintArObject()
+ */
+export type MintArObjectData = {
+  awKeyHex: BytesLike;
+  objKeyHex: BytesLike;
+  editionOf: BigNumber;
+  initialAsk: BigNumber;
+  batchSize: BigNumber;
+  batchOffset: BigNumber;
+  mintArObjectNonce: BigNumber;
+  currency: string;
+  setInitialAsk: boolean;
 };
 
 /**

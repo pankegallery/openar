@@ -5,9 +5,9 @@
 import { Contract, Signer } from "ethers";
 import { Provider } from "@ethersproject/providers";
 
-import type { IMedia } from "./IMedia";
+import type { IMedia } from "../IMedia";
 
-export class IMediaFactory {
+export class IMedia__factory {
   static connect(address: string, signerOrProvider: Signer | Provider): IMedia {
     return new Contract(address, _abi, signerOrProvider) as IMedia;
   }
@@ -43,6 +43,42 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
+        internalType: "uint256[]",
+        name: "tokenIds",
+        type: "uint256[]",
+      },
+      {
+        components: [
+          {
+            internalType: "bytes32",
+            name: "awKeyHex",
+            type: "bytes32",
+          },
+          {
+            internalType: "bytes32",
+            name: "objKeyHex",
+            type: "bytes32",
+          },
+          {
+            internalType: "uint256",
+            name: "editionOf",
+            type: "uint256",
+          },
+        ],
+        indexed: false,
+        internalType: "struct IMedia.MintObjectData",
+        name: "data",
+        type: "tuple",
+      },
+    ],
+    name: "TokenObjectMinted",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: true,
         internalType: "uint256",
         name: "_tokenId",
@@ -63,58 +99,6 @@ const _abi = [
     ],
     name: "TokenURIUpdated",
     type: "event",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
-        components: [
-          {
-            internalType: "uint256",
-            name: "amount",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "currency",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "bidder",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "recipient",
-            type: "address",
-          },
-          {
-            components: [
-              {
-                internalType: "uint256",
-                name: "value",
-                type: "uint256",
-              },
-            ],
-            internalType: "struct Decimal.D256",
-            name: "sellOnShare",
-            type: "tuple",
-          },
-        ],
-        internalType: "struct IMarket.Bid",
-        name: "bid",
-        type: "tuple",
-      },
-    ],
-    name: "acceptBid",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
   },
   {
     inputs: [
@@ -169,6 +153,49 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "actor",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "isApprovedOrOwner",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "isCreated",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         components: [
           {
             internalType: "string",
@@ -182,6 +209,16 @@ const _abi = [
           },
           {
             internalType: "bytes32",
+            name: "awKeyHex",
+            type: "bytes32",
+          },
+          {
+            internalType: "bytes32",
+            name: "objKeyHex",
+            type: "bytes32",
+          },
+          {
+            internalType: "bytes32",
             name: "contentHash",
             type: "bytes32",
           },
@@ -190,8 +227,18 @@ const _abi = [
             name: "metadataHash",
             type: "bytes32",
           },
+          {
+            internalType: "uint256",
+            name: "editionOf",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "editionNumber",
+            type: "uint256",
+          },
         ],
-        internalType: "struct IMedia.MediaData",
+        internalType: "struct IMedia.MintData",
         name: "data",
         type: "tuple",
       },
@@ -299,7 +346,12 @@ const _abi = [
         components: [
           {
             internalType: "bytes32",
-            name: "keyHash",
+            name: "awKeyHex",
+            type: "bytes32",
+          },
+          {
+            internalType: "bytes32",
+            name: "objKeyHex",
             type: "bytes32",
           },
           {
@@ -453,6 +505,16 @@ const _abi = [
           },
           {
             internalType: "bytes32",
+            name: "awKeyHex",
+            type: "bytes32",
+          },
+          {
+            internalType: "bytes32",
+            name: "objKeyHex",
+            type: "bytes32",
+          },
+          {
+            internalType: "bytes32",
             name: "contentHash",
             type: "bytes32",
           },
@@ -461,8 +523,18 @@ const _abi = [
             name: "metadataHash",
             type: "bytes32",
           },
+          {
+            internalType: "uint256",
+            name: "editionOf",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "editionNumber",
+            type: "uint256",
+          },
         ],
-        internalType: "struct IMedia.MediaData",
+        internalType: "struct IMedia.MintData",
         name: "data",
         type: "tuple",
       },
@@ -624,115 +696,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "removeAsk",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "removeBid",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
     name: "revokeApproval",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
-        components: [
-          {
-            internalType: "uint256",
-            name: "amount",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "currency",
-            type: "address",
-          },
-        ],
-        internalType: "struct IMarket.Ask",
-        name: "ask",
-        type: "tuple",
-      },
-    ],
-    name: "setAsk",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
-        components: [
-          {
-            internalType: "uint256",
-            name: "amount",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "currency",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "bidder",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "recipient",
-            type: "address",
-          },
-          {
-            components: [
-              {
-                internalType: "uint256",
-                name: "value",
-                type: "uint256",
-              },
-            ],
-            internalType: "struct Decimal.D256",
-            name: "sellOnShare",
-            type: "tuple",
-          },
-        ],
-        internalType: "struct IMarket.Bid",
-        name: "bid",
-        type: "tuple",
-      },
-    ],
-    name: "setBid",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

@@ -4,20 +4,25 @@ import {
   BidShares,
   EIP712Domain,
   EIP712Signature,
-  MediaData,
+  MintData,
 } from "./types";
 import { Decimal } from "./decimal";
 import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
 import { ContractTransaction } from "@ethersproject/contracts";
 import { Provider } from "@ethersproject/providers";
 import { Signer } from "@ethersproject/abstract-signer";
-import { MarketFactory, MediaFactory } from "@openar/contracts";
+import {
+  Market,
+  Market__factory,
+  Media,
+  Media__factory,
+} from "@openar/contracts";
 import { addresses } from "./addresses";
 
 import {
   chainIdToNetworkName,
-  constructMediaData,
-  isMediaDataVerified,
+  constructMintData,
+  isMintDataVerified,
   validateAndParseAddress,
   validateBidShares,
   validateURI,
@@ -34,9 +39,9 @@ export class OpenAR {
 
   public signerOrProvider: Signer | Provider;
 
-  public media: ReturnType<typeof MediaFactory>;
+  public media: Media;
 
-  public market: ReturnType<typeof MarketFactory>;
+  public market: Market;
 
   public readOnly: boolean;
 
@@ -76,8 +81,8 @@ export class OpenAR {
     console.log("openAR: market", this.marketAddress);
     console.log("openAR: media", this.mediaAddress);
 
-    this.media = MediaFactory.connect(this.mediaAddress, signerOrProvider);
-    this.market = MarketFactory.connect(this.marketAddress, signerOrProvider);
+    this.media = Media__factory.connect(this.mediaAddress, signerOrProvider);
+    this.market = Market__factory.connect(this.marketAddress, signerOrProvider);
   }
 
   /*********************
@@ -225,13 +230,13 @@ export class OpenAR {
    * @param bidShares
    */
   public async mint(
-    mediaData: MediaData,
+    mintData: MintData,
     bidShares: BidShares
   ): Promise<ContractTransaction> {
     try {
       this.ensureNotReadOnly();
-      validateURI(mediaData.metadataURI);
-      validateURI(mediaData.tokenURI);
+      validateURI(mintData.metadataURI);
+      validateURI(mintData.tokenURI);
       validateBidShares(
         bidShares.platform,
         bidShares.pool,
@@ -243,9 +248,9 @@ export class OpenAR {
       return Promise.reject(err.message);
     }
 
-    const gasEstimate = await this.media.estimateGas.mint(mediaData, bidShares);
+    const gasEstimate = await this.media.estimateGas.mint(mintData, bidShares);
     const paddedEstimate = gasEstimate.mul(110).div(100);
-    return this.media.mint(mediaData, bidShares, {
+    return this.media.mint(mintData, bidShares, {
       gasLimit: paddedEstimate.toString(),
     });
   }
@@ -253,20 +258,20 @@ export class OpenAR {
   /**
    * Mints a new piece of media on an instance of the openAR Media Contract
    * @param creator
-   * @param mediaData
+   * @param MintData
    * @param bidShares
    * @param sig
    */
   public async mintWithSig(
     creator: string,
-    mediaData: MediaData,
+    mintData: MintData,
     bidShares: BidShares,
     sig: EIP712Signature
   ): Promise<ContractTransaction> {
     try {
       this.ensureNotReadOnly();
-      validateURI(mediaData.metadataURI);
-      validateURI(mediaData.tokenURI);
+      validateURI(mintData.metadataURI);
+      validateURI(mintData.tokenURI);
       validateBidShares(
         bidShares.platform,
         bidShares.pool,
@@ -278,7 +283,7 @@ export class OpenAR {
       return Promise.reject(err.message);
     }
 
-    return this.media.mintWithSig(creator, mediaData, bidShares, sig);
+    return this.media.mintWithSig(creator, mintData, bidShares, sig);
   }
 
   /**
@@ -629,13 +634,17 @@ export class OpenAR {
           this.fetchMetadataHash(mediaId),
         ]);
 
-      const mediaData = constructMediaData(
+      const mintData = constructMintData(
+        "",
+        "",
         tokenURI,
         metadataURI,
         contentHash,
-        metadataHash
+        metadataHash,
+        BigNumber.from(1),
+        BigNumber.from(1)
       );
-      return await isMediaDataVerified(mediaData, timeout);
+      return await isMintDataVerified(mintData, timeout);
     } catch (err: any) {
       return Promise.reject(err.message);
     }
