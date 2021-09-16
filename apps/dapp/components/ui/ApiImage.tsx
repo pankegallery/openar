@@ -20,6 +20,33 @@ export type ApiImageProps = {
   sizes?: string;
 };
 
+const baseStyle = {
+  boxSizing: "border-box",
+  p: "4",
+  position: "absolute",
+  t: 0,
+  l: 0,
+  w: "100%",
+  h: "100%",
+  borderWidth: 6,
+  borderColor: "white",
+  borderStyle: "dashed",
+  backgroundColor: "green.300",
+  color: "white",
+  outline: "none",
+  transition: "all .24s ease-in-out",
+  cursor: "pointer",
+  _before: {
+    content: "''",
+    position: "absolute",
+    border: "4px solid var(--chakra-colors-openar-muddygreen)",
+    width: "calc(100% + 4px)",
+    height: "calc(100% + 4px)",
+    transition: "all .24s ease-in-out",
+    bgColor: "#ffffff22",
+  },  
+};
+
 export const ApiImage = ({
   id,
   alt,
@@ -106,14 +133,10 @@ export const ApiImage = ({
       <Flex
         justifyContent="center"
         alignItems="center"
-        fontSize="lg"
-        color="gray.800"
-        border="2px solid"
-        bg="gray.100"
-        borderColor="red.100"
-        minH="200px"
-        p="4"
+        direction="column"
+        fontSize="md"
         textAlign="center"
+        sx={{...baseStyle,bg:"openar.error"}}
       >
         The image could unfortunately not be processed. Please try uploading
         again.
@@ -132,19 +155,14 @@ export const ApiImage = ({
         alignItems="center"
         direction="column"
         fontSize="md"
-        color="gray.800"
-        border="2px solid"
-        bg="green.200"
-        borderColor="green.200"
-        minH="100%"
-        p="4"
         textAlign="center"
+        sx={baseStyle}
       >
         <Text pb="4" w="90%">
           Image uploaded. We are processing it now
         </Text>
 
-        <BeatLoader />
+        <BeatLoader color="#fff" />
       </Flex>
     );
 
