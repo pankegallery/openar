@@ -102,6 +102,7 @@ input ArtworkUpsertInput {
   heroImage: JSON
   id: Int
   images: JSON
+  isPublic: Boolean
   lat: Float
   lng: Float
   objects: JSON

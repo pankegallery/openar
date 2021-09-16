@@ -612,7 +612,8 @@ export const ArtworkMutations = extendType({
       async resolve(...[, args]) {
         const page = await daoArtworkCreate({
           ...args.data,
-          isPublic: typeof args.data.isPublic === "boolean" ? args.data.isPublic : true,
+          isPublic:
+            typeof args.data.isPublic === "boolean" ? args.data.isPublic : true,
           key: daoNanoidCustom16(),
           type: 1, // TODO: make this dynamic
           status: ArtworkStatusEnum.DRAFT,
@@ -654,7 +655,7 @@ export const ArtworkMutations = extendType({
 
       async resolve(...[, args]) {
         // TODO: remove once all keys are set
-        let data: any = {
+        const data: any = {
           ...args.data,
           type: 1,
           status: args.data?.status ?? ArtworkStatusEnum.DRAFT,

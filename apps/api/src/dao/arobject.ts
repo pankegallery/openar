@@ -14,7 +14,7 @@ const prisma = getPrismaClient();
 export const daoArObjectQuery = async (
   where: Prisma.ArObjectWhereInput,
   include: Prisma.ArObjectInclude | undefined,
-  orderBy: Prisma.ArObjectOrderByInput | Prisma.ArObjectOrderByInput[],
+  orderBy: any,
   pageIndex: number = 0,
   pageSize: number = apiConfig.db.defaultPageSize
 ): Promise<ArObject[]> => {

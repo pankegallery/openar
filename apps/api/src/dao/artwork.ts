@@ -14,7 +14,7 @@ const prisma = getPrismaClient();
 export const daoArtworkQuery = async (
   where: Prisma.ArtworkWhereInput,
   include: Prisma.ArtworkInclude | undefined,
-  orderBy: Prisma.ArtworkOrderByInput | Prisma.ArtworkOrderByInput[],
+  orderBy: any,
   pageIndex: number = 0,
   pageSize: number = apiConfig.db.defaultPageSize
 ): Promise<Artwork[]> => {

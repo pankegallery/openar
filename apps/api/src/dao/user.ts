@@ -65,7 +65,7 @@ export const daoUserCreate = async (
 
 export const daoUserQuery = async (
   where: Prisma.UserWhereInput,
-  orderBy: Prisma.UserOrderByInput | Prisma.UserOrderByInput[],
+  orderBy: any,
   pageIndex: number = 0,
   pageSize: number = apiConfig.db.defaultPageSize
 ): Promise<User[]> => {

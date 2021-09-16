@@ -16,7 +16,7 @@ export const daoImageTranslatedColumns = ["alt", "credits"];
 
 export const daoImageQuery = async (
   where: Prisma.ImageWhereInput,
-  orderBy: Prisma.ImageOrderByInput | Prisma.ImageOrderByInput[],
+  orderBy: any,
   pageIndex: number = 0,
   pageSize: number = apiConfig.db.defaultPageSize
 ): Promise<Image[]> => {

@@ -79,6 +79,7 @@ export interface NexusGenInputs {
     heroImage?: NexusGenScalars['JSON'] | null; // JSON
     id?: number | null; // Int
     images?: NexusGenScalars['JSON'] | null; // JSON
+    isPublic?: boolean | null; // Boolean
     lat?: number | null; // Float
     lng?: number | null; // Float
     objects?: NexusGenScalars['JSON'] | null; // JSON

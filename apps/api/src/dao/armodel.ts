@@ -16,7 +16,7 @@ export const daoArModelTranslatedColumns = ["alt", "credits"];
 
 export const daoArModelQuery = async (
   where: Prisma.ArModelWhereInput,
-  orderBy: Prisma.ArModelOrderByInput | Prisma.ArModelOrderByInput[],
+  orderBy: any,
   pageIndex: number = 0,
   pageSize: number = apiConfig.db.defaultPageSize
 ): Promise<ArModel[]> => {
