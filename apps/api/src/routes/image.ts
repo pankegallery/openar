@@ -62,7 +62,7 @@ const createImageMetaInfo = (
   // TODO: what to do about the image type?
   const metainfo: ApiImageMetaInformation = {
     uploadFolder,
-    originalFileName: file.originalname,
+    originalFileName: file.filename,
     originalFileUrl: `${apiConfig.baseUrl.api}${uploadFolder}/${file.filename}`,
     originalFilePath: file.path,
     mimeType: file.mimetype,
