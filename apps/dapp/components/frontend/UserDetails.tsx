@@ -2,56 +2,69 @@ import React from "react";
 import Link from "next/link";
 
 import { Box, Grid, Flex, chakra, Button } from "@chakra-ui/react";
-import {ArrowLink} from "~/components/ui";
-import {CornerButton, RoleBadgeControl, ArtworkList} from "~/components/frontend";
+import { ArrowLink } from "~/components/ui";
+import {
+  CornerButton,
+  RoleBadgeControl,
+  ArtworkList,
+} from "~/components/frontend";
 
 import { useSSRSaveMediaQuery } from "~/hooks";
 
-
-export const UserDetails = ({ user, showArtworks, isPublic = true }: {user: any; showArtworks: boolean; isPublic: boolean;}) => {
-
+export const UserDetails = ({
+  user,
+  showArtworks,
+  isPublic = true,
+}: {
+  user: any;
+  showArtworks: boolean;
+  isPublic: boolean;
+}) => {
   let name = user?.pseudonym ? user?.pseudonym : user?.ethAddress;
   const isIncomplete = user?.pseudonym || isPublic ? false : true;
-//  const isIncomplete = true
+  //  const isIncomplete = true
 
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
-  const isTablet = useSSRSaveMediaQuery("(min-width: 45rem) and (max-width: 75rem)");
+  const isTablet = useSSRSaveMediaQuery(
+    "(min-width: 45rem) and (max-width: 75rem)"
+  );
 
-//  console.log("[UserDetails] user: ", user)
-//  console.log("[UserDetails] name: ", name)
+  //  console.log("[UserDetails] user: ", user)
+  //  console.log("[UserDetails] name: ", name)
 
-  const allRoles=[
+  const allRoles = [
     {
       slug: "user",
       title: "User",
-      description: "Signin to OpenAR is provided by crypto wallets. You can browse the platform incognito or create your own OpenAR alter ego. Once you start building your profile, you will earn the user badge.",
+      description:
+        "Signin to OpenAR is provided by crypto wallets. You can browse the platform incognito or create your own OpenAR alter ego. Once you start building your profile, you will earn the user badge.",
       badges: [
         {
           year: 2021,
           image: "badges2021/user@6x-100.jpg",
           artist: "Anna-Luise Lorenz",
-        }
+        },
       ],
     },
     {
       slug: "curator",
       title: "Curator",
-      description: "The curator badge will be assigned to users, that have successfully curated an exhibition on OpenAR.",
+      description:
+        "The curator badge will be assigned to users, that have successfully curated an exhibition on OpenAR.",
       badges: [
         {
           year: 2021,
           image: "badges2021/curator@6x-100.jpg",
           artist: "Anna-Luise Lorenz",
-        }
+        },
       ],
     },
-  ]
+  ];
 
   const wT = !isPublic ? "100%" : "50vw";
   /* --------- COL: User details) --------- */
 
-  return(
-
+  return (
     <Flex
       direction="column"
       layerStyle="backdropMud"
@@ -60,12 +73,12 @@ export const UserDetails = ({ user, showArtworks, isPublic = true }: {user: any;
       w={{
         base: "100vw",
         t: `${wT}`,
-        d: "33.3vw"
+        d: "33.3vw",
       }}
       height={{
-          base: "auto",
-          t: "100%"
-        }}
+        base: "auto",
+        t: "100%",
+      }}
       bg="var(--chakra-colors-openar-muddygreen)"
       overflowY="auto"
       borderLeft="1px solid white"
@@ -79,24 +92,34 @@ export const UserDetails = ({ user, showArtworks, isPublic = true }: {user: any;
         borderBottom="1px solid white"
         p="6"
         pt="20"
-        minHeight={isIncomplete? "400px" : "unset"}
+        minHeight={isIncomplete ? "400px" : "unset"}
       >
-        {!isPublic && !isIncomplete &&
-          <Button
-            position="absolute"
-            top="6"
-            right="6"
-            href="/x/profile/update"
-          >Edit profile</Button>
-        }
-        <chakra.p textStyle="label" className="label">Profile</chakra.p>
-        <chakra.h1 textStyle="pagetitle" maxWidth="80%">{name}</chakra.h1>
+        {!isPublic && !isIncomplete && (
+          <Link href="/x/profile/update" passHref>
+            <Button
+              position="absolute"
+              top="6"
+              right="6"
+              
+            >
+              Edit profile
+            </Button>
+          </Link>
+        )}
+        <chakra.p textStyle="label" className="label">
+          Profile
+        </chakra.p>
+        <chakra.h1 textStyle="pagetitle" maxWidth="80%">
+          {name}
+        </chakra.h1>
 
-        <chakra.h2 fontSize="xs" maxWidth="80%">{user?.ethAddress}</chakra.h2>
+        <chakra.h2 fontSize="xs" maxWidth="80%">
+          {user?.ethAddress}
+        </chakra.h2>
       </Box>
 
       {/* ======== OVERLAY: Incomplete profile  ======== */}
-      {isIncomplete &&  (
+      {isIncomplete && (
         <Flex
           layerStyle="backdropBlurred"
           w="100%"
@@ -118,10 +141,9 @@ export const UserDetails = ({ user, showArtworks, isPublic = true }: {user: any;
             position: "absolute",
             width: "100%",
             height: "100%",
-            display: "block"
+            display: "block",
           }}
         >
-
           <Box mx="20" mb="10" mt="auto">
             <chakra.p textStyle="subtitle">
               Looks like you haven’t completed your profile yet.
@@ -129,32 +151,26 @@ export const UserDetails = ({ user, showArtworks, isPublic = true }: {user: any;
             <chakra.p pb="6">
               Add some details about yourself to receive your first badge.
             </chakra.p>
-            <Link href="/x/profile/update" passHref><Button>Complete Profile</Button></Link>
+            <Link href="/x/profile/update" passHref>
+              <Button>Complete Profile</Button>
+            </Link>
           </Box>
         </Flex>
       )}
 
       {/* ======== BOX: Scrollable content  ======== */}
 
-      <Box
-        width="100%"
-        overflow="auto"
-        flexGrow={0}
-      >
-
+      <Box width="100%" overflow="auto" flexGrow={0}>
         {/* ======== BOX: User bio  ======== */}
 
         {(user.bio || user.url) && (
-          <Box
-            className="bio"
-            borderBottom="1px solid white"
-            p="6"
-          >
-
+          <Box className="bio" borderBottom="1px solid white" p="6">
             {user.bio && (
               <>
-                <chakra.p textStyle="label" className="label">About</chakra.p>
-                <div dangerouslySetInnerHTML={{__html: user.bio}} />
+                <chakra.p textStyle="label" className="label">
+                  About
+                </chakra.p>
+                <div dangerouslySetInnerHTML={{ __html: user.bio }} />
               </>
             )}
 
@@ -162,13 +178,13 @@ export const UserDetails = ({ user, showArtworks, isPublic = true }: {user: any;
 
             {user.url && (
               <>
-                <chakra.p textStyle="label" className="label" mt="6">More information</chakra.p>
+                <chakra.p textStyle="label" className="label" mt="6">
+                  More information
+                </chakra.p>
                 <ArrowLink href="user.url">{user.url}</ArrowLink>
               </>
             )}
-
           </Box>
-
         )}
 
         {/* ======== BOX: User badges  ======== */}
@@ -178,48 +194,53 @@ export const UserDetails = ({ user, showArtworks, isPublic = true }: {user: any;
           borderBottom="1px solid white"
           p="6"
         >
-          <CornerButton label="View badges" href="/p/badges"/>
-          <chakra.p textStyle="label" className="label">Roles</chakra.p>
+          <CornerButton label="View badges" href="/p/badges" />
+          <chakra.p textStyle="label" className="label">
+            Roles
+          </chakra.p>
 
           {user.roles?.length > 0 &&
             user.roles.map((role, key) => {
-              return <RoleBadgeControl key={key} role={allRoles.filter(r => r.slug === role)[0]} />
-            })
-          }
-          {user.roles?.length == 0 &&
-            <chakra.p py="6">You haven’t earned any badges yet, begin by adding some details about
-yourself. Start collecting, add your own artworks or write reviews to
-              collect further badges.</chakra.p>
-          }
-
+              return (
+                <RoleBadgeControl
+                  key={key}
+                  role={allRoles.filter((r) => r.slug === role)[0]}
+                />
+              );
+            })}
+          {user.roles?.length == 0 && (
+            <chakra.p py="6">
+              You haven’t earned any badges yet, begin by adding some details
+              about yourself. Start collecting, add your own artworks or write
+              reviews to collect further badges.
+            </chakra.p>
+          )}
         </Box>
 
-            {/* _____________________________
+        {/* _____________________________
 
                 TODO: Buy Button onclick LINK
             _______________________________*/}
 
         {/* ======== BOX: User reviews  ======== */}
-        {user.reviews&&
-          <Box
-            className="reviews"
-            borderBottom="1px solid white"
-            p="6"
-          >
-            <chakra.p textStyle="label" className="label">More information</chakra.p>
+        {user.reviews && (
+          <Box className="reviews" borderBottom="1px solid white" p="6">
+            <chakra.p textStyle="label" className="label">
+              More information
+            </chakra.p>
             {user.reviews.map((review, key) => (
-              <ArrowLink href={review.url} key={key}>{review.title}</ArrowLink>
+              <ArrowLink href={review.url} key={key}>
+                {review.title}
+              </ArrowLink>
             ))}
-
           </Box>
-        }
+        )}
 
         {/* ======== BOX: User artworks  ======== */}
 
-        {showArtworks &&
+        {showArtworks && (
           <ArtworkList artworks={user.artworks} col={1} isPublic={isPublic} />
-        }
-
+        )}
       </Box>
     </Flex>
   );

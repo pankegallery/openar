@@ -1,10 +1,10 @@
 import { Wallet, BigNumber } from "ethers";
-import sjcl from "sjcl";
 import warning from "tiny-warning";
 import invariant from "tiny-invariant";
 import { getAddress } from "@ethersproject/address";
 import {
   Bytes,
+  BytesLike,
   hexDataLength,
   hexlify,
   arrayify,
@@ -30,6 +30,7 @@ import {
   EIP712Signature,
   MintData,
 } from "./types";
+import { sha256FromBuffer } from "./sha256tools";
 
 export function validateBytes32(value: Bytes) {
   if (typeof value === "string") {
@@ -493,17 +494,6 @@ export function constructMintData(
  */
 
 /**
- * Generates the sha256 hash from a buffer and returns the hash hex-encoded
- *
- * @param buffer
- */
-export function sha256FromBuffer(buffer: Buffer): string {
-  const bitArray = sjcl.codec.hex.toBits(buffer.toString("hex"));
-  const hashArray = sjcl.hash.sha256.hash(bitArray);
-  return "0x".concat(sjcl.codec.hex.fromBits(hashArray));
-}
-
-/**
  * Returns the `verified` status of a uri.
  * A uri is only considered `verified` if its content hashes to its expected hash
  *
@@ -513,7 +503,7 @@ export function sha256FromBuffer(buffer: Buffer): string {
  */
 export async function isURIHashVerified(
   uri: string,
-  expectedHash: Bytes,
+  expectedHash: BytesLike,
   timeout: number = 10
 ): Promise<boolean> {
   try {

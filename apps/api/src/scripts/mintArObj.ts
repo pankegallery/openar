@@ -4,17 +4,18 @@ import os from "os";
 import path from "path";
 
 import Mustache from "mustache";
+import { Market__factory } from "@openar/contracts";
 
 import Prisma, { ArObject } from "@prisma/client";
-import { prismaDisconnect } from "../db";
 import minimist from "minimist";
 
-import { Market__factory } from "@openar/contracts";
-import { ipfsCreateClient } from "@openar/crypto";
+import { ipfsCreateClient, sha256FromFile } from "@openar/crypto";
+
+import { prismaDisconnect } from "../db";
 import { getApiConfig } from "../config";
 import logger from "../services/serviceLogging";
 import { ArObjectStatusEnum } from "../utils";
-import { ar } from "date-fns/locale";
+
 
 const apiConfig = getApiConfig();
 
@@ -105,7 +106,7 @@ const processArObject = async (
       creatorURL: arObject?.creator?.url,
       year: new Date(arObject.updatedAt).getFullYear(),
     };
-    console.log(templateVars);
+
     fs.copyFileSync(
       glbMeta?.originalFilePath,
       path.join(ipfsFolderPath, path.parse(glbMeta?.originalFilePath).base)
@@ -131,8 +132,8 @@ const processArObject = async (
     );
 
     writeTemplateFile(
-      path.join(templateFolder, "info.txt"),
-      path.join(ipfsFolderPath, "info.txt"),
+      path.join(templateFolder, "info.html"),
+      path.join(ipfsFolderPath, "info.html"),
       templateVars
     );
 

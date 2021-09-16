@@ -15,7 +15,7 @@ export const Sidebar = () => {
     {
       slug: "profile",
       label:"My profile",
-      url:"x"
+      url:"/x/"
     },
 //    {
 //      slug: "notifications",

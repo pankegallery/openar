@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>{{title}} {{editionNumber}}/{{editionOf}} - {{artworkTitle}} - {{creator}} - {{year}} </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:image" content="{{poster}}" />
+    <style type="text/css">
+      html,
+      body {
+        margin: 20px;
+        height: 100%;
+        font-family: Manrope, Arial, Helvetica, sans-serif;
+      }
+
+      body {
+        height: 100%;
+        overflow: hidden;
+        background-color: #fff;
+      }
+
+      * {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+      }
+
+      a {
+        color: #000 !important;
+      }
+
+      .cornerlink {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100px;
+        background-color: yellow;
+      }
+    </style>
+  </head>
+  <body>
+<pre>--------------------------------<br/>
+---- OBJECT --------------------<br/>
+--------------------------------<br/></pre>
+Title: {{title}}<br/>
+URL: <a href="https://openar.art/a/{{artworkKey}}/{{objKey}}">https://openar.art/a/{{artworkKey}}/{{objKey}}</a><br/>
+Year: {{year}}<br/>
+Edition Of: {{editionOf}}<br/>
+Edition Number: {{editionNumber}}<br/><br/>
+
+File (GLB): <a href="{{glb}}">{{glb}}</a><br/>
+File (USDZ): <a href="{{usdz}}">{{usdz}}</a><br/>
+File (POSTER): <a href="{{poster}}">{{poster}}</a><br/><br/>
+
+Description:<br/>
+{{{description}}}
+<br/><br/>
+<pre>--------------------------------<br/>
+---- ARTWORK -------------------<br/>
+--------------------------------<br/></pre>
+Title: {{title}}<br/>
+Year: {{year}}<br/>
+URL: <a href="https://openar.art/a/{{artworkKey}}">https://openar.art/a/{{artworkKey}}</a><br/><br/>
+Description:<br/>
+{{{artworkDescription}}}
+<br/><br/>
+<pre>--------------------------------<br/>
+---- ARTIST --------------------<br/>
+--------------------------------<br/></pre>
+Name: {{creator}}<br/>
+URL: <a href="https://openar.art/u/{{ethAddress}}">https://openar.art/u/{{ethAddress}}</a><br/>
+Personal URL: <a href="{{{creatorURL}}}">{{{creatorURL}}}</a><br/><br/>
+Biography:<br/>
+{{{bio}}}<br/>
+
+    <a href="https://openar.art/a/{{artworkKey}}/{{objKey}}" class="cornerlink"><!-- TODO: make pretty --></a>
+  </body>
+</html>

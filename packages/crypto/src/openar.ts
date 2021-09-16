@@ -78,9 +78,6 @@ export class OpenAR {
       this.marketAddress = addresses[network].market;
     }
 
-    console.log("openAR: market", this.marketAddress);
-    console.log("openAR: media", this.mediaAddress);
-
     this.media = Media__factory.connect(this.mediaAddress, signerOrProvider);
     this.market = Market__factory.connect(this.marketAddress, signerOrProvider);
   }
