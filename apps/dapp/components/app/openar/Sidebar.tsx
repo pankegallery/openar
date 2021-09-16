@@ -58,7 +58,6 @@ export const Sidebar = () => {
   return (
     <>
       <Box
-        position="sticky"
         right="0"
         w="100%"
         minH="100%"
@@ -69,9 +68,35 @@ export const Sidebar = () => {
         pt="40"
       >
 
-        {/*____________ Main login menu ____________*/}
+        <Box
+          position="sticky"
+          top="40"
+        >
+          {/*____________ Main login menu ____________*/}
 
-        <chakra.nav
+          <chakra.nav
+              className="addMenu"
+              display="flex"
+              flexDirection="column"
+              flexWrap="nowrap"
+              textStyle="subtitle"
+              sx={{
+                "a": {
+                  display: "block",
+                  my: "2",
+                }
+              }}
+            >
+            <Menu pages={mainMenu} />
+          </chakra.nav>
+
+          {/*____________ Add items menu ____________*/}
+
+
+          <Box mt="10" mb="2">
+            <chakra.span textStyle="subtitle">Add</chakra.span>
+          </Box>
+          <chakra.nav
             className="addMenu"
             display="flex"
             flexDirection="column"
@@ -84,31 +109,9 @@ export const Sidebar = () => {
               }
             }}
           >
-          <Menu pages={mainMenu} />
-        </chakra.nav>
-
-        {/*____________ Add items menu ____________*/}
-
-
-        <Box mt="10" mb="2">
-          <chakra.span textStyle="subtitle">Add</chakra.span>
+            <Menu pages={addMenu} />
+          </chakra.nav>
         </Box>
-        <chakra.nav
-          className="addMenu"
-          display="flex"
-          flexDirection="column"
-          flexWrap="nowrap"
-          textStyle="subtitle"
-          sx={{
-            "a": {
-              display: "block",
-              my: "2",
-            }
-          }}
-        >
-          <Menu pages={addMenu} />
-        </chakra.nav>
-
         {/*____________ Footer menu ____________*/}
 
         <chakra.nav
