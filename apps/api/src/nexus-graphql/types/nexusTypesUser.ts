@@ -15,7 +15,6 @@ import {
   interfaceType,
 } from "nexus";
 import httpStatus from "http-status";
-import { ApiError } from "../../utils";
 
 import {
   userRead,
@@ -43,6 +42,7 @@ import {
   ImageStatusEnum,
   ArObjectStatusEnum,
   ArtworkStatusEnum,
+  ApiError,
 } from "../../utils";
 
 const apiConfig = getApiConfig();
