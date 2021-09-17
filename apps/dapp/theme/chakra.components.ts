@@ -221,10 +221,14 @@ export const components = {
   },
   Switch: {
     baseStyle: {
-      display: "flex",
-      flexDirection: "row-reverse",
-      width: "100%",
-      justifyContent: "space-between",
+      container: {
+        display: "flex",
+        flexDirection: "row-reverse",
+        width: "100%",
+        maxW: "100%",
+        mb:1,
+        justifyContent: "space-between",
+      },
       track: {
         bg: "transparent",
         border: "1px solid white",

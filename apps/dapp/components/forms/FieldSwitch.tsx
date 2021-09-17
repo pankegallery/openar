@@ -1,6 +1,6 @@
 import React from "react";
-import { Switch, FormControl, Flex, FormLabel, FormHelperText } from "@chakra-ui/react";
-import { useFormContext } from "react-hook-form";
+import { Switch, FormControl, Flex, chakra, FormHelperText } from "@chakra-ui/react";
+import { useFormContext, Controller } from "react-hook-form";
 
 import { FieldErrorMessage } from ".";
 
@@ -27,6 +27,7 @@ export const FieldSwitch = ({
 }) => {
   const {
     register,
+    control,
     formState: { errors },
   } = useFormContext();
 
@@ -37,27 +38,28 @@ export const FieldSwitch = ({
       isInvalid={!!errors[name]?.message}
       p="6"
     >
-      <Flex alignItems="center">
-        <Switch
-          id={name}
-          mt="1"
-          key={`key-${name}`}
-          isInvalid={!!errors[name]?.message}
-          
-          {...{
-            isRequired,
-            isDisabled,
-            isReadOnly,
-            defaultChecked,
-            colorScheme,
-            isChecked: typeof isChecked !== "undefined" && !!isChecked ? true : false
-          }}
-          {...register(name, { required: isRequired })}
-          display="flex"
-        >
-          <FormLabel>{label}</FormLabel>
-        </Switch>
-        
+       
+
+      <Flex alignItems="center" w="100%">
+        <Controller
+          control={control}
+          name={name}
+          defaultValue={typeof defaultChecked === "boolean" ? defaultChecked : false}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Switch
+              onChange={onChange}
+              onBlur={onBlur}
+              isDisabled={isDisabled}
+              isChecked={typeof isChecked !== "undefined" ? !!isChecked : value}
+              isInvalid={errors[name]?.message}
+              colorScheme={colorScheme}
+              isRequired={isRequired}
+              isReadOnly={isReadOnly}
+            >
+              <chakra.span textStyle="label" fontSize="sm">{label}</chakra.span>
+            </Switch>
+          )}
+        />
       </Flex>
       {hint && <FormHelperText fontSize="sm">{hint}</FormHelperText>}
       <FieldErrorMessage error={errors[name]?.message} />
