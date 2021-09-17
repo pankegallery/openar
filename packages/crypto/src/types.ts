@@ -40,7 +40,7 @@ export type Bid = {
  * openAR Media Protocol MediaData stored on chain
  */
 
- export type MediaData = {
+export type MediaData = {
   awKeyHex: BytesLike;
   objKeyHex: BytesLike;
   editionOf: BigNumberish;
@@ -102,4 +102,12 @@ export type EIP712Sig = {
   v: any;
   r: any;
   s: any;
+};
+
+export type PlatformCuts = {
+  firstSalePlatform: DecimalValue;
+  firstSalePool: DecimalValue;
+  furtherSalesPlatform: DecimalValue;
+  furtherSalesPool: DecimalValue;
+  furtherSalesCreator: DecimalValue;
 };

@@ -1,41 +1,50 @@
-import { useState, ReactElement } from "react";
-
+import { useEffect, ReactElement } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Text, Box, IconButton, useClipboard, Flex, Button } from "@chakra-ui/react";
+import { Text, Box, Flex, Button } from "@chakra-ui/react";
 import { useQuery, gql } from "@apollo/client";
 import { LayoutOpenAR } from "~/components/app";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
 import { RestrictPageAccess } from "~/components/utils";
 import { BeatLoader } from "react-spinners";
-import { MdContentCopy } from "react-icons/md";
 
 import {
   ModuleSubNav,
   ModulePage,
   ButtonListElement,
+  isArObjectReadyToMint,
+  isArObjectMinting
 } from "~/components/modules";
+import { ShowUrlAndCopy } from "~/components/frontend";
+
 import { appConfig } from "~/config";
 
-// TODO
 export const arObjectReadOwnQueryGQL = gql`
   query arObjectReadOwn($id: Int!, $aid: Int!) {
     arObjectReadOwn(id: $id) {
       id
+      status
       key
-      title
+      arModels {
+        id
+        type
+        status
+      }
+      heroImage {
+        id
+      }
     }
     artworkReadOwn(id: $aid) {
       id
-      key
       title
+      description
+      status
     }
   }
 `;
 
 const Update = () => {
   const router = useRouter();
-  
 
   const { data, loading, error } = useQuery(arObjectReadOwnQueryGQL, {
     variables: {
@@ -45,8 +54,6 @@ const Update = () => {
   });
 
   const href = `${appConfig.baseUrl}/a/${data?.artworkReadOwn?.key}/${data?.arObjectReadOwn?.key}/`;
-  const { hasCopied, onCopy } = useClipboard(href);
-
 
   // TODO: make more general
   const trimTitle = (str: string) =>
@@ -54,11 +61,7 @@ const Update = () => {
 
   const breadcrumb = [
     {
-      path: moduleConfig.rootPath,
-      title: "Artworks",
-    },
-    {
-      path: `${moduleConfig.rootPath}/${router.query.aid}/update`,
+      path: `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`,
       title:
         data &&
         (data.artworkReadOwn?.title ? (
@@ -83,6 +86,15 @@ const Update = () => {
     },
   ];
 
+  const isReadyToMint = data && isArObjectReadyToMint(data);
+
+  useEffect(() => {
+    if (data && isArObjectMinting(data))
+      router.replace(
+        `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`
+      );
+  }, [data, router]);
+
   return (
     <>
       <ModuleSubNav breadcrumb={breadcrumb} buttonList={buttonList} />
@@ -90,34 +102,40 @@ const Update = () => {
         isLoading={loading}
         isError={!!error || (!error && !loading && !data?.arObjectReadOwn)}
       >
-        <Box p="6" maxW="800px">
-          <Text>
-            As minting an object can not be reversed please make sure that your
-            object looks and works as intended (try and Android and iOS device
-            if you can). You can access the object using the following URL
-          </Text>
-          <Flex my={2}>
-            <a href={href} target="_blank" rel="noreferrer">
-              {href}
-            </a>
-            <IconButton onClick={onCopy} ml={2} icon={<MdContentCopy />} aria-label="copy" border="none" bg="transparent" _hover={{
-              bg: "none",
-              opacity: 0.6
-            }} _active={{
-              bg:"transparent",
-              color: "green.300"
-            }} h="30px" fontSize="lg" justifyContent="flex-start">
-              {hasCopied ? "Copied" : "Copy"}
-            </IconButton>
-          </Flex>
-
-          <Link
-            href={`${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/mint`}
-            passHref
+        {!isReadyToMint && (
+          <Text
+            width="100%"
+            p="6"
+            borderBottom="1px solid #fff"
+            color="openar.error"
           >
-            <Button mt="4">All looks good, proceed</Button>
-          </Link>
-        </Box>
+            It looks like your object is not ready to be minted please ensure
+            that artwork and object are published, neccessary fields are filled
+            in, and all assets are uploaded
+          </Text>
+        )}
+
+        {isReadyToMint && (
+          <Box p="6" maxW="800px">
+            <Text>
+              As minting an object can not be reversed please make sure that
+              your object looks and works as intended (try and Android and iOS
+              device if you can). You can access the object using the following
+              URL
+            </Text>
+
+            <Flex my={2}>
+              <ShowUrlAndCopy url={href} />
+            </Flex>
+
+            <Link
+              href={`${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/mint`}
+              passHref
+            >
+              <Button mt="4">All looks good, proceed</Button>
+            </Link>
+          </Box>
+        )}
       </ModulePage>
     </>
   );

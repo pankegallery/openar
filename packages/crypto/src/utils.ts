@@ -2,6 +2,7 @@ import { Wallet, BigNumber } from "ethers";
 import warning from "tiny-warning";
 import invariant from "tiny-invariant";
 import { getAddress } from "@ethersproject/address";
+import { customAlphabet } from "nanoid";
 import {
   Bytes,
   BytesLike,
@@ -29,8 +30,14 @@ import {
   EIP712Domain,
   EIP712Signature,
   MintData,
+  PlatformCuts,
 } from "./types";
 import { sha256FromBuffer } from "./sha256tools";
+
+export const nanoidCustom16 = customAlphabet(
+  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+  16
+);
 
 export function validateBytes32(value: Bytes) {
   if (typeof value === "string") {
@@ -47,6 +54,14 @@ export function validateBytes32(value: Bytes) {
     invariant(false, `value is not a length 32 byte array`);
   }
 }
+
+export const platformCuts: PlatformCuts = {
+  firstSalePlatform: Decimal.new(10),
+  firstSalePool: Decimal.new(5),
+  furtherSalesPlatform: Decimal.new(5),
+  furtherSalesPool: Decimal.new(5),
+  furtherSalesCreator: Decimal.new(5),
+};
 
 export function validateBidShares(
   platform: DecimalValue,
@@ -69,6 +84,24 @@ export function validateBidShares(
       `The BidShares sum to ${sum.toString()}, but they must sum to ${decimal100.value.toString()}`
     );
   }
+}
+
+export function validateBidOrAsk(
+  value: DecimalValue,
+  platform: DecimalValue,
+  pool: DecimalValue,
+  creator: DecimalValue,
+  owner: DecimalValue,
+  prevOwner: DecimalValue
+): boolean {
+  const sum = Decimal.new(0)
+    .value.add(value.value.mul(creator.value.div(100)))
+    .add(value.value.mul(platform.value.div(100)))
+    .add(value.value.mul(pool.value.div(100)))
+    .add(value.value.mul(owner.value.div(100)))
+    .add(value.value.mul(prevOwner.value.div(100)));
+
+  return sum.toString() === value.value.toString();
 }
 
 export const openARConstructBidShares = (

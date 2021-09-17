@@ -26,7 +26,10 @@ import {
   validateAndParseAddress,
   validateBidShares,
   validateURI,
+  nanoidCustom16,
 } from "./utils";
+
+import { getBytes32FromString } from "./sha256tools";
 
 import invariant from "tiny-invariant";
 
@@ -632,12 +635,12 @@ export class OpenAR {
         ]);
 
       const mintData = constructMintData(
-        "",
-        "",
+        getBytes32FromString(nanoidCustom16()),
+        getBytes32FromString(nanoidCustom16()),
         tokenURI,
         metadataURI,
-        contentHash,
-        metadataHash,
+        getBytes32FromString(contentHash),
+        getBytes32FromString(metadataHash),
         BigNumber.from(1),
         BigNumber.from(1)
       );

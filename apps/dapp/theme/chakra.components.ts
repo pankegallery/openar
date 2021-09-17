@@ -173,6 +173,50 @@ export const components = {
       },
     },
   },
+  NumberInput: {
+    baseStyle:{
+      _placeholder: {
+          color: "white",
+          opacity: "0.6"
+        },
+    },
+    variants: {
+      outline: {
+        field: {
+          bg: "#fff",
+          borderColor: "gray.400",
+          _hover: {
+            borderColor: "gray.400",
+          },
+          _autofill: {
+            bg: "wine.300",
+          },
+        },
+      },
+      flushed: {
+        _placeholder: {
+          color: "white",
+          opacity: "0.6"
+        },
+        field: {
+          _placeholder: {
+            color: "white",
+            opacity: "0.6"
+          },
+          fontFamily: "Source code pro, monospace",
+          bg: "transparent",
+          borderColor: "white",
+          _hover: {
+            borderColor: "gray.400",
+          },
+          _autofill: {
+            bg: "gray.700",
+          },
+          p: "0",
+        },
+      },
+    },
+  },
   Select: {
     variants: {
       outline: {

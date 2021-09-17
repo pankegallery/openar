@@ -33,6 +33,7 @@ export const injectedConnector = new InjectedConnector({
 });
 
 export const walletConntectConnector = new WalletConnectConnector({
+  chainId: ChainId.xDai,
   rpc: readOnlyUrls,
   qrcode: true,
   pollingInterval: POLLING_INTERVAL,

@@ -9,7 +9,7 @@ import Head from "next/head";
 import { LayoutOpenAR } from "~/components/app";
 import { FormNavigationBlock } from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
-import { ModuleArtworkArObjectForm } from "~/components/modules/forms";
+import { ModuleArtworkArObjectMint } from "~/components/modules/forms";
 import { ModuleArObjectUpdateSchema } from "~/components/modules/validation";
 import { RestrictPageAccess } from "~/components/utils";
 import { BeatLoader } from "react-spinners";
@@ -20,6 +20,8 @@ import {
   ModuleSubNav,
   ModulePage,
   ButtonListElement,
+  isArObjectReadyToMint,
+  isArObjectMinting,
 } from "~/components/modules";
 
 import { filteredOutputByWhitelist } from "~/utils";
@@ -57,6 +59,7 @@ export const arObjectReadOwnQueryGQL = gql`
       id
       title
       description
+      status
     }
   }
 `;
@@ -68,7 +71,7 @@ const Update = () => {
   const successToast = useSuccessfullySavedToast();
   const [disableNavigation, setDisableNavigation] = useState(false);
   const [activeUploadCounter, setActiveUploadCounter] = useState<number>(0);
-  const [isNavigatingAway, setIsNavigatingAway] = useState(false)
+  const [isNavigatingAway, setIsNavigatingAway] = useState(false);
 
   const [firstMutation, firstMutationResults] = useArObjectUpdateMutation();
   const [isFormError, setIsFormError] = useState(false);
@@ -140,7 +143,9 @@ const Update = () => {
         if (!errors) {
           successToast();
           setIsNavigatingAway(true);
-          router.push(`${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`);
+          router.push(
+            `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`
+          );
         } else {
           setIsFormError(true);
         }
@@ -158,11 +163,7 @@ const Update = () => {
 
   const breadcrumb = [
     {
-      path: moduleConfig.rootPath,
-      title: "Artworks",
-    },
-    {
-      path: `${moduleConfig.rootPath}/${router.query.aid}/update`,
+      path: `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`,
       title:
         data &&
         (data.artworkReadOwn?.title ? (
@@ -187,10 +188,22 @@ const Update = () => {
     },
   ];
 
+  const isReadyToMint = data && isArObjectReadyToMint(data);
+
+  useEffect(() => {
+    if (data && isArObjectMinting(data))
+      router.replace(
+        `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`
+      );
+  }, [data, router]);
+
   return (
     <>
       <FormNavigationBlock
-        shouldBlock={!isNavigatingAway && ((isDirty && !isSubmitting) || activeUploadCounter > 0)}
+        shouldBlock={
+          !isNavigatingAway &&
+          ((isDirty && !isSubmitting) || activeUploadCounter > 0)
+        }
       />
       <FormProvider {...formMethods}>
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -202,11 +215,23 @@ const Update = () => {
                 !!error || (!error && !loading && !data?.arObjectReadOwn)
               }
             >
+              {!isReadyToMint && (
+                <Text
+                  width="100%"
+                  p="6"
+                  borderBottom="1px solid #fff"
+                  color="openar.error"
+                >
+                  It looks like your object is not ready to be minted please
+                  ensure that artwork and object are published, neccessary
+                  fields are filled in, and all assets are uploaded
+                </Text>
+              )}
+
               {isFormError && (
                 <Text
                   width="100%"
-                  lineHeight="3rem"
-                  px="3"
+                  p="6"
                   borderBottom="1px solid #fff"
                   color="openar.error"
                 >
@@ -214,13 +239,16 @@ const Update = () => {
                   in a little bit.
                 </Text>
               )}
-              <ModuleArtworkArObjectForm
-                action="update"
-                data={data}
-                setActiveUploadCounter={setActiveUploadCounter}
-                disableNavigation={setDisableNavigation}
-                validationSchema={ModuleArObjectUpdateSchema}
-              />
+
+              {isReadyToMint && (
+                <ModuleArtworkArObjectMint
+                  action="update"
+                  data={data}
+                  setActiveUploadCounter={setActiveUploadCounter}
+                  disableNavigation={setDisableNavigation}
+                  validationSchema={ModuleArObjectUpdateSchema}
+                />
+              )}
             </ModulePage>
           </fieldset>
         </form>

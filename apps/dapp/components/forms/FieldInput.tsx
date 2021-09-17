@@ -17,23 +17,20 @@ import {
   InputRightElement,
   IconButton,
   useBoolean,
-  Flex,
   Box,
 } from "@chakra-ui/react";
 
 import { HiOutlineEyeOff, HiOutlineEye } from "react-icons/hi";
-import LogoXDAI from "~/assets/img/xdai/xdai-white.svg"
 
 import FieldErrorMessage from "./FieldErrorMessage";
 
-export interface FieldSettings {
+export interface FieldInputSettings {
   onChange?: ChangeEventHandler;
   rows?: number;
   required?: boolean;
   autoComplete?: string;
   key?: string;
   name?: string;
-  icon?: string;
   type?: string;
   className?: string;
   placeholder?: string;
@@ -55,7 +52,7 @@ export const FieldInput = ({
   isRequired,
   isDisabled,
 }: {
-  settings?: FieldSettings;
+  settings?: FieldInputSettings;
   id: string;
   isRequired?: boolean;
   isDisabled?: boolean;
@@ -66,23 +63,13 @@ export const FieldInput = ({
   const fieldRef = useRef<HTMLInputElement | null>(null);
   const [revealFlag, setRevealFlag] = useBoolean();
 
-  let Icon;
-  switch (settings?.icon){
-    case "price":
-      Icon = <LogoXDAI className="field-icon price-icon" width="20px" height="20px" viewBox="0 0 150 150"/>;
-      break;
-    default:
-      Icon = <></>;
-  }
-
-
   const {
     formState: { errors },
     register,
     setValue,
   } = useFormContext();
 
-  let fieldProps: FieldSettings = {
+  let fieldProps: FieldInputSettings = {
     key: `key-${id}`,
     name: name,
     type: type,
@@ -227,7 +214,7 @@ export const FieldInput = ({
           htmlFor={id}
           m={0}
         >
-          {label}{settings?.icon && Icon}
+          {label}
         </FormLabel>
         {settings?.helpText &&
         <FormHelperText>{settings?.helpText}</FormHelperText>}

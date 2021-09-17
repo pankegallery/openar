@@ -5,6 +5,7 @@ export * from "./LocationPicker";
 export * from "./TextEditor";
 export * from "./FieldTextEditor";
 export * from "./FieldInput";
+export * from "./FieldNumberInput";
 export * from "./FieldSelect";
 export * from "./FieldRow";
 export * from "./FieldErrorMessage";

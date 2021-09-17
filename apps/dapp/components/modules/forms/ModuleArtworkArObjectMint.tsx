@@ -9,7 +9,7 @@ import {
   generateMintArObjectSignMessageData,
   recoverSignatureFromMintArObject,
   Decimal,
-  sha256FromBuffer
+  sha256FromBuffer,
 } from "@openar/crypto";
 
 import {
@@ -30,6 +30,7 @@ import {
   ModalBody,
   Text,
   Flex,
+  Heading,
   chakra,
   FormLabel,
   FormHelperText,
@@ -39,24 +40,19 @@ import pick from "lodash/pick";
 import { useFormContext } from "react-hook-form";
 
 import {
-  FieldInput,
+  FieldNumberInput,
   FieldRow,
-  FieldTextEditor,
-  FieldImageUploader,
-  FieldModelUploader,
-  FieldStatusSelect,
   FieldSwitch,
 } from "~/components/forms";
+import LogoXDAI from "~/assets/img/xdai/xdai-white.svg"
 
-import {IncompleteOverlay} from "~/components/frontend"
+import { IncompleteOverlay } from "~/components/frontend";
 
 import { ArObjectStatusEnum } from "~/utils";
 
 import { yupIsFieldRequired } from "../validation";
 
-
-
-export const ModuleArtworkArObjectForm = ({
+export const ModuleArtworkArObjectMint = ({
   action,
   data,
   errors,
@@ -73,10 +69,6 @@ export const ModuleArtworkArObjectForm = ({
 }) => {
   const { arObjectReadOwn } = data ?? {};
   const mintDisclosure = useDisclosure();
-
-  const columns = { base: "100%", t: "50% 50%" };
-  const rows = { base: "auto 1fr", t: "1fr" };
-
 
   const uploadedFiles = arObjectReadOwn?.arModels.reduce(
     (acc, model) => ({
@@ -189,7 +181,7 @@ export const ModuleArtworkArObjectForm = ({
   //           //   data: JSON.parse(msgParams),
   //           //   sig: result.result,
   //           // });
-            
+
   //           // https://programtheblockchain.com/posts/2018/02/17/signing-and-verifying-messages-in-ethereum/
 
   //           // console.log(createEIP712Signature(signature, deadline));
@@ -199,8 +191,8 @@ export const ModuleArtworkArObjectForm = ({
   //           var r2 = new Buffer(signature2.substring(0, 64), 'hex')
   //           var s2 = new Buffer(signature2.substring(64, 128), 'hex')
   //           var v2 = new Buffer((parseInt(signature2.substring(128, 130)) + 27).toString());
-            
-  //           console.log('V,R,S at client -'+v2,r2,s2); 
+
+  //           console.log('V,R,S at client -'+v2,r2,s2);
 
   //           recoverSignatureFromMintArObject(
   //             keyHash,
@@ -213,12 +205,11 @@ export const ModuleArtworkArObjectForm = ({
   //             signature
   //           ).then((recovered) => console.log("RRRR: ", recovered)).catch((err) => console.log(err))
 
-
   //         })
   //         .catch((err) => {
   //           console.log(err);
   //         });
-          
+
   //       // .sendAsync(
   //       //   {
   //       //     method,
@@ -381,307 +372,84 @@ export const ModuleArtworkArObjectForm = ({
   //   active,
   //   library.provider,
   // //console.log("web3 error", error, mintObject);
-  
+
   // ]);
+
+  const [setInitialAsk] = watch(["setInitialAsk"]);
 
   return (
     <>
-      <Grid
-        templateColumns={columns}
-        templateRows={rows}
-        minH="calc(100vh - 4rem)"
-      >
-        <Box>
-          <FieldRow>
-            <FieldInput
-              name="title"
-              id="title"
-              type="title"
-              label="Object title"
-              isRequired={yupIsFieldRequired("title", validationSchema)}
-              settings={{
-                // defaultValue: data.abc.key
-                placeholder: "Insert title here…",
-              }}
-            />
-          </FieldRow>
-          <FieldRow>
-            
-            <Box px="6" pt="3" className="muted">
-              <Text textStyle="label">Artwork description</Text>
-              <div dangerouslySetInnerHTML={{
-                __html: data?.artworkReadOwn.description
-              }}/>
-            </Box>
-
-            <FieldTextEditor
-              id="description"
-              type="basic"
-              name="description"
-              label="Additional Object description"
-              isRequired={yupIsFieldRequired("description", validationSchema)}
-              settings={{
-                maxLength: 500,
-                defaultValue: arObjectReadOwn?.description
-                  ? arObjectReadOwn?.description
-                  : undefined,
-                placeholder: "Insert object details…",
-              }}
-            />
-          </FieldRow>
-          <FieldRow>
-            <FieldInput
-              name="orderNumber"
-              id="orderNumber"
-              type="orderNumber"
-              label="Order Number"
-              isRequired={yupIsFieldRequired("orderNumber", validationSchema)}
-              settings={{
-                // defaultValue: data.abc.key
-                placeholder: "The object is number ... in the artwork listing",
-              }}
-            />
-          </FieldRow>
-          <FieldRow col>
-            <FieldInput
-              name="edition"
-              id="edition"
-              type="edition"
-              label="Edition"
-              isRequired={yupIsFieldRequired("edition", validationSchema)}
-              settings={{
-                // defaultValue: data.abc.key
-                placeholder: "Insert number here…",
-                helpText: "Number of units to be sold"
-              }}
-            />
-            <FieldInput
-              name="price"
-              id="price"
-              type="price"
-              label="Price per item"
-              isRequired={yupIsFieldRequired("price", validationSchema)}
-              settings={{
-                // defaultValue: data.abc.key
-                placeholder: "Insert price here…",
-                helpText: "Initial price for object in xDai",
-                icon: "price",
-              }}
-            />
-          </FieldRow>
+      <Box>
+        <Box p="6" borderBottom="1px solid #fff">
+          <Heading as="h1">Mint {arObjectReadOwn?.title}</Heading>
+          <Text>
+            Longer description of the minting process, that it <br />
+            + That you can choose the editoion size of 1 - 100
+            <br />+ That you optionally can choose to directly set an asking
+            price <br />+ That the mint and the inital set of the ask is paid by
+            openAR. <br />
+            + That you can later change, remove the ask but you will need to
+            have at least ~ 0.01 xDai to pay for the transaction. <br />
+            + We need you to sign and once we got you signature we will send the
+            minting job to our server and the blockchain
+            <br />
+            + Will take a few minutes and is irriversible (we will place all the
+            NFTs in you wallet)
+            <br />
+            + That the mint also means that the artwork and the object will be
+            permanently published (but both can be hidden on the platform)
+            <br />
+          </Text>
+        </Box>
+        <FieldRow>
+          <FieldNumberInput
+            name="editionOf"
+            id="edition"
+            label="Edition of"
+            isRequired={yupIsFieldRequired("editionOf", validationSchema)}
+            settings={{
+              defaultValue: 1,
+              precision: 0,
+              step: 1,
+              min: 1,
+              max: 100,
+              placeholder: "Insert number here…",
+              helpText: "Number of NFTs to be minted (1 - 100)",
+            }}
+          />
+        </FieldRow>
+        <Box borderBottom="1px solid #fff">
           <FieldRow>
             <FieldSwitch
-              name="mintObject"
-              label="Mint object"
-              isRequired={yupIsFieldRequired("private", validationSchema)}
+              name="setInitialAsk"
+              label="Set initial asking price"
               hint="To sell this object as NFT, i.e. mint, the object will be written into the blockchain.
 This step cannot be undone. 
 
 Note: an object must be published within a published artwork to be minted."
             />
           </FieldRow>
-         
-          
         </Box>
-        <Box
-          w={{ base: "50%", t: "auto" }}
-          minH="100%"
-          borderLeft="1px solid #fff"
-          position="relative"
-        >
-          {action === "create" && (
-            <IncompleteOverlay
-            headline="Save draft to upload material."
-            subline=" Please save as draft to unlock image and model uplodad."
-            button={true}
-            buttonLabel="Save draft"
-            href=""
-            height="100%"
-            marginLeft="20"
-            marginTop="60"
-          />
-
-          )}
-          
-          {/* ---- BOX: Fake content behind --- */}
-
-          {action === "create" && (
-            <>
-              <Box
-                p="6"
-                borderBottom="1px solid #fff"
-              >
-                <chakra.p textStyle="label">Featured image</chakra.p>
-                <chakra.p textStyle="small">The featured image is shown in artwork streams and exhibitions.</chakra.p>
-                <AspectRatio
-                  ratio={1}
-                  border="4px dashed white" mt="6"
-                  position="static"
-                >
-                  <Box textAlign="center" position="static">
-                  </Box>
-                </AspectRatio>
-              </Box>
-              <Box
-                p="6"
-                borderBottom="1px solid #fff"
-              >
-                <chakra.p textStyle="label">Artwork objects</chakra.p>
-                <chakra.p textStyle="small">Click to edit, drag to change order.</chakra.p>
-                <AspectRatio
-                  ratio={1}
-                  border="4px dashed white" mt="6"
-                  position="static"
-                  display="inline-flex"
-                  width="48%"
-                  mr="4%"
-                >
-                  <Box textAlign="center" position="static">
-                  </Box>
-                </AspectRatio>
-                <AspectRatio
-                  ratio={1}
-                  display="inline-flex"
-                  border="4px dashed white" mt="6"
-                  position="static"
-                  width="48%"
-                >
-                  <Box textAlign="center" position="static">
-                  </Box>
-                </AspectRatio>
-              </Box>
-            </>
-          )}
-
-          {action === "update" && (
-            <>
-            <Box
-              p="6"
-              borderBottom="1px solid #fff"
-            >
-              <FieldRow>
-                <FieldImageUploader
-                  route="image"
-                  id="heroImage"
-                  name="heroImage"
-                  label="Featured image"
-                  isRequired={yupIsFieldRequired("heroImage", validationSchema)}
-                  setActiveUploadCounter={setActiveUploadCounter}
-                  canDelete={arObjectReadOwn?.status === ArObjectStatusEnum.DRAFT}
-                  deleteButtonGQL={imageDeleteMutationGQL}
-                  shouldSetFormDirtyOnDelete={true}
-                  connectWith={{
-                    heroImageArObjects: {
-                      connect: {
-                        id: arObjectReadOwn?.id,
-                      },
-                    },
-                  }}
-                  settings={{
-                    // minFileSize: 1024 * 1024 * 0.0488,
-                    maxFileSize: 1024 * 1024 * 5,
-                    aspectRatioPB: 100, // % bottom padding
-
-                    image: {
-                      status: arObjectReadOwn?.heroImage?.status,
-                      id: arObjectReadOwn?.heroImage?.id,
-                      meta: arObjectReadOwn?.heroImage?.meta,
-                      alt: `Featured Image`,
-                      forceAspectRatioPB: 100,
-                      showPlaceholder: true,
-                      sizes: "(min-width: 45em) 20v, 95vw",
-                    },
-                    helpText: "The featured image is shown for each image of the artwork",
-                  }}
-                />
-              </FieldRow>
-            </Box>
-            <Box
-              p="6"
-              borderBottom="1px solid #fff"
-            >
-              <FieldRow>
-                <FormLabel>AR models</FormLabel>
-                <Text fontSize="xs" className="muted">Add one model each for iOS and Android</Text>
-                <Grid
-                  w="100%"
-                  mt="3"
-                  templateRows="1fr"
-                  templateColumns={{
-                    base: "100%",
-                    t: "1fr 1fr",
-                  }}
-                  gap="4"
-                >
-                  <FieldModelUploader
-                    route="model"
-                    id="modelGlb"
-                    type="glb"
-                    name="modelGlb"
-                    label=".glb/.gltf"
-                    isRequired={yupIsFieldRequired(
-                      "modelGlb",
-                      validationSchema
-                    )}
-                    setActiveUploadCounter={setActiveUploadCounter}
-                    canDelete={arObjectReadOwn?.status === ArObjectStatusEnum.DRAFT}
-                    deleteButtonGQL={arModelDeleteMutationGQL}
-                    connectWith={{
-                      arObject: {
-                        connect: {
-                          id: arObjectReadOwn?.id,
-                        },
-                      },
-                    }}
-                    settings={{
-                      // minFileSize: 1024 * 1024 * 0.0488,
-                      maxFileSize: 1024 * 1024 * 50,
-                      accept: ".glb",
-                      model: {
-                        status: uploadedFiles?.glb?.status,
-                        id: uploadedFiles?.glb?.id,
-                        meta: uploadedFiles?.glb?.meta,
-                      },
-                    }}
-                  />
-                  <FieldModelUploader
-                    route="model"
-                    id="modelUsdz"
-                    type="usdz"
-                    name="modelUsdz"
-                    label=".usdz"
-                    isRequired={yupIsFieldRequired(
-                      "modelUsdz",
-                      validationSchema
-                    )}
-                    setActiveUploadCounter={setActiveUploadCounter}
-                    canDelete={arObjectReadOwn?.status === ArObjectStatusEnum.DRAFT}
-                    deleteButtonGQL={arModelDeleteMutationGQL}
-                    connectWith={{
-                      arObject: {
-                        connect: {
-                          id: arObjectReadOwn?.id,
-                        },
-                      },
-                    }}
-                    settings={{
-                      // minFileSize: 1024 * 1024 * 0.0488,
-                      maxFileSize: 1024 * 1024 * 50,
-                      accept: ".usdz",
-                      model: {
-                        status: uploadedFiles?.usdz?.status,
-                        id: uploadedFiles?.usdz?.id,
-                        meta: uploadedFiles?.usdz?.meta,
-                      },
-                    }}
-                  />
-                </Grid>
-              </FieldRow>
-            </Box>
-            </>
-          )}
-        </Box>
-      </Grid>
+        {setInitialAsk && (
+          <FieldRow>
+            <FieldNumberInput
+              name="askPrice"
+              id="askPrice"
+              label="Price per item"
+              isRequired={yupIsFieldRequired("price", validationSchema)}
+              settings={{
+                precision: 2,
+                step: 0.01,
+                min: 0.0,
+                max: 999999999999.0,
+                placeholder: "0.00",
+                helpText: "Initial price for object in xDai",
+                icon: <LogoXDAI className="field-icon price-icon" width="20px" height="20px" viewBox="0 0 150 150"/>,
+              }}
+            />
+          </FieldRow>
+        )}
+      </Box>
       <Modal
         closeOnOverlayClick={false}
         isOpen={mintDisclosure.isOpen}
@@ -716,4 +484,4 @@ Note: an object must be published within a published artwork to be minted."
     </>
   );
 };
-export default ModuleArtworkArObjectForm;
+export default ModuleArtworkArObjectMint;

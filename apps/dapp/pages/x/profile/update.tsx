@@ -156,7 +156,7 @@ const Update = () => {
           <fieldset disabled={disableForm}>
             <ModuleSubNav breadcrumb={breadcrumb} buttonList={buttonList} />
             <ModulePage isLoading={loading} isError={!!error}>
-              {isFormError && <Text width="100%" lineHeight="3rem" px="3" borderBottom="1px solid #fff" color="openar.error">{errorMessage}</Text>}
+              {isFormError && <Text width="100%" p="6" borderBottom="1px solid #fff" color="openar.error">{errorMessage}</Text>}
               <ModuleProfileUpdateForm
                 data={data?.userProfileRead}
                 setActiveUploadCounter={setActiveUploadCounter}

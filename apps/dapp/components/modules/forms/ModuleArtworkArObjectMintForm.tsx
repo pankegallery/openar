@@ -1,3 +1,5 @@
+//TODO: ReMOVE whole file as most likely not needed
+
 import { useEffect, useState } from "react";
 
 import { useWeb3React, UnsupportedChainIdError } from "@web3-react/core";
@@ -43,7 +45,6 @@ import {
   FieldTextEditor,
   FieldImageUploader,
   FieldModelUploader,
-  FieldStatusSelect,
   FieldSwitch,
 } from "~/components/forms";
 

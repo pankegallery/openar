@@ -73,7 +73,7 @@ export const WalletConnectGate = ({
         stored = window.localStorage.getItem("walletconnect");
         const walletConnect = stored ? JSON.parse(stored) : false;
 
-        if (connected === "walletconnect" && walletConnect.connected) {
+        if (connected === "walletconnect" && walletConnect.connected && !account) {
           console.log("Wallet Connect might be connected", account);
           if (Router.pathname !== appConfig.reauthenticateRedirectUrl) {
             console.log("So go through the login flow to establish a new connection", account);
@@ -88,5 +88,6 @@ export const WalletConnectGate = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  console.log(`Account ${account}`);
   return <>{children}</>;
 };

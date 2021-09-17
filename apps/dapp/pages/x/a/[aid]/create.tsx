@@ -156,8 +156,7 @@ const Create = () => {
               {isFormError && (
                 <Text
                   width="100%"
-                  lineHeight="3rem"
-                  px="3"
+                  p="6"
                   borderBottom="1px solid #fff"
                   color="openar.error"
                 >

@@ -5,10 +5,6 @@ import {
   Box,
   Grid,
   chakra,
-  useClipboard,
-  Flex,
-  Button,
-  IconButton
 } from "@chakra-ui/react";
 
 import {
@@ -19,10 +15,8 @@ import {
   FieldImageUploader,
 } from "~/components/forms";
 
-import { IncompleteOverlay } from "~/components/frontend";
+import { IncompleteOverlay, ShowUrlAndCopy } from "~/components/frontend";
 import { ModuleArtworkArObjectsList } from ".";
-
-import { MdContentCopy } from "react-icons/md";
 
 import { yupIsFieldRequired } from "../validation";
 import { useFormContext } from "react-hook-form";
@@ -46,8 +40,7 @@ export const ModuleArtworkForm = ({
   const { artworkReadOwn } = data ?? {};
 
   const href = `${appConfig.baseUrl}/a/${data?.artworkReadOwn?.key}/`;
-  const { hasCopied, onCopy } = useClipboard(href);
-
+  
   const columns = { base: "100%", t: "50% 50%" };
   const rows = { base: "auto 1fr", t: "1fr" };
 
@@ -124,42 +117,16 @@ export const ModuleArtworkForm = ({
         <Box borderBottom="1px solid #fff">
           <FieldSwitch
             name="isPublic"
-            label="Artwork is public"
+            label="Is you artwork public?"
             isRequired={yupIsFieldRequired("isPublic", validationSchema)}
-            defaultChecked={artworkReadOwn?.isPublic}
-            isChecked={isPublic}
+            defaultChecked={artworkReadOwn?.isPublic}            
             hint={
               isPublic ? "Your artwork is visible on openAR" : "Your artwork will be hidden on openAR. You can always access your artwork via:"
             }
           />
           {!isPublic && (
-            <Box px="6" pb="6">
-              <Flex mt="-1rem">
-                <a href={href} target="_blank" rel="noreferrer">
-                  {href}
-                </a>
-                <IconButton
-                  onClick={onCopy}
-                  ml={2}
-                  icon={<MdContentCopy />}
-                  aria-label="copy"
-                  border="none"
-                  bg="transparent"
-                  _hover={{
-                    bg: "none",
-                    opacity: 0.6,
-                  }}
-                  _active={{
-                    bg: "transparent",
-                    color: "green.300",
-                  }}
-                  h="30px"
-                  fontSize="lg"
-                  justifyContent="flex-start"
-                >
-                  {hasCopied ? "Copied" : "Copy"}
-                </IconButton>
-              </Flex>
+            <Box px="6" pb="6" mt="-1rem">
+              <ShowUrlAndCopy url={href} />
             </Box>
           )}
         </Box>

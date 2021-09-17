@@ -14,8 +14,7 @@ import { ipfsCreateClient, sha256FromFile } from "@openar/crypto";
 import { prismaDisconnect } from "../db";
 import { getApiConfig } from "../config";
 import logger from "../services/serviceLogging";
-import { ArObjectStatusEnum } from "../utils";
-
+import { ArObjectStatusEnum, ArtworkStatusEnum } from "../utils";
 
 const apiConfig = getApiConfig();
 
@@ -191,10 +190,18 @@ const doChores = async () => {
     if (arObject) {
       if (
         ![ArObjectStatusEnum.MINT, ArObjectStatusEnum.MINTRETRY].includes(
-          arObject.status
+          arObject.status ?? -1
         )
       )
         throw Error("Status of object excludes it from processing");
+
+      if (
+        ![
+          ArtworkStatusEnum.PUBLISHED,
+          ArtworkStatusEnum.HASMINTEDOBJECTS,
+        ].includes(arObject?.artwork?.status ?? -1)
+      )
+        throw Error("Status of artwork excludes object from processing");
 
       if (!arObject?.heroImage?.id) throw Error("No hero image present");
 

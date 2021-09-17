@@ -26,7 +26,7 @@ import {
   ButtonListElement,
 } from "~/components/modules";
 
-import { filteredOutputByWhitelist, ArObjectStatusEnum } from "~/utils";
+import { filteredOutputByWhitelist, ArObjectStatusEnum, ArtworkStatusEnum } from "~/utils";
 
 // TODO
 export const arObjectReadOwnQueryGQL = gql`
@@ -61,6 +61,7 @@ export const arObjectReadOwnQueryGQL = gql`
       id
       title
       description
+      status
     }
   }
 `;
@@ -260,6 +261,7 @@ const Update = () => {
       },
       label: "Mint as NFT",
       isDisabled:
+        !(data?.artworkReadOwn?.status === ArtworkStatusEnum.PUBLISHED || data?.artworkReadOwn?.status === ArtworkStatusEnum.HASMINTEDOBJECTS) ||
         !(data?.arObjectReadOwn?.status === ArObjectStatusEnum.PUBLISHED) ||
         !couldMint ||
         disableNavigation ||
@@ -289,8 +291,7 @@ const Update = () => {
               {isFormError && (
                 <Text
                   width="100%"
-                  lineHeight="3rem"
-                  px="3"
+                  p="6"
                   borderBottom="1px solid #fff"
                   color="openar.error"
                 >
