@@ -280,8 +280,11 @@ export const UserQueries = extendType({
 
                     status: {
                       in: [
-                        ArtworkStatusEnum.PUBLISHED,
-                        ArtworkStatusEnum.HASMINTEDOBJECTS,
+                        ArObjectStatusEnum.PUBLISHED,
+                        ArObjectStatusEnum.MINTSIGNATUREREQUIRED,
+                        ArObjectStatusEnum.MINT,
+                        ArObjectStatusEnum.MINTING,
+                        ArObjectStatusEnum.MINTED,
                       ],
                     },
                   },

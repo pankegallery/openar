@@ -26,7 +26,7 @@ export default {};
 // export const daoTermQuery = async (
 //   taxonomyId: number,
 //   where: Prisma.TermWhereInput,
-//   orderBy: Prisma.TermOrderByInput | Prisma.TermOrderByInput[],
+//   orderBy: any,
 //   pageIndex: number = 0,
 //   pageSize: number = apiConfig.db.defaultPageSize
 // ): Promise<Term[]> => {
