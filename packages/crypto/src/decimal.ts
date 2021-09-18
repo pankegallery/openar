@@ -14,6 +14,7 @@ export class Decimal {
    * @param precision
    */
   static new(value: number | string, precision: number = 18): DecimalValue {
+    console.log("xxx", invariant);
     invariant(
       precision % 1 === 0 && precision <= 18 && precision > -1,
       `${precision.toString()} must be a non-negative integer less than or equal to 18`
@@ -62,5 +63,3 @@ export class Decimal {
     return 0;
   }
 }
-
-export default Decimal;

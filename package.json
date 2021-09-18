@@ -37,13 +37,15 @@
     "app:dapp:build": "NODE_END=production npm run package:crypto:build && npm run build -w dapp && openar_dapp_restart",
     "app:dapp:dev": "PORT=$(grep DEV_DAPP_PORT .env | cut -d '=' -f2) NEXT_PUBLIC_API_URL=$(grep '^BASE_URL_API' .env | cut -d '=' -f2) npm run dev -w dapp",
     "app:dapp:lint": "npm run lint -w dapp",
-    "package:contracts:build": "NODE_ENV=production rimraf ./packages/contracts/dist && babel ./packages/contracts/src --out-dir ./packages/contracts/dist --extensions .ts && tsc --project ./packages/contracts/tsconfig.json --declaration --emitDeclarationOnly",
+    "package:contracts:lint": "eslint ./packages/contracts/src --ext .js,.ts",
+    "package:contracts:build": "NODE_ENV=production rimraf ./packages/contracts/dist && tsc --project ./packages/contracts/tsconfig.json",
+    "package:contracts:dev": "npm run package:contracts:build && concurrently -k -p \"[{name}]\" -n \"TSC\" -c \"#d531f5\" \"npm run package:contracts:watch:tsc\"",
+    "package:contracts:watch:tsc": "NODE_ENV=development  tsc --project ./packages/contracts/tsconfig.json --watch --preserveWatchOutput",
+    
     "package:crypto:lint": "eslint ./packages/crypto/src --ext .js,.ts",
-    "package:crypto:build2": "NODE_ENV=production tsc ./packages/crypto/src/*.ts --target 'es2021' --moduleResolution 'node' --declaration --esModuleInterop  --outDir ./packages/crypto/dist",
-    "package:crypto:dev": "npm run package:contracts:build && concurrently -k -p \"[{name}]\" -n \"BABEL,TS\" -c \"#d531f5,#4d5ffa\" \"npm run package:crypto:watch:babel\" \"sleep 5 && npm run package:crypto:watch:typings\"",
-    "package:crypto:watch:babel": "NODE_ENV=development babel ./packages/crypto/src  --watch --out-dir ./packages/crypto/dist --extensions .ts",
-    "package:crypto:watch:typings": "NODE_ENV=production tsc --project ./packages/crypto/tsconfig.json --watch --declaration --noEmit --preserveWatchOutput",
-    "package:crypto:build": "NODE_ENV=production npm run package:contracts:build && rimraf ./packages/crypto/dist && babel ./packages/crypto/src --out-dir ./packages/crypto/dist --extensions .ts && tsc --project ./packages/crypto/tsconfig.json --declaration --emitDeclarationOnly"
+    "package:crypto:build": "NODE_ENV=production npm run package:contracts:build && rimraf ./packages/crypto/dist && tsc --project ./packages/crypto/tsconfig.json",
+    "package:crypto:dev": "npm run package:contracts:build && concurrently -k -p \"[{name}]\" -n \"TSC\" -c \"#d531f5\" \"npm run package:crypto:watch:tsc\"",
+    "package:crypto:watch:tsc": "NODE_ENV=development  tsc --project ./packages/crypto/tsconfig.json --watch --preserveWatchOutput"
   },
   "lint-staged": {
     "packages/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
@@ -84,8 +86,8 @@
     "typescript": "^4.3.5"
   },
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "packages/*",
+    "apps/*"
   ],
   "dependencies": {
     "dotenv": "^10.0.0"

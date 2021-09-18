@@ -23,8 +23,8 @@ import { fromRpcSig, toRpcSig } from "ethereumjs-util";
 
 import { Decimal } from "./decimal";
 import {
-  Ask,
-  Bid,
+  // Ask,
+  // Bid,
   BidShares,
   DecimalValue,
   EIP712Domain,
