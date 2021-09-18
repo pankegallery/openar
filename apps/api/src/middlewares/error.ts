@@ -5,7 +5,7 @@ import { ApiError } from "../utils/ApiError";
 
 export const errorProcessErrors: ErrorRequestHandler = (
   err,
-  req,
+  _req,
   res,
   next
 ) => {
@@ -27,10 +27,8 @@ export const errorProcessErrors: ErrorRequestHandler = (
 
 export const errorDisplayInResponse: ErrorRequestHandler = (
   err,
-  req,
-  res,
-  // eslint-disable-next-line
-  next
+  _req,
+  res /*, next */
 ) => {
   let { statusCode, message } = err;
   if (process.env.NODE_ENV === "production" && !err.isOperational) {
@@ -53,12 +51,7 @@ export const errorDisplayInResponse: ErrorRequestHandler = (
   res.status(statusCode).json(response);
 };
 
-export const errorConvert404ToApiError: RequestHandler = (
-  req,
-  res,
-  // eslint-disable-next-line
-  next
-) => {
+export const errorConvert404ToApiError: RequestHandler = (_req, _res, next) => {
   next(new ApiError(httpStatus.NOT_FOUND, "Not found"));
 };
 

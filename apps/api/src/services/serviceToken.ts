@@ -106,8 +106,6 @@ export const tokenVerify = (token: string): JwtPayload | null => {
     );
 
     if (typeof tokenPayload === "object") {
-      console.log(`Token payload.exp ${tokenPayload.exp ?? 0}`);
-
       if (Date.now() >= (tokenPayload.exp ?? 0) * 1000) {
         logger.debug(`Error: Token expired (VT 2)`);
         throw new ApiError(httpStatus.UNAUTHORIZED, "(VT 2)");
@@ -116,7 +114,7 @@ export const tokenVerify = (token: string): JwtPayload | null => {
       return null;
     }
     return tokenPayload;
-  } catch (err) {
+  } catch (err: any) {
     throw new ApiError(
       httpStatus.UNAUTHORIZED,
       `Token not authorized (${err.message})`
@@ -155,7 +153,7 @@ export const tokenVerifyInDB = async (
     }
 
     return tokenPayload;
-  } catch (err) {
+  } catch (err: any) {
     logger.debug(`Token not authorized (${err.message})`);
     throw new ApiError(
       httpStatus.UNAUTHORIZED,

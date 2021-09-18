@@ -46,7 +46,7 @@ export class Asserts {
     }
   }
 
-  static never(v: never, msg?: string): never {
+  static never(_v: never, msg?: string): never {
     throw new Error(msg ?? "Unexpected value");
   }
 

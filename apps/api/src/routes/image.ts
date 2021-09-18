@@ -15,7 +15,7 @@ import { ApiError } from "../utils";
 const apiConfig = getApiConfig();
 
 const storage = multer.diskStorage({
-  destination: async (req: Request, file, cb) => {
+  destination: async (_req: Request, _file, cb) => {
     const date = new Date();
 
     const uploadFolder = `${apiConfig.imgUploadDir}/${date.getUTCFullYear()}/${
@@ -36,7 +36,7 @@ const storage = multer.diskStorage({
 
     cb(null, uploadPath);
   },
-  filename: (req, file, cb) => {
+  filename: (_req, file, cb) => {
     const extension = path.extname(file.originalname);
     cb(null, `${nanoid()}${extension}`);
   },

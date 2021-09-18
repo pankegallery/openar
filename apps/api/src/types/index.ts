@@ -1,3 +1,5 @@
+import "./missing/graceful";
+
 export type Complete<T> = {
   [P in keyof Required<T>]: Pick<T, P> extends Required<Pick<T, P>>
     ? T[P]
@@ -40,3 +42,4 @@ export type ApiArModelMetaInformation = {
   mimeType: any;
   size: number;
 };
+

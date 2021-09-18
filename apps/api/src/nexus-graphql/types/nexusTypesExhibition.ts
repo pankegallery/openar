@@ -1,5 +1,5 @@
 /// <reference path="../../types/nexus-typegen.ts" />
-import { parseResolveInfo } from "graphql-parse-resolve-info";
+// import { parseResolveInfo } from "graphql-parse-resolve-info";
 // import { filteredOutputByWhitelist } from "../../utils";
 
 // import dedent from "dedent";
@@ -88,8 +88,8 @@ export const EventQueries = extendType({
         slug: nonNull(stringArg()),
       },
 
-      // resolve(root, args, ctx, info)
-      async resolve(...[, args, , info]) {
+      // resolve(...[, args, , info])
+      async resolve() {
         return {
           id: 1,
           title: "OpenAR.art",

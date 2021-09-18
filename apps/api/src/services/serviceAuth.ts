@@ -71,7 +71,7 @@ export const authAuthenticateUserByToken = (
         );
       }
     }
-  } catch (err) {
+  } catch (err: any) {
     logger.debug(`[auth.authenticateUserByToken]: ${err.name}: ${err.message}`);
   }
 
@@ -245,7 +245,7 @@ export const authRefresh = async (refreshToken: string) => {
       {
         id: user.id,
         pseudonym: user.pseudonym,
-        ethAddress: user.ethAddress,
+        ethAddress: user.ethAddress ?? "",
         email: user.email,
       },
       user.roles as RoleName[]
@@ -267,7 +267,7 @@ export const authRequestEmailVerificationEmail = async (
     if (userInDb && userInDb.email)
       return await authSendEmailConfirmationEmail(
         userInDb.id,
-        userInDb.ethAddress,
+        userInDb.ethAddress ?? "",
         userInDb.email
       );
 
