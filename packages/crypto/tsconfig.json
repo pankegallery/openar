@@ -9,7 +9,7 @@
     "allowSyntheticDefaultImports": true,
     "preserveConstEnums": true,
     "forceConsistentCasingInFileNames": true,
-    "importHelpers": true,
+    "importHelpers": false,
     "declaration": true,
     "sourceMap": true,
     "rootDir": "./src",

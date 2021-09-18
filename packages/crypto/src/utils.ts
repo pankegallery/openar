@@ -94,16 +94,24 @@ export function validateBidOrAsk(
   owner: DecimalValue,
   prevOwner: DecimalValue
 ): boolean {
+  const decimal100 = Decimal.new(100);
   const sum = Decimal.new(0)
-    .value.add(value.value.mul(creator.value.div(100)))
-    .add(value.value.mul(platform.value.div(100)))
-    .add(value.value.mul(pool.value.div(100)))
-    .add(value.value.mul(owner.value.div(100)))
-    .add(value.value.mul(prevOwner.value.div(100)));
-
+    .value.add(value.value.mul(creator.value).div(decimal100.value))
+    .add(value.value.mul(platform.value).div(decimal100.value))
+    .add(value.value.mul(pool.value).div(decimal100.value))
+    .add(value.value.mul(owner.value).div(decimal100.value))
+    .add(value.value.mul(prevOwner.value).div(decimal100.value));
+  
   return sum.toString() === value.value.toString();
 }
 
+// 1799999999999993550
+// 11999999999999957000
+// 1199999999999995700000000000000000000
+// 100000000000000000000
+// 10000000000000000000
+// 1000000000000000000
+// 5000000000000000000
 export const openARConstructBidShares = (
   platform: number,
   pool: number,
