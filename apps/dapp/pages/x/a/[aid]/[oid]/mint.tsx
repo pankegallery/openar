@@ -3,19 +3,44 @@ import type * as yup from "yup";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/router";
-import { Text } from "@chakra-ui/react";
+import {
+  Text,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  Button,
+  Flex,
+  Box,
+  ModalBody,
+  chakra,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { useQuery, gql } from "@apollo/client";
-import Head from "next/head";
+
+import { useWeb3React, UnsupportedChainIdError } from "@web3-react/core";
+import { Web3Provider } from "@ethersproject/providers";
+
+import {
+  OpenAR,
+  addresses,
+  generateMintArObjectSignMessageData,
+  recoverSignatureFromMintArObject,
+  Decimal,
+  stringToHexHash,
+  numberToBigNumber,
+} from "@openar/crypto";
+
 import { LayoutOpenAR } from "~/components/app";
 import { FormNavigationBlock } from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
 import { ModuleArtworkArObjectMint } from "~/components/modules/forms";
-import { ModuleArObjectUpdateSchema } from "~/components/modules/validation";
+import { ModuleArObjectMintableSchema } from "~/components/modules/validation";
 import { RestrictPageAccess } from "~/components/utils";
 import { BeatLoader } from "react-spinners";
 
 import { useAuthentication, useSuccessfullySavedToast } from "~/hooks";
-import { useArObjectUpdateMutation } from "~/hooks/mutations";
+import { useArObjectMintMutation } from "~/hooks/mutations";
 import {
   ModuleSubNav,
   ModulePage,
@@ -23,8 +48,7 @@ import {
   isArObjectReadyToMint,
   isArObjectMinting,
 } from "~/components/modules";
-
-import { filteredOutputByWhitelist } from "~/utils";
+import { ArObjectStatusEnum } from "~/utils";
 
 // TODO
 export const arObjectReadOwnQueryGQL = gql`
@@ -60,6 +84,7 @@ export const arObjectReadOwnQueryGQL = gql`
       title
       description
       status
+      key
     }
   }
 `;
@@ -67,94 +92,149 @@ export const arObjectReadOwnQueryGQL = gql`
 const Update = () => {
   const router = useRouter();
 
+  const mintDisclosure = useDisclosure();
+
   const [appUser] = useAuthentication();
   const successToast = useSuccessfullySavedToast();
-  const [disableNavigation, setDisableNavigation] = useState(false);
-  const [activeUploadCounter, setActiveUploadCounter] = useState<number>(0);
+
+  const [isAwaitingSignature, setIsAwaitingSignature] = useState(false);
   const [isNavigatingAway, setIsNavigatingAway] = useState(false);
 
-  const [firstMutation, firstMutationResults] = useArObjectUpdateMutation();
+  const [firstMutation, firstMutationResults] = useArObjectMintMutation();
   const [isFormError, setIsFormError] = useState(false);
 
   const disableForm = firstMutationResults.loading;
 
   const formMethods = useForm({
     mode: "onTouched",
-    resolver: yupResolver(ModuleArObjectUpdateSchema),
+    resolver: yupResolver(ModuleArObjectMintableSchema),
     defaultValues: {
-      dates: [],
+      setInitialAsk: true,
+      editionOf: 1,
+      askPrice: 0,
+      mintSignature: "",
     },
   });
-  const {
-    handleSubmit,
-    reset,
-    setError,
-    formState: { isSubmitting, isDirty },
-  } = formMethods;
+  const { handleSubmit, setValue, watch, getValues } = formMethods;
 
-  const { data, loading, error } = useQuery(arObjectReadOwnQueryGQL, {
+  const formDataQuery = useQuery(arObjectReadOwnQueryGQL, {
     variables: {
       id: parseInt(router.query.oid as string, 10),
       aid: parseInt(router.query.aid as string, 10),
     },
   });
 
-  useEffect(() => {
-    if (!data || !data.arObjectReadOwn) return;
+  const [signatureError, setSignatureError] = useState<string | undefined>(
+    undefined
+  );
 
-    reset({
-      ...filteredOutputByWhitelist(data.arObjectReadOwn, [
-        "title",
-        "description",
-        "orderNumber",
-        "editionOf",
-        "askPrice",
-        "status",
-        "key",
-      ]),
+  const { library, chainId, account, active, error, connector } =
+    useWeb3React<Web3Provider>();
+
+  const cancelMintSignature = () => {
+    setValue("mintSignature", "", {
+      shouldDirty: false,
     });
-  }, [reset, data]);
+    setIsAwaitingSignature(false);
+    mintDisclosure.onClose();
 
-  const onSubmit = async (
-    newData: yup.InferType<typeof ModuleArObjectUpdateSchema>
-  ) => {
+    console.log("cancelled window");
+  };
+
+  let openAR: OpenAR;
+  if (library && account) {
+    console.log("chain ID", chainId);
+    openAR = new OpenAR(library.getSigner(account), chainId);
+  }
+
+  const signMintRequest = async () => {
+    if (!openAR || !appUser) {
+      setIsFormError(true);
+      return;
+    }
+
+    setSignatureError(undefined);
     setIsFormError(false);
     setIsNavigatingAway(false);
-    try {
-      if (appUser) {
-        const { data, errors } = await firstMutation(
-          parseInt(router.query.oid as string, 10),
-          {
-            title: newData.title,
-            description: newData.description,
-            editionOf: newData.editionOf ?? null,
-            orderNumber: newData.orderNumber ?? null,
-            askPrice: newData.askPrice ?? null,
-            status: newData.status ?? null,
-            key: newData.key ?? "",
-            creator: {
-              connect: {
-                id: appUser.id,
-              },
-            },
-          }
-        );
 
-        if (!errors) {
-          successToast();
-          setIsNavigatingAway(true);
-          router.push(
-            `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`
-          );
-        } else {
-          setIsFormError(true);
-        }
-      } else {
-        setIsFormError(true);
-      }
-    } catch (err) {
-      setIsFormError(true);
-    }
+    const deadline = openAR.createDeadline(60 * 60 * 24);
+    const nonce = numberToBigNumber(new Date().getTime());
+
+    const awKeyHash = stringToHexHash(formDataQuery?.data?.artworkReadOwn?.key);
+    const objKeyHash = stringToHexHash(
+      formDataQuery?.data?.arObjectReadOwn?.key
+    );
+    const messageData = generateMintArObjectSignMessageData(
+      awKeyHash,
+      objKeyHash,
+      numberToBigNumber(getValues("editionOf")),
+      getValues("setInitialAsk"),
+      Decimal.new(getValues("askPrice")),
+      nonce,
+      deadline,
+      openAR.eip712Domain()
+    );
+
+    const msgParams = JSON.stringify(messageData);
+
+    var params = [account, msgParams];
+
+    library
+      .send("eth_signTypedData_v4", params)
+      .then((signature) => {
+        recoverSignatureFromMintArObject(
+          awKeyHash,
+          objKeyHash,
+          numberToBigNumber(getValues("editionOf")),
+          getValues("setInitialAsk"),
+          Decimal.new(getValues("askPrice")),
+          nonce,
+          deadline,
+          openAR.eip712Domain(),
+          signature
+        )
+          .then(async (recovered) => {
+            console.log("RRRR: ", recovered);
+            const newData = getValues();
+
+            const { errors } = await firstMutation(
+              parseInt(router.query.oid as string, 10),
+              {
+                editionOf: newData.editionOf ?? 1,
+                askPrice: newData.askPrice ?? 0,
+                mintSignature: {
+                  signature,
+                  deadline: deadline.toString(),
+                  nonce: nonce.toString(),
+                },
+              }
+            );
+
+            if (!errors) {
+              successToast();
+              setIsNavigatingAway(true);
+              cancelMintSignature();
+              router.push(
+                `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`
+              );
+            } else {
+              setIsFormError(true);
+            }
+          })
+          .catch((err) => {
+            setSignatureError("Sign failed. Please try again.");
+            console.error(err);
+          });
+      })
+      .catch((err) => {
+        setSignatureError(err.message);
+      });
+  };
+
+  const onSubmit = async (
+    newData: yup.InferType<typeof ModuleArObjectMintableSchema>
+  ) => {
+    console.log("handle sybmit");
   };
 
   // TODO: make more general
@@ -165,9 +245,9 @@ const Update = () => {
     {
       path: `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`,
       title:
-        data &&
-        (data.artworkReadOwn?.title ? (
-          trimTitle(data.artworkReadOwn?.title)
+        formDataQuery?.data &&
+        (formDataQuery?.data?.artworkReadOwn?.title ? (
+          trimTitle(formDataQuery?.data?.artworkReadOwn?.title)
         ) : (
           <BeatLoader size="10px" color="#fff" />
         )),
@@ -176,6 +256,8 @@ const Update = () => {
       title: "Mint object",
     },
   ];
+
+  console.log(watch(), ModuleArObjectMintableSchema.isValidSync(watch()));
 
   // TODO: this makes some trouble on SSR as the buttons look differently
   // as the user can't do thing on the server
@@ -186,36 +268,55 @@ const Update = () => {
       label: "Cancel",
       userCan: "artworkReadOwn",
     },
+    {
+      type: "button",
+      isLoading: isAwaitingSignature,
+      onClick: async () => {
+        setIsAwaitingSignature(true);
+        mintDisclosure.onOpen();
+
+        await signMintRequest();
+      },
+      label: "Mint",
+      isDisabled: !ModuleArObjectMintableSchema.isValidSync(watch()),
+      userCan: "artworkUpdateOwn",
+    },
   ];
 
-  const isReadyToMint = data && isArObjectReadyToMint(data);
+  const isReadyToMint =
+    formDataQuery?.data && isArObjectReadyToMint(formDataQuery?.data);
 
   useEffect(() => {
-    if (data && isArObjectMinting(data))
+    if (
+      !isAwaitingSignature &&
+      !isNavigatingAway &&
+      formDataQuery?.data &&
+      isArObjectMinting(formDataQuery?.data)
+    )
       router.replace(
         `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`
       );
-  }, [data, router]);
+  }, [formDataQuery, isAwaitingSignature, router]);
 
   return (
     <>
       <FormNavigationBlock
-        shouldBlock={
-          !isNavigatingAway &&
-          ((isDirty && !isSubmitting) || activeUploadCounter > 0)
-        }
+        shouldBlock={!isNavigatingAway && isAwaitingSignature}
       />
       <FormProvider {...formMethods}>
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={disableForm}>
             <ModuleSubNav breadcrumb={breadcrumb} buttonList={buttonList} />
             <ModulePage
-              isLoading={loading}
+              isLoading={formDataQuery?.loading}
               isError={
-                !!error || (!error && !loading && !data?.arObjectReadOwn)
+                !!formDataQuery?.error ||
+                (!formDataQuery?.error &&
+                  !formDataQuery?.loading &&
+                  !formDataQuery?.data?.arObjectReadOwn)
               }
             >
-              {!isReadyToMint && (
+              {!isReadyToMint && !isNavigatingAway && (
                 <Text
                   width="100%"
                   p="6"
@@ -240,19 +341,69 @@ const Update = () => {
                 </Text>
               )}
 
-              {isReadyToMint && (
+              {(isReadyToMint || isNavigatingAway) && (
                 <ModuleArtworkArObjectMint
                   action="update"
-                  data={data}
-                  setActiveUploadCounter={setActiveUploadCounter}
-                  disableNavigation={setDisableNavigation}
-                  validationSchema={ModuleArObjectUpdateSchema}
+                  data={formDataQuery?.data}
+                  awaitingSignature={isAwaitingSignature}
+                  validationSchema={ModuleArObjectMintableSchema}
                 />
               )}
             </ModulePage>
           </fieldset>
         </form>
       </FormProvider>
+      <Modal
+        closeOnOverlayClick={false}
+        isOpen={mintDisclosure.isOpen}
+        onClose={cancelMintSignature}
+      >
+        <ModalOverlay bg="blackAlpha.800" />
+        <ModalContent
+          color="white"
+          pt="0"
+          bg="openar.muddygreen"
+          borderRadius="0"
+        >
+          <ModalHeader pb="0">Signature required</ModalHeader>
+          <ModalBody pb="6">
+            <Text color="white" mb="4">
+              Please confirm to mint your object{" "}
+              <chakra.span fontWeight="bold" color="gray.400">
+                {formDataQuery?.data?.arObjectReadOwn?.title}
+              </chakra.span>{" "}
+              as an edition of{" "}
+              <chakra.span fontWeight="bold" color="gray.400">
+                {getValues("editionOf")}
+              </chakra.span>
+              {getValues("setInitialAsk") ? (
+                <>
+                  {" "}
+                  with an intitial ask of{" "}
+                  <chakra.span fontWeight="bold" color="gray.400">
+                    {getValues("askPrice").toFixed(2)}
+                  </chakra.span>{" "}
+                  xDai
+                </>
+              ) : (
+                <></>
+              )}{" "}
+              by giving the signature in your wallet.
+            </Text>
+            {signatureError && (
+              <Text color="openar.error">{signatureError}</Text>
+            )}
+            {!signatureError && (
+              <Flex my="6" justifyContent="center">
+                <BeatLoader color="#fff" />
+              </Flex>
+            )}
+            <Box>
+              <Button onClick={cancelMintSignature}>Cancel</Button>
+            </Box>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </>
   );
 };

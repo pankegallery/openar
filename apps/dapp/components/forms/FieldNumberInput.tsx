@@ -1,9 +1,4 @@
-import React, {
-  ChangeEventHandler,
-  ChangeEvent,
-  useRef,
-  useEffect,
-} from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useFormContext, Controller } from "react-hook-form";
 
 import {
@@ -18,7 +13,7 @@ import {
 import FieldErrorMessage from "./FieldErrorMessage";
 
 export interface FieldNumberSettings {
-  onChange?: ChangeEventHandler;
+  onChange?: (value: number) => void;
   rows?: number;
   required?: boolean;
   autoComplete?: string;
@@ -51,17 +46,34 @@ export const FieldNumberInput = ({
   name: string;
 }) => {
   const fieldRef = useRef<HTMLInputElement | null>(null);
-  
+
+  let defaultValue = settings?.defaultValue ?? "0.00";
+  if (typeof defaultValue !== "string")
+    defaultValue = defaultValue.toString();
+
+  const [fieldValue, setFieldValue] = useState(defaultValue);
+
+  const format = (val) => {
+    let num = val;
+
+    if (Number.isNaN(val))
+      num = "0.00";
+
+    if (typeof val !== "string")
+      num = val.toString();
+    
+    return num;
+  };
+
   const {
     formState: { errors },
+    getValues,
     setValue,
     control,
   } = useFormContext();
 
-  const onChangeHandler: ChangeEventHandler = (
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
-    settings?.onChange && settings?.onChange.call(null, event);
+  const onChangeHandler = (value: number) => {
+    settings?.onChange && settings?.onChange.call(null, value);
   };
 
   // browser auto fill and form initation might be at the wrong times
@@ -112,48 +124,61 @@ export const FieldNumberInput = ({
         <Controller
           control={control}
           name={name}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <NumberInput
-              defaultValue={settings.defaultValue}
-              max={
-                typeof settings?.max !== "undefined" ? settings.max : undefined
-              }
-              min={
-                typeof settings?.min !== "undefined" ? settings.min : undefined
-              }
-              precision={
-                typeof settings?.precision !== "undefined"
-                  ? settings.precision
-                  : undefined
-              }
-              step={
-                typeof settings?.step !== "undefined"
-                  ? settings.step
-                  : undefined
-              }
-              keepWithinRange={!!(settings.min || settings.max)}
-              clampValueOnBlur={!!(settings.min || settings.max)}
-             
-            >
-              <NumberInputField 
-                variant="flushed"
-                onBlur={(event) => {
-                  onBlur();
-                  onChangeHandler(event);
+          // render={({ field: { onChange, onBlur, value, ref } }) => {
+          render={({ field: { ref, ...restField } }) => {
+            return (
+              <NumberInput
+                {...{
+                  ...restField,
+                  onBlur: (event) => {
+                    restField.onBlur();
+                    onChangeHandler(restField.value);
+                  },
+                  onChange: (valueAsString, valueAsNumber) => {
+                    setFieldValue(valueAsString);
+                    restField.onChange(valueAsNumber);
+                    onChangeHandler(valueAsNumber);
+                  },
                 }}
-                onChange={(event) => {
-                  onChange(event);
-                  onChangeHandler(event);
-                }}
-                _placeholder={{
-                  opacity: "0.6",
-                  color: "white"
-                }}
-                border="0"
-                placeholder={settings.placeholder}
-              />
-            </NumberInput>
-          )}
+                value={format(fieldValue)}
+                defaultValue={settings.defaultValue}
+                max={
+                  typeof settings?.max !== "undefined"
+                    ? settings.max
+                    : undefined
+                }
+                min={
+                  typeof settings?.min !== "undefined"
+                    ? settings.min
+                    : undefined
+                }
+                precision={
+                  typeof settings?.precision !== "undefined"
+                    ? settings.precision
+                    : undefined
+                }
+                step={
+                  typeof settings?.step !== "undefined"
+                    ? settings.step
+                    : undefined
+                }
+                keepWithinRange={!!(settings.min || settings.max)}
+                clampValueOnBlur={!!(settings.min || settings.max)}
+              >
+                <NumberInputField
+                  variant="flushed"
+                  ref={ref}
+                  name={restField.name}
+                  _placeholder={{
+                    opacity: "0.6",
+                    color: "white",
+                  }}
+                  border="0"
+                  placeholder={settings.placeholder}
+                />
+              </NumberInput>
+            );
+          }}
         />
       </Box>
     </FormControl>

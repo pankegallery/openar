@@ -97,13 +97,6 @@ export type EIP712Domain = {
   verifyingContract: string;
 };
 
-export type EIP712Sig = {
-  deadline: BigNumberish;
-  v: any;
-  r: any;
-  s: any;
-};
-
 export type PlatformCuts = {
   firstSalePlatform: DecimalValue;
   firstSalePool: DecimalValue;

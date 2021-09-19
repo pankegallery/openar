@@ -56,7 +56,7 @@ export const IncompleteOverlay = ({
         <chakra.p pb="6">
           {subline}
         </chakra.p>
-        <Button>{buttonLabel}</Button>
+        {button && <Button type="submit">{buttonLabel}</Button>}
       </Box>
     </Flex>
   );

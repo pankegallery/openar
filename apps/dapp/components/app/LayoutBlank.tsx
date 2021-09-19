@@ -29,8 +29,6 @@ export const LayoutBlank = ({
     finalMode == modeSize
   }
 
-  console.log("mode", finalMode)
-
   return (
     <WalletConnectGate>
       <Head>

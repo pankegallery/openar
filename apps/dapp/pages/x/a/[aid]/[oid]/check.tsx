@@ -39,6 +39,7 @@ export const arObjectReadOwnQueryGQL = gql`
       title
       description
       status
+      key
     }
   }
 `;

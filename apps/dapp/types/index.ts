@@ -1,3 +1,4 @@
+import { PlatformCuts, Decimal } from "@openar/crypto";
 import type { RoleName, PermissionName } from "~/appuser/roles";
 
 export type Complete<T> = {
@@ -27,6 +28,7 @@ export type AppConfigSettings = {
   ankrXDaiRPCURL?: string | undefined;
   reauthenticateRedirectUrl?: string | undefined;
   defaultPageSize?: number;
+  platformCuts: PlatformCuts;
 };
  
 export type AppConfig = Complete<AppConfigSettings>;

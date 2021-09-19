@@ -105,8 +105,6 @@ const Create = () => {
     },
   ];
 
-  console.log(errors);
-
   return (
     <>
       <FormNavigationBlock shouldBlock={!isNavigatingAway && isDirty && !isSubmitting} />

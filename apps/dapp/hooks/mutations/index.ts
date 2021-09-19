@@ -5,3 +5,4 @@ export * from "./useAuthRequestEmailVerificationEmailMutation";
 export * from "./useAuthVerifyEmailMutation";
 export * from "./useModuleProfileMutations";
 export * from "./useArtworkMutations";
+export * from "./useArObjectMutations";

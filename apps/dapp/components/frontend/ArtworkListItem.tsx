@@ -42,8 +42,7 @@ export const ArtworkListItem = ({
   if (artist.trim().length === 0) artist = creator?.ethAddress;
 
   const router = useRouter();
-  console.log(router)
-
+  
   let cameFromExhibition;
 
   // TODO: VVU router.components does not work, does it? TypeScript complains that the function is not known

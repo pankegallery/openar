@@ -248,8 +248,6 @@ const Update = () => {
       type: "button",
       isLoading: false,
       onClick: async () => {
-        console.log("123", isArObjectFormValid(data, errors, getValues));
-
         if (isArObjectFormValid(data, errors, getValues)) {
           router.push(
             `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/check`

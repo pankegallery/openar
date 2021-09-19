@@ -1,3 +1,17 @@
+import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
+import { ContractTransaction } from "@ethersproject/contracts";
+import { Provider } from "@ethersproject/providers";
+import { Signer } from "@ethersproject/abstract-signer";
+import invariant from "tiny-invariant";
+import {
+  Market,
+  Market__factory,
+  Media,
+  Media__factory,
+} from "@openar/contracts";
+
+import { addresses, mediaContractName } from "./addresses";
+
 import {
   Ask,
   Bid,
@@ -5,33 +19,22 @@ import {
   EIP712Domain,
   EIP712Signature,
   MintData,
+  MediaData,
+  PlatformCuts,
 } from "./types";
+
 import { Decimal } from "./decimal";
-import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
-import { ContractTransaction } from "@ethersproject/contracts";
-import { Provider } from "@ethersproject/providers";
-import { Signer } from "@ethersproject/abstract-signer";
-import {
-  Market,
-  Market__factory,
-  Media,
-  Media__factory,
-} from "@openar/contracts";
-import { addresses } from "./addresses";
 
 import {
-  chainIdToNetworkName,
   constructMintData,
   isMintDataVerified,
   validateAndParseAddress,
   validateBidShares,
   validateURI,
   nanoidCustom16,
+  validateBidOrAsk,
+  stringToBytes32,
 } from "./utils";
-
-import { getBytes32FromString } from "./sha256tools";
-
-import invariant from "tiny-invariant";
 
 export class OpenAR {
   public chainId: number;
@@ -61,6 +64,7 @@ export class OpenAR {
       );
     }
 
+    // TODO: check if this works ...
     if (Signer.isSigner(signerOrProvider)) {
       this.readOnly = false;
     } else {
@@ -76,9 +80,8 @@ export class OpenAR {
       this.mediaAddress = parsedMediaAddress;
       this.marketAddress = parsedMarketAddress;
     } else {
-      const network = chainIdToNetworkName(chainId);
-      this.mediaAddress = addresses[network].media;
-      this.marketAddress = addresses[network].market;
+      this.mediaAddress = addresses[chainId].media;
+      this.marketAddress = addresses[chainId].market;
     }
 
     this.media = Media__factory.connect(this.mediaAddress, signerOrProvider);
@@ -123,6 +126,14 @@ export class OpenAR {
   }
 
   /**
+   * Fetches the media data the specified media on an instance of the openAR Media Contract
+   * @param mediaId
+   */
+  public async fetchMediaData(mediaId: BigNumberish): Promise<MediaData> {
+    return this.media.tokenMediaData(mediaId);
+  }
+
+  /**
    * Fetches the creator for the specified media on an instance of the openAR Media Contract
    * @param mediaId
    */
@@ -146,6 +157,14 @@ export class OpenAR {
    */
   public async fetchCurrentAsk(mediaId: BigNumberish): Promise<Ask> {
     return this.market.currentAskForToken(mediaId);
+  }
+
+  /**
+   * Fetches the current ask for the specified media on an instance of the openAR Media Contract
+   * @param mediaId
+   */
+  public async fetchPlatformCuts(): Promise<PlatformCuts> {
+    return this.market.platformCuts();
   }
 
   /**
@@ -293,7 +312,8 @@ export class OpenAR {
    */
   public async setAsk(
     mediaId: BigNumberish,
-    ask: Ask
+    ask: Ask,
+    bidShares: BidShares
   ): Promise<ContractTransaction> {
     try {
       this.ensureNotReadOnly();
@@ -301,7 +321,10 @@ export class OpenAR {
       return Promise.reject(err.message);
     }
 
-    return this.media.setAsk(mediaId, ask);
+    if (!validateBidOrAsk(Decimal.new(ask.amount.toString()), bidShares))
+      return Promise.reject("invalid ask");
+
+    return this.market.setAsk(mediaId, ask);
   }
 
   /**
@@ -311,7 +334,8 @@ export class OpenAR {
    */
   public async setBid(
     mediaId: BigNumberish,
-    bid: Bid
+    bid: Bid,
+    bidShares: BidShares
   ): Promise<ContractTransaction> {
     try {
       this.ensureNotReadOnly();
@@ -319,7 +343,10 @@ export class OpenAR {
       return Promise.reject(err.message);
     }
 
-    return this.media.setBid(mediaId, bid);
+    if (!validateBidOrAsk(Decimal.new(bid.amount.toString()), bidShares))
+      return Promise.reject("invalid bid");
+
+    return this.market.setBid(mediaId, bid);
   }
 
   /**
@@ -333,7 +360,7 @@ export class OpenAR {
       return Promise.reject(err.message);
     }
 
-    return this.media.removeAsk(mediaId);
+    return this.market.removeAsk(mediaId);
   }
 
   /**
@@ -365,7 +392,7 @@ export class OpenAR {
       return Promise.reject(err.message);
     }
 
-    return this.media.acceptBid(mediaId, bid);
+    return this.market.acceptBid(mediaId, bid);
   }
 
   /**
@@ -576,16 +603,19 @@ export class OpenAR {
    * Returns the EIP-712 Domain for an instance of the openAR Media Contract
    */
   public eip712Domain(): EIP712Domain {
-    // Due to a bug in ganache-core, set the chainId to 1 if its a local blockchain
-    // https://github.com/trufflesuite/ganache-core/issues/515
-    const chainId = this.chainId == 50 ? 1337 : this.chainId;
-
     return {
-      name: "openAR",
+      name: mediaContractName,
       version: "1",
-      chainId: chainId,
+      chainId: this.chainId,
       verifyingContract: this.mediaAddress,
     };
+  }
+
+  /**
+   * Returns the given seconds as BigNumber
+   */
+  public createDeadline(seconds: number): BigNumber {
+    return BigNumber.from(Math.floor(new Date().getTime() / 1000) + seconds);
   }
 
   /**
@@ -635,12 +665,12 @@ export class OpenAR {
         ]);
 
       const mintData = constructMintData(
-        getBytes32FromString(nanoidCustom16()),
-        getBytes32FromString(nanoidCustom16()),
+        stringToBytes32(nanoidCustom16()),
+        stringToBytes32(nanoidCustom16()),
         tokenURI,
         metadataURI,
-        getBytes32FromString(contentHash),
-        getBytes32FromString(metadataHash),
+        stringToBytes32(contentHash),
+        stringToBytes32(metadataHash),
         BigNumber.from(1),
         BigNumber.from(1)
       );

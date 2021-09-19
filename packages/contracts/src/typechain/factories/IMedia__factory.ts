@@ -361,6 +361,16 @@ const _abi = [
           },
           {
             internalType: "uint256",
+            name: "batchSize",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "batchOffset",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
             name: "initialAsk",
             type: "uint256",
           },

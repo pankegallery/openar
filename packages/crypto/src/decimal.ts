@@ -8,12 +8,17 @@ import { DecimalValue } from "./types";
  * to ethers `BigDecimal` with the ability to customize precision
  */
 export class Decimal {
+  value: BigNumber = BigNumber.from(0);
+
   /**
    * Returns a `DecimalValue` type from the specified value and precision
    * @param value
    * @param precision
    */
-  static new(value: number | string, precision: number = 18): DecimalValue {
+  static new(
+    value: number | string | BigNumber,
+    precision: number = 18
+  ): DecimalValue {
     invariant(
       precision % 1 === 0 && precision <= 18 && precision > -1,
       `${precision.toString()} must be a non-negative integer less than or equal to 18`

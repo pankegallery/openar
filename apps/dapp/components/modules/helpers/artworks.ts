@@ -1,7 +1,6 @@
 import { ArObjectStatusEnum, ArtworkStatusEnum } from "~/utils";
 
 export const isArObjectReadyToMint = (data: any) => {
-  console.log(data, data?.arObjectReadOwn?.status);
   if (
     ![ArObjectStatusEnum.PUBLISHED].includes(
       data?.arObjectReadOwn?.status ?? -1
@@ -40,9 +39,8 @@ export const isArObjectReadyToMint = (data: any) => {
 };
 
 export const isArObjectMinting = (data: any) => {
-  console.log(data, data?.arObjectReadOwn?.status);
   if (
-    ![ArObjectStatusEnum.MINT,
+    [ArObjectStatusEnum.MINT,
       ArObjectStatusEnum.MINTING,
       ArObjectStatusEnum.MINTRETRY,
       ArObjectStatusEnum.MINTED,

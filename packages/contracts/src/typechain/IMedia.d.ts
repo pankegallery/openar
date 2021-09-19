@@ -88,6 +88,8 @@ interface IMediaInterface extends ethers.utils.Interface {
         awKeyHex: BytesLike;
         objKeyHex: BytesLike;
         editionOf: BigNumberish;
+        batchSize: BigNumberish;
+        batchOffset: BigNumberish;
         initialAsk: BigNumberish;
         mintArObjectNonce: BigNumberish;
         currency: string;
@@ -363,6 +365,8 @@ export class IMedia extends Contract {
         awKeyHex: BytesLike;
         objKeyHex: BytesLike;
         editionOf: BigNumberish;
+        batchSize: BigNumberish;
+        batchOffset: BigNumberish;
         initialAsk: BigNumberish;
         mintArObjectNonce: BigNumberish;
         currency: string;
@@ -384,7 +388,7 @@ export class IMedia extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "mintArObject(address,string[],string[],bytes32[],bytes32[],(bytes32,bytes32,uint256,uint256,uint256,address,bool),((uint256),(uint256),(uint256),(uint256),(uint256)),(uint256,uint8,bytes32,bytes32))"(
+    "mintArObject(address,string[],string[],bytes32[],bytes32[],(bytes32,bytes32,uint256,uint256,uint256,uint256,uint256,address,bool),((uint256),(uint256),(uint256),(uint256),(uint256)),(uint256,uint8,bytes32,bytes32))"(
       creator: string,
       tokenURI: string[],
       metadataURI: string[],
@@ -394,6 +398,8 @@ export class IMedia extends Contract {
         awKeyHex: BytesLike;
         objKeyHex: BytesLike;
         editionOf: BigNumberish;
+        batchSize: BigNumberish;
+        batchOffset: BigNumberish;
         initialAsk: BigNumberish;
         mintArObjectNonce: BigNumberish;
         currency: string;
@@ -660,6 +666,8 @@ export class IMedia extends Contract {
       awKeyHex: BytesLike;
       objKeyHex: BytesLike;
       editionOf: BigNumberish;
+      batchSize: BigNumberish;
+      batchOffset: BigNumberish;
       initialAsk: BigNumberish;
       mintArObjectNonce: BigNumberish;
       currency: string;
@@ -681,7 +689,7 @@ export class IMedia extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "mintArObject(address,string[],string[],bytes32[],bytes32[],(bytes32,bytes32,uint256,uint256,uint256,address,bool),((uint256),(uint256),(uint256),(uint256),(uint256)),(uint256,uint8,bytes32,bytes32))"(
+  "mintArObject(address,string[],string[],bytes32[],bytes32[],(bytes32,bytes32,uint256,uint256,uint256,uint256,uint256,address,bool),((uint256),(uint256),(uint256),(uint256),(uint256)),(uint256,uint8,bytes32,bytes32))"(
     creator: string,
     tokenURI: string[],
     metadataURI: string[],
@@ -691,6 +699,8 @@ export class IMedia extends Contract {
       awKeyHex: BytesLike;
       objKeyHex: BytesLike;
       editionOf: BigNumberish;
+      batchSize: BigNumberish;
+      batchOffset: BigNumberish;
       initialAsk: BigNumberish;
       mintArObjectNonce: BigNumberish;
       currency: string;
@@ -957,6 +967,8 @@ export class IMedia extends Contract {
         awKeyHex: BytesLike;
         objKeyHex: BytesLike;
         editionOf: BigNumberish;
+        batchSize: BigNumberish;
+        batchOffset: BigNumberish;
         initialAsk: BigNumberish;
         mintArObjectNonce: BigNumberish;
         currency: string;
@@ -978,7 +990,7 @@ export class IMedia extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    "mintArObject(address,string[],string[],bytes32[],bytes32[],(bytes32,bytes32,uint256,uint256,uint256,address,bool),((uint256),(uint256),(uint256),(uint256),(uint256)),(uint256,uint8,bytes32,bytes32))"(
+    "mintArObject(address,string[],string[],bytes32[],bytes32[],(bytes32,bytes32,uint256,uint256,uint256,uint256,uint256,address,bool),((uint256),(uint256),(uint256),(uint256),(uint256)),(uint256,uint8,bytes32,bytes32))"(
       creator: string,
       tokenURI: string[],
       metadataURI: string[],
@@ -988,6 +1000,8 @@ export class IMedia extends Contract {
         awKeyHex: BytesLike;
         objKeyHex: BytesLike;
         editionOf: BigNumberish;
+        batchSize: BigNumberish;
+        batchOffset: BigNumberish;
         initialAsk: BigNumberish;
         mintArObjectNonce: BigNumberish;
         currency: string;
@@ -1297,6 +1311,8 @@ export class IMedia extends Contract {
         awKeyHex: BytesLike;
         objKeyHex: BytesLike;
         editionOf: BigNumberish;
+        batchSize: BigNumberish;
+        batchOffset: BigNumberish;
         initialAsk: BigNumberish;
         mintArObjectNonce: BigNumberish;
         currency: string;
@@ -1318,7 +1334,7 @@ export class IMedia extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "mintArObject(address,string[],string[],bytes32[],bytes32[],(bytes32,bytes32,uint256,uint256,uint256,address,bool),((uint256),(uint256),(uint256),(uint256),(uint256)),(uint256,uint8,bytes32,bytes32))"(
+    "mintArObject(address,string[],string[],bytes32[],bytes32[],(bytes32,bytes32,uint256,uint256,uint256,uint256,uint256,address,bool),((uint256),(uint256),(uint256),(uint256),(uint256)),(uint256,uint8,bytes32,bytes32))"(
       creator: string,
       tokenURI: string[],
       metadataURI: string[],
@@ -1328,6 +1344,8 @@ export class IMedia extends Contract {
         awKeyHex: BytesLike;
         objKeyHex: BytesLike;
         editionOf: BigNumberish;
+        batchSize: BigNumberish;
+        batchOffset: BigNumberish;
         initialAsk: BigNumberish;
         mintArObjectNonce: BigNumberish;
         currency: string;
@@ -1595,6 +1613,8 @@ export class IMedia extends Contract {
         awKeyHex: BytesLike;
         objKeyHex: BytesLike;
         editionOf: BigNumberish;
+        batchSize: BigNumberish;
+        batchOffset: BigNumberish;
         initialAsk: BigNumberish;
         mintArObjectNonce: BigNumberish;
         currency: string;
@@ -1616,7 +1636,7 @@ export class IMedia extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "mintArObject(address,string[],string[],bytes32[],bytes32[],(bytes32,bytes32,uint256,uint256,uint256,address,bool),((uint256),(uint256),(uint256),(uint256),(uint256)),(uint256,uint8,bytes32,bytes32))"(
+    "mintArObject(address,string[],string[],bytes32[],bytes32[],(bytes32,bytes32,uint256,uint256,uint256,uint256,uint256,address,bool),((uint256),(uint256),(uint256),(uint256),(uint256)),(uint256,uint8,bytes32,bytes32))"(
       creator: string,
       tokenURI: string[],
       metadataURI: string[],
@@ -1626,6 +1646,8 @@ export class IMedia extends Contract {
         awKeyHex: BytesLike;
         objKeyHex: BytesLike;
         editionOf: BigNumberish;
+        batchSize: BigNumberish;
+        batchOffset: BigNumberish;
         initialAsk: BigNumberish;
         mintArObjectNonce: BigNumberish;
         currency: string;

@@ -1,4 +1,4 @@
-import { Wallet, BigNumber } from "ethers";
+import { Wallet, BigNumber, utils } from "ethers";
 import warning from "tiny-warning";
 import invariant from "tiny-invariant";
 import { getAddress } from "@ethersproject/address";
@@ -21,10 +21,10 @@ import {
 
 import { fromRpcSig, toRpcSig } from "ethereumjs-util";
 
+import { Media } from "@openar/contracts";
+
 import { Decimal } from "./decimal";
 import {
-  // Ask,
-  // Bid,
   BidShares,
   DecimalValue,
   EIP712Domain,
@@ -88,20 +88,16 @@ export function validateBidShares(
 
 export function validateBidOrAsk(
   value: DecimalValue,
-  platform: DecimalValue,
-  pool: DecimalValue,
-  creator: DecimalValue,
-  owner: DecimalValue,
-  prevOwner: DecimalValue
+  bidShares: BidShares
 ): boolean {
   const decimal100 = Decimal.new(100);
   const sum = Decimal.new(0)
-    .value.add(value.value.mul(creator.value).div(decimal100.value))
-    .add(value.value.mul(platform.value).div(decimal100.value))
-    .add(value.value.mul(pool.value).div(decimal100.value))
-    .add(value.value.mul(owner.value).div(decimal100.value))
-    .add(value.value.mul(prevOwner.value).div(decimal100.value));
-  
+    .value.add(value.value.mul(bidShares.creator.value).div(decimal100.value))
+    .add(value.value.mul(bidShares.platform.value).div(decimal100.value))
+    .add(value.value.mul(bidShares.pool.value).div(decimal100.value))
+    .add(value.value.mul(bidShares.owner.value).div(decimal100.value))
+    .add(value.value.mul(bidShares.prevOwner.value).div(decimal100.value));
+
   return sum.toString() === value.value.toString();
 }
 
@@ -326,16 +322,19 @@ export const signMintWithSigMessageFromWallet = async (
  * @param domain
  */
 export const generateMintArObjectSignMessageData = (
-  keyHash: Bytes,
+  awKeyHash: BytesLike,
+  objKeyHash: BytesLike,
   editionOfBN: BigNumber,
   setInitialAsk: boolean,
-  initialAskBN: BigNumber,
-  nonce: number,
-  deadline: number,
+  initialAskDecimal: Decimal,
+  nonceBN: BigNumber,
+  deadlineBN: BigNumber,
   domain: EIP712Domain
 ) => {
   const editionOf = editionOfBN.toString();
-  const initialAsk = initialAskBN.toString();
+  const initialAsk = initialAskDecimal.value.toString();
+  const nonce = nonceBN.toString();
+  const deadline = deadlineBN.toString();
 
   return {
     types: {
@@ -346,7 +345,8 @@ export const generateMintArObjectSignMessageData = (
         { name: "verifyingContract", type: "address" },
       ],
       MintArObject: [
-        { name: "keyHash", type: "bytes32" },
+        { name: "awKeyHash", type: "bytes32" },
+        { name: "objKeyHash", type: "bytes32" },
         { name: "editionOf", type: "uint256" },
         { name: "setInitialAsk", type: "bool" },
         { name: "initialAsk", type: "uint256" },
@@ -357,7 +357,8 @@ export const generateMintArObjectSignMessageData = (
     primaryType: "MintArObject" as "MintArObject" | "EIP712Domain",
     domain,
     message: {
-      keyHash,
+      awKeyHash,
+      objKeyHash,
       editionOf,
       setInitialAsk,
       initialAsk,
@@ -368,22 +369,24 @@ export const generateMintArObjectSignMessageData = (
 };
 
 export const recoverSignatureFromMintArObject = async (
-  keyHash: Bytes,
+  awKeyHash: BytesLike,
+  objKeyHash: BytesLike,
   editionOfBN: BigNumber,
   setInitialAsk: boolean,
-  initialAskBN: BigNumber,
-  nonce: number,
-  deadline: number,
+  initialAskDecimal: Decimal,
+  nonceBN: BigNumber,
+  deadline: BigNumber,
   domain: EIP712Domain,
   sig: string
 ) => {
   const recovered = recoverTypedSignature_v4({
     data: generateMintArObjectSignMessageData(
-      keyHash,
+      awKeyHash,
+      objKeyHash,
       editionOfBN,
       setInitialAsk,
-      initialAskBN,
-      nonce,
+      initialAskDecimal,
+      nonceBN,
       deadline,
       domain
     ),
@@ -404,29 +407,63 @@ export const recoverSignatureFromMintArObject = async (
  * @param domain
  */
 export const signMintArObjectMessageFromWallet = async (
+  media: Media,
   owner: Wallet,
-  keyHash: Bytes,
+  awKeyHash: BytesLike,
+  objKeyHash: BytesLike,
   editionOfBN: BigNumber,
   setInitialAsk: boolean,
-  initialAskBN: BigNumber,
-  nonce: number,
-  deadline: number,
-  domain: EIP712Domain
-): Promise<EIP712Signature> => {
-  return new Promise<EIP712Signature>((res, reject) => {
+  initialAskDecimal: Decimal,
+  nonceBN: BigNumber,
+  chainId: number
+) => {
+  return new Promise<EIP712Signature>(async (res, reject) => {
+    const deadline = Math.floor(new Date().getTime() / 1000) + 60 * 60 * 24; // 24 hours
+    const name = await media.name();
+
+    const editionOf = editionOfBN.toString();
+    const initialAsk = initialAskDecimal.value.toString();
+    const nonce = nonceBN.toString();
+
     try {
       const sig = signTypedData_v4(
         Buffer.from(owner.privateKey.slice(2), "hex"),
         {
-          data: generateMintArObjectSignMessageData(
-            keyHash,
-            editionOfBN,
-            setInitialAsk,
-            initialAskBN,
-            nonce,
-            deadline,
-            domain
-          ),
+          data: {
+            types: {
+              EIP712Domain: [
+                { name: "name", type: "string" },
+                { name: "version", type: "string" },
+                { name: "chainId", type: "uint256" },
+                { name: "verifyingContract", type: "address" },
+              ],
+              MintArObject: [
+                { name: "awKeyHash", type: "bytes32" },
+                { name: "objKeyHash", type: "bytes32" },
+                { name: "editionOf", type: "uint256" },
+                { name: "setInitialAsk", type: "bool" },
+                { name: "initialAsk", type: "uint256" },
+                { name: "nonce", type: "uint256" },
+                { name: "deadline", type: "uint256" },
+              ],
+            },
+            primaryType: "MintArObject",
+            domain: {
+              name,
+              version: "1",
+              chainId,
+              verifyingContract: media.address,
+            },
+            message: {
+              awKeyHash,
+              objKeyHash,
+              editionOf,
+              setInitialAsk,
+              initialAsk,
+              nonce,
+              deadline,
+            },
+          },
         }
       );
       const response = fromRpcSig(sig);
@@ -434,7 +471,7 @@ export const signMintArObjectMessageFromWallet = async (
         r: response.r,
         s: response.s,
         v: response.v,
-        deadline: BigNumber.from(deadline),
+        deadline: deadline.toString(),
       });
     } catch (e) {
       // eslint-disable-next-line no-console
@@ -443,27 +480,6 @@ export const signMintArObjectMessageFromWallet = async (
     }
   });
 };
-
-/**
- * Returns the proper network name for the specified chainId
- *
- * @param chainId
- */
-export function chainIdToNetworkName(chainId: number): string {
-  switch (chainId) {
-    case 1337: {
-      return "localhost";
-    }
-    case 100: {
-      return "xDai";
-    }
-  }
-
-  invariant(
-    false,
-    `chainId ${chainId} not officially supported by the openAR Protocol`
-  );
-}
 
 /**
  * Validates the URI is prefixed with `https://`
@@ -588,3 +604,23 @@ export async function isMintDataVerified(
 
   return isTokenURIVerified && isMetadataURIVerified;
 }
+
+export const stringToHex = (str: string) => utils.formatBytes32String(str);
+
+export const stringToSha256 = (str: string) => utils.sha256(str);
+
+export const hexToBytes = (hex: string) => utils.arrayify(hex);
+
+export const stringToBytes32 = (str: string) => {
+  return utils.arrayify(utils.formatBytes32String(str));
+};
+
+export const stringToHexHash = (str: string) => {
+  return utils.sha256(utils.formatBytes32String(str));
+};
+
+export const stringToBytes32Hash = (str: string) => {
+  return utils.arrayify(utils.sha256(utils.formatBytes32String(str)));
+};
+
+export const numberToBigNumber = (n: number) => BigNumber.from(n);

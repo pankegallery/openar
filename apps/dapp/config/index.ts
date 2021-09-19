@@ -1,3 +1,4 @@
+import { Decimal } from "packages/crypto/dist";
 import type { AppConfig } from "~/types";
 
 const domain = `${process.env.NEXT_PUBLIC_API_URL}` !== "undefined" ? new URL(`${process.env.NEXT_PUBLIC_API_URL}`) : "";
@@ -18,4 +19,11 @@ export const appConfig: AppConfig = {
   infuraApiKey: `${process.env.NEXT_PUBLIC_INFURA_ID}`,
   ankrXDaiRPCURL: `${process.env.NEXT_PUBLIC_ANKR_XDAI_RPC}`,
   defaultPageSize: 30,
+  platformCuts: {
+    firstSalePlatform: Decimal.new(10),
+    firstSalePool: Decimal.new(5),
+    furtherSalesPlatform: Decimal.new(5),
+    furtherSalesPool: Decimal.new(5),
+    furtherSalesCreator: Decimal.new(5),
+  }
 };
