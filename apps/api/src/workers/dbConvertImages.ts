@@ -103,10 +103,9 @@ const doChores = async () => {
   postMessage("Creating prisma client");
   const { PrismaClient } = Prisma;
   const prisma = new PrismaClient({
-    // TODO: how to ensuere how many connections are allow??? Should only be one for this one...
     datasources: {
       db: {
-        url: apiConfig.db.url,
+        url: `${apiConfig.db.url}&connection_limit=1`,
       },
     },
   });
@@ -223,7 +222,7 @@ const doChores = async () => {
 
     await prisma.$disconnect();
     postMessage(`[WORKER:DbConvertImages]: Processed ${count} images`);
-  } catch (Err) {
+  } catch (Err: any) {
     if (prisma) await prisma.$disconnect();
     postMessage(
       `[WORKER:DbConvertImages]: Failed to run worker. ${Err.name} ${Err.message}`

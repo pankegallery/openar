@@ -37,6 +37,7 @@ export type ApiModelScopes =
 
 export interface ApiConfigDB {
   url: string;
+  connectionLimit: number;
   defaultPageSize: number;
   maxPageSize: number;
   privateJSONDataKeys: PartialRecord<ApiModelScopes, Array<string>>;
@@ -130,6 +131,7 @@ const db: ApiConfigDB = {
     "Error: missing/wrong .env config: DATABASE_URL"
   ),
   defaultPageSize: 50,
+  connectionLimit: 5,
   maxPageSize: 500,
   privateJSONDataKeys: {
     all: ["password"],

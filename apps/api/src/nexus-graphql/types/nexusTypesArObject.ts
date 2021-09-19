@@ -18,6 +18,7 @@ import {
   ImageStatusEnum,
   ArObjectStatusEnum,
   ArModelStatusEnum,
+  ArtworkStatusEnum,
   ApiError,
 } from "../../utils";
 import { GQLJson } from "./nexusTypesShared";
@@ -50,7 +51,7 @@ export const ArObject = objectType({
     t.nonNull.int("status");
 
     t.float("askPrice");
-    
+
     t.int("orderNumber");
     t.int("editionOf");
 
@@ -518,6 +519,16 @@ export const ArObjectUpsertInput = inputObjectType({
   },
 });
 
+export const ArObjectMintInput = inputObjectType({
+  name: "ArObjectMintInput",
+  definition(t) {
+    t.int("id");
+    t.float("askPrice");
+    t.int("editionOf");
+    t.json("mintSignature");
+  },
+});
+
 export const ArObjectMutations = extendType({
   type: "Mutation",
 
@@ -580,6 +591,57 @@ export const ArObjectMutations = extendType({
         const arObject = await daoArObjectUpdate(args.id, {
           ...args.data,
           status: args.data?.status ?? ArObjectStatusEnum.DRAFT,
+        });
+
+        if (!arObject)
+          throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Update failed");
+
+        return arObject;
+      },
+    });
+
+    t.nonNull.field("arObjectMint", {
+      type: "ArObject",
+
+      args: {
+        id: nonNull(intArg()),
+        data: nonNull("ArObjectMintInput"),
+      },
+
+      authorize: async (...[, args, ctx]) => {
+        if (!authorizeApiUser(ctx, "artworkUpdateOwn")) return false;
+
+        const count = await daoArObjectQueryCount({
+          id: args.id,
+          status: {
+            notIn: [
+              ArObjectStatusEnum.MINT,
+              ArObjectStatusEnum.MINTING,
+              ArObjectStatusEnum.MINTED,
+              ArObjectStatusEnum.MINTERROR,
+              ArObjectStatusEnum.MINTRETRY,
+              ArObjectStatusEnum.DELETED,
+            ],
+          },
+          creator: {
+            id: ctx.appUser?.id ?? 0,
+          },
+        });
+
+        return count === 1;
+      },
+
+      async resolve(...[, args]) {
+        const arObject = await daoArObjectUpdate(args.id, {
+          editionOf: args.data.editionOf,
+          askPrice: args.data.askPrice,
+          mintSignature: args.data.mintSignature,
+          status: ArObjectStatusEnum.MINT,
+          artwork: {
+            update: {
+              status: ArtworkStatusEnum.HASMINTEDOBJECTS,
+            },
+          },
         });
 
         if (!arObject)

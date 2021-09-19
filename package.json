@@ -35,7 +35,7 @@
     "app:api:db:dev:seed": "NODE_ENV=development dotenv -e .env -- node --loader ts-node/esm ./apps/api/src/db/seeds/resetdb.ts",
     "app:dapp:start": "NODE_END=production npm run start -w dapp",
     "app:dapp:build": "NODE_END=production npm run package:crypto:build && npm run build -w dapp && openar_dapp_restart",
-    "app:dapp:dev": "PORT=$(grep DEV_DAPP_PORT .env | cut -d '=' -f2) NEXT_PUBLIC_API_URL=$(grep '^BASE_URL_API' .env | cut -d '=' -f2) npm run dev -w dapp",
+    "app:dapp:dev": "PORT=$(grep DEV_DAPP_PORT .env | cut -d '=' -f2) NEXT_PUBLIC_API_URL=$(grep '^BASE_URL_API' .env | cut -d '=' -f2) sleep 5 &&  npm run dev -w dapp",
     "app:dapp:lint": "npm run lint -w dapp",
     "package:contracts:lint": "eslint ./packages/contracts/src --ext .js,.ts",
     "package:contracts:build": "NODE_ENV=production rimraf ./packages/contracts/dist && tsc --project ./packages/contracts/tsconfig.json",

@@ -54,6 +54,12 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  ArObjectMintInput: { // input type
+    askPrice?: number | null; // Float
+    editionOf?: number | null; // Int
+    id?: number | null; // Int
+    mintSignature?: NexusGenScalars['JSON'] | null; // JSON
+  }
   ArObjectUpsertInput: { // input type
     arModels?: NexusGenScalars['JSON'] | null; // JSON
     artwork?: NexusGenScalars['JSON'] | null; // JSON
@@ -444,6 +450,7 @@ export interface NexusGenFieldTypes {
     arModelDelete: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     arObjectCreate: NexusGenRootTypes['ArObject']; // ArObject!
     arObjectDelete: NexusGenRootTypes['BooleanResult']; // BooleanResult!
+    arObjectMint: NexusGenRootTypes['ArObject']; // ArObject!
     arObjectUpdate: NexusGenRootTypes['ArObject']; // ArObject!
     artworkCreate: NexusGenRootTypes['Artwork']; // Artwork!
     artworkDelete: NexusGenRootTypes['BooleanResult']; // BooleanResult!
@@ -656,6 +663,7 @@ export interface NexusGenFieldTypeNames {
     arModelDelete: 'BooleanResult'
     arObjectCreate: 'ArObject'
     arObjectDelete: 'BooleanResult'
+    arObjectMint: 'ArObject'
     arObjectUpdate: 'ArObject'
     artworkCreate: 'Artwork'
     artworkDelete: 'BooleanResult'
@@ -744,6 +752,10 @@ export interface NexusGenArgTypes {
       data: NexusGenInputs['ArObjectUpsertInput']; // ArObjectUpsertInput!
     }
     arObjectDelete: { // args
+      id: number; // Int!
+    }
+    arObjectMint: { // args
+      data: NexusGenInputs['ArObjectMintInput']; // ArObjectMintInput!
       id: number; // Int!
     }
     arObjectUpdate: { // args

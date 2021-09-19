@@ -6,3 +6,4 @@ export * as typeguards from "./typeguards";
 export * from "./asserts";
 export * from "./string-convert";
 export * from "./htmlToString";
+export * from "./sha256Tools";

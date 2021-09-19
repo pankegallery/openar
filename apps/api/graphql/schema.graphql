@@ -45,6 +45,13 @@ type ArObject {
   video: String
 }
 
+input ArObjectMintInput {
+  askPrice: Float
+  editionOf: Int
+  id: Int
+  mintSignature: JSON
+}
+
 """List all the ArObjects in the database."""
 type ArObjectQueryResult {
   arObjects: [ArObject]
@@ -231,6 +238,7 @@ type Mutation {
   arModelDelete(id: Int!): BooleanResult!
   arObjectCreate(data: ArObjectUpsertInput!): ArObject!
   arObjectDelete(id: Int!): BooleanResult!
+  arObjectMint(data: ArObjectMintInput!, id: Int!): ArObject!
   arObjectUpdate(data: ArObjectUpsertInput!, id: Int!): ArObject!
   artworkCreate(data: ArtworkUpsertInput!): Artwork!
   artworkDelete(id: Int!): BooleanResult!

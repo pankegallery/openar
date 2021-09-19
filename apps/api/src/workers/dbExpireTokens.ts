@@ -1,10 +1,11 @@
 import { parentPort } from "worker_threads";
-import { prismaDisconnect } from "../db";
-import { daoTokenDeleteExpired } from "../dao/token";
 
-// TODO: Should use independed prisma connect
+// !!!! ALWAY REMEMBER TO CLOSE YOU DB CONNECTION !!!
+import Prisma from "@prisma/client";
 
-// ALWAY REMEMBER TO CLOSE YOU DB CONNECTION !!!
+import { getApiConfig } from "../config";
+
+const apiConfig = getApiConfig();
 
 // https://github.com/breejs/bree#long-running-jobs
 // Or use https://threads.js.org/usage for a queing experience .. .
@@ -25,10 +26,28 @@ const postMessage = (msg: string) => {
 };
 
 const doChores = async () => {
+  const { PrismaClient } = Prisma;
+  const prisma = new PrismaClient({
+    datasources: {
+      db: {
+        url: `${apiConfig.db.url}&connection_limit=1`,
+      },
+    },
+  });
+
   try {
-    const count = await daoTokenDeleteExpired();
+    const { count } = await prisma.token.deleteMany({
+      where: {
+        expires: {
+          lt: new Date(),
+        },
+      },
+    });
+
+    await prisma.$disconnect();
     postMessage(`[WORKER:DbExpireTokens]: Deleted ${count} expired token`);
-  } catch (Err) {
+  } catch (Err: any) {
+    if (prisma) await prisma.$disconnect();
     postMessage(
       `[WORKER:DbExpireTokens]: Failed to run worker. ${Err.name} ${Err.message}`
     );
@@ -37,12 +56,10 @@ const doChores = async () => {
 
 doChores()
   .then(async () => {
-    await prismaDisconnect();
     if (parentPort) postMessage("done");
     else process.exit(0);
   })
-  .catch(async (Err) => {
-    await prismaDisconnect();
+  .catch((Err) => {
     postMessage(JSON.stringify(Err));
     process.exit(1);
   });
