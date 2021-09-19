@@ -24,6 +24,7 @@ export interface ButtonListElementLink extends ModuleAccessRules {
   to?: string;
   as?: React.ReactNode;
   isDisabled?: boolean;
+  skip?: boolean;
   type: "back" | "navigation";
 }
 
@@ -31,6 +32,7 @@ export interface ButtonListElementSubmit extends ModuleAccessRules {
   label: string;
   isLoading: boolean;
   isDisabled?: boolean;
+  skip?: boolean;
   type: "submit";
 }
 
@@ -39,6 +41,7 @@ export interface ButtonListElementButton extends ModuleAccessRules {
   isLoading: boolean;
   isDisabled?: boolean;
   onClick: MouseEventHandler;
+  skip?: boolean;
   type: "button";
 }
 
@@ -79,11 +82,13 @@ export const ModuleSubNav = ({
       button,
       index
     ) {
+      if (button.skip) return pButtonList;
       
       if (button.userIs && !appUser?.has(button.userIs)) return pButtonList;
 
       if (button.userCan && !appUser?.can(button.userCan)) return pButtonList;
 
+      
       let buttonProps: ButtonListRenderElement = {
         key: `bl-${index}`,
         variant: "outline",

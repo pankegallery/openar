@@ -574,8 +574,11 @@ export const ArObjectMutations = extendType({
           id: args.id,
           status: {
             notIn: [
+              ArObjectStatusEnum.MINT,
               ArObjectStatusEnum.MINTING,
               ArObjectStatusEnum.MINTED,
+              ArObjectStatusEnum.MINTERROR,
+              ArObjectStatusEnum.MINTRETRY,
               ArObjectStatusEnum.DELETED,
             ],
           },
@@ -587,10 +590,24 @@ export const ArObjectMutations = extendType({
         return count === 1;
       },
 
-      async resolve(...[, args]) {
+      async resolve(...[, args, ctx]) {
+        const currentObject = await daoArObjectGetOwnById(
+          args.id,
+          ctx?.appUser?.id ?? 0
+        );
+
+        if (!currentObject)
+          throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Update failed");
+
         const arObject = await daoArObjectUpdate(args.id, {
           ...args.data,
-          status: args.data?.status ?? ArObjectStatusEnum.DRAFT,
+
+          status: [
+            ArObjectStatusEnum.DRAFT,
+            ArObjectStatusEnum.PUBLISHED,
+          ].includes(currentObject?.status)
+            ? args.data?.status ?? ArObjectStatusEnum.DRAFT
+            : undefined,
         });
 
         if (!arObject)
@@ -664,7 +681,14 @@ export const ArObjectMutations = extendType({
         const count = await daoArObjectQueryCount({
           id: args.id,
           status: {
-            notIn: [ArObjectStatusEnum.MINTED, ArObjectStatusEnum.DELETED],
+            notIn: [
+              ArObjectStatusEnum.MINT,
+              ArObjectStatusEnum.MINTING,
+              ArObjectStatusEnum.MINTED,
+              ArObjectStatusEnum.MINTERROR,
+              ArObjectStatusEnum.MINTRETRY,
+              ArObjectStatusEnum.DELETED,
+            ],
           },
           creator: {
             id: ctx.appUser?.id ?? 0,

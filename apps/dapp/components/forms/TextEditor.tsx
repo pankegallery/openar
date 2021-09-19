@@ -331,7 +331,7 @@ export const TextEditor = ({
   content,
   contentType = "html",
   maxLength,
-  isInvalid,
+  isInvalid
 }: {
   name: string;
   type: TextEditorTypes;

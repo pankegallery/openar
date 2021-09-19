@@ -169,6 +169,8 @@ const Update = () => {
     },
   ];
 
+  console.log(data?.artworkReadOwn?.status === ArtworkStatusEnum.HASMINTEDOBJECTS);
+
   // TODO: this makes some trouble on SSR as the buttons look differently
   // as the user can't do thing on the server
   const buttonList: ButtonListElement[] = [
@@ -192,15 +194,17 @@ const Update = () => {
           : "Unpublish",
       isDisabled:
         disableNavigation ||
-        activeUploadCounter > 0 ||
-        data?.artworkReadOwn?.status !== ArtworkStatusEnum.HASMINTEDOBJECTS,
+        activeUploadCounter > 0,
+      skip: data?.artworkReadOwn?.status === ArtworkStatusEnum.HASMINTEDOBJECTS,
       userCan: "artworkUpdateOwn",
     },
     {
       type: "button",
       isLoading: isSubmitting,
       onClick: () => {
-        setValue("status", ArtworkStatusEnum.PUBLISHED);
+        if (data?.artworkReadOwn?.status === ArtworkStatusEnum.DRAFT)
+          setValue("status", ArtworkStatusEnum.PUBLISHED);
+          
         handleSubmit(onSubmit)();
       },
       label: [

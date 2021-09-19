@@ -60,6 +60,7 @@ export const ModuleArtworkArObjectForm = ({
     {}
   );
 
+  const disableFormFields = ![ArObjectStatusEnum.DRAFT, ArObjectStatusEnum.PUBLISHED].includes(arObjectReadOwn?.status);
   return (
     <>
       <Grid
@@ -74,6 +75,7 @@ export const ModuleArtworkArObjectForm = ({
               id="title"
               type="title"
               label="Object title"
+              isDisabled={disableFormFields}
               isRequired={yupIsFieldRequired("title", validationSchema)}
               settings={{
                 // defaultValue: data.abc.key
@@ -95,6 +97,7 @@ export const ModuleArtworkArObjectForm = ({
               type="basic"
               name="description"
               label="Additional Object description"
+              isDisabled={disableFormFields}
               isRequired={yupIsFieldRequired("description", validationSchema)}
               settings={{
                 maxLength: 500,
@@ -193,6 +196,7 @@ export const ModuleArtworkArObjectForm = ({
                   canDelete={arObjectReadOwn?.status === ArObjectStatusEnum.DRAFT}
                   deleteButtonGQL={imageDeleteMutationGQL}
                   shouldSetFormDirtyOnDelete={true}
+                  isDisabled={disableFormFields}
                   connectWith={{
                     heroImageArObjects: {
                       connect: {
@@ -224,7 +228,7 @@ export const ModuleArtworkArObjectForm = ({
               borderBottom="1px solid #fff"
             >
               <FieldRow>
-                <FormLabel>AR models</FormLabel>
+                <FormLabel opacity={disableFormFields? 0.4:1}>AR models</FormLabel>
                 <Text fontSize="xs" className="muted">Add one model each for iOS and Android</Text>
                 <Grid
                   w="100%"
@@ -246,6 +250,7 @@ export const ModuleArtworkArObjectForm = ({
                       "modelGlb",
                       validationSchema
                     )}
+                    isDisabled={disableFormFields}
                     setActiveUploadCounter={setActiveUploadCounter}
                     canDelete={arObjectReadOwn?.status === ArObjectStatusEnum.DRAFT}
                     deleteButtonGQL={arModelDeleteMutationGQL}
@@ -277,6 +282,7 @@ export const ModuleArtworkArObjectForm = ({
                       "modelUsdz",
                       validationSchema
                     )}
+                    isDisabled={disableFormFields}
                     setActiveUploadCounter={setActiveUploadCounter}
                     canDelete={arObjectReadOwn?.status === ArObjectStatusEnum.DRAFT}
                     deleteButtonGQL={arModelDeleteMutationGQL}

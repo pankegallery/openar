@@ -162,13 +162,16 @@ export const components = {
           fontFamily: "Source code pro, monospace",
           bg: "transparent",
           borderColor: "white",
+          p: "0",
           _hover: {
             borderColor: "gray.400",
           },
           _autofill: {
             bg: "gray.700",
           },
-          p: "0",
+          _disabled: {
+            opacity: 0.4
+          }
         },
       },
     },

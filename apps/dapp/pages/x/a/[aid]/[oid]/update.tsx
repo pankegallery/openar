@@ -9,10 +9,9 @@ import Head from "next/head";
 import { LayoutOpenAR } from "~/components/app";
 import { FormNavigationBlock } from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
-import { ModuleArtworkArObjectForm } from "~/components/modules/forms";
+import { ModuleArtworkArObjectForm, ModuleArObjectNFTForm } from "~/components/modules/forms";
 import {
-  ModuleArObjectUpdateSchema,
-  ModuleArObjectMintableSchema,
+  ModuleArObjectUpdateSchema
 } from "~/components/modules/validation";
 import { RestrictPageAccess } from "~/components/utils";
 import { BeatLoader } from "react-spinners";
@@ -23,7 +22,7 @@ import { useArObjectUpdateMutation } from "~/hooks/mutations";
 import {
   ModuleSubNav,
   ModulePage,
-  ButtonListElement,
+  ButtonListElement
 } from "~/components/modules";
 
 import { filteredOutputByWhitelist, ArObjectStatusEnum, ArtworkStatusEnum } from "~/utils";
@@ -115,7 +114,7 @@ const Update = () => {
     setValue,
     getValues,
     watch,
-    formState: { isSubmitting, isDirty, isSubmitSuccessful, errors, isValid },
+    formState: { isSubmitting, isDirty, errors, isValid },
   } = formMethods;
 
   const { data, loading, error } = useQuery(arObjectReadOwnQueryGQL, {
@@ -228,21 +227,30 @@ const Update = () => {
           ? "Save draft"
           : "Unpublish",
       isDisabled: disableNavigation || activeUploadCounter > 0,
+      skip: ![
+        ArtworkStatusEnum.DRAFT,
+        ArtworkStatusEnum.PUBLISHED,
+      ].includes(data?.arObjectReadOwn?.status),
       userCan: "artworkUpdateOwn",
     },
     {
       type: "button",
       isLoading: isSubmitting,
       onClick: () => {
-        setValue("status", ArObjectStatusEnum.PUBLISHED);
+        if (data?.artworkReadOwn?.status === ArtworkStatusEnum.DRAFT)
+          setValue("status", ArtworkStatusEnum.PUBLISHED);
         handleSubmit(onSubmit)();
       },
       label:
-        data?.arObjectReadOwn?.status === ArObjectStatusEnum.PUBLISHED
-          ? "Save"
-          : "Publish",
+        data?.arObjectReadOwn?.status === ArObjectStatusEnum.DRAFT
+          ? "Publish"
+          : "Save",
       isDisabled: disableNavigation || activeUploadCounter > 0,
       userCan: "artworkUpdateOwn",
+      skip: ![
+        ArtworkStatusEnum.DRAFT,
+        ArtworkStatusEnum.PUBLISHED,
+      ].includes(data?.arObjectReadOwn?.status),
     },
     {
       type: "button",
@@ -264,6 +272,10 @@ const Update = () => {
         !couldMint ||
         disableNavigation ||
         activeUploadCounter > 0,
+      skip: ![
+        ArtworkStatusEnum.DRAFT,
+        ArtworkStatusEnum.PUBLISHED,
+      ].includes(data?.arObjectReadOwn?.status),
       userCan: "artworkUpdateOwn",
     },
   ];
@@ -297,6 +309,8 @@ const Update = () => {
                   in a little bit.
                 </Text>
               )}
+
+              <ModuleArObjectNFTForm data={data} />
               <ModuleArtworkArObjectForm
                 action="update"
                 data={data}
