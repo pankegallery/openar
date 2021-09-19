@@ -1,6 +1,7 @@
-import { string, object, number, boolean } from "yup";
+import { string, object, number, boolean, mixed } from "yup";
 import { validateBidOrAsk, Decimal } from "@openar/crypto";
 import { appConfig } from "~/config";
+import { ArObjectStatusEnum } from "~/utils";
 
 export const ModuleArtworkCreateSchema = object().shape({
   title: string().required(),
@@ -24,18 +25,30 @@ export const ModuleArObjectCreateSchema = object().shape({
 export const ModuleArObjectUpdateSchema = ModuleArObjectCreateSchema.concat(
   object().shape({
     status: number().required(),
-    heroImage: number()
-      .required()
-      .nullable()
-      .typeError("Please upload an image"),
-    modelGlb: number()
-      .required()
-      .nullable()
-      .typeError("Please upload your .gbl or .gltf model"),
-    modelUsdz: number()
-      .required()
-      .nullable()
-      .typeError("Please upload your .usdz file"),
+    heroImage: mixed().when("status", {
+      is: ArObjectStatusEnum.PUBLISHED,
+      then: number()
+        .required()
+        .nullable()
+        .typeError("Please upload an image"),
+      otherwise: mixed().nullable()
+    }),
+    modelGlb: mixed().when("status", {
+      is: ArObjectStatusEnum.PUBLISHED,
+      then: number()
+        .required()
+        .nullable()
+        .typeError("Please upload your .gbl or .gltf model"),
+      otherwise: mixed().nullable()
+    }),
+    modelUsdz: mixed().when("status", {
+      is: ArObjectStatusEnum.PUBLISHED,
+      then: number()
+        .required()
+        .nullable()
+        .typeError("Please upload your .gbl or .gltf model"),
+      otherwise: mixed().nullable()
+    }),
   })
 );
 

@@ -134,8 +134,8 @@ export const ModuleArtworkArObjectForm = ({
                 p="6"
                 borderBottom="1px solid #fff"
               >
-                <chakra.p textStyle="label">Featured image</chakra.p>
-                <chakra.p textStyle="small">The featured image is shown in artwork streams and exhibitions.</chakra.p>
+                <chakra.p textStyle="label">Poster image</chakra.p>
+                <chakra.p textStyle="small">The poster image is shown in artwork streams and exhibitions.</chakra.p>
                 <AspectRatio
                   ratio={1}
                   border="4px dashed white" mt="6"
@@ -187,7 +187,7 @@ export const ModuleArtworkArObjectForm = ({
                   route="image"
                   id="heroImage"
                   name="heroImage"
-                  label="Featured image"
+                  label="Poster image"
                   isRequired={yupIsFieldRequired("heroImage", validationSchema)}
                   setActiveUploadCounter={setActiveUploadCounter}
                   canDelete={arObjectReadOwn?.status === ArObjectStatusEnum.DRAFT}
@@ -209,12 +209,12 @@ export const ModuleArtworkArObjectForm = ({
                       status: arObjectReadOwn?.heroImage?.status,
                       id: arObjectReadOwn?.heroImage?.id,
                       meta: arObjectReadOwn?.heroImage?.meta,
-                      alt: `Featured Image`,
+                      alt: `Poster Image`,
                       forceAspectRatioPB: 100,
                       showPlaceholder: true,
                       sizes: "(min-width: 45em) 20v, 95vw",
                     },
-                    helpText: "The featured image is shown for each image of the artwork",
+                    helpText: "The poster image is shown for each image of the artwork",
                   }}
                 />
               </FieldRow>

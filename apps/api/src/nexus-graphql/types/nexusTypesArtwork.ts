@@ -645,7 +645,7 @@ export const ArtworkMutations = extendType({
         const count = await daoArtworkQueryCount({
           id: args.id,
           status: {
-            notIn: [ArtworkStatusEnum.MINTED, ArtworkStatusEnum.DELETED],
+            notIn: [ArtworkStatusEnum.DELETED],
           },
           creator: {
             id: ctx.appUser?.id ?? 0,
@@ -655,12 +655,23 @@ export const ArtworkMutations = extendType({
         return count === 1;
       },
 
-      async resolve(...[, args]) {
+      async resolve(...[, args, ctx]) {
+        const currentArtwork = await daoArtworkGetOwnById(
+          args.id,
+          ctx?.appUser?.id ?? 0
+        );
+
+        if (!currentArtwork)
+          throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Update failed");
+
         // TODO: remove once all keys are set
         const data: any = {
           ...args.data,
           type: 1,
-          status: args.data?.status ?? ArtworkStatusEnum.DRAFT,
+          status:
+            currentArtwork?.status === ArtworkStatusEnum.HASMINTEDOBJECTS
+              ? ArtworkStatusEnum.HASMINTEDOBJECTS
+              : args.data.status ?? ArtworkStatusEnum.DRAFT,
         };
 
         const artwork = await daoArtworkUpdate(args.id, data);
@@ -686,8 +697,7 @@ export const ArtworkMutations = extendType({
           id: args.id,
           status: {
             notIn: [
-              ArtworkStatusEnum.MINTED,
-              ArtworkStatusEnum.MINTING,
+              ArtworkStatusEnum.HASMINTEDOBJECTS,
               ArtworkStatusEnum.DELETED,
             ],
           },

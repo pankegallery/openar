@@ -190,7 +190,10 @@ const Update = () => {
         data?.artworkReadOwn?.status === ArtworkStatusEnum.DRAFT
           ? "Save draft"
           : "Unpublish",
-      isDisabled: disableNavigation || activeUploadCounter > 0,
+      isDisabled:
+        disableNavigation ||
+        activeUploadCounter > 0 ||
+        data?.artworkReadOwn?.status !== ArtworkStatusEnum.HASMINTEDOBJECTS,
       userCan: "artworkUpdateOwn",
     },
     {
@@ -200,10 +203,12 @@ const Update = () => {
         setValue("status", ArtworkStatusEnum.PUBLISHED);
         handleSubmit(onSubmit)();
       },
-      label:
-        data?.artworkReadOwn?.status === ArtworkStatusEnum.PUBLISHED
-          ? "Save"
-          : "Publish",
+      label: [
+        ArtworkStatusEnum.PUBLISHED,
+        ArtworkStatusEnum.HASMINTEDOBJECTS,
+      ].includes(data?.artworkReadOwn?.status)
+        ? "Save"
+        : "Publish",
       isDisabled: disableNavigation || activeUploadCounter > 0,
       userCan: "artworkUpdateOwn",
     },

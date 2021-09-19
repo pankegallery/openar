@@ -156,9 +156,9 @@ export const ModuleArtworkForm = ({
         {action === "create" && (
           <>
             <Box p="6" borderBottom="1px solid #fff">
-              <chakra.p textStyle="label">Featured image</chakra.p>
+              <chakra.p textStyle="label">Poster image</chakra.p>
               <chakra.p textStyle="small">
-                The featured image is shown in artwork streams and exhibitions.
+                The poster image is shown in artwork streams and exhibitions.
               </chakra.p>
               <AspectRatio
                 ratio={1}
@@ -205,7 +205,7 @@ export const ModuleArtworkForm = ({
               route="image"
               id="heroImage"
               name="heroImage"
-              label="Featured Image"
+              label="Poster Image"
               isRequired={yupIsFieldRequired("heroImage", validationSchema)}
               setActiveUploadCounter={setActiveUploadCounter}
               deleteButtonGQL={imageDeleteMutationGQL}
@@ -225,13 +225,13 @@ export const ModuleArtworkForm = ({
                   status: artworkReadOwn?.heroImage?.status,
                   id: artworkReadOwn?.heroImage?.id,
                   meta: artworkReadOwn?.heroImage?.meta,
-                  alt: `Featured Image`,
+                  alt: `Poster Image`,
                   forceAspectRatioPB: 100,
                   showPlaceholder: true,
                   sizes: "(min-width: 45em) 20v, 95vw",
                 },
                 helpText:
-                  "The featured image is shown in artwork streams and exhibitions. Leave empty to use the first object’s featured image.",
+                  "The poster image is shown in artwork streams and exhibitions. Leave empty to use the first object’s poster image.",
               }}
             />
           </Box>
