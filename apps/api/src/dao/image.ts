@@ -1,8 +1,12 @@
 import { Image, Prisma } from "@prisma/client";
+import httpStatus from "http-status";
+
 import {
   filteredOutputByBlacklist,
   ImageStatusEnum,
   filteredOutputByBlacklistOrNotFound,
+  ApiError,
+  ArObjectStatusEnum,
 } from "../utils";
 
 import { getApiConfig } from "../config";
@@ -41,9 +45,13 @@ export const daoImageQueryCount = async (
   });
 };
 
-export const daoImageGetById = async (id: number): Promise<Image> => {
+export const daoImageGetById = async (
+  id: number,
+  include?: Prisma.ImageInclude | undefined
+): Promise<Image> => {
   const image: Image | null = await prisma.image.findUnique({
     where: { id },
+    include,
   });
 
   return filteredOutputByBlacklistOrNotFound(
@@ -113,10 +121,29 @@ export const daoImageDelete = async (id: number): Promise<Image> => {
 };
 
 export const daoImageSetToDelete = async (id: number): Promise<Image> => {
+  const currentModel = await daoImageGetById(id, {
+    arObjects: {
+      select: {
+        id: true,
+        status: true,
+      },
+    },
+  });
+
+  const arObjects = (currentModel as any)?.arObjects ?? [];
+  if (
+    !currentModel ||
+    (arObjects.length > 0 &&
+      ![ArObjectStatusEnum.DRAFT, ArObjectStatusEnum.PUBLISHED].includes(
+        (currentModel as any)?.arObjects[0].status
+      ))
+  )
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Delete failed");
+
   const image: Image = await prisma.image.update({
     data: {
       status: ImageStatusEnum.DELETED,
-      // does it need to be extended for reviews and tours?
+      // TODO: does it need to be extended for exhibitions and reviews?
       artworks: {
         set: [],
       },

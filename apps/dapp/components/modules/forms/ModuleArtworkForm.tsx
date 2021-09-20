@@ -231,7 +231,7 @@ export const ModuleArtworkForm = ({
                   sizes: "(min-width: 45em) 20v, 95vw",
                 },
                 helpText:
-                  "The poster image is shown in artwork streams and exhibitions. Leave empty to use the first object’s poster image.",
+                  "The poster image is shown in artwork streams and exhibitions. Leave empty to use the first published object’s poster image.",
               }}
             />
           </Box>

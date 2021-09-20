@@ -139,13 +139,26 @@ export const components = {
     variants: {
       outline: {
         field: {
-          bg: "#fff",
-          borderColor: "gray.400",
+          bg: "transparent",
+          borderColor: "white",
+          borderRadius: 0,
+          color: "#fff",
           _hover: {
-            borderColor: "gray.400",
+            borderColor: "white",
+          },
+          _focus: {
+            borderColor: "white",
+          },
+          _active: {
+            borderColor: "white",
           },
           _autofill: {
             bg: "wine.300",
+          },
+
+          _placeholder: {
+            color: "white",
+            opacity: "0.4"
           },
         },
       },

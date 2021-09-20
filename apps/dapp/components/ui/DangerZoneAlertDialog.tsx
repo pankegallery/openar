@@ -78,17 +78,17 @@ export const DangerZoneAlertDialog = ({
             <Flex alignItems="flex-end">
               <Icon
                 as={AiOutlineAlert}
-                w="20"
-                height="20"
+                w="10"
+                height="10"
                 color="red.600"
                 mr="2"
                 transform="translateX(-0.2em);"
               />
-              <Box transform="translateY(0.2em);">{title}</Box>
+              <Box transform="translateY(0.2em);" color="#fff">{title}</Box>
             </Flex>
           </AlertDialogHeader>
 
-          <AlertDialogBody>
+          <AlertDialogBody color="#fff">
             {message}
 
             {requireTextualConfirmation && (
@@ -104,11 +104,13 @@ export const DangerZoneAlertDialog = ({
                       Written delete confirmation.
                     </VisuallyHidden>
                     <Input
+                      variant="outline"
                       autoComplete="please-confirm"
                       onChange={onFilterChange}
                       onBlur={onFilterChange}
                       textTransform="uppercase"
                       placeholder={token}
+                      
                     />
                   </FormLabel>
                 </FormControl>

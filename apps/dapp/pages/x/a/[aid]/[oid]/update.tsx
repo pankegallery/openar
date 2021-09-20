@@ -9,23 +9,29 @@ import Head from "next/head";
 import { LayoutOpenAR } from "~/components/app";
 import { FormNavigationBlock } from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
-import { ModuleArtworkArObjectForm, ModuleArObjectNFTForm } from "~/components/modules/forms";
 import {
-  ModuleArObjectUpdateSchema
-} from "~/components/modules/validation";
+  ModuleArtworkArObjectForm,
+  ModuleArObjectNFTForm,
+  ModuleDeleteButton,
+} from "~/components/modules/forms";
+import { ModuleArObjectUpdateSchema } from "~/components/modules/validation";
 import { RestrictPageAccess } from "~/components/utils";
 import { BeatLoader } from "react-spinners";
 import pick from "lodash/pick";
 
 import { useAuthentication, useSuccessfullySavedToast } from "~/hooks";
-import { useArObjectUpdateMutation } from "~/hooks/mutations";
+import { useArObjectUpdateMutation, useArObjectDeleteMutation } from "~/hooks/mutations";
 import {
   ModuleSubNav,
   ModulePage,
-  ButtonListElement
+  ButtonListElement,
 } from "~/components/modules";
 
-import { filteredOutputByWhitelist, ArObjectStatusEnum, ArtworkStatusEnum } from "~/utils";
+import {
+  filteredOutputByWhitelist,
+  ArObjectStatusEnum,
+  ArtworkStatusEnum,
+} from "~/utils";
 
 // TODO
 export const arObjectReadOwnQueryGQL = gql`
@@ -100,6 +106,7 @@ const Update = () => {
 
   const [couldMint, setCouldMint] = useState(false);
   const [firstMutation, firstMutationResults] = useArObjectUpdateMutation();
+  const [deleteMutation, deleteMutationResults] = useArObjectDeleteMutation();
   const [isFormError, setIsFormError] = useState(false);
 
   const disableForm = firstMutationResults.loading;
@@ -227,10 +234,9 @@ const Update = () => {
           ? "Save draft"
           : "Unpublish",
       isDisabled: disableNavigation || activeUploadCounter > 0,
-      skip: ![
-        ArtworkStatusEnum.DRAFT,
-        ArtworkStatusEnum.PUBLISHED,
-      ].includes(data?.arObjectReadOwn?.status),
+      skip: ![ArtworkStatusEnum.DRAFT, ArtworkStatusEnum.PUBLISHED].includes(
+        data?.arObjectReadOwn?.status
+      ),
       userCan: "artworkUpdateOwn",
     },
     {
@@ -247,10 +253,9 @@ const Update = () => {
           : "Save",
       isDisabled: disableNavigation || activeUploadCounter > 0,
       userCan: "artworkUpdateOwn",
-      skip: ![
-        ArtworkStatusEnum.DRAFT,
-        ArtworkStatusEnum.PUBLISHED,
-      ].includes(data?.arObjectReadOwn?.status),
+      skip: ![ArtworkStatusEnum.DRAFT, ArtworkStatusEnum.PUBLISHED].includes(
+        data?.arObjectReadOwn?.status
+      ),
     },
     {
       type: "button",
@@ -267,15 +272,17 @@ const Update = () => {
       },
       label: "Mint as NFT",
       isDisabled:
-        !(data?.artworkReadOwn?.status === ArtworkStatusEnum.PUBLISHED || data?.artworkReadOwn?.status === ArtworkStatusEnum.HASMINTEDOBJECTS) ||
+        !(
+          data?.artworkReadOwn?.status === ArtworkStatusEnum.PUBLISHED ||
+          data?.artworkReadOwn?.status === ArtworkStatusEnum.HASMINTEDOBJECTS
+        ) ||
         !(data?.arObjectReadOwn?.status === ArObjectStatusEnum.PUBLISHED) ||
         !couldMint ||
         disableNavigation ||
         activeUploadCounter > 0,
-      skip: ![
-        ArtworkStatusEnum.DRAFT,
-        ArtworkStatusEnum.PUBLISHED,
-      ].includes(data?.arObjectReadOwn?.status),
+      skip: ![ArtworkStatusEnum.DRAFT, ArtworkStatusEnum.PUBLISHED].includes(
+        data?.arObjectReadOwn?.status
+      ),
       userCan: "artworkUpdateOwn",
     },
   ];
@@ -318,6 +325,32 @@ const Update = () => {
                 disableNavigation={setDisableNavigation}
                 validationSchema={ModuleArObjectUpdateSchema}
               />
+              {[
+                ArObjectStatusEnum.DRAFT,
+                ArObjectStatusEnum.PUBLISHED,
+              ].includes(data?.arObjectReadOwn?.status) && (
+                <ModuleDeleteButton
+                  buttonLabel="Delete object"
+                  dZADRequireTextualConfirmation={true}
+                  dZADTitle="Delete object"
+                  dZADMessage="Do you really want to delete the object and its AR model(s) and image?"
+                  dZADOnYes={async () => {
+                    setIsNavigatingAway(false);
+
+                    const { errors } = await deleteMutation(
+                      parseInt(router.query.oid as string)
+                    );
+
+                    if (!errors) {
+                      successToast();
+                      setIsNavigatingAway(true);
+                      router.push(`${moduleConfig.rootPath}/${router.query.aid}/update`);
+                    } else {
+                      setIsFormError(true);
+                    }
+                  }}
+                />
+              )}
             </ModulePage>
           </fieldset>
         </form>

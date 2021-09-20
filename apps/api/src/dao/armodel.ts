@@ -1,8 +1,12 @@
 import { ArModel, Prisma } from "@prisma/client";
+import httpStatus from "http-status";
+
 import {
   filteredOutputByBlacklist,
   ArModelStatusEnum,
   filteredOutputByBlacklistOrNotFound,
+  ApiError,
+  ArObjectStatusEnum,
 } from "../utils";
 
 import { getApiConfig } from "../config";
@@ -20,7 +24,7 @@ export const daoArModelQuery = async (
   pageIndex: number = 0,
   pageSize: number = apiConfig.db.defaultPageSize
 ): Promise<ArModel[]> => {
-  const arModels: ArModel[] = await prisma.arModel.findMany({
+  const arModels = await prisma.arModel.findMany({
     where,
     orderBy,
     skip: pageIndex * pageSize,
@@ -41,9 +45,13 @@ export const daoArModelQueryCount = async (
   });
 };
 
-export const daoArModelGetById = async (id: number): Promise<ArModel> => {
-  const arModel: ArModel | null = await prisma.arModel.findUnique({
+export const daoArModelGetById = async (
+  id: number,
+  include?: Prisma.ArModelInclude | undefined
+): Promise<ArModel> => {
+  const arModel = await prisma.arModel.findUnique({
     where: { id },
+    include,
   });
 
   return filteredOutputByBlacklistOrNotFound(
@@ -71,7 +79,7 @@ export const daoArModelGetStatusById = async (id: number): Promise<ArModel> => {
 export const daoArModelCreate = async (
   data: Prisma.ArModelCreateInput
 ): Promise<ArModel> => {
-  const arModel: ArModel = await prisma.arModel.create({
+  const arModel = await prisma.arModel.create({
     data,
   });
 
@@ -85,7 +93,7 @@ export const daoArModelUpdate = async (
   id: number,
   data: Prisma.ArModelUpdateInput
 ): Promise<ArModel> => {
-  const arModel: ArModel = await prisma.arModel.update({
+  const arModel = await prisma.arModel.update({
     data,
     where: {
       id,
@@ -99,7 +107,7 @@ export const daoArModelUpdate = async (
 };
 
 export const daoArModelDelete = async (id: number): Promise<ArModel> => {
-  const arModel: ArModel = await prisma.arModel.delete({
+  const arModel = await prisma.arModel.delete({
     where: {
       id,
     },
@@ -113,9 +121,29 @@ export const daoArModelDelete = async (id: number): Promise<ArModel> => {
 };
 
 export const daoArModelSetToDelete = async (id: number): Promise<ArModel> => {
-  const arModel: ArModel = await prisma.arModel.update({
+  const currentModel = await daoArModelGetById(id, {
+    arObject: {
+      select: {
+        id: true,
+        status: true,
+      },
+    },
+  });
+
+  if (
+    !currentModel ||
+    ![ArObjectStatusEnum.DRAFT, ArObjectStatusEnum.PUBLISHED].includes(
+      (currentModel as any)?.arObject?.status
+    )
+  )
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Delete failed");
+
+  const arModel = await prisma.arModel.update({
     data: {
       status: ArModelStatusEnum.DELETED,
+      arObject: {
+        disconnect: true,
+      },
     },
 
     where: {

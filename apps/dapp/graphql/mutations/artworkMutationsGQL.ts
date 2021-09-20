@@ -21,3 +21,11 @@ export const artworkUpdateMutationGQL = gql`
     }
   }
 `;
+
+export const artworkDeleteMutationGQL = gql`
+  mutation artworkDelete($id: Int!) {
+    artworkDelete(id: $id) {
+      result       
+    }
+  }
+`;

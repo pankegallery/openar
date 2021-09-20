@@ -9,12 +9,18 @@ import { useQuery, gql } from "@apollo/client";
 import { LayoutOpenAR } from "~/components/app";
 import { FormNavigationBlock } from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
-import { ModuleArtworkForm } from "~/components/modules/forms";
+import {
+  ModuleArtworkForm,
+  ModuleDeleteButton,
+} from "~/components/modules/forms";
 import { ModuleArtworkUpdateSchema } from "~/components/modules/validation";
 import { RestrictPageAccess } from "~/components/utils";
 
 import { useAuthentication, useSuccessfullySavedToast } from "~/hooks";
-import { useArtworkUpdateMutation } from "~/hooks/mutations";
+import {
+  useArtworkUpdateMutation,
+  useArtworkDeleteMutation,
+} from "~/hooks/mutations";
 import {
   ModuleSubNav,
   ModulePage,
@@ -76,6 +82,7 @@ const Update = () => {
   const [activeUploadCounter, setActiveUploadCounter] = useState<number>(0);
 
   const [firstMutation, firstMutationResults] = useArtworkUpdateMutation();
+  const [deleteMutation, deleteMutationResults] = useArtworkDeleteMutation();
   const [isFormError, setIsFormError] = useState(false);
 
   const disableForm = firstMutationResults.loading;
@@ -169,8 +176,6 @@ const Update = () => {
     },
   ];
 
-  console.log(data?.artworkReadOwn?.status === ArtworkStatusEnum.HASMINTEDOBJECTS);
-
   // TODO: this makes some trouble on SSR as the buttons look differently
   // as the user can't do thing on the server
   const buttonList: ButtonListElement[] = [
@@ -192,9 +197,7 @@ const Update = () => {
         data?.artworkReadOwn?.status === ArtworkStatusEnum.DRAFT
           ? "Save draft"
           : "Unpublish",
-      isDisabled:
-        disableNavigation ||
-        activeUploadCounter > 0,
+      isDisabled: disableNavigation || activeUploadCounter > 0,
       skip: data?.artworkReadOwn?.status === ArtworkStatusEnum.HASMINTEDOBJECTS,
       userCan: "artworkUpdateOwn",
     },
@@ -204,7 +207,7 @@ const Update = () => {
       onClick: () => {
         if (data?.artworkReadOwn?.status === ArtworkStatusEnum.DRAFT)
           setValue("status", ArtworkStatusEnum.PUBLISHED);
-          
+
         handleSubmit(onSubmit)();
       },
       label: [
@@ -218,6 +221,7 @@ const Update = () => {
     },
   ];
 
+  console.log(data?.artworkReadOwn?.status);
   return (
     <>
       <FormNavigationBlock
@@ -252,6 +256,32 @@ const Update = () => {
                 disableNavigation={setDisableNavigation}
                 validationSchema={ModuleArtworkUpdateSchema}
               />
+              {[ArtworkStatusEnum.DRAFT, ArtworkStatusEnum.PUBLISHED].includes(
+                data?.artworkReadOwn?.status
+              ) && (
+                <ModuleDeleteButton
+                  buttonLabel="Delete artwork"
+                  dZADRequireTextualConfirmation={true}
+                  dZADTitle="Delete artwork"
+                  dZADMessage="Do you really want to delete the artwork, objects, ar model, and images?"
+                  dZADOnYes={async () => {
+                    setIsNavigatingAway(false);
+
+                    const { errors } = await deleteMutation(
+                      parseInt(router.query.aid as string)
+                    );
+
+                    if (!errors) {
+                      clearErrors();
+                      successToast();
+                      setIsNavigatingAway(true);
+                      router.push(`/x/`);
+                    } else {
+                      setIsFormError(true);
+                    }
+                  }}
+                />
+              )}
             </ModulePage>
           </fieldset>
         </form>

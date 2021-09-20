@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 
-import { artworkCreateMutationGQL, artworkUpdateMutationGQL } from "~/graphql/mutations";
+import { artworkCreateMutationGQL, artworkUpdateMutationGQL, artworkDeleteMutationGQL } from "~/graphql/mutations";
 
 export const useArtworkCreateMutation = () => {
   const [mutation, mutationResults] = useMutation(artworkCreateMutationGQL, {
@@ -27,6 +27,21 @@ export const useArtworkUpdateMutation = () => {
       variables: {
         id, 
         data,
+      }
+    });
+  };
+  return [execute, mutationResults] as const;
+};
+
+export const useArtworkDeleteMutation = () => {
+  const [mutation, mutationResults] = useMutation(artworkDeleteMutationGQL, {
+    // onCompleted: (data) => {},
+  });
+
+  const execute = (id: number) => {
+    return mutation({
+      variables: {
+        id
       }
     });
   };

@@ -1,4 +1,5 @@
 import { Artwork, Prisma } from "@prisma/client";
+import httpStatus from "http-status";
 
 import {
   filteredOutputByBlacklistOrNotFound,
@@ -7,6 +8,8 @@ import {
 
 import { getPrismaClient } from "../db/client";
 import { getApiConfig } from "../config";
+import { ApiError, ArtworkStatusEnum } from "../utils";
+import { daoArObjectDelete, daoImageSetToDelete } from ".";
 
 const apiConfig = getApiConfig();
 const prisma = getPrismaClient();
@@ -72,7 +75,7 @@ export const daoArtworkGetById = async (
   id: number,
   include?: Prisma.ArtworkInclude | undefined
 ): Promise<Artwork> => {
-  const artwork: Artwork | null = await prisma.artwork.findUnique({
+  const artwork = await prisma.artwork.findUnique({
     where: { id },
     include,
   });
@@ -88,7 +91,7 @@ export const daoArtworkGetOwnById = async (
   userId: number,
   include?: Prisma.ArtworkInclude | undefined
 ): Promise<Artwork> => {
-  const artwork: Artwork | null = await prisma.artwork.findFirst({
+  const artwork = await prisma.artwork.findFirst({
     where: {
       id,
       creator: {
@@ -108,7 +111,7 @@ export const daoArtworkGetByKey = async (
   where: Prisma.ArtworkWhereInput | undefined,
   include?: Prisma.ArtworkInclude | undefined
 ): Promise<Artwork> => {
-  const artwork: Artwork | null = await prisma.artwork.findFirst({
+  const artwork = await prisma.artwork.findFirst({
     where,
     include,
   });
@@ -137,7 +140,34 @@ export const daoArtworkUpdate = async (
 };
 
 export const daoArtworkDelete = async (id: number): Promise<Artwork> => {
-  const artwork: Artwork = await prisma.artwork.delete({
+  const currentArtwork = await daoArtworkGetById(id, {
+    arObjects: {
+      select: {
+        id: true,
+        status: true,
+      },
+    },
+    heroImage: true,
+  });
+
+  if (
+    !currentArtwork ||
+    ![ArtworkStatusEnum.DRAFT, ArtworkStatusEnum.PUBLISHED].includes(
+      currentArtwork.status
+    )
+  )
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Delete failed");
+
+  await Promise.all(
+    (currentArtwork as any).arObjects.map(async (obj: any) => {
+      await daoArObjectDelete(obj.id);
+    })
+  );
+
+  if (currentArtwork.heroImageId)
+    await daoImageSetToDelete(currentArtwork.heroImageId);
+
+  const artwork = await prisma.artwork.delete({
     where: {
       id,
     },

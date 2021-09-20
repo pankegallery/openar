@@ -30,3 +30,11 @@ mutation arObjectMint($id: Int!, $data: ArObjectMintInput!) {
   }
 }
 `;
+
+export const artworkArObjectDeleteMutationGQL = gql`
+  mutation arObjectDelete($id: Int!) {
+    arObjectDelete(id: $id) {
+      result       
+    }
+  }
+`;

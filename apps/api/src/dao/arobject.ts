@@ -1,12 +1,16 @@
 import { ArObject, Prisma } from "@prisma/client";
+import httpStatus from "http-status";
 
 import {
   filteredOutputByBlacklistOrNotFound,
   filteredOutputByBlacklist,
+  ArObjectStatusEnum,
+  ApiError,
 } from "../utils";
 
 import { getPrismaClient } from "../db/client";
 import { getApiConfig } from "../config";
+import { daoImageSetToDelete, daoArModelSetToDelete } from ".";
 
 const apiConfig = getApiConfig();
 const prisma = getPrismaClient();
@@ -18,7 +22,7 @@ export const daoArObjectQuery = async (
   pageIndex: number = 0,
   pageSize: number = apiConfig.db.defaultPageSize
 ): Promise<ArObject[]> => {
-  const arObjects: ArObject[] = await prisma.arObject.findMany({
+  const arObjects = await prisma.arObject.findMany({
     where,
     include,
     orderBy,
@@ -58,7 +62,7 @@ export const daoArObjectQueryCount = async (
 export const daoArObjectCreate = async (
   data: Prisma.ArObjectCreateInput
 ): Promise<ArObject> => {
-  const arObject: ArObject = await prisma.arObject.create({
+  const arObject = await prisma.arObject.create({
     data,
   });
 
@@ -72,7 +76,7 @@ export const daoArObjectGetById = async (
   id: number,
   include?: Prisma.ArObjectInclude | undefined
 ): Promise<ArObject> => {
-  const arObject: ArObject | null = await prisma.arObject.findUnique({
+  const arObject = await prisma.arObject.findUnique({
     where: { id },
     include,
   });
@@ -88,7 +92,7 @@ export const daoArObjectGetOwnById = async (
   userId: number,
   include?: Prisma.ArObjectInclude | undefined
 ): Promise<ArObject> => {
-  const arObject: ArObject | null = await prisma.arObject.findFirst({
+  const arObject = await prisma.arObject.findFirst({
     where: {
       id,
       creator: {
@@ -108,7 +112,7 @@ export const daoArObjectGetByKey = async (
   where: Prisma.ArObjectWhereInput | undefined,
   include?: Prisma.ArObjectInclude | undefined
 ): Promise<ArObject> => {
-  const arObject: ArObject | null = await prisma.arObject.findFirst({
+  const arObject = await prisma.arObject.findFirst({
     where,
     include,
   });
@@ -123,7 +127,7 @@ export const daoArObjectUpdate = async (
   id: number,
   data: Prisma.ArObjectUpdateInput
 ): Promise<ArObject> => {
-  const arObject: ArObject = await prisma.arObject.update({
+  const arObject = await prisma.arObject.update({
     data,
     where: {
       id,
@@ -137,7 +141,29 @@ export const daoArObjectUpdate = async (
 };
 
 export const daoArObjectDelete = async (id: number): Promise<ArObject> => {
-  const arObject: ArObject = await prisma.arObject.delete({
+  const currentObject = await daoArObjectGetById(id, {
+    arModels: true,
+    heroImage: true,
+  });
+
+  if (
+    !currentObject ||
+    ![ArObjectStatusEnum.DRAFT, ArObjectStatusEnum.PUBLISHED].includes(
+      currentObject.status
+    )
+  )
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Delete failed");
+
+  await Promise.all(
+    (currentObject as any).arModels.map(async (obj: any) => {
+      await daoArModelSetToDelete(obj.id);
+    })
+  );
+
+  if (currentObject.heroImageId)
+    await daoImageSetToDelete(currentObject.heroImageId);
+
+  const arObject = await prisma.arObject.delete({
     where: {
       id,
     },

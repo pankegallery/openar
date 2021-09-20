@@ -159,8 +159,8 @@ model ArModel {
   status     Int    @default(0)
   retryCount Int    @default(0)
   type       String @db.VarChar(8)
-  arObjectId   Int
-  arObject     ArObject @relation(fields: [arObjectId], references: [id])
+  arObjectId   Int?
+  arObject     ArObject? @relation(fields: [arObjectId], references: [id])
   ownerId    Int  
   owner      User   @relation(fields: [ownerId], references: [id])
 
