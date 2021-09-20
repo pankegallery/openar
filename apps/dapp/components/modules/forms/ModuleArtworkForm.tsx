@@ -238,7 +238,7 @@ export const ModuleArtworkForm = ({
         )}
         {action === "update" && (
           <>
-            <Box borderBottom="1px solid #fff">
+            {/* V2: <Box borderBottom="1px solid #fff">
               <FieldRow>
                 <FieldSwitch
                   name="multipleObjects"
@@ -250,7 +250,7 @@ export const ModuleArtworkForm = ({
                   hint="The artwork consists of multiple objects."
                 />
               </FieldRow>
-            </Box>
+            </Box> */}
             <Box borderBottom="1px solid #fff" p="6">
               <ModuleArtworkArObjectsList
                 {...{
