@@ -34,6 +34,7 @@ import {
   nanoidCustom16,
   validateBidOrAsk,
   stringToBytes32,
+  generateEIP712Domain,
 } from "./utils";
 
 export class OpenAR {
@@ -396,26 +397,6 @@ export class OpenAR {
   }
 
   /**
-   * Grants the spender approval for the specified media using meta transactions as outlined in EIP-712
-   * @param sender
-   * @param mediaId
-   * @param sig
-   */
-  public async permit(
-    spender: string,
-    mediaId: BigNumberish,
-    sig: EIP712Signature
-  ): Promise<ContractTransaction> {
-    try {
-      this.ensureNotReadOnly();
-    } catch (err: any) {
-      return Promise.reject(err.message);
-    }
-
-    return this.media.permit(spender, mediaId, sig);
-  }
-
-  /**
    * Revokes the approval of an approved account for the specified media on an instance of the openAR Media Contract
    * @param mediaId
    */
@@ -429,20 +410,6 @@ export class OpenAR {
     }
 
     return this.media.revokeApproval(mediaId);
-  }
-
-  /**
-   * Burns the specified media on an instance of the openAR Media Contract
-   * @param mediaId
-   */
-  public async burn(mediaId: BigNumberish): Promise<ContractTransaction> {
-    try {
-      this.ensureNotReadOnly();
-    } catch (err: any) {
-      return Promise.reject(err.message);
-    }
-
-    return this.media.burn(mediaId);
   }
 
   /***********************
@@ -519,42 +486,6 @@ export class OpenAR {
    */
 
   /**
-   * Grants approval to the specified address for the specified media on an instance of the openAR Media Contract
-   * @param to
-   * @param mediaId
-   */
-  public async approve(
-    to: string,
-    mediaId: BigNumberish
-  ): Promise<ContractTransaction> {
-    try {
-      this.ensureNotReadOnly();
-    } catch (err: any) {
-      return Promise.reject(err.message);
-    }
-
-    return this.media.approve(to, mediaId);
-  }
-
-  /**
-   * Grants approval for all media owner by msg.sender on an instance of the openAR Media Contract
-   * @param operator
-   * @param approved
-   */
-  public async setApprovalForAll(
-    operator: string,
-    approved: boolean
-  ): Promise<ContractTransaction> {
-    try {
-      this.ensureNotReadOnly();
-    } catch (err: any) {
-      return Promise.reject(err.message);
-    }
-
-    return this.media.setApprovalForAll(operator, approved);
-  }
-
-  /**
    * Transfers the specified media to the specified to address on an instance of the openAR Media Contract
    * @param from
    * @param to
@@ -603,12 +534,11 @@ export class OpenAR {
    * Returns the EIP-712 Domain for an instance of the openAR Media Contract
    */
   public eip712Domain(): EIP712Domain {
-    return {
-      name: mediaContractName,
-      version: "1",
-      chainId: this.chainId,
-      verifyingContract: this.mediaAddress,
-    };
+    return generateEIP712Domain(
+      mediaContractName,
+      this.chainId,
+      this.mediaAddress
+    );
   }
 
   /**

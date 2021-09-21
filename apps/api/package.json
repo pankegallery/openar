@@ -14,6 +14,8 @@
   "typings": "build/index.d.ts",
   "scripts": {},
   "dependencies": {
+    "@ethersproject/bytes": "^5.4.0",
+    "@ethersproject/constants": "^5.4.0",
     "@ladjs/graceful": "^1.0.5",
     "@openar/contracts": "^1.0.0",
     "@openar/crypto": "^1.0.0",

@@ -104,3 +104,18 @@ export type PlatformCuts = {
   furtherSalesPool: DecimalValue;
   furtherSalesCreator: DecimalValue;
 };
+
+export type OpenArNFTMetaData = {
+  image: string;
+  animation_url: string;
+  external_url: string;
+  original_creator: string;
+  edition_number: number;
+  edition_of: number;
+  name: string;
+  description: string;
+  artworkKey: string;
+  arObjectKey: string;
+  year: number;
+  mimeType: string;
+};

@@ -82,6 +82,7 @@ export interface ApiConfigJwt {
 export type ApiConfigSignaturePrefix = "login";
 
 export interface ApiConfig {
+  defaultMintBatchSize: number;
   enablePublicRegistration: boolean;
   baseDir: string;
   publicDir: string;
@@ -103,6 +104,7 @@ export interface ApiConfig {
 }
 
 export interface ApiConfigOverwrite {
+  defaultMintBatchSize?: number;
   enablePublicRegistration?: boolean;
   baseDir?: string;
   imgUploadDir?: string;
@@ -148,6 +150,7 @@ const trimTrailingSlash = (str: string) =>
   str.endsWith("/") ? str.slice(0, -1) : str;
 
 let apiConfig = {
+  defaultMintBatchSize: 5,
   enablePublicRegistration: true,
   baseDir: resolve(dirname("")),
   publicDir: "public",

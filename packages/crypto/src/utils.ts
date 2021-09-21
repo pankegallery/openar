@@ -31,6 +31,7 @@ import {
   EIP712Signature,
   MintData,
   PlatformCuts,
+  MintArObjectData,
 } from "./types";
 import { sha256FromBuffer } from "./sha256tools";
 
@@ -101,13 +102,19 @@ export function validateBidOrAsk(
   return sum.toString() === value.value.toString();
 }
 
-// 1799999999999993550
-// 11999999999999957000
-// 1199999999999995700000000000000000000
-// 100000000000000000000
-// 10000000000000000000
-// 1000000000000000000
-// 5000000000000000000
+export const generateEIP712Domain = (
+  mediaContractName: string,
+  chainId: number,
+  mediaAddress: string
+): EIP712Domain => {
+  return {
+    name: mediaContractName,
+    version: "1",
+    chainId: chainId,
+    verifyingContract: mediaAddress.toLowerCase(),
+  };
+};
+
 export const openARConstructBidShares = (
   platform: number,
   pool: number,
@@ -147,9 +154,7 @@ export const createEIP712Signature = (
 
   const r = Buffer.from(signature.substring(2, 66), "hex");
   const s = Buffer.from(signature.substring(66, 130), "hex");
-  // const r = signature.substring(2, 66);
-  // const s = signature.substring(66, 130);
-  const v = parseInt(signature.substring(130, 132)) + 27;
+  const v = parseInt(signature.substring(130, 132), 16);
 
   return {
     deadline,
@@ -375,7 +380,7 @@ export const recoverSignatureFromMintArObject = async (
   setInitialAsk: boolean,
   initialAskDecimal: Decimal,
   nonceBN: BigNumber,
-  deadline: BigNumber,
+  deadlineBN: BigNumber,
   domain: EIP712Domain,
   sig: string
 ) => {
@@ -387,7 +392,7 @@ export const recoverSignatureFromMintArObject = async (
       setInitialAsk,
       initialAskDecimal,
       nonceBN,
-      deadline,
+      deadlineBN,
       domain
     ),
     sig: sig,
@@ -415,55 +420,26 @@ export const signMintArObjectMessageFromWallet = async (
   setInitialAsk: boolean,
   initialAskDecimal: Decimal,
   nonceBN: BigNumber,
+  deadlineBN: BigNumber,
   chainId: number
 ) => {
   return new Promise<EIP712Signature>(async (res, reject) => {
-    const deadline = Math.floor(new Date().getTime() / 1000) + 60 * 60 * 24; // 24 hours
     const name = await media.name();
-
-    const editionOf = editionOfBN.toString();
-    const initialAsk = initialAskDecimal.value.toString();
-    const nonce = nonceBN.toString();
 
     try {
       const sig = signTypedData_v4(
         Buffer.from(owner.privateKey.slice(2), "hex"),
         {
-          data: {
-            types: {
-              EIP712Domain: [
-                { name: "name", type: "string" },
-                { name: "version", type: "string" },
-                { name: "chainId", type: "uint256" },
-                { name: "verifyingContract", type: "address" },
-              ],
-              MintArObject: [
-                { name: "awKeyHash", type: "bytes32" },
-                { name: "objKeyHash", type: "bytes32" },
-                { name: "editionOf", type: "uint256" },
-                { name: "setInitialAsk", type: "bool" },
-                { name: "initialAsk", type: "uint256" },
-                { name: "nonce", type: "uint256" },
-                { name: "deadline", type: "uint256" },
-              ],
-            },
-            primaryType: "MintArObject",
-            domain: {
-              name,
-              version: "1",
-              chainId,
-              verifyingContract: media.address,
-            },
-            message: {
-              awKeyHash,
-              objKeyHash,
-              editionOf,
-              setInitialAsk,
-              initialAsk,
-              nonce,
-              deadline,
-            },
-          },
+          data: generateMintArObjectSignMessageData(
+            awKeyHash,
+            objKeyHash,
+            editionOfBN,
+            setInitialAsk,
+            initialAskDecimal,
+            nonceBN,
+            deadlineBN,
+            generateEIP712Domain(name, chainId, media.address)
+          ),
         }
       );
       const response = fromRpcSig(sig);
@@ -471,7 +447,7 @@ export const signMintArObjectMessageFromWallet = async (
         r: response.r,
         s: response.s,
         v: response.v,
-        deadline: deadline.toString(),
+        deadline: deadlineBN.toString(),
       });
     } catch (e) {
       // eslint-disable-next-line no-console
@@ -545,6 +521,102 @@ export function constructMintData(
   };
 }
 
+export async function mintArObjectBatchWithSig(
+  batchSize: number,
+  batchOffset: number,
+  media: Media,
+  creator: string,
+  tokenURIs: string[],
+  metadataURIs: string[],
+  contentHashes: Bytes[],
+  metadataHashes: Bytes[],
+  awKeyHex: Bytes,
+  objKeyHex: Bytes,
+  editionOfBN: BigNumber,
+  setInitialAsk: boolean,
+  initialAsk: Decimal,
+  nonceBN: BigNumber,
+  currencyAddress: string,
+  shares: BidShares,
+  sig: EIP712Signature
+) {
+  const data: MintArObjectData = {
+    awKeyHex,
+    objKeyHex,
+    editionOf: editionOfBN,
+    initialAsk: initialAsk.value,
+    batchSize: BigNumber.from(batchSize),
+    batchOffset: BigNumber.from(batchOffset),
+    mintArObjectNonce: nonceBN,
+    currency: currencyAddress,
+    setInitialAsk,
+  };
+
+  return media.mintArObject(
+    creator,
+    tokenURIs.slice(batchOffset, batchOffset + batchSize),
+    metadataURIs.slice(batchOffset, batchOffset + batchSize),
+    contentHashes.slice(batchOffset, batchOffset + batchSize),
+    metadataHashes.slice(batchOffset, batchOffset + batchSize),
+    data,
+    shares,
+    sig
+  );
+}
+
+export async function mintArObjectWithSig(
+  batchSize: number,
+  media: Media,
+  creator: string,
+  tokenURIs: string[],
+  metadataURIs: string[],
+  contentHashes: Bytes[],
+  metadataHashes: Bytes[],
+  awKeyHex: Bytes,
+  objKeyHex: Bytes,
+  editionOfBN: BigNumber,
+  setInitialAsk: boolean,
+  initialAsk: Decimal,
+  nonceBN: BigNumber,
+  currencyAddress: string,
+  shares: BidShares,
+  sig: EIP712Signature
+) {
+  let offset = 0;
+
+  return new Promise(async (resolve, reject) => {
+    while (offset < editionOfBN.toNumber()) {
+      let nextBatchSize = batchSize;
+      if (offset + batchSize > editionOfBN.toNumber())
+        nextBatchSize = editionOfBN.toNumber() % batchSize;
+
+      await mintArObjectBatchWithSig(
+        nextBatchSize,
+        offset,
+        media,
+        creator,
+        tokenURIs,
+        metadataURIs,
+        contentHashes,
+        metadataHashes,
+        awKeyHex,
+        objKeyHex,
+        editionOfBN,
+        setInitialAsk,
+        initialAsk,
+        nonceBN,
+        currencyAddress,
+        shares,
+        sig
+      ).catch((err: any) => reject(err));
+
+      offset += batchSize;
+    }
+
+    resolve(true);
+  });
+}
+
 /********************
  * Hashing Utilities
  ********************
@@ -611,7 +683,7 @@ export const stringToSha256 = (str: string) => utils.sha256(str);
 
 export const hexToBytes = (hex: string) => utils.arrayify(hex);
 
-export const stringToBytes32 = (str: string) => {
+export const stringToHexBytes = (str: string) => {
   return utils.arrayify(utils.formatBytes32String(str));
 };
 
@@ -619,8 +691,16 @@ export const stringToHexHash = (str: string) => {
   return utils.sha256(utils.formatBytes32String(str));
 };
 
-export const stringToBytes32Hash = (str: string) => {
+export const stringToHexHashBytes = (str: string) => {
   return utils.arrayify(utils.sha256(utils.formatBytes32String(str)));
+};
+
+export const stringToBytes = (str: string) => {
+  return utils.arrayify(str);
+};
+
+export const stringToBytes32 = (str: string) => {
+  return utils.arrayify(utils.formatBytes32String(str));
 };
 
 export const numberToBigNumber = (n: number) => BigNumber.from(n);

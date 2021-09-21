@@ -59,6 +59,14 @@ export class Decimal {
   }
 
   /**
+   * Returns the raw `DecimalValue` with no precision
+   * @param value
+   */
+  static rawBigNumber(value: BigNumber): DecimalValue {
+    return { value };
+  }
+
+  /**
    * Returns the number of decimals for value
    * @param value
    */

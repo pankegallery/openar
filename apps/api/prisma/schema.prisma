@@ -88,11 +88,14 @@ model ArObject {
   title         String?
   description   String?
   mintSignature  Json?
+  mintMetaData   Json?
   orderNumber     Int? @default(0)
   editionOf     Int?
   
   lat           Float?
   lng           Float?
+
+  setInitialAsk        Boolean @default(true)
 
   askPrice    Float? @default(0.0)
   isPublic        Boolean @default(true)

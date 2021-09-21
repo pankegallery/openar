@@ -157,8 +157,8 @@ const Update = () => {
     setIsFormError(false);
     setIsNavigatingAway(false);
 
-    const deadline = openAR.createDeadline(60 * 60 * 24);
-    const nonce = numberToBigNumber(new Date().getTime());
+    const deadlineBN = openAR.createDeadline(60 * 60 * 24);
+    const nonceBN = numberToBigNumber(new Date().getTime());
 
     const awKeyHash = stringToHexHash(formDataQuery?.data?.artworkReadOwn?.key);
     const objKeyHash = stringToHexHash(
@@ -170,26 +170,42 @@ const Update = () => {
       numberToBigNumber(getValues("editionOf")),
       getValues("setInitialAsk"),
       Decimal.new(getValues("askPrice")),
-      nonce,
-      deadline,
+      nonceBN,
+      deadlineBN,
       openAR.eip712Domain()
     );
 
+    console.log(
+      "AW-".concat(formDataQuery?.data?.artworkReadOwn?.key),
+      awKeyHash,
+      "OB-".concat(formDataQuery?.data?.arObjectReadOwn?.key),
+      objKeyHash,
+      numberToBigNumber(getValues("editionOf")).toString(),
+      getValues("setInitialAsk"),
+      Decimal.new(getValues("askPrice")).value.toString(),
+      nonceBN.toString(),
+      deadlineBN.toString(),
+      openAR.eip712Domain()
+    );
+
+    console.log(messageData, account);
     const msgParams = JSON.stringify(messageData);
 
-    var params = [account, msgParams];
+    var params = [account.toLowerCase(), msgParams];
 
     library
       .send("eth_signTypedData_v4", params)
       .then((signature) => {
+        console.log("Signature: ", signature);
+        
         recoverSignatureFromMintArObject(
           awKeyHash,
           objKeyHash,
           numberToBigNumber(getValues("editionOf")),
           getValues("setInitialAsk"),
           Decimal.new(getValues("askPrice")),
-          nonce,
-          deadline,
+          nonceBN,
+          deadlineBN,
           openAR.eip712Domain(),
           signature
         )
@@ -202,10 +218,11 @@ const Update = () => {
               {
                 editionOf: newData.editionOf ?? 1,
                 askPrice: newData.askPrice ?? 0,
+                setInitialAsk: !!newData.setInitialAsk,
                 mintSignature: {
                   signature,
-                  deadline: deadline.toString(),
-                  nonce: nonce.toString(),
+                  deadline: deadlineBN.toString(),
+                  nonce: nonceBN.toString(),
                 },
               }
             );
@@ -213,7 +230,7 @@ const Update = () => {
             if (!errors) {
               successToast();
               setIsNavigatingAway(true);
-              cancelMintSignature();
+              cancelMintSignature(); 
               router.push(
                 `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`
               );
@@ -256,8 +273,6 @@ const Update = () => {
       title: "Mint object",
     },
   ];
-
-  console.log(watch(), ModuleArObjectMintableSchema.isValidSync(watch()));
 
   // TODO: this makes some trouble on SSR as the buttons look differently
   // as the user can't do thing on the server

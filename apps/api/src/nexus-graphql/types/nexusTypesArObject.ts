@@ -524,6 +524,7 @@ export const ArObjectMintInput = inputObjectType({
   definition(t) {
     t.int("id");
     t.float("askPrice");
+    t.boolean("setInitialAsk");
     t.int("editionOf");
     t.json("mintSignature");
   },
@@ -651,6 +652,7 @@ export const ArObjectMutations = extendType({
       async resolve(...[, args]) {
         const arObject = await daoArObjectUpdate(args.id, {
           editionOf: args.data.editionOf,
+          setInitialAsk: !!args.data.setInitialAsk,
           askPrice: args.data.askPrice,
           mintSignature: args.data.mintSignature,
           status: ArObjectStatusEnum.MINT,

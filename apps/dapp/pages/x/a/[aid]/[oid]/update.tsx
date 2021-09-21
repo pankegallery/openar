@@ -234,7 +234,7 @@ const Update = () => {
           ? "Save draft"
           : "Unpublish",
       isDisabled: disableNavigation || activeUploadCounter > 0,
-      skip: ![ArtworkStatusEnum.DRAFT, ArtworkStatusEnum.PUBLISHED].includes(
+      skip: ![ArObjectStatusEnum.DRAFT, ArObjectStatusEnum.PUBLISHED].includes(
         data?.arObjectReadOwn?.status
       ),
       userCan: "artworkUpdateOwn",
@@ -243,7 +243,7 @@ const Update = () => {
       type: "button",
       isLoading: isSubmitting,
       onClick: () => {
-        if (data?.artworkReadOwn?.status === ArtworkStatusEnum.DRAFT)
+        if (data?.arObjectReadOwn?.status === ArObjectStatusEnum.DRAFT)
           setValue("status", ArtworkStatusEnum.PUBLISHED);
         handleSubmit(onSubmit)();
       },
@@ -253,7 +253,7 @@ const Update = () => {
           : "Save",
       isDisabled: disableNavigation || activeUploadCounter > 0,
       userCan: "artworkUpdateOwn",
-      skip: ![ArtworkStatusEnum.DRAFT, ArtworkStatusEnum.PUBLISHED].includes(
+      skip: ![ArObjectStatusEnum.DRAFT, ArObjectStatusEnum.PUBLISHED].includes(
         data?.arObjectReadOwn?.status
       ),
     },
@@ -280,7 +280,7 @@ const Update = () => {
         !couldMint ||
         disableNavigation ||
         activeUploadCounter > 0,
-      skip: ![ArtworkStatusEnum.DRAFT, ArtworkStatusEnum.PUBLISHED].includes(
+      skip: ![ArObjectStatusEnum.DRAFT, ArObjectStatusEnum.PUBLISHED].includes(
         data?.arObjectReadOwn?.status
       ),
       userCan: "artworkUpdateOwn",

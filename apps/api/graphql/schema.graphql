@@ -50,6 +50,7 @@ input ArObjectMintInput {
   editionOf: Int
   id: Int
   mintSignature: JSON
+  setInitialAsk: Boolean
 }
 
 """List all the ArObjects in the database."""

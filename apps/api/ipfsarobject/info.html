@@ -47,7 +47,7 @@
 ---- OBJECT --------------------<br/>
 --------------------------------<br/></pre>
 Title: {{title}}<br/>
-URL: <a href="https://openar.art/a/{{artworkKey}}/{{objKey}}">https://openar.art/a/{{artworkKey}}/{{objKey}}</a><br/>
+URL: <a href="{{{baseUrl}}}/a/{{artworkKey}}/{{objKey}}">{{{baseUrl}}}/a/{{artworkKey}}/{{objKey}}</a><br/>
 Year: {{year}}<br/>
 Edition Of: {{editionOf}}<br/>
 Edition Number: {{editionNumber}}<br/><br/>
@@ -64,7 +64,7 @@ Description:<br/>
 --------------------------------<br/></pre>
 Title: {{title}}<br/>
 Year: {{year}}<br/>
-URL: <a href="https://openar.art/a/{{artworkKey}}">https://openar.art/a/{{artworkKey}}</a><br/><br/>
+URL: <a href="{{{baseUrl}}}/a/{{artworkKey}}">{{{baseUrl}}}/a/{{artworkKey}}</a><br/><br/>
 Description:<br/>
 {{{artworkDescription}}}
 <br/><br/>
@@ -72,11 +72,11 @@ Description:<br/>
 ---- ARTIST --------------------<br/>
 --------------------------------<br/></pre>
 Name: {{creator}}<br/>
-URL: <a href="https://openar.art/u/{{ethAddress}}">https://openar.art/u/{{ethAddress}}</a><br/>
+URL: <a href="{{{baseUrl}}}/u/{{ethAddress}}">{{{baseUrl}}}/u/{{ethAddress}}</a><br/>
 Personal URL: <a href="{{{creatorURL}}}">{{{creatorURL}}}</a><br/><br/>
 Biography:<br/>
 {{{bio}}}<br/>
 
-    <a href="https://openar.art/a/{{artworkKey}}/{{objKey}}" class="cornerlink"><!-- TODO: make pretty --></a>
+    <a href="{{{baseUrl}}}/a/{{artworkKey}}/{{objKey}}" class="cornerlink"><!-- TODO: make pretty --></a>
   </body>
 </html>

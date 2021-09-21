@@ -59,6 +59,7 @@ export interface NexusGenInputs {
     editionOf?: number | null; // Int
     id?: number | null; // Int
     mintSignature?: NexusGenScalars['JSON'] | null; // JSON
+    setInitialAsk?: boolean | null; // Boolean
   }
   ArObjectUpsertInput: { // input type
     arModels?: NexusGenScalars['JSON'] | null; // JSON
