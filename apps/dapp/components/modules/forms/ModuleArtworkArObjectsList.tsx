@@ -55,15 +55,18 @@ export const ModuleArtworkArObjectsList = ({
               break;
 
             case ArObjectStatusEnum.MINT:
-            case ArObjectStatusEnum.MINTING:
-            case ArObjectStatusEnum.MINTERROR:
+            case ArObjectStatusEnum.MINTING:            
             case ArObjectStatusEnum.MINTRETRY:
-            case ArObjectStatusEnum.MINTSIGNATUREREQUIRED:
+            case ArObjectStatusEnum.MINTCONFIRM:
               status = "minting";
               break;
 
+            case ArObjectStatusEnum.MINTERROR:
+              status = "error"
+              break;
+
             case ArObjectStatusEnum.MINTED:
-              status = "minting";
+              status = "minted";
               break;
           }
 

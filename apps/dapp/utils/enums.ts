@@ -42,7 +42,7 @@ export enum ArObjectStatusEnum {
   MINT,
   MINTRETRY,
   MINTERROR,
-  MINTSIGNATUREREQUIRED,
+  MINTCONFIRM,
 }
 
 export enum ArModelStatusEnum {

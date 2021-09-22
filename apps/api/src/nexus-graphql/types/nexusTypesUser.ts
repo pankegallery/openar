@@ -281,7 +281,7 @@ export const UserQueries = extendType({
                     status: {
                       in: [
                         ArObjectStatusEnum.PUBLISHED,
-                        ArObjectStatusEnum.MINTSIGNATUREREQUIRED,
+                        ArObjectStatusEnum.MINTCONFIRM,
                         ArObjectStatusEnum.MINT,
                         ArObjectStatusEnum.MINTING,
                         ArObjectStatusEnum.MINTED,
@@ -307,7 +307,7 @@ export const UserQueries = extendType({
                     status: {
                       in: [
                         ArObjectStatusEnum.PUBLISHED,
-                        ArObjectStatusEnum.MINTSIGNATUREREQUIRED,
+                        ArObjectStatusEnum.MINTCONFIRM,
                         ArObjectStatusEnum.MINT,
                         ArObjectStatusEnum.MINTING,
                         ArObjectStatusEnum.MINTED,

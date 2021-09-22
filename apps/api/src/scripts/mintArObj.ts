@@ -43,7 +43,6 @@ import {
   sha256FromString,
   htmlToString,
 } from "../utils";
-import { min } from "date-fns";
 
 dotenv.config();
 
@@ -61,6 +60,13 @@ const writeTemplateFile = async (
   fs.writeFileSync(outputPath, Mustache.render(template, vars));
 };
 
+type TokenInfo = {
+  tokenURI: string;
+  metaDataURI: string;
+  contentHashBytes: Bytes;
+  metadataHashBytes: Bytes;
+};
+
 const writeToIPFS = async (
   editionNumber: number,
   arObject: Prisma.ArObject & {
@@ -69,20 +75,17 @@ const writeToIPFS = async (
     artwork: Prisma.Artwork | null;
     creator: Prisma.User | null;
   }
-): Promise<
-  [
-    tokenURI: string,
-    metadataURI: string,
-    contentHashBytes: Bytes,
-    metadataHashBytes: Bytes
-  ]
-> => {
+): Promise<TokenInfo> => {
   const appPrefix = "openAR";
   let tmpDir,
     tokenURI = "",
     metaDataURI = "",
     contentHashBytes = stringToBytes(sha256FromString("")),
     metadataHashBytes = stringToBytes(sha256FromString(""));
+
+  logger.info(
+    `[Start] Preparing IPFS data for object ${arObject.key} ${editionNumber}/${arObject.editionOf}`
+  );
 
   try {
     tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix));
@@ -207,9 +210,14 @@ const writeToIPFS = async (
 
     metaDataURI = `https://ipfs.io/ipfs/${cidMetaData}/metadata.json`;
 
+    logger.info(
+      `[Done] Preparing IPFS data for object ${arObject.key} ${editionNumber}/${arObject.editionOf}`
+    );
+
     // the rest of your app goes here
   } catch (err) {
     logger.error(err);
+    throw err;
   } finally {
     try {
       // TODO ENable
@@ -222,7 +230,7 @@ const writeToIPFS = async (
       );
     }
   }
-  return [tokenURI, metaDataURI, contentHashBytes, metadataHashBytes];
+  return { tokenURI, metaDataURI, contentHashBytes, metadataHashBytes };
 };
 
 const processArObject = async (
@@ -239,148 +247,148 @@ const processArObject = async (
   prisma: Prisma.PrismaClient,
   chainId: number
 ) => {
-  let newStatus = ArObjectStatusEnum.MINTING;
-
-  const [tokenURI, metaDataURI, contentHashBytes, metadataHashBytes] =
-    await writeToIPFS(1, arObject);
-
-  if (tokenURI === "" || metaDataURI === "") throw Error("IPFS Upload Error");
-
   const creatorCut = Decimal.new(100)
     .value.sub(platformCuts.firstSalePlatform.value)
     .sub(platformCuts.firstSalePool.value);
+  const editionOf = arObject.editionOf ?? 1;
 
-  // let offset = 0;
+  await new Promise(async (resolve, reject) => {
+    let offset = 0;
 
-  // await new Promise(async (resolve, reject) => {
-  //   while (offset < editionOfBN.toNumber()) {
-  //     let nextBatchSize = batchSize;
-  //     if (offset + batchSize > editionOfBN.toNumber())
-  //       nextBatchSize = editionOfBN.toNumber() % batchSize;
+    while (offset < editionOf) {
+      let newStatus = ArObjectStatusEnum.MINTING;
+      let nextBatchSize = mintMetaData.batchSize;
+      if (offset + mintMetaData.batchSize > editionOf)
+        nextBatchSize = editionOf % mintMetaData.batchSize;
 
-  //     const data: MintArObjectData = {
-  //       awKeyHex,
-  //       objKeyHex,
-  //       editionOf: editionOfBN,
-  //       initialAsk: initialAsk.value,
-  //       batchSize: BigNumber.from(nextBatchSize),
-  //       batchOffset: BigNumber.from(offset),
-  //       mintArObjectNonce: nonceBN,
-  //       currency: currencyAddr,
-  //       setInitialAsk,
-  //     };
+      mintMetaData.offset = offset;
+      mintMetaData.nextBatchSize = nextBatchSize;
 
-  //     await media
-  //       .mintArObject(
-  //         creator,
-  //         tokenURIs.slice(offset, offset + nextBatchSize),
-  //         metadataURIs.slice(offset, offset + nextBatchSize),
-  //         contentHashes.slice(offset, offset + nextBatchSize),
-  //         metadataHashes.slice(offset, offset + nextBatchSize),
-  //         data,
-  //         shares,
-  //         sig
-  //       )
-  //       .catch((err: any) => reject(err));
+      // txReceipt = await provider.getTransactionReceipt(tx.hash);
+      // console.log('Gas usage: ', txReceipt.gasUsed.toNumber());
+      try {
+        let tokenInfo: TokenInfo[] = [];
+        try {
+          tokenInfo = await Promise.all(
+            Array(nextBatchSize)
+              .fill(offset)
+              .map((ofs, index) => writeToIPFS(ofs + index + 1, arObject))
+          );
+        } catch (err: any) {
+          throw err;
+        }
 
-  //     offset += batchSize;
-  //   }
+        if (
+          tokenInfo.length === 0 ||
+          tokenInfo.length !== nextBatchSize ||
+          tokenInfo[0].tokenURI === "" ||
+          tokenInfo[0].metaDataURI === ""
+        )
+          throw Error("IPFS Upload Error");
 
-  //   resolve(true);
-  // });
+        console.log(editionOf, nextBatchSize, offset, tokenInfo.map((ti) => ti.tokenURI));
 
-  // txReceipt = await provider.getTransactionReceipt(tx.hash);
-  // console.log('Gas usage: ', txReceipt.gasUsed.toNumber());
-  try {
-    const tx = await mintArObjectBatchWithSig(
-      1,
-      0,
-      mediaContract,
-      creatorAddress,
-      [tokenURI],
-      [metaDataURI],
-      [contentHashBytes],
-      [metadataHashBytes],
-      stringToHexBytes(arObject?.artwork?.key ?? ""),
-      stringToHexBytes(arObject?.key ?? ""),
-      numberToBigNumber(arObject.editionOf ?? 1),
-      arObject.setInitialAsk,
-      Decimal.new(arObject.askPrice ?? 0),
-      numberToBigNumber((arObject?.mintSignature as any)?.nonce),
-      AddressZero,
-      {
-        prevOwner: Decimal.new(0),
-        owner: Decimal.new(0),
-        creator: Decimal.rawBigNumber(creatorCut),
-        platform: platformCuts.firstSalePlatform,
-        pool: platformCuts.firstSalePool,
-      },
-      createEIP712Signature(
-        (arObject?.mintSignature as any)?.signature,
-        numberToBigNumber((arObject?.mintSignature as any)?.deadline)
-      )
-    );
-    mintMetaData.txHashes = [...mintMetaData.txHashes, tx.hash];
+        const tx = await mintArObjectBatchWithSig(
+          nextBatchSize,
+          offset,
+          mediaContract,
+          creatorAddress,
+          tokenInfo.map((ti) => ti.tokenURI),
+          tokenInfo.map((ti) => ti.metaDataURI),
+          tokenInfo.map((ti) => ti.contentHashBytes),
+          tokenInfo.map((ti) => ti.metadataHashBytes),
+          stringToHexBytes(arObject?.artwork?.key ?? ""),
+          stringToHexBytes(arObject?.key ?? ""),
+          numberToBigNumber(editionOf),
+          arObject.setInitialAsk,
+          Decimal.new(arObject.askPrice ?? 0),
+          numberToBigNumber((arObject?.mintSignature as any)?.nonce),
+          AddressZero,
+          {
+            prevOwner: Decimal.new(0),
+            owner: Decimal.new(0),
+            creator: Decimal.rawBigNumber(creatorCut),
+            platform: platformCuts.firstSalePlatform,
+            pool: platformCuts.firstSalePool,
+          },
+          createEIP712Signature(
+            (arObject?.mintSignature as any)?.signature,
+            numberToBigNumber((arObject?.mintSignature as any)?.deadline)
+          )
+        );
+        logger.info(
+          `Mint TX for ${arObject.key} batch size:${nextBatchSize} offset:${offset} txh:${tx.hash}`
+        );
+        mintMetaData.txHashes = [...mintMetaData.txHashes, tx.hash];
 
-    const txReceipt = await tx.wait(chainId === 31337 ? 0 : 4);
+        const txReceipt = await tx.wait(chainId === 31337 ? 0 : 4);
 
-    if (txReceipt) {
-      mintMetaData.blockNumbers = [
-        ...mintMetaData.blockNumbers,
-        txReceipt.blockNumber,
-      ];
+        if (txReceipt) {
+          mintMetaData.blockNumbers = [
+            ...mintMetaData.blockNumbers,
+            txReceipt.blockNumber,
+          ];
 
-      const events = await mediaContract.queryFilter(
-        mediaContract.filters.TokenObjectMinted(null, null),
-        txReceipt.blockNumber
-      );
+          const events = await mediaContract.queryFilter(
+            mediaContract.filters.TokenObjectMinted(null, null),
+            txReceipt.blockNumber
+          );
 
-      if (events && events.length > 0) {
-        events.forEach((event: any) => {
-          const logDescription = mediaContract.interface.parseLog(event);
-          if (
-            logDescription?.args?.tokenIds &&
-            logDescription?.args?.data?.objKeyHex
-          ) {
-            const objKey = utils.parseBytes32String(
-              logDescription?.args?.data?.objKeyHex ?? ""
-            );
+          if (events && events.length > 0) {
+            mintMetaData = events.reduce((mMD: any, event: any) => {
+              const logDescription = mediaContract.interface.parseLog(event);
+              if (
+                logDescription?.args?.tokenIds &&
+                logDescription?.args?.data?.objKeyHex
+              ) {
+                const objKey = utils.parseBytes32String(
+                  logDescription?.args?.data?.objKeyHex ?? ""
+                );
 
-            if (objKey === arObject.key) {
-              mintMetaData.tokenIds = [
-                ...mintMetaData.tokenIds,
-                ...logDescription?.args?.tokenIds.map((tID: BigNumber) =>
-                  tID.toString()
-                ),
-              ];
+                if (objKey === arObject.key) {
+                  mMD.tokenIds = [
+                    ...mMD.tokenIds,
+                    ...logDescription?.args?.tokenIds.map((tID: BigNumber) =>
+                      tID.toString()
+                    ),
+                  ];
 
-              if (mintMetaData.tokenIds.length === arObject.editionOf) {
-                newStatus = ArObjectStatusEnum.MINTED;
+                  if (mMD.tokenIds.length === arObject.editionOf)
+                    newStatus = ArObjectStatusEnum.MINTED;
+                    // newStatus = ArObjectStatusEnum.MINTCONFIRM;
+                }
               }
-            }
+              return mMD;
+            }, mintMetaData);
           }
+        } else {
+          newStatus = ArObjectStatusEnum.MINTRETRY;
+        }
+      } catch (err: any) {
+        logger.error(err);
+        newStatus = ArObjectStatusEnum.MINTERROR;
+        mintMetaData.error = err.message;
+        mintMetaData.stopped = new Date().toISOString();
+        // eslint-disable-next-line no-console
+        console.error(err);
+        reject(false);
+      } finally {
+        await prisma.arObject.update({
+          data: {
+            status: newStatus,
+            mintMetaData,
+          },
+          where: {
+            id: arObject.id,
+          },
         });
       }
+
+      offset += mintMetaData.batchSize;
     }
 
-    //console.log(logDescription.args);
-  } catch (err: any) {
-    logger.error(err);
-    newStatus = ArObjectStatusEnum.MINTERROR;
-    mintMetaData.error = err.message;
-    mintMetaData.stopped = new Date().toISOString();
-    console.error(err);
-  } finally {
-    await prisma.arObject.update({
-      data: {
-        status: newStatus,
-        mintMetaData,
-      },
-      where: {
-        id: arObject.id,
-      },
-    });
-  }
+    resolve(true);
+  });
 };
 
 const doChores = async () => {
@@ -485,12 +493,20 @@ const doChores = async () => {
       if (creatorEthAddress.toLowerCase() !== recoveredEthAddress.toLowerCase())
         throw Error("Signature verification failed");
 
+      const editionOf = arObject.editionOf ?? 1;
       const mintMetaData = {
+        offset: 0,
+        batchSize:
+          apiConfig.defaultMintBatchSize <= editionOf
+            ? apiConfig.defaultMintBatchSize
+            : editionOf,
+        nextBatchSize: 1,
         tokenIds: [],
         blockNumbers: [],
         txHashes: [],
         started: new Date().toISOString(),
       };
+      mintMetaData.nextBatchSize = mintMetaData.batchSize;
 
       await prisma.arObject.update({
         data: {

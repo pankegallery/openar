@@ -137,15 +137,11 @@ const Update = () => {
     });
     setIsAwaitingSignature(false);
     mintDisclosure.onClose();
-
-    console.log("cancelled window");
   };
 
   let openAR: OpenAR;
-  if (library && account) {
-    console.log("chain ID", chainId);
+  if (library && account)
     openAR = new OpenAR(library.getSigner(account), chainId);
-  }
 
   const signMintRequest = async () => {
     if (!openAR || !appUser) {
@@ -175,20 +171,6 @@ const Update = () => {
       openAR.eip712Domain()
     );
 
-    console.log(
-      "AW-".concat(formDataQuery?.data?.artworkReadOwn?.key),
-      awKeyHash,
-      "OB-".concat(formDataQuery?.data?.arObjectReadOwn?.key),
-      objKeyHash,
-      numberToBigNumber(getValues("editionOf")).toString(),
-      getValues("setInitialAsk"),
-      Decimal.new(getValues("askPrice")).value.toString(),
-      nonceBN.toString(),
-      deadlineBN.toString(),
-      openAR.eip712Domain()
-    );
-
-    console.log(messageData, account);
     const msgParams = JSON.stringify(messageData);
 
     var params = [account.toLowerCase(), msgParams];
@@ -196,8 +178,6 @@ const Update = () => {
     library
       .send("eth_signTypedData_v4", params)
       .then((signature) => {
-        console.log("Signature: ", signature);
-        
         recoverSignatureFromMintArObject(
           awKeyHash,
           objKeyHash,
@@ -210,7 +190,6 @@ const Update = () => {
           signature
         )
           .then(async (recovered) => {
-            console.log("RRRR: ", recovered);
             const newData = getValues();
 
             const { errors } = await firstMutation(
@@ -230,7 +209,7 @@ const Update = () => {
             if (!errors) {
               successToast();
               setIsNavigatingAway(true);
-              cancelMintSignature(); 
+              cancelMintSignature();
               router.push(
                 `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`
               );
@@ -250,9 +229,7 @@ const Update = () => {
 
   const onSubmit = async (
     newData: yup.InferType<typeof ModuleArObjectMintableSchema>
-  ) => {
-    console.log("handle sybmit");
-  };
+  ) => {};
 
   // TODO: make more general
   const trimTitle = (str: string) =>
