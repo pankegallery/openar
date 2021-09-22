@@ -110,7 +110,7 @@ export const Home = (props) => {
             alignContent="flex-end"
           >
             {!beta && (
-              <Link href="/e/openar-art" passHref>
+              <Link href="/e/xxxx" passHref>
                 <chakra.a display="block" mt="auto">
                   <chakra.h1 textStyle="worktitle" mt="auto" mb="2rem">
                     OpenAR.art

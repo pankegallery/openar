@@ -195,6 +195,15 @@ let apiConfig = {
         "Error: missing/wrong .env config: BASE_URL_API"
       )
     ),
+    subgraph: trimTrailingSlash(
+      safeGuardVariable(
+        logger,
+        "string",
+        process.env.BASE_URL_SUBGRAPH,
+        "",
+        "Error: missing/wrong .env config: BASE_URL_SUBGRAPH"
+      )
+    ),
   },
   imageFormats: {
     normal: [

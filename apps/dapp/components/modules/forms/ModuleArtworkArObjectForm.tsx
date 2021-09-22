@@ -232,7 +232,7 @@ export const ModuleArtworkArObjectForm = ({
                     AR models
                   </FormLabel>
                   <Text fontSize="xs" className="muted">
-                    Add one model each for iOS and Android
+                    Add one model each for iOS and Android. We recommend to upload models smaller than 10Mb
                   </Text>
                   <Grid
                     w="100%"

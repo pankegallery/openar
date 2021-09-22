@@ -52,12 +52,16 @@ export const startApi = async () => {
         jobs: [
           {
             name: "dbExpireTokens",
-            interval: "1m",
+            interval: process.env.NODE_ENV === "production" ? "1m" : "1hr",
           },
           {
             name: "dbConvertImages",
-            interval: "30s",
+            interval: process.env.NODE_ENV === "production" ? "13s" : "37s",
           },
+          {
+            name: "mint",
+            interval: process.env.NODE_ENV === "production" ? "19s" : "61s",
+          }
         ],
       });
       bree.start();

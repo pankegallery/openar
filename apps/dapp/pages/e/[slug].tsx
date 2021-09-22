@@ -26,81 +26,6 @@ import { ExhibitionTitleTile } from "~/components/frontend";
 import pick from "lodash/pick";
 
 export const Exhibition = ({ exhibition }: { exhibition: any }) => {
-  const inputEl = useRef(null);
-
-  //TODO: happens with client side rendering and accessing unknown slugs ... we need to redirct to 404 on the client side.
-  // {
-  //   {
-  //     "id": 1,
-  //     "slug": null,
-  //     "title": "OpenAR.art",
-  //     "description": "Lorem ipsim",
-  //     "subtitle": "Platform launch and groupshow curated by Sakrowski and Jeremy Bailey",
-  //     "dateBegin": "2021-08-29T10:00:00.000Z",
-  //     "dateEnd": "2021-10-04T10:00:00.000Z",
-  //     "status": 2,
-  //     "curators": null,
-  //     "artworks": [
-  //       {
-  //         "id": 22,
-  //         "key": "RWEOzHzMPehrpgyn",
-  //         "title": "TEWS",
-  //         "description": "<p>TEST</p>",
-  //         "heroImage": {
-  //           "id": 42,
-  //           "meta": {
-  //             "size": 93976,
-  //             "mimeType": "image/jpeg",
-  //             "imageType": "square",
-  //             "uploadFolder": "/img/2021/8",
-  //             "availableSizes": {
-  //               "original": {
-  //                 "url": "http://localhost:4401/img/2021/8/kmsFu-TgGVy6Kp1Lkrug3.jpg",
-  //                 "isJpg": true,
-  //                 "width": 1280,
-  //                 "height": 1279,
-  //                 "isWebP": false
-  //               },
-  //               "720-720-jpg": {
-  //                 "url": "http://localhost:4401//img/2021/8/kmsFu-TgGVy6Kp1Lkrug3-720-720.jpg",
-  //                 "isJpg": true,
-  //                 "width": 720,
-  //                 "height": 720,
-  //                 "isWebP": false
-  //               },
-  //               "480-480-webp": {
-  //                 "url": "http://localhost:4401//img/2021/8/kmsFu-TgGVy6Kp1Lkrug3-480-480.webp",
-  //                 "isJpg": false,
-  //                 "width": 480,
-  //                 "height": 480,
-  //                 "isWebP": true
-  //               },
-  //               "720-720-webp": {
-  //                 "url": "http://localhost:4401//img/2021/8/kmsFu-TgGVy6Kp1Lkrug3-720-720.webp",
-  //                 "isJpg": false,
-  //                 "width": 720,
-  //                 "height": 720,
-  //                 "isWebP": true
-  //               },
-  //               "1080-1080-webp": {
-  //                 "url": "http://localhost:4401//img/2021/8/kmsFu-TgGVy6Kp1Lkrug3-1080-1080.webp",
-  //                 "isJpg": false,
-  //                 "width": 1080,
-  //                 "height": 1080,
-  //                 "isWebP": true
-  //               }
-  //             },
-  //             "originalFileUrl": "http://localhost:4401/img/2021/8/kmsFu-TgGVy6Kp1Lkrug3.jpg",
-  //             "originalFileName": "fa-pnk-195.jpg",
-  //             "originalFilePath": "/Users/fluxed/Dropbox/www/fluxed/openar/openar-monorepo/public/img/2021/8/kmsFu-TgGVy6Kp1Lkrug3.jpg"
-  //           },
-  //           "status": 4
-  //         }
-  //       }
-  //     ]
-  //   }
-  // }
-
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
   const refArtworksWrapper = useRef(null);
 
@@ -239,10 +164,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
               }}
               alignContent="flex-end"
             >
-              <ExhibitionTitleTile
-                exhibition={exhibition}
-                link={false}
-              />
+              <ExhibitionTitleTile exhibition={exhibition} link={false} />
             </Flex>
           </Flex>
           {/* --------- Description  --------- */}
@@ -454,7 +376,11 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     },
   });
 
-  if (!data?.exhibition) {
+  if (
+    !data?.exhibition ||
+    !data?.exhibition?.artworks ||
+    data?.exhibition?.artworks.length === 0
+  ) {
     return {
       notFound: true,
     };

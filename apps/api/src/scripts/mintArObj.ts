@@ -264,8 +264,6 @@ const processArObject = async (
       mintMetaData.offset = offset;
       mintMetaData.nextBatchSize = nextBatchSize;
 
-      // txReceipt = await provider.getTransactionReceipt(tx.hash);
-      // console.log('Gas usage: ', txReceipt.gasUsed.toNumber());
       try {
         let tokenInfo: TokenInfo[] = [];
         try {
@@ -285,8 +283,6 @@ const processArObject = async (
           tokenInfo[0].metaDataURI === ""
         )
           throw Error("IPFS Upload Error");
-
-        console.log(editionOf, nextBatchSize, offset, tokenInfo.map((ti) => ti.tokenURI));
 
         const tx = await mintArObjectBatchWithSig(
           nextBatchSize,
@@ -354,19 +350,27 @@ const processArObject = async (
                   ];
 
                   if (mMD.tokenIds.length === arObject.editionOf)
-                    newStatus = ArObjectStatusEnum.MINTED;
-                    // newStatus = ArObjectStatusEnum.MINTCONFIRM;
+                    newStatus = ArObjectStatusEnum.MINTCONFIRM;
                 }
               }
               return mMD;
             }, mintMetaData);
           }
         } else {
+          if (mintMetaData.retryCount === 3)
+            throw Error("3rd retry attempt failed");
+
           newStatus = ArObjectStatusEnum.MINTRETRY;
         }
       } catch (err: any) {
         logger.error(err);
-        newStatus = ArObjectStatusEnum.MINTERROR;
+
+        let canRetry = false;
+
+        if (err.message.indexOf("nonce has already been used") > -1)
+          canRetry = true;
+
+        newStatus = canRetry ? ArObjectStatusEnum.MINTRETRY : ArObjectStatusEnum.MINTERROR;
         mintMetaData.error = err.message;
         mintMetaData.stopped = new Date().toISOString();
         // eslint-disable-next-line no-console
@@ -494,7 +498,8 @@ const doChores = async () => {
         throw Error("Signature verification failed");
 
       const editionOf = arObject.editionOf ?? 1;
-      const mintMetaData = {
+      let mintMetaData: any = {
+        retryCount: 0,
         offset: 0,
         batchSize:
           apiConfig.defaultMintBatchSize <= editionOf
@@ -506,6 +511,17 @@ const doChores = async () => {
         txHashes: [],
         started: new Date().toISOString(),
       };
+
+      if (arObject?.status === ArObjectStatusEnum.MINTRETRY) {
+        mintMetaData = {
+          ...mintMetaData,
+          ...((arObject.mintMetaData as object) ?? {}),
+          restarted: new Date().toISOString(),
+        };
+        mintMetaData.retryCount = mintMetaData.retryCount + 1;
+      } else {
+      }
+
       mintMetaData.nextBatchSize = mintMetaData.batchSize;
 
       await prisma.arObject.update({

@@ -74,7 +74,7 @@ export const ArtworkDetails = ({
           </chakra.p>
           <div dangerouslySetInnerHTML={{ __html: artwork.description }} />
 
-          {object.description && (
+          {object?.description && (
             <>
               <chakra.p textStyle="label" mt="4" className="label">
                 Object description
@@ -106,13 +106,13 @@ export const ArtworkDetails = ({
               sx={{ svg: { display: "inline-block" } }}
             >
               <LogoXDAI width="30px" height="20px" viewBox="40 0 150 150" />
-              {object.askPrice} xDai
+              {object?.askPrice} xDai
             </chakra.p>
             {/* ======== TODO: Edition number  ======== */}
             <chakra.p mb="0 !important" textStyle="label" className="label">
               Edition{" "}
               <chakra.span fontWeight="300" pl="1rem">
-                3/{object.editionOf}
+                3/{object?.editionOf}
               </chakra.span>
             </chakra.p>
           </Box>

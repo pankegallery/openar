@@ -220,13 +220,13 @@ const doChores = async () => {
       );
     }
 
-    await prisma.$disconnect();
     postMessage(`[WORKER:DbConvertImages]: Processed ${count} images`);
   } catch (Err: any) {
-    if (prisma) await prisma.$disconnect();
     postMessage(
       `[WORKER:DbConvertImages]: Failed to run worker. ${Err.name} ${Err.message}`
     );
+  } finally {
+    if (prisma) await prisma.$disconnect();
   }
 };
 

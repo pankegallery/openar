@@ -3,7 +3,7 @@ import Head from "next/head";
 import { gql } from "@apollo/client";
 
 import { LayoutBlank } from "~/components/app";
-import { Box, Grid, Flex, chakra } from "@chakra-ui/react";
+import { Box, Flex, chakra } from "@chakra-ui/react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -11,59 +11,60 @@ import { getApolloClient } from "~/services/apolloClient";
 
 import openingBg from "~/assets/img/opening-bg.png";
 import Arrow from "~/assets/img/arrow.svg";
-import { ArtworkDetails,
-         ArtworkImageViewer,
-         ExhibitionTitleTile } from "~/components/frontend";
-import { ArrowLink } from "~/components/ui";
-import pick from "lodash/pick";
+import {
+  ArtworkDetails,
+  ArtworkImageViewer,
+  ExhibitionTitleTile,
+} from "~/components/frontend";
+
 import { useSSRSaveMediaQuery } from "~/hooks";
 
-
-export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibition: any, okey?: String }) => {
-
+export const Artwork = ({
+  artwork,
+  exhibition,
+  okey,
+}: {
+  artwork: any;
+  exhibition: any;
+  okey?: String;
+}) => {
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
 
   // _____________ Get prev/next artwork _____________
 
+  const thisArtworkIndex = exhibition.artworks.findIndex(
+    (a: any) => a.key === artwork.key
+  );
 
-  const thisArtworkIndex = exhibition.artworks.findIndex((a) => a.key === artwork.key)
-      console.log("[... key] index: ", thisArtworkIndex)
+  const prevArtworkKey = exhibition.artworks[
+    thisArtworkIndex === 0 ? exhibition.artworks.length - 1 : thisArtworkIndex - 1
+  ];
 
-  let nextArtworkKey
-  (thisArtworkIndex == exhibition.artworks.length - 1) ?
-    nextArtworkKey =  exhibition.artworks[0].key :
-    nextArtworkKey =  exhibition.artworks[thisArtworkIndex + 1].key
-    console.log("[... key] next: ",  nextArtworkKey)
-
-  let prevArtworkKey
-  (thisArtworkIndex === 0) ?
-    prevArtworkKey =  exhibition.artworks[exhibition.artworks.length].key :
-    prevArtworkKey =  exhibition.artworks[thisArtworkIndex + -1].key
-    console.log("[... key] prev: ", prevArtworkKey)
-
-
+  const nextArtworkKey = exhibition.artworks[
+    thisArtworkIndex === exhibition.artworks.length - 1 ? 0 : thisArtworkIndex + 1
+  ];
+  
   // _____________ Get initial or selected object _____________
 
-  let selectedObject = {}
-  if (okey === "initial"){
-    selectedObject = artwork.arObjects[0]
+  let selectedObject = {};
+  if (okey === "initial") {
+    selectedObject = artwork.arObjects[0];
   } else {
-    selectedObject = artwork.arObjects.find(o => o.key === okey)
+    selectedObject = artwork.arObjects.find((o) => o.key === okey);
   }
 
   // _____________ Debugging logs _____________
 
-//  console.log("[... key] sel obj: ", selectedObject)
-//  console.log("[... key] artwork: ", artwork)
-  console.log("[... key] ex: ", exhibition)
-
+  //  console.log("[... key] sel obj: ", selectedObject)
+  //  console.log("[... key] artwork: ", artwork)
+  console.log("[... key] ex: ", exhibition);
 
   // _____________ RETURN _____________
 
   return (
     <>
       <Head>
-        <title>{artwork.title} · Ope  nAR</title>
+        <title>{artwork.title} · Ope nAR</title>
         <meta
           property="og:title"
           content={`${artwork.title} · OpenAR`}
@@ -71,7 +72,7 @@ export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibitio
         />
       </Head>
       {/* --------- Background image (desktop only) --------- */}
-      {isDesktop&&
+      {isDesktop && (
         <Box
           position="relative"
           zIndex="100"
@@ -89,14 +90,13 @@ export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibitio
             role="presentation"
           />
         </Box>
-      }
-
+      )}
       {/* --------- Column Layout --------- */}
       <Flex
         flexWrap="wrap"
         position={{
           base: "relative",
-          t: "fixed"
+          t: "fixed",
         }}
         className="artwork"
         top="0"
@@ -105,7 +105,7 @@ export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibitio
         p=""
         h={{
           base: "auto",
-          t: "100vh"
+          t: "100vh",
         }}
         zIndex="200"
         color="white"
@@ -115,18 +115,11 @@ export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibitio
         }}
       >
         {/* --------- COL: Exhibition (desktop only) --------- */}
-        {isDesktop&&
-          <Flex
-            direction="column"
-            className="exhibitionColumn"
-          >
-          {/* --------- ROW: Header row --------- */}
+        {isDesktop && (
+          <Flex direction="column" className="exhibitionColumn">
+            {/* --------- ROW: Header row --------- */}
 
-            <Flex
-               w="33.33vw"
-               h="var(--openar-header-height-desktop)"
-               p="10"
-            >
+            <Flex w="33.33vw" h="var(--openar-header-height-desktop)" p="10">
               <Link href={`/e/openar-art`}>
                 <a>
                   <Arrow className="arrow" />
@@ -148,7 +141,7 @@ export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibitio
               <ExhibitionTitleTile exhibition={exhibition} />
             </Flex>
           </Flex>
-        }
+        )}
         {/* --------- COL: Artwork images --------- */}
         <Flex
           className="imageViewer light"
@@ -156,7 +149,7 @@ export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibitio
           w={{
             base: "100vw",
             t: "50vw",
-            d: "33.3vw"
+            d: "33.3vw",
           }}
           minHeight="70vh"
           h="100%"
@@ -165,32 +158,28 @@ export const Artwork = ({ artwork, exhibition, okey }: { artwork: any, exhibitio
           pt="10"
           overflow="auto"
         >
-          <Flex
-            w="auto"
-            mb="10"
-            px="6"
-          >
-            <Link href={`/e/${exhibition.slug}/${prevArtworkKey}`}>
-              <a>
-                <Arrow className="arrow" />
-              </a>
-            </Link>
-            <Link href={`/e/${exhibition.slug}/${nextArtworkKey}`} passHref>
-              <chakra.a ml="6">
-                <Arrow className="arrow right" />
-              </chakra.a>
-            </Link>
-          </Flex>
+          {exhibition.artworks.length > 1 && (
+            <Flex w="auto" mb="10" px="6">
+              <Link href={`/e/${exhibition.slug}/${prevArtworkKey}`}>
+                <a>
+                  <Arrow className="arrow" />
+                </a>
+              </Link>
+              <Link href={`/e/${exhibition.slug}/${nextArtworkKey}`} passHref>
+                <chakra.a ml="6">
+                  <Arrow className="arrow right" />
+                </chakra.a>
+              </Link>
+            </Flex>
+          )}
 
-          <ArtworkImageViewer artwork={artwork} object={selectedObject}/>
-
+          <ArtworkImageViewer artwork={artwork} object={selectedObject} />
         </Flex>
 
         {/* --------- COL: Artwork details) --------- */}
         <ArtworkDetails artwork={artwork} object={selectedObject} />
-
-      </Flex> {/* Column Layout close*/}
-
+      </Flex>{" "}
+      {/* Column Layout close*/}
     </>
   );
 };
@@ -267,13 +256,8 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           ethAddress
         }
       }
-    }`;
-
-    console.log({
-      slug: params.slug,
-      key: params.key,
     }
-    );
+  `;
 
   const { data } = await client.query({
     query: artworkQuery,
@@ -283,7 +267,13 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     },
   });
 
-  if (!data?.artwork) {
+  if (
+    !data ||
+    !data?.artwork ||
+    !data?.exhibition ||
+    !data?.exhibitions?.artworks ||
+    data?.exhibition?.artworks.length === 0
+  ) {
     return {
       notFound: true,
     };
@@ -301,7 +291,11 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 };
 
 Artwork.getLayout = function getLayout(page: ReactElement) {
-  return <LayoutBlank mode="dark" modeSize="light" size="mobile">{page}</LayoutBlank>;
+  return (
+    <LayoutBlank mode="dark" modeSize="light" size="mobile">
+      {page}
+    </LayoutBlank>
+  );
 };
 
 export default Artwork;

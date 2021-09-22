@@ -44,13 +44,13 @@ const doChores = async () => {
       },
     });
 
-    await prisma.$disconnect();
     postMessage(`[WORKER:DbExpireTokens]: Deleted ${count} expired token`);
   } catch (Err: any) {
-    if (prisma) await prisma.$disconnect();
     postMessage(
       `[WORKER:DbExpireTokens]: Failed to run worker. ${Err.name} ${Err.message}`
     );
+  } finally {
+    if (prisma) await prisma.$disconnect();
   }
 };
 

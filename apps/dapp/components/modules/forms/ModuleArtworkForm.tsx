@@ -114,7 +114,7 @@ export const ModuleArtworkForm = ({
             }}
           />
         </FieldRow>
-        <Box borderBottom="1px solid #fff">
+        {action === "update" && <Box borderBottom="1px solid #fff">
           <FieldSwitch
             name="isPublic"
             label="Is you artwork public?"
@@ -129,7 +129,7 @@ export const ModuleArtworkForm = ({
               <ShowUrlAndCopy url={href} />
             </Box>
           )}
-        </Box>
+        </Box>}
       </Box>
       <Box
         w={{ base: "50%", t: "auto" }}
