@@ -55,8 +55,6 @@ export const AlertEmailVerification = () => {
     },
   });
 
-  console.log(appUser, data);
-
   let localEmailVerified =
     typeof data?.userProfileRead?.emailVerified === "boolean"
       ? data?.userProfileRead?.emailVerified && data?.userProfileRead?.email && `${data?.userProfileRead?.email}`.trim() !== ""
@@ -110,7 +108,7 @@ export const AlertEmailVerification = () => {
             <AlertTitle>Looks like you&#39;re new. Welcome!</AlertTitle>
             <AlertDescription>We would love to be able to get in touch with your. Please set your email address in your profile and claim your first badge</AlertDescription>
           </AlertBox>}
-      {showPopup && data?.userProfileRead?.email && !error &&
+      {data && showPopup && data?.userProfileRead?.email && !error &&
         localEmailVerified === "no" &&
         !requestMutationResults.loading && (
           <AlertBox status="warning" hasClose>

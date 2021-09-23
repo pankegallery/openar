@@ -19,6 +19,7 @@ export const appConfig: AppConfig = {
   apiUrl: `${process.env.NEXT_PUBLIC_API_URL}`,
   baseUrl: `${process.env.NEXT_PUBLIC_BASE_URL}`,
   apiGraphQLUrl: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
+  subgraphGraphQLUrl: `${process.env.NEXT_PUBLIC_SUBGRAPH_URL}`,
   infuraApiKey: `${process.env.NEXT_PUBLIC_INFURA_ID}`,
   ankrXDaiRPCURL: `${process.env.NEXT_PUBLIC_ANKR_XDAI_RPC}`,
   chainId: process.env.NEXT_PUBLIC_CHAIN_ID

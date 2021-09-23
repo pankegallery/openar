@@ -146,7 +146,43 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 const createApolloClient = (appConfig: AppConfig) => {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
-    link: from([
+    link: ApolloLink.split(
+      operation => operation.getContext().clientName === "subgraph",
+      from([
+        new RetryLink({
+          delay: {
+            initial: 500,
+            max: 20000,
+            jitter: true,
+          },
+          attempts: {
+            max: 3,
+            retryIf: (error, _operation) => {
+              return (
+                !!error &&
+                ![400, 403, 404].includes(parseInt(error.statusCode, 10))
+              );
+            },
+          },
+        }),
+        onError(({ graphQLErrors, networkError }) => {
+          if (graphQLErrors)
+            // TODO: remove?
+            graphQLErrors.forEach((err) =>
+              console.log(
+                err,
+                `[Subgraph GQLError error]: ${err.message} ${err?.extensions?.code ?? ""}`
+              )
+            );
+        
+          if (networkError) console.log(`[Network error]: ${networkError}`);
+        }),
+        new HttpLink({
+          uri: appConfig.subgraphGraphQLUrl
+          
+        }),
+      ]),
+      from([
       authLink,
       retryWithRefreshTokenLink,
       new RetryLink({
@@ -177,7 +213,8 @@ const createApolloClient = (appConfig: AppConfig) => {
         uri: appConfig.apiGraphQLUrl, // Server URL (must be absolute)
         credentials: "include", // Additional fetch() options like `credentials` or `headers`
       }),
-    ]),
+    ])
+    ),
     // TODO: find generic ways to manage the chache ...
     // HOW TO ENSURE deletion/updates are reflected in the cache ...
     // how will the cache expire?
@@ -207,6 +244,8 @@ const createApolloClient = (appConfig: AppConfig) => {
   });
 };
 
+
+
 export const initializeClient = (appConfig: AppConfig) => {
   const aClient = client ?? createApolloClient(appConfig);
 
@@ -217,6 +256,7 @@ export const initializeClient = (appConfig: AppConfig) => {
 
   return aClient;
 };
+
 
 export const getApolloClient = () => initializeClient(appConfig)
 

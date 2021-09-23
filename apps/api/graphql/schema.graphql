@@ -37,6 +37,7 @@ type ArObject {
   lng: Float
   orderNumber: Int
   ownerEthAddress: String
+  setInitialAsk: Boolean
   status: Int!
   title: String
   type: Int

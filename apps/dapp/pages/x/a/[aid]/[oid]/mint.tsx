@@ -6,9 +6,6 @@ import { useRouter } from "next/router";
 import { Text, chakra, useDisclosure } from "@chakra-ui/react";
 import { useQuery, gql } from "@apollo/client";
 
-import { useWeb3React } from "@web3-react/core";
-import { Web3Provider } from "@ethersproject/providers";
-
 import {
   OpenAR,
   generateMintArObjectSignMessageData,
@@ -27,7 +24,7 @@ import { ModuleArObjectMintableSchema } from "~/components/modules/validation";
 import { RestrictPageAccess } from "~/components/utils";
 import { BeatLoader } from "react-spinners";
 
-import { useAuthentication, useSuccessfullySavedToast } from "~/hooks";
+import { useAuthentication, useSuccessfullySavedToast, useWalletLogin } from "~/hooks";
 import { useArObjectMintMutation } from "~/hooks/mutations";
 import {
   ModuleSubNav,
@@ -114,7 +111,7 @@ const Update = () => {
     undefined
   );
 
-  const { library, chainId, account } = useWeb3React<Web3Provider>();
+  const { library, chainId, account } = useWalletLogin();
 
   const cancelMintSignature = () => {
     setValue("mintSignature", "", {

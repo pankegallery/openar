@@ -51,6 +51,7 @@ export const ArObject = objectType({
     t.nonNull.int("status");
 
     t.float("askPrice");
+    t.boolean("setInitialAsk");
 
     t.int("orderNumber");
     t.int("editionOf");

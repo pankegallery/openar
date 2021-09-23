@@ -180,6 +180,7 @@ export interface NexusGenObjects {
     lng?: number | null; // Float
     orderNumber?: number | null; // Int
     ownerEthAddress?: string | null; // String
+    setInitialAsk?: boolean | null; // Boolean
     status: number; // Int!
     title?: string | null; // String
     type?: number | null; // Int
@@ -354,6 +355,7 @@ export interface NexusGenFieldTypes {
     lng: number | null; // Float
     orderNumber: number | null; // Int
     ownerEthAddress: string | null; // String
+    setInitialAsk: boolean | null; // Boolean
     status: number; // Int!
     title: string | null; // String
     type: number | null; // Int
@@ -568,6 +570,7 @@ export interface NexusGenFieldTypeNames {
     lng: 'Float'
     orderNumber: 'Int'
     ownerEthAddress: 'String'
+    setInitialAsk: 'Boolean'
     status: 'Int'
     title: 'String'
     type: 'Int'

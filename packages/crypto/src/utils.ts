@@ -704,3 +704,7 @@ export const stringToBytes32 = (str: string) => {
 };
 
 export const numberToBigNumber = (n: number) => BigNumber.from(n);
+
+export const decimalToEther = (d: Decimal) => utils.formatEther(d.value);
+
+export const bigNumberToEther = (b: BigNumber) => utils.formatEther(b);

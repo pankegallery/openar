@@ -23,6 +23,7 @@ export type AppConfigSettings = {
   apiDomain?: string | undefined;
   baseUrl?: string | undefined;
   apiGraphQLUrl?: string | undefined;
+  subgraphGraphQLUrl?: string | undefined;
   contactEmail?: string | undefined;
   infuraApiKey?: string | undefined;
   ankrXDaiRPCURL?: string | undefined;

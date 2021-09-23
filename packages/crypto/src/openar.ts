@@ -1,7 +1,10 @@
 import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
 import { ContractTransaction } from "@ethersproject/contracts";
 import { Provider } from "@ethersproject/providers";
+import { AddressZero } from "@ethersproject/constants";
 import { Signer } from "@ethersproject/abstract-signer";
+
+import { BytesLike } from "ethers";
 import invariant from "tiny-invariant";
 import {
   Market,
@@ -329,6 +332,29 @@ export class OpenAR {
   }
 
   /**
+   * Sets an ask on the specified media on an instance of the openAR Media Contract
+   * @param mediaId
+   * @param ask
+   */
+  public async setAskForBatch(
+    mediaIds: BigNumberish[],
+    ask: Ask,
+    bidShares: BidShares,
+    objKeyHex: BytesLike
+  ): Promise<ContractTransaction> {
+    try {
+      this.ensureNotReadOnly();
+    } catch (err: any) {
+      return Promise.reject(err.message);
+    }
+
+    if (!validateBidOrAsk(Decimal.new(ask.amount.toString()), bidShares))
+      return Promise.reject("invalid ask");
+
+    return this.market.setAskForBatch(mediaIds, ask, objKeyHex);
+  }
+
+  /**
    * Sets a bid on the specified media on an instance of the openAR Media Contract
    * @param mediaId
    * @param bid
@@ -362,6 +388,22 @@ export class OpenAR {
     }
 
     return this.market.removeAsk(mediaId);
+  }
+
+  /**
+   * Removes the ask on the specified media on an instance of the openAR Media Contract
+   * @param mediaId
+   */
+  public async removeAskForBatch(
+    mediaIds: BigNumberish[]
+  ): Promise<ContractTransaction> {
+    try {
+      this.ensureNotReadOnly();
+    } catch (err: any) {
+      return Promise.reject(err.message);
+    }
+
+    return this.market.removeAskForBatch(mediaIds);
   }
 
   /**
@@ -539,6 +581,13 @@ export class OpenAR {
       this.chainId,
       this.mediaAddress
     );
+  }
+
+  public createAsk(amount: number): Ask {
+    return {
+      amount: Decimal.new(amount).value,
+      currency: AddressZero,
+    };
   }
 
   /**

@@ -39,7 +39,7 @@ a {
         transform: scale(80%, 80%);
     }
 
-    &:hover, a:hover > &{
+    &:hover, a:hover &{
         transform: translate(-5px, 0);
 
         g path:first-child {
@@ -61,7 +61,7 @@ a {
         transform-origin: center center;
     }
 
-    .arrowLink.to:hover > &,
+    .arrowLink.to:hover &,
     &.right:hover {
         transform: rotate(-180deg) translate(0px, 2.7px);
     }

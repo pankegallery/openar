@@ -45,6 +45,7 @@ export const arObjectReadOwnQueryGQL = gql`
       editionOf
       orderNumber
       askPrice
+      setInitialAsk
       key
       # isBanned TODO: make good use of this
       lat
@@ -65,6 +66,7 @@ export const arObjectReadOwnQueryGQL = gql`
     }
     artworkReadOwn(id: $aid) {
       id
+      key
       title
       description
       status

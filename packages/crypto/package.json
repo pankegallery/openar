@@ -20,6 +20,7 @@
     "@ethersproject/address": "^5.4.0",
     "@ethersproject/bignumber": "^5.4.1",
     "@ethersproject/bytes": "^5.4.0",
+    "@ethersproject/constants": "^5.4.0",
     "@ethersproject/contracts": "^5.4.1",
     "@ethersproject/providers": "^5.4.5",
     "@openar/contracts": "^1.0.0",

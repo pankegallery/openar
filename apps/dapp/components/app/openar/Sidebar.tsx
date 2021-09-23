@@ -4,56 +4,48 @@ import { Box, chakra } from "@chakra-ui/react";
 import { useAuthentication } from "~/hooks";
 import { Menu } from "~/components/frontend";
 
-
 export const Sidebar = () => {
   const [appUser] = useAuthentication();
-  if (!appUser)
-    return <></>;
-
+  if (!appUser) return <></>;
 
   const mainMenu = [
     {
       slug: "profile",
-      label:"My profile",
-      url:"/x/"
+      label: "My profile",
+      url: "/x/",
     },
-//    {
-//      slug: "notifications",
-//      label:"Notifications",
-//      url:"x/notifications"
-//    },
-  ]
+  ];
 
   const addMenu = [
     {
       slug: "newArtwork",
-      label:" + Artwork",
-      url:"/x/a/create"
+      label: " + Artwork",
+      url: "/x/a/create",
     },
-  ]
-
+  ];
 
   const footerMenu = [
     {
       slug: "discord",
-      label:"Discord",
-      url:"discord"
+      label: "Discord",
+      url: "discord",
     },
     {
       slug: "imprint",
-      label:"Imprint",
-      url:"/p/imprint"
+      label: "Imprint",
+      url: "/p/imprint",
     },
     {
       slug: "tandc",
-      label:"Terms and Conditions",
-      url:"/p/tandc"
+      label: "Terms and Conditions",
+      url: "/p/tandc",
     },
     {
       slug: "logout",
-      label:"Logout" ,
-      url:"/p/funding"},
-  ]
+      label: "Logout",
+      url: "/p/funding",
+    },
+  ];
 
   return (
     <>
@@ -67,35 +59,9 @@ export const Sidebar = () => {
         p="6"
         pt="40"
       >
-
-        <Box
-          position="sticky"
-          top="40"
-        >
+        <Box position="sticky" top="40">
           {/*____________ Main login menu ____________*/}
 
-          <chakra.nav
-              className="addMenu"
-              display="flex"
-              flexDirection="column"
-              flexWrap="nowrap"
-              textStyle="subtitle"
-              sx={{
-                "a": {
-                  display: "block",
-                  my: "2",
-                }
-              }}
-            >
-            <Menu pages={mainMenu} />
-          </chakra.nav>
-
-          {/*____________ Add items menu ____________*/}
-
-
-          <Box mt="10" mb="2">
-            <chakra.span textStyle="subtitle">Add</chakra.span>
-          </Box>
           <chakra.nav
             className="addMenu"
             display="flex"
@@ -103,14 +69,38 @@ export const Sidebar = () => {
             flexWrap="nowrap"
             textStyle="subtitle"
             sx={{
-              "a": {
+              a: {
                 display: "block",
                 my: "2",
-              }
+              },
             }}
           >
-            <Menu pages={addMenu} />
+            <Menu pages={mainMenu} />
           </chakra.nav>
+
+          {/*____________ Add items menu ____________*/}
+          {appUser && appUser.roles && appUser.roles.includes("user") && (
+            <>
+              <Box mt="10" mb="2">
+                <chakra.span textStyle="subtitle">Add</chakra.span>
+              </Box>
+              <chakra.nav
+                className="addMenu"
+                display="flex"
+                flexDirection="column"
+                flexWrap="nowrap"
+                textStyle="subtitle"
+                sx={{
+                  a: {
+                    display: "block",
+                    my: "2",
+                  },
+                }}
+              >
+                <Menu pages={addMenu} />
+              </chakra.nav>
+            </>
+          )}
         </Box>
         {/*____________ Footer menu ____________*/}
 
@@ -122,10 +112,10 @@ export const Sidebar = () => {
           flexWrap="nowrap"
           textStyle="small"
           sx={{
-            "a": {
+            a: {
               display: "block",
               my: "1",
-            }
+            },
           }}
         >
           <Menu pages={footerMenu} />
