@@ -61,7 +61,7 @@ export const startApi = async () => {
           {
             name: "mint",
             interval: process.env.NODE_ENV === "production" ? "19s" : "61s",
-          }
+          },
         ],
       });
       bree.start();

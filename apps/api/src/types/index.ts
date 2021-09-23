@@ -42,4 +42,3 @@ export type ApiArModelMetaInformation = {
   mimeType: any;
   size: number;
 };
-

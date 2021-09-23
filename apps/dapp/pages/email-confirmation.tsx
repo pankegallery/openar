@@ -21,7 +21,7 @@ import {
   useAuthRequestEmailVerificationEmail,
 } from "~/hooks/mutations";
 import { useAuthentication } from "~/hooks";
-
+import { appConfig } from "~/config";
 const EmailConfirmation = () => {
   const router = useRouter();
 
@@ -97,7 +97,7 @@ const EmailConfirmation = () => {
 
   let buttonDashboardLogin = (
     <Text>
-      <Link href={isLoggedIn() ? "/x/" : "/connect"} passHref>
+      <Link href={isLoggedIn() ? "/x/" : appConfig.reauthenticateRedirectUrl } passHref>
         <Button as={ChakraLink}>
           {isLoggedIn() ? "Goto dashboard" : "Goto login"}
         </Button>

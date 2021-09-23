@@ -81,7 +81,7 @@ const doChores = async () => {
     logger.error(Err);
     throw Err;
   } finally {
-    if (prisma) await prisma.$disconnect();    
+    if (prisma) await prisma.$disconnect();
   }
 };
 

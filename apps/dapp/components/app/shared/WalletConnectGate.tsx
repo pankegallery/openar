@@ -15,7 +15,7 @@ export const WalletConnectGate = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { isLoggingIn, account, setIsLoggingIn, walletLoginPreLogin } =
+  const { isLoggingIn, account, chainId, setIsLoggingIn, walletLoginPreLogin } =
     useWalletLogin();
 
   const [loginStatus] = useAuthTabWideLogInOutReload();
@@ -29,7 +29,15 @@ export const WalletConnectGate = ({
       await walletLoginPreLogin(account);
     };
 
-    if (!account) return;
+    if (!account || !chainId) return;
+
+    if (
+      chainId !== parseInt(process.env.NEXT_PUBLIC_CHAIN_ID) &&
+      Router.asPath.indexOf("/chain") === -1
+    ) {
+      Router.replace("/chain");
+      return;
+    }
 
     if (
       stateUser.justConnected &&
@@ -54,7 +62,7 @@ export const WalletConnectGate = ({
   useEffect(() => {
     if (
       loginStatus === "logged-out" &&
-      Router.asPath.indexOf('/x/') > -1 &&
+      Router.asPath.indexOf("/x/") > -1 &&
       !isLoggingIn
     ) {
       console.log("trigger redirect to /");
@@ -73,13 +81,19 @@ export const WalletConnectGate = ({
         stored = window.localStorage.getItem("walletconnect");
         const walletConnect = stored ? JSON.parse(stored) : false;
 
-        if (connected === "walletconnect" && walletConnect.connected && !account) {
+        if (
+          connected === "walletconnect" &&
+          walletConnect.connected &&
+          !account
+        ) {
           console.log("Wallet Connect might be connected", account);
           if (Router.pathname !== appConfig.reauthenticateRedirectUrl) {
-            console.log("So go through the login flow to establish a new connection", account);
-            Router.replace(appConfig.reauthenticateRedirectUrl);        
+            console.log(
+              "So go through the login flow to establish a new connection",
+              account
+            );
+            Router.replace(appConfig.reauthenticateRedirectUrl);
           }
-            
         }
       } catch (error) {}
     };

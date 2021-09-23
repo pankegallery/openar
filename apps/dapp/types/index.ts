@@ -28,6 +28,7 @@ export type AppConfigSettings = {
   ankrXDaiRPCURL?: string | undefined;
   reauthenticateRedirectUrl?: string | undefined;
   defaultPageSize?: number;
+  chainId?: number;
   platformCuts: PlatformCuts;
 };
  

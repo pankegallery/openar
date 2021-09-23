@@ -13,8 +13,8 @@ export const AuthenticationSessionActiveGate = ({
   const router = useRouter();
 
   useEffect(() => {
-    if (!appUser && router.asPath !== "/connect")
-      router.replace("/connect");    
+    if (!appUser && router.asPath !== "/login")
+      router.replace("/login");    
     // eslint-disable-next-line 
   }, []);
 

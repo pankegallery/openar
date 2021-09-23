@@ -18,7 +18,13 @@ import Image from "next/image";
 import { useOpenARDappWeb3InjectedContext } from "~/providers";
 import { useTypedSelector, useWalletLogin } from "~/hooks";
 
-export const WalletControl = ({ color = "white" }: { color?: string }) => {
+export const WalletControl = ({
+  color = "white",
+  location = "menu",
+}: {
+  color?: string;
+  location?: string;
+}) => {
   const stateUser = useTypedSelector(({ user }) => user);
   const stateCrypto = useTypedSelector(({ crypto }) => crypto);
 
@@ -58,7 +64,11 @@ export const WalletControl = ({ color = "white" }: { color?: string }) => {
       {/* ------- Buttons ------- */}
       <Box>
         {(!account || !stateUser.authenticated) && (
-          <Button variant="menuLink" onClick={walletDisclosure.onOpen} color={color}>
+          <Button
+            variant={location === "page" ? "outlineBlack" : "menuLink"}
+            onClick={walletDisclosure.onOpen}
+            color={color}
+          >
             Login
           </Button>
         )}

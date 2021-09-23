@@ -35,8 +35,6 @@ export function useWalletLogin() {
   const [awaitingUserInteraction, setAwaitingUserInteraction] = useState<
     string | null
   >(null);
-  const web3Injected = useOpenARDappWeb3InjectedContext();
-
   const [walletLoginError, setWalletLoginError] = useState<string | null>(null);
 
   const [preloginMutation] = useAuthPreLoginMutation();
@@ -112,7 +110,7 @@ export function useWalletLogin() {
       console.log(
         `walletDisconnect: PUSH ${appConfig.reauthenticateRedirectUrl}`
       );
-      Router.push(appConfig.reauthenticateRedirectUrl);
+      Router.replace(appConfig.reauthenticateRedirectUrl);
     } catch (error) {
       setIsConnected(undefined);
       handleError(error);
@@ -173,7 +171,7 @@ export function useWalletLogin() {
     setIsLoggingIn(false);
     triggerToast();
 
-    Router.push("/x/");
+    Router.replace("/x/");
   }, [triggerToast, setIsLoggingIn, setWalletLoginError]);
 
   const walletLoginLogin = useCallback(
@@ -296,8 +294,8 @@ export function useWalletLogin() {
           // ) {
           //   await walletLoginRequestSignature(payload?.message, account);
           // } else {
-          console.log("walletLoginPreLogin push /login");
-          Router.push("/login");
+          console.log("walletLoginPreLogin push /sign");
+          Router.replace("/sign");
           //}
         } else if (errors) {
           throw errors[0];

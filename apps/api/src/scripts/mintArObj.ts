@@ -370,7 +370,9 @@ const processArObject = async (
         if (err.message.indexOf("nonce has already been used") > -1)
           canRetry = true;
 
-        newStatus = canRetry ? ArObjectStatusEnum.MINTRETRY : ArObjectStatusEnum.MINTERROR;
+        newStatus = canRetry
+          ? ArObjectStatusEnum.MINTRETRY
+          : ArObjectStatusEnum.MINTERROR;
         mintMetaData.error = err.message;
         mintMetaData.stopped = new Date().toISOString();
         // eslint-disable-next-line no-console

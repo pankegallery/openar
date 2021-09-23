@@ -52,13 +52,29 @@ export const components = {
         fontSize: "xs",
         textTransform: "uppercase",
         letterSpacing: "0.02em",
-        boder: "1px solid #fff",
+        border: "1px solid #fff",
         bg: "transparent linear-gradient(170deg, #FFFFFF02 0%, #FFFFFF3B 100%) 0% 0% no-repeat padding-box",
         transition: "all 0.4s",
         color: "white",
         _hover: {
           bg: "transparent 0% 0% no-repeat padding-box",
           bgImage: "linear-gradient(132deg, #FFF0 49%, #FFFFFF24 50%, #FFFA 100%), linear-gradient(170deg, #FFFFFF02 0%, #FFFFFF3B 100%)",
+        },
+        _focus: {
+          boxShadow: false,
+        }
+      },
+      outlineBlack: {
+        fontSize: "xs",
+        textTransform: "uppercase",
+        letterSpacing: "0.02em",
+        border: "1px solid #000000",
+        bg: "transparent linear-gradient(170deg, #00000002 0%, #0000003B 100%) 0% 0% no-repeat padding-box",
+        transition: "all 0.4s",
+        color: "#000000",
+        _hover: {
+          bg: "transparent 0% 0% no-repeat padding-box",
+          bgImage: "linear-gradient(132deg, #FFF0 49%, #00000024 50%, #FFFA 100%), linear-gradient(170deg, #00000002 0%, #0000003B 100%)",
         },
         _focus: {
           boxShadow: false,

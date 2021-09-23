@@ -92,15 +92,13 @@ export const AuthMutations = extendType({
             ctx
           );
 
-          console.log(authPayload);
-
           logger.debug(
             `authLogin, about sign message ${authPayload?.tokens?.sign?.token}`
           );
 
           return tokenProcessRefreshToken(ctx.res, authPayload);
         } catch (Err) {
-          console.log(Err);
+          logger.debug(Err);
           throw new AuthenticationError("Pre login Failed");
         }
       },
