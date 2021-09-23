@@ -31,7 +31,7 @@ export const ModulePage = ({
         position="relative"
       >
         {isLoading && <LoadingIcon type="inline" position="fixed" />}
-        {isAccessDenied && <>Access denied</>}
+        {isAccessDenied && <Box p="6">Access denied</Box>}
         {isError && (errorInfo ? errorInfo : <>{err}</>)}
         {!isLoading && !isError && <>{children}</>}
       </Box>

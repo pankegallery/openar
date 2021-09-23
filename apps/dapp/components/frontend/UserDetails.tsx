@@ -9,7 +9,8 @@ import {
   ArtworkList,
 } from "~/components/frontend";
 
-import { useSSRSaveMediaQuery } from "~/hooks";
+import { useAuthentication, useSSRSaveMediaQuery } from "~/hooks";
+import { AlertEmailVerification } from "../utils";
 
 export const UserDetails = ({
   user,
@@ -21,16 +22,15 @@ export const UserDetails = ({
   isPublic: boolean;
 }) => {
   let name = user?.pseudonym ? user?.pseudonym : user?.ethAddress;
-  const isIncomplete = user?.pseudonym || isPublic ? false : true;
-  //  const isIncomplete = true
+  const isIncomplete = !isPublic && !user?.acceptedTerms;
 
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
   const isTablet = useSSRSaveMediaQuery(
     "(min-width: 45rem) and (max-width: 75rem)"
   );
 
-  //  console.log("[UserDetails] user: ", user)
-  //  console.log("[UserDetails] name: ", name)
+  const [appUser] = useAuthentication();
+
 
   const allRoles = [
     {
@@ -46,6 +46,20 @@ export const UserDetails = ({
         },
       ],
     },
+    {
+      slug: "artist",
+      title: "Artist",
+      description:
+        "The curator badge will be given to all users, that have published an artwork on openAR.",
+      badges: [
+        {
+          year: 2021,
+          image: "badges2021/artist@6x-100.jpg",
+          artist: "Anna-Luise Lorenz",
+        },
+      ],
+    },
+    ,
     {
       slug: "curator",
       title: "Curator",
@@ -63,6 +77,16 @@ export const UserDetails = ({
 
   const wT = !isPublic ? "100%" : "50vw";
   /* --------- COL: User details) --------- */
+
+  let badges: any[];
+
+  if (user.roles && user.roles.length > 0) {
+    badges = allRoles.reduce((badges, badge) => {
+      if (user.roles.includes(badge.slug))
+        badges.push(<RoleBadgeControl key={badge.slug} role={badge} />);
+      return badges;
+    }, []);
+  }
 
   return (
     <Flex
@@ -94,14 +118,10 @@ export const UserDetails = ({
         pt="20"
         minHeight={isIncomplete ? "400px" : "unset"}
       >
+        {!isPublic  && <AlertEmailVerification />}
         {!isPublic && !isIncomplete && (
           <Link href="/x/profile/update" passHref>
-            <Button
-              position="absolute"
-              top="6"
-              right="6"
-              
-            >
+            <Button position="absolute" top="6" right="6">
               Edit profile
             </Button>
           </Link>
@@ -188,34 +208,31 @@ export const UserDetails = ({
         )}
 
         {/* ======== BOX: User badges  ======== */}
-        <Box
-          className="badges"
-          position="relative"
-          borderBottom="1px solid white"
-          p="6"
-        >
-          <CornerButton label="View badges" href="/p/badges" />
-          <chakra.p textStyle="label" className="label">
-            Roles
-          </chakra.p>
-
-          {user.roles?.length > 0 &&
-            user.roles.map((role, key) => {
-              return (
-                <RoleBadgeControl
-                  key={key}
-                  role={allRoles.filter((r) => r.slug === role)[0]}
-                />
-              );
-            })}
-          {user.roles?.length == 0 && (
-            <chakra.p py="6">
-              You haven’t earned any badges yet, begin by adding some details
-              about yourself. Start collecting, add your own artworks or write
-              reviews to collect further badges.
+        {((badges && badges.length > 0) ||
+          (appUser && appUser.ethAddress === user.ethAddress)) && (
+          <Box
+            className="badges"
+            position="relative"
+            borderBottom="1px solid white"
+            p="6"
+          >
+            <CornerButton label="View badges" href="/p/badges" />
+            <chakra.p textStyle="label" className="label">
+              Roles
             </chakra.p>
-          )}
-        </Box>
+
+            {badges && badges.length > 0 && <>{badges}</>}
+            {appUser &&
+              appUser.ethAddress === user.ethAddress &&
+              (!badges || badges.length === 0) && (
+                <chakra.p py="6">
+                  You haven’t earned any badges yet, begin by adding some
+                  details about yourself and confirming your email address, starting to collect, or adding your own
+                  artworks to collect further badges.
+                </chakra.p>
+              )}
+          </Box>
+        )}
 
         {/* _____________________________
 

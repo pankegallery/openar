@@ -109,6 +109,7 @@ export interface NexusGenInputs {
     role: string; // String!
   }
   UserProfileUpdateInput: { // input type
+    acceptedTerms: boolean; // Boolean!
     bio: string; // String!
     email: NexusGenScalars['EmailAddress']; // EmailAddress!
     pseudonym: string; // String!
@@ -287,6 +288,7 @@ export interface NexusGenObjects {
   }
   Query: {};
   User: { // root type
+    acceptedTerms?: boolean | null; // Boolean
     artworks?: Array<NexusGenRootTypes['Artwork'] | null> | null; // [Artwork]
     bio?: string | null; // String
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -501,6 +503,7 @@ export interface NexusGenFieldTypes {
     users: NexusGenRootTypes['UsersQueryResult'] | null; // UsersQueryResult
   }
   User: { // field return type
+    acceptedTerms: boolean | null; // Boolean
     artworks: Array<NexusGenRootTypes['Artwork'] | null> | null; // [Artwork]
     bio: string | null; // String
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -714,6 +717,7 @@ export interface NexusGenFieldTypeNames {
     users: 'UsersQueryResult'
   }
   User: { // field return type name
+    acceptedTerms: 'Boolean'
     artworks: 'Artwork'
     bio: 'String'
     createdAt: 'DateTime'

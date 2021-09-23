@@ -15,8 +15,8 @@ import {
 import { useAuthRequestEmailVerificationEmail } from "~/hooks/mutations";
 
 const GET_EMAIL_VERIFICATION_STATUS = gql`
-  query userProfileRead($id: Int!) {
-    userProfileRead(id: $id) {
+  query userProfileRead($ethAddress: String!) {
+    userProfileRead(ethAddress: $ethAddress) {
       emailVerified
       email
     }
@@ -51,9 +51,11 @@ export const AlertEmailVerification = () => {
   const { data, error } = useQuery(GET_EMAIL_VERIFICATION_STATUS, {
     skip: !isLoggedIn() || emailVerified === "yes" || !showPopup,
     variables: {
-      id: appUser?.id ?? 0,
+      ethAddress: appUser?.ethAddress ?? "",
     },
   });
+
+  console.log(appUser, data);
 
   let localEmailVerified =
     typeof data?.userProfileRead?.emailVerified === "boolean"

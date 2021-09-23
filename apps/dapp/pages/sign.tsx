@@ -20,6 +20,7 @@ const OpenARLogin = () => {
   let navigating = false;
 
   if (appUser && stateUser.authenticated) {
+    console.log("/x/ 2", router.asPath);
     router.push("/x/");
     navigating = true;
   }

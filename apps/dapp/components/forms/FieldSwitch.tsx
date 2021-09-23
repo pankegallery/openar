@@ -17,7 +17,7 @@ export const FieldSwitch = ({
 }: {
   name: string;
   label: string | React.ReactNode;
-  hint?: string;
+  hint?: string | React.ReactNode;
   isChecked?: boolean;
   isRequired?: boolean;
   isReadOnly?: boolean;
@@ -38,8 +38,6 @@ export const FieldSwitch = ({
       isInvalid={!!errors[name]?.message}
       p="6"
     >
-       
-
       <Flex alignItems="center" w="100%">
         <Controller
           control={control}

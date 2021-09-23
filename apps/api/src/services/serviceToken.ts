@@ -12,7 +12,11 @@ import {
 
 import { getApiConfig } from "../config";
 import { AuthPayload } from "../types/auth";
-import { daoTokenCreate, daoTokenFindFirst } from "../dao/token";
+import {
+  daoTokenCreate,
+  daoTokenFindFirst,
+  daoTokenDeleteMany,
+} from "../dao/token";
 
 import { ApiError, TokenTypesEnum } from "../utils";
 
@@ -252,6 +256,11 @@ export const tokenGenerateVerifyEmailToken = async (
   ownerId: number,
   ethAddress: string
 ) => {
+  daoTokenDeleteMany({
+    ownerId: ownerId,
+    type: TokenTypesEnum.VERIFY_EMAIL,
+  });
+
   const expires = addDays(
     new Date(),
     apiConfig.jwt.expiration.emailConfirmation

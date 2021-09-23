@@ -1,12 +1,15 @@
 import { userProfileImageDeleteMutationGQL } from "~/graphql/mutations";
 
 import { Box, Grid } from "@chakra-ui/react";
+import Link from "next/link";
 
 import {
   FieldInput,
   FieldRow,
   FieldTextEditor,
   FieldImageUploader,
+  FieldSwitch,
+  FormScrollInvalidIntoView,
 } from "~/components/forms";
 
 import {
@@ -25,7 +28,7 @@ export const ModuleProfileUpdateForm = ({
   setActiveUploadCounter?: Function;
   disableNavigation?: Function;
 }) => {
-  const { firstName, lastName, profileImage, bio } = data ?? {};
+  const { firstName, lastName, profileImage, bio, acceptedTerms } = data ?? {};
 
   const columns = { base: "100%", t: "1fr max(33.33%, 350px) " };
   const rows = { base: "auto 1fr", t: "1fr" };
@@ -36,6 +39,7 @@ export const ModuleProfileUpdateForm = ({
       templateRows={rows}
       minH="calc(100vh - 4rem)"
     >
+      <FormScrollInvalidIntoView />
       <Box>
         <FieldRow>
           <FieldInput
@@ -90,15 +94,35 @@ export const ModuleProfileUpdateForm = ({
             id="bio"
             type="basic"
             name="bio"
-            
             label="Bio"
-            isRequired={false}          
+            isRequired={false}
             settings={{
               defaultValue: bio ? bio : undefined,
-              placeholder: "Tell us something about yourself"
+              placeholder: "Tell us something about yourself",
             }}
           />
         </FieldRow>
+        <Box borderBottom="1px solid #fff">
+          <FieldRow>
+            <FieldSwitch
+              name="acceptedTerms"
+              isRequired={yupIsFieldRequired(
+                "acceptedTerms",
+                UserProfileUpdateValidationSchema
+              )}
+              label="I accept the terms and conditions"
+              hint={
+                <>
+                  I've aggree with the platform's{" "}
+                  <Link href="/p/tandc">terms and conditions</Link>
+                </>
+              }
+              defaultChecked={
+                !!acceptedTerms
+              }
+            />
+          </FieldRow>
+        </Box>
 
       </Box>
       <Box
@@ -106,8 +130,7 @@ export const ModuleProfileUpdateForm = ({
         minH="100%"
         borderLeft="1px solid #fff"
         p="3"
-      > 
-
+      >
         <FieldImageUploader
           route="profileImage"
           id="profileImage"

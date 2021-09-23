@@ -1,6 +1,6 @@
 import React, { useState, useEffect, ReactElement } from "react";
 
-import { LayoutOpenAR } from "~/components/app";
+import { LayoutBlank } from "~/components/app";
 import {
   Button,
   Box,
@@ -98,7 +98,7 @@ const EmailConfirmation = () => {
   let buttonDashboardLogin = (
     <Text>
       <Link href={isLoggedIn() ? "/x/" : appConfig.reauthenticateRedirectUrl } passHref>
-        <Button as={ChakraLink}>
+        <Button as={ChakraLink}  variant="outlineBlack">
           {isLoggedIn() ? "Goto dashboard" : "Goto login"}
         </Button>
       </Link>
@@ -114,8 +114,15 @@ const EmailConfirmation = () => {
               "We are sorry"}
             {!isRequestingError &&
               !requestMutationResults.error &&
-              "Thanky you"}
+              "Thank you"}
           </Heading>
+          <Text>
+            {(isRequestingError || requestMutationResults.error) &&
+              "We could not process your request. Please try again later"}
+            {!isRequestingError &&
+              !requestMutationResults.error &&
+              "We've sent you another email. Please check your inbox!"}
+          </Text>
         </Box>
 
         <>{buttonDashboardLogin}</>
@@ -148,6 +155,7 @@ const EmailConfirmation = () => {
               <Button
                 onClick={requestAnotherEmail}
                 isLoading={requestMutationResults.loading}
+                variant="outlineBlack"
               >
                 Request a new verification email.
               </Button>
@@ -175,8 +183,9 @@ const EmailConfirmation = () => {
   return <Box p="6" minH="100%">{content}</Box>;
 };
 
+
 EmailConfirmation.getLayout = function getLayout(page: ReactElement) {
-  return <LayoutOpenAR>{page}</LayoutOpenAR>;
+  return <LayoutBlank>{page}</LayoutBlank>;
 };
 
 export default EmailConfirmation;

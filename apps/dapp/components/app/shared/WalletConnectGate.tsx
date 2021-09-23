@@ -26,6 +26,7 @@ export const WalletConnectGate = ({
   useEffect(() => {
     console.log("WalletConnectGate account", account);
     const preLogin = async () => {
+      console.log("WalletConnectGate preLogin");
       await walletLoginPreLogin(account);
     };
 

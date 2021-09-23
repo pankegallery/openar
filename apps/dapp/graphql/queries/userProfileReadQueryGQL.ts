@@ -9,6 +9,7 @@ export const userProfileReadQueryGQL = gql`
       bio
       email
       url
+      acceptedTerms
       emailVerified
       profileImage {
         id

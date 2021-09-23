@@ -5,7 +5,7 @@ import {
 } from "@chakra-ui/react";
 import { useFormContext } from "react-hook-form";
 
-import { FieldNumberInput, FieldRow, FieldSwitch } from "~/components/forms";
+import { FieldNumberInput, FieldRow, FieldSwitch, FormScrollInvalidIntoView } from "~/components/forms";
 import LogoXDAI from "~/assets/img/xdai/xdai-white.svg";
 
 import { yupIsFieldRequired } from "../validation";
@@ -32,6 +32,7 @@ export const ModuleArtworkArObjectMint = ({
   return (
     <>
       <Box>
+        <FormScrollInvalidIntoView />
         <Box p="6" borderBottom="1px solid #fff">
           <Heading as="h1">Mint {arObjectReadOwn?.title}</Heading>
           <Text>

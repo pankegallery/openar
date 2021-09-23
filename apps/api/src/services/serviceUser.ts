@@ -52,7 +52,7 @@ export const userRegister = async (
         pseudonym: user.pseudonym ?? "",
         ethAddress: data.ethAddress,
       },
-      ["user"] as RoleName[]
+      ["newuser"] as RoleName[]
     );
 
     authPayload.user = {
@@ -106,6 +106,13 @@ export const userUpdate = async (
     if (await daoUserCheckIsEmailTaken(data.email as string, id))
       throw new ApiError(httpStatus.BAD_REQUEST, "Email already taken");
   }
+
+  if (
+    data.acceptedTerms &&
+    userInDb.emailVerified &&
+    !userInDb.roles.includes("user")
+  )
+    dbData.roles = [...userInDb.roles, "user"];
 
   const user: User = await daoUserUpdate(id, dbData);
 

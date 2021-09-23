@@ -170,7 +170,7 @@ export function useWalletLogin() {
     setWalletLoginError(null);
     setIsLoggingIn(false);
     triggerToast();
-
+    console.log("/x/ 4");
     Router.replace("/x/");
   }, [triggerToast, setIsLoggingIn, setWalletLoginError]);
 

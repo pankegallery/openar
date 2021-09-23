@@ -24,6 +24,7 @@ const OpenARLogin = () => {
     appUser &&
     stateUser.authenticated
   ) {
+    console.log("/x/ 1");
     router.push("/x/");
     navigating = true;
   }

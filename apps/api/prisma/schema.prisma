@@ -25,7 +25,7 @@ model User {
   acceptedTerms Boolean @default(false)
   isBanned      Boolean @default(false)
   isNew         Boolean @default(true)
-
+  
   artworks   Artwork[] @relation("artworks")
   collection ArObject2Collector[]
   arObjects  ArObject[] @relation("arObjects")

@@ -292,6 +292,7 @@ type Query {
 }
 
 type User implements UserBaseNode {
+  acceptedTerms: Boolean
   artworks: [Artwork]
   bio: String
   createdAt: DateTime
@@ -329,6 +330,7 @@ input UserCreateInput {
 }
 
 input UserProfileUpdateInput {
+  acceptedTerms: Boolean!
   bio: String!
   email: EmailAddress!
   pseudonym: String!

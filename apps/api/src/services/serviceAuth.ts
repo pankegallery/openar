@@ -134,7 +134,7 @@ export const authPreLoginUserWithEthAddress = async (
   if (!user) {
     user = await daoUserCreate({
       ethAddress,
-      roles: ["user"],
+      roles: ["newuser"],
     });
     authPayload = await tokenGenerateAuthTokens(
       {
@@ -287,16 +287,25 @@ export const authVerifyEmail = async (token: string) => {
       token,
       TokenTypesEnum.VERIFY_EMAIL
     );
-    if (tokenPayload && "user" in tokenPayload && "id" in tokenPayload.user) {
-      daoTokenDeleteMany({
-        ownerId: tokenPayload.id,
-        type: TokenTypesEnum.VERIFY_EMAIL,
-      });
-      await daoUserUpdate(tokenPayload.user.id, {
-        emailVerified: true,
-      });
 
-      return true;
+    if (tokenPayload && "user" in tokenPayload && "id" in tokenPayload.user) {
+      const userInDb = await daoUserGetById(tokenPayload.user.id);
+      if (userInDb) {
+        daoTokenDeleteMany({
+          ownerId: tokenPayload.user.id,
+          type: TokenTypesEnum.VERIFY_EMAIL,
+        });
+
+        await daoUserUpdate(tokenPayload.user.id, {
+          emailVerified: true,
+          roles:
+            userInDb.acceptedTerms && !userInDb.roles.includes("user")
+              ? [...userInDb.roles, "user"]
+              : undefined,
+        });
+
+        return true;
+      }
     }
 
     throw new ApiError(

@@ -90,6 +90,7 @@ export const User = objectType({
     t.email("email");
     t.boolean("emailVerified");
     t.boolean("isBanned");
+    t.boolean("acceptedTerms");
     t.date("createdAt");
     t.date("updatedAt");
   },
@@ -486,6 +487,7 @@ export const UserProfileUpdateInput = inputObjectType({
     t.nonNull.string("bio");
     t.nonNull.string("url");
     t.nonNull.email("email");
+    t.nonNull.boolean("acceptedTerms");
   },
 });
 

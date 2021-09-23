@@ -29,6 +29,7 @@ export const PublicUserProfile = ({ user }: { user: any }) => {
 
   if (appUser && appUser.ethAddress === user.ethAddress) {
     console.log("PublicUserProfile Redirect to /x/");
+    console.log("/x/ 3");
     router.replace("/x/");
   }
 

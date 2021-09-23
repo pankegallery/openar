@@ -44,13 +44,14 @@ const Update = () => {
 
   const { data, loading, error } = useQuery(userProfileReadQueryGQL, {
     variables: {
-      ethAddress: appUser?.ethAddress ?? 0,
+      ethAddress: appUser?.ethAddress ?? "",
     },
   });
 
   const [firstMutation, firstMutationResults] = useUserProfileUpdateMutation();
   const [isFormError, setIsFormError] = useState(false);
-  
+  const [isNavigatingAway, setIsNavigatingAway] = useState(false);
+
   const disableForm = firstMutationResults.loading;
 
   const formMethods = useForm({
@@ -71,6 +72,7 @@ const Update = () => {
         "email",
         "bio",
         "url",
+        "acceptedTerms"
       ])
     );
   }, [reset, data]);
@@ -81,6 +83,7 @@ const Update = () => {
     setIsFormError(false);
     try {
       if (appUser) {
+      
         const { errors } = await firstMutation(
           appUser?.id,
           {
@@ -88,6 +91,7 @@ const Update = () => {
             email: newData.email ?? "",
             bio: newData.bio ?? "",
             url: newData.url ?? "",
+            acceptedTerms: !!newData.acceptedTerms,
           }
         );
 
@@ -104,10 +108,10 @@ const Update = () => {
                   : undefined,
             })
           );
-
           successToast();
-
+          setIsNavigatingAway(true);
           router.push(moduleConfig.rootPath);
+          
         } else {
           setIsFormError(true);
         }
@@ -150,7 +154,7 @@ const Update = () => {
 
   return (
     <>
-      <FormNavigationBlock shouldBlock={(isDirty && !isSubmitting) || activeUploadCounter > 0} />
+      <FormNavigationBlock shouldBlock={(isDirty && !isSubmitting && !isNavigatingAway) || activeUploadCounter > 0} />
       <FormProvider {...formMethods}>
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={disableForm}>

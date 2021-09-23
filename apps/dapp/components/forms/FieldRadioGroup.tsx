@@ -6,7 +6,6 @@ export const FieldRadioGroup = () => {
   // TODO: finish field...
   //     const { register, handleSubmit, control } = useForm();
   //     const onSubmit =  data => {
-  //         console.log(data)
   //     }
   //     return (
   //         <form onSubmit={handleSubmit(onSubmit)} >
