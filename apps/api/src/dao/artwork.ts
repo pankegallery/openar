@@ -9,7 +9,7 @@ import {
 import { getPrismaClient } from "../db/client";
 import { getApiConfig } from "../config";
 import { ApiError, ArtworkStatusEnum } from "../utils";
-import { daoArObjectDelete, daoImageSetToDelete } from ".";
+import { daoArObjectDelete, daoImageSetToDelete, daoUserUpdate } from ".";
 
 const apiConfig = getApiConfig();
 const prisma = getPrismaClient();
@@ -126,17 +126,53 @@ export const daoArtworkUpdate = async (
   id: number,
   data: Prisma.ArtworkUpdateInput
 ): Promise<Artwork> => {
-  const artwork: Artwork = await prisma.artwork.update({
-    data,
+  const artworkInDb = await prisma.artwork.findUnique({
+    select: {
+      id: true,
+      status: true,
+      creator: {
+        select: {
+          id: true,
+          roles: true,
+        },
+      },
+      arObjects: true,
+    },
     where: {
       id,
     },
   });
 
-  return filteredOutputByBlacklistOrNotFound(
-    artwork,
-    apiConfig.db.privateJSONDataKeys.artwork
-  );
+  if (artworkInDb) {
+    if (
+      [
+        ArtworkStatusEnum.PUBLISHED,
+        ArtworkStatusEnum.HASMINTEDOBJECTS,
+      ].includes((data?.status as ArtworkStatusEnum) ?? ArtworkStatusEnum.DRAFT)
+    ) {
+      if (
+        artworkInDb.arObjects.length > 0 &&
+        artworkInDb?.creator?.roles &&
+        !artworkInDb?.creator?.roles.includes("artist")
+      ) {
+        daoUserUpdate(artworkInDb?.creator?.id, {
+          roles: [...artworkInDb?.creator?.roles, "artist"],
+        });
+      }
+    }
+
+    const artwork: Artwork = await prisma.artwork.update({
+      data,
+      where: {
+        id,
+      },
+    });
+    return filteredOutputByBlacklistOrNotFound(
+      artwork,
+      apiConfig.db.privateJSONDataKeys.artwork
+    );
+  }
+  throw new ApiError(httpStatus.NOT_FOUND, "Not found");
 };
 
 export const daoArtworkDelete = async (id: number): Promise<Artwork> => {

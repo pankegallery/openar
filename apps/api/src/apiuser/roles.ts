@@ -19,28 +19,22 @@ export type PermissionsOfAdministrator =
   | "userDelete";
 
 // !!! Also add new permissions to the constructing arrays on the bottom
-export type PermissionsOfArtist = "artworkUpdateOwn" | "artworkDeleteOwn";
-
-// !!! Also add new permissions to the constructing arrays on the bottom
-export type PermissionsOfCollector =
-  | "collectionSellOwn"
-  | "collectionUpdateOwn";
-
-export type PermissionsOfCurator =
-  | "exhibitionUpdateOwn"
-  | "exhibitionDeleteOwn";
-
-export type PermissionsOfCritic = "critiqueUpdateOwn" | "critiqueDeleteOwn";
-
-// !!! Also add new permissions to the constructing arrays on the bottom
 export type PermissionsOfUser =
+  | "artworkUpdateOwn"
+  | "artworkDeleteOwn"
+  | "collectionSellOwn"
+  | "collectionUpdateOwn"
+  | "critiqueUpdateOwn"
+  | "critiqueDeleteOwn"
   | "critiqueCreate"
   | "exhibitionCreate"
   | "artworkCreate"
   | "artworkReadOwn"
   | "collectionReadOwn"
   | "exhibitionReadOwn"
-  | "critiqueReadOwn";
+  | "critiqueReadOwn"
+  | "exhibitionUpdateOwn"
+  | "exhibitionDeleteOwn";
 
 // !!! Also add new permissions to the constructing arrays on the bottom
 export type PermissionsOfNewUser =
@@ -56,10 +50,6 @@ export type PermissionsOfApi = "canConfirmToken";
 
 export type PermissionName =
   | PermissionsOfAdministrator
-  | PermissionsOfCritic
-  | PermissionsOfCurator
-  | PermissionsOfCollector
-  | PermissionsOfArtist
   | PermissionsOfUser
   | PermissionsOfNewUser
   | PermissionsOfRefresh
@@ -131,26 +121,18 @@ export const apiRolesAndPermissions: ApiRolesAndPermissions = {
 
 apiRolesAndPermissions.add("api", ["canConfirmToken"]);
 apiRolesAndPermissions.add("refresh", ["canRefreshAccessToken"]);
-
-apiRolesAndPermissions.add("artist", ["artworkUpdateOwn", "artworkDeleteOwn"]);
-
-apiRolesAndPermissions.add("collector", [
-  "accessAsAuthenticatedUser",
-  "profileRead",
-  "profileUpdate",
-]);
-
-apiRolesAndPermissions.add("curator", [
-  "exhibitionUpdateOwn",
-  "exhibitionDeleteOwn",
-]);
-
-apiRolesAndPermissions.add("critic", [
-  "critiqueUpdateOwn",
-  "critiqueDeleteOwn",
-]);
+apiRolesAndPermissions.add("artist", []);
+apiRolesAndPermissions.add("collector", []);
+apiRolesAndPermissions.add("curator", []);
+apiRolesAndPermissions.add("critic", []);
 
 apiRolesAndPermissions.add("user", [
+  "artworkUpdateOwn",
+  "artworkDeleteOwn",
+  "exhibitionUpdateOwn",
+  "exhibitionDeleteOwn",
+  "critiqueUpdateOwn",
+  "critiqueDeleteOwn",
   "critiqueCreate",
   "exhibitionCreate",
   "artworkCreate",
