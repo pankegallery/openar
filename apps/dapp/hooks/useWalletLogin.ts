@@ -30,7 +30,10 @@ import { store } from "~/redux";
 import { appConfig } from "~/config";
 
 export function useWalletLogin() {
-  const [, setIsConnected] = useLocalStorage("connected", undefined);
+  const [connectedVia, setIsConnected] = useLocalStorage(
+    "connected",
+    undefined
+  );
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [awaitingUserInteraction, setAwaitingUserInteraction] = useState<
     string | null
@@ -213,12 +216,19 @@ export function useWalletLogin() {
                 // TODO: make better
                 setAwaitingUserInteraction(null);
 
-                triggerToast(
-                  "Signature required",
-                  "Please sign the requested signature to be able to logon to our plaform",
-                  "error"
-                );
-                await walletDisconnect();
+                const msg =
+                  "Please sign the requested signature to be able to logon to our plaform";
+
+                if (connectedVia === "walletconnect") {
+                  triggerToast(
+                    "Signature required",
+                    "Please sign the requested signature to be able to logon to our plaform",
+                    "error"
+                  );
+                  await walletDisconnect();
+                } else {
+                  setWalletLoginError(msg);
+                }
               } else {
                 handleError(error);
               }
@@ -237,6 +247,7 @@ export function useWalletLogin() {
       walletDisconnect,
       setAwaitingUserInteraction,
       setWalletLoginError,
+      connectedVia,
     ]
   );
 

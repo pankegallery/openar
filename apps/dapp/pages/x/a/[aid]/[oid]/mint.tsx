@@ -3,27 +3,14 @@ import type * as yup from "yup";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/router";
-import {
-  Text,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  Button,
-  Flex,
-  Box,
-  ModalBody,
-  chakra,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Text, chakra, useDisclosure } from "@chakra-ui/react";
 import { useQuery, gql } from "@apollo/client";
 
-import { useWeb3React, UnsupportedChainIdError } from "@web3-react/core";
+import { useWeb3React } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
 
 import {
   OpenAR,
-  addresses,
   generateMintArObjectSignMessageData,
   recoverSignatureFromMintArObject,
   Decimal,
@@ -32,6 +19,7 @@ import {
 } from "@openar/crypto";
 
 import { LayoutOpenAR } from "~/components/app";
+import { WalletActionRequired } from "~/components/frontend";
 import { FormNavigationBlock } from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
 import { ModuleArtworkArObjectMint } from "~/components/modules/forms";
@@ -48,9 +36,8 @@ import {
   isArObjectReadyToMint,
   isArObjectMinting,
 } from "~/components/modules";
-import { ArObjectStatusEnum } from "~/utils";
+import { trimStringToLength } from "~/utils";
 
-// TODO
 export const arObjectReadOwnQueryGQL = gql`
   query arObjectReadOwn($id: Int!, $aid: Int!) {
     arObjectReadOwn(id: $id) {
@@ -65,8 +52,7 @@ export const arObjectReadOwnQueryGQL = gql`
       # isBanned TODO: make good use of this
       lat
       lng
-      # images {
-      # }
+
       arModels {
         id
         type
@@ -128,8 +114,7 @@ const Update = () => {
     undefined
   );
 
-  const { library, chainId, account, active, error, connector } =
-    useWeb3React<Web3Provider>();
+  const { library, chainId, account } = useWeb3React<Web3Provider>();
 
   const cancelMintSignature = () => {
     setValue("mintSignature", "", {
@@ -232,8 +217,6 @@ const Update = () => {
   ) => {};
 
   // TODO: make more general
-  const trimTitle = (str: string) =>
-    str.length > 13 ? `${str.substr(0, 10)}...` : str;
 
   const breadcrumb = [
     {
@@ -241,7 +224,7 @@ const Update = () => {
       title:
         formDataQuery?.data &&
         (formDataQuery?.data?.artworkReadOwn?.title ? (
-          trimTitle(formDataQuery?.data?.artworkReadOwn?.title)
+          trimStringToLength(formDataQuery?.data?.artworkReadOwn?.title, 13)
         ) : (
           <BeatLoader size="10px" color="#fff" />
         )),
@@ -345,57 +328,38 @@ const Update = () => {
           </fieldset>
         </form>
       </FormProvider>
-      <Modal
-        closeOnOverlayClick={false}
+
+      <WalletActionRequired
         isOpen={mintDisclosure.isOpen}
+        showClose={!!signatureError}
         onClose={cancelMintSignature}
+        title="Signature required"
+        error={signatureError}
       >
-        <ModalOverlay bg="blackAlpha.800" />
-        <ModalContent
-          color="white"
-          pt="0"
-          bg="openar.muddygreen"
-          borderRadius="0"
-        >
-          <ModalHeader pb="0">Signature required</ModalHeader>
-          <ModalBody pb="6">
-            <Text color="white" mb="4">
-              Please confirm to mint your object{" "}
+        <Text color="white" mb="4">
+          Please confirm to mint your object{" "}
+          <chakra.span fontWeight="bold" color="gray.400">
+            {formDataQuery?.data?.arObjectReadOwn?.title}
+          </chakra.span>{" "}
+          as an edition of{" "}
+          <chakra.span fontWeight="bold" color="gray.400">
+            {getValues("editionOf")}
+          </chakra.span>
+          {getValues("setInitialAsk") ? (
+            <>
+              {" "}
+              with an intitial ask of{" "}
               <chakra.span fontWeight="bold" color="gray.400">
-                {formDataQuery?.data?.arObjectReadOwn?.title}
+                {getValues("askPrice").toFixed(2)}
               </chakra.span>{" "}
-              as an edition of{" "}
-              <chakra.span fontWeight="bold" color="gray.400">
-                {getValues("editionOf")}
-              </chakra.span>
-              {getValues("setInitialAsk") ? (
-                <>
-                  {" "}
-                  with an intitial ask of{" "}
-                  <chakra.span fontWeight="bold" color="gray.400">
-                    {getValues("askPrice").toFixed(2)}
-                  </chakra.span>{" "}
-                  xDai
-                </>
-              ) : (
-                <></>
-              )}{" "}
-              by giving the signature in your wallet.
-            </Text>
-            {signatureError && (
-              <Text color="openar.error">{signatureError}</Text>
-            )}
-            {!signatureError && (
-              <Flex my="6" justifyContent="center">
-                <BeatLoader color="#fff" />
-              </Flex>
-            )}
-            <Box>
-              <Button onClick={cancelMintSignature}>Cancel</Button>
-            </Box>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+              xDai
+            </>
+          ) : (
+            <></>
+          )}{" "}
+          by signing the signature request in your wallet.
+        </Text>
+      </WalletActionRequired>
     </>
   );
 };

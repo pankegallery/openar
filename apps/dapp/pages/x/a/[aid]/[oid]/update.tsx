@@ -31,6 +31,7 @@ import {
   filteredOutputByWhitelist,
   ArObjectStatusEnum,
   ArtworkStatusEnum,
+  trimStringToLength
 } from "~/utils";
 
 // TODO
@@ -184,17 +185,13 @@ const Update = () => {
     }
   };
 
-  // TODO: make more general
-  const trimTitle = (str: string) =>
-    str.length > 13 ? `${str.substr(0, 10)}...` : str;
-
   const breadcrumb = [
     {
       path: `${moduleConfig.rootPath}/${router.query.aid}/update`,
       title:
         data &&
         (data.artworkReadOwn?.title ? (
-          trimTitle(data.artworkReadOwn?.title)
+          trimStringToLength(data.artworkReadOwn?.title, 13)
         ) : (
           <BeatLoader size="10px" color="#fff" />
         )),

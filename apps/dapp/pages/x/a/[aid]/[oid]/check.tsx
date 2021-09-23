@@ -18,6 +18,7 @@ import {
 import { ShowUrlAndCopy } from "~/components/frontend";
 
 import { appConfig } from "~/config";
+import { trimStringToLength } from "~/utils";
 
 export const arObjectReadOwnQueryGQL = gql`
   query arObjectReadOwn($id: Int!, $aid: Int!) {
@@ -56,17 +57,13 @@ const Update = () => {
 
   const href = `${appConfig.baseUrl}/a/${data?.artworkReadOwn?.key}/${data?.arObjectReadOwn?.key}/`;
 
-  // TODO: make more general
-  const trimTitle = (str: string) =>
-    str.length > 13 ? `${str.substr(0, 10)}...` : str;
-
   const breadcrumb = [
     {
       path: `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`,
       title:
         data &&
         (data.artworkReadOwn?.title ? (
-          trimTitle(data.artworkReadOwn?.title)
+          trimStringToLength(data.artworkReadOwn?.title, 13)
         ) : (
           <BeatLoader size="10px" color="#fff" />
         )),

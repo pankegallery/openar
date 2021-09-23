@@ -12,3 +12,4 @@ export * from "./RoleBadgeControl";
 export * from "./UserDetails";
 export * from "./IncompleteOverlay";
 export * from "./ShowUrlAndCopy";
+export * from "./WalletActionRequired";

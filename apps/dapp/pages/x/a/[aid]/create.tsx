@@ -22,6 +22,7 @@ import {
   ModulePage,
   ButtonListElement,
 } from "~/components/modules";
+import { trimStringToLength } from "~/utils";
 
 export const artworkReadOwnQueryGQL = gql`
   query artworkReadOwn($id: Int!) {
@@ -107,12 +108,10 @@ const Create = () => {
     }
   };
 
-  const trimTitle = (str: string) => (str.length > 13) ? `${str.substr(0,10)}...` : str; 
-
   const breadcrumb = [
     {
       path: `${moduleConfig.rootPath}/${router.query.aid}/update`,
-      title: data && (data.artworkReadOwn?.title ? trimTitle(data.artworkReadOwn?.title) : <BeatLoader size="10px" color="#fff"/>),
+      title: data && (data.artworkReadOwn?.title ? trimStringToLength(data.artworkReadOwn?.title, 13) : <BeatLoader size="10px" color="#fff"/>),
     },
     {
       title: "Create object ",
