@@ -22,6 +22,8 @@ import { setTabWideAccessStatus } from "~/hooks/useAuthTabWideLogInOutReload";
 
 let refreshTimeoutId: ReturnType<typeof setTimeout>;
 
+const canRefresh = () => store.getState().user.allowRefresh;
+
 // TODO: xxx is the autorefresh really needed? Or is it good enough to rely on the refresh by use of the API?
 const refreshToken = async () => {
   console.log("refreshToken", canRefresh(), getRefreshCookie());
@@ -59,19 +61,18 @@ const refreshToken = async () => {
         }
       })
       .catch((error) => {
-        console.log("logout() refreshToken()");
+        console.log("triggering logout() in user.refreshToken() 1")
         console.log(error);
         logout();
       });
   } else if (canRefresh()) {
+    console.log("triggering logout() in user.refreshToken() 2");
     await logout();
   }
 };
 
 const setAllowRefresh = (status: boolean) =>
   store.dispatch(authAllowRefresh(status));
-
-const canRefresh = () => store.getState().user.allowRefresh;
 
 const setRefreshing = (status: boolean) =>
   store.dispatch(authRefreshing(status));

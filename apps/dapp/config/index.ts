@@ -25,6 +25,7 @@ export const appConfig: AppConfig = {
   chainId: process.env.NEXT_PUBLIC_CHAIN_ID
     ? parseInt(process.env.NEXT_PUBLIC_CHAIN_ID)
     : 0,
+  numBlockConfirmations: 8,
   defaultPageSize: 30,
   platformCuts: {
     firstSalePlatform: Decimal.new(10),

@@ -90,7 +90,7 @@ Note: an object must be published within a published artwork to be minted."
             <FieldNumberInput
               name="askPrice"
               id="askPrice"
-              label="Price per item"
+              label="Price per NFT"
               isDisabled={awaitingSignature}
               isRequired={yupIsFieldRequired("price", validationSchema)}
               settings={{

@@ -992,11 +992,6 @@ const _abi = [
         name: "ask",
         type: "tuple",
       },
-      {
-        internalType: "bytes32",
-        name: "objKeyHex",
-        type: "bytes32",
-      },
     ],
     name: "setAskForBatch",
     outputs: [],

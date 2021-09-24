@@ -10,41 +10,31 @@ import { WalletControl } from "~/components/app/shared";
 
 const OpenARLogin = () => {
   const { account, walletDisconnect, library } = useWalletLogin();
-  const [appUser] = useAuthentication();
+  const [appUser, { hasCookies }] = useAuthentication();
   const stateUser = useTypedSelector(({ user }) => user);
   const stateCrypto = useTypedSelector(({ crypto }) => crypto);
   const router = useRouter();
 
   let navigating = false;
 
-  if (
-    library &&
-    library?.provider &&
-    account &&
-    appUser &&
-    stateUser.authenticated
-  ) {
-    console.log("/x/ 1");
-    router.push("/x/");
-    navigating = true;
-  }
-
   useEffect(() => {
-    if (!library || !library?.provider) {
-      if (stateCrypto.signatureRequired) {
-        walletDisconnect();
-      }
+    if (
+      library &&
+      library?.provider &&
+      account &&
+      appUser &&
+      stateUser.authenticated && 
+      hasCookies()
+    ) {
+      console.log("/x/ 1");
+      router.push("/x/");
+      navigating = true;
     }
-  }, [
-    library,
-    walletDisconnect,
-    stateUser.justConnected,
-    stateCrypto.signatureRequired,
-  ]);
+  }, [library, library?.provider, account, appUser, stateUser.authenticated, hasCookies]);
 
   useEffect(() => {
     if (library || library?.provider) {
-      if (stateUser.justConnected && account) {
+      if (stateUser.justConnected && account && stateCrypto.signatureRequired) {
         router.push("/sign");
       }
     }
@@ -52,6 +42,7 @@ const OpenARLogin = () => {
     library,
     walletDisconnect,
     stateUser.justConnected,
+    stateCrypto.signatureRequired,
     router,
     account,
   ]);
@@ -64,9 +55,7 @@ const OpenARLogin = () => {
       </Head>
       <Text mb="4">Hello, please click to connect your wallet to openAR.</Text>
 
-      {((
-        (!appUser || !stateUser.authenticated) &&
-        !navigating) ||
+      {(((!appUser || !stateUser.authenticated) && !navigating) ||
         !account) && (
         <Box mt="6">
           <WalletControl location="page" color="black" />

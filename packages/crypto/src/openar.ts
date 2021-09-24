@@ -4,7 +4,6 @@ import { Provider } from "@ethersproject/providers";
 import { AddressZero } from "@ethersproject/constants";
 import { Signer } from "@ethersproject/abstract-signer";
 
-import { BytesLike } from "ethers";
 import invariant from "tiny-invariant";
 import {
   Market,
@@ -339,8 +338,7 @@ export class OpenAR {
   public async setAskForBatch(
     mediaIds: BigNumberish[],
     ask: Ask,
-    bidShares: BidShares,
-    objKeyHex: BytesLike
+    bidShares: BidShares
   ): Promise<ContractTransaction> {
     try {
       this.ensureNotReadOnly();
@@ -351,7 +349,7 @@ export class OpenAR {
     if (!validateBidOrAsk(Decimal.new(ask.amount.toString()), bidShares))
       return Promise.reject("invalid ask");
 
-    return this.market.setAskForBatch(mediaIds, ask, objKeyHex);
+    return this.market.setAskForBatch(mediaIds, ask);
   }
 
   /**

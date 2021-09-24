@@ -40,8 +40,12 @@ export const useAuthentication = () => {
     return result;
   };
 
+  const hasCookies = async () => {
+    return typeof authentication.getRefreshCookie() !== "undefined";    
+  };
+
   return [
     appUser,
-    { isLoggedIn, login, logout, preLoginLogout, logoutAndRedirect },
+    { isLoggedIn, login, logout, preLoginLogout, logoutAndRedirect, hasCookies },
   ] as const;
 };

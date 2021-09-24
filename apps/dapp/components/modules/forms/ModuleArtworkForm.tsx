@@ -150,6 +150,7 @@ export const ModuleArtworkForm = ({
             height="100%"
             marginLeft="20"
             marginTop="60"
+            align="top"
           />
         )}
 

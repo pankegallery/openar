@@ -310,7 +310,9 @@ export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
                     {account && appUser && (
                       <ActiveLink href={`/x/`}>Profile</ActiveLink>
                     )}
-                    <WalletControl />
+                    <WalletControl 
+                      onCloseMenu={onClose}
+                    />
                   </chakra.nav>
                 </Box>
               </Flex>

@@ -14,6 +14,9 @@ import {
   useLocalStorage,
 } from "~/hooks";
 
+import { user, authentication } from "~/services";
+import { appConfig } from "~/config";
+
 const OpenARLogin = () => {
   const {
     account,
@@ -23,7 +26,7 @@ const OpenARLogin = () => {
     library,
   } = useWalletLogin();
   const [connectedVia] = useLocalStorage("connected", undefined);
-  const [appUser] = useAuthentication();
+  const [appUser, {hasCookies}] = useAuthentication();
   const stateUser = useTypedSelector(({ user }) => user);
   const stateCrypto = useTypedSelector(({ crypto }) => crypto);
   const router = useRouter();
@@ -31,11 +34,26 @@ const OpenARLogin = () => {
 
   let navigating = false;
 
-  if (appUser && stateUser.authenticated) {
-    console.log("/x/ 2", router.asPath);
-    router.push("/x/");
-    navigating = true;
-  }
+  useEffect(() => {
+    if (
+      library &&
+      library?.provider &&
+      account &&
+      appUser &&
+      stateUser.authenticated && 
+      hasCookies()
+    ) {
+      console.log("/x/ 1");
+      router.push("/x/");
+      navigating = true;
+    } else {
+      if (!stateCrypto.signatureRequired) {
+        console.log("/login sign 1", router.asPath);
+        router.push(appConfig.reauthenticateRedirectUrl);
+        navigating = true;
+      }
+    }
+  }, [library, library?.provider, account, appUser, stateUser.authenticated, stateCrypto.signatureRequired, hasCookies]);
 
   useEffect(() => {
     if (!library || !library?.provider) {
@@ -76,10 +94,7 @@ const OpenARLogin = () => {
                     stateCrypto.loginMessage,
                     account
                   );
-                } catch (err) {
-
-                }
-                
+                } catch (err) {}
               }}
               variant="outlineBlack"
             >
@@ -100,12 +115,10 @@ const OpenARLogin = () => {
         !navigating && (
           <Box>
             <Text>
-              Oops, it seems like you sidestepped the login process. Please
-              connect your wallet first.
+              We are logging you in.
             </Text>
           </Box>
         )}
-        
     </Box>
   );
 };

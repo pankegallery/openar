@@ -43,7 +43,6 @@ export const Home = (props) => {
       {/* --------- GRID --------- */}
       <Grid
         position="fixed"
-        backgroundImage="url(/image/opening-bg.png)"
         className="exhibition"
         top="0"
         left="0"

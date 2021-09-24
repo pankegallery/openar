@@ -30,6 +30,34 @@ export interface FieldNumberSettings {
   valid?: boolean;
 }
 
+const format = (val: any, settings: FieldNumberSettings) => {
+  let num = val;
+
+  if (Number.isNaN(val)) return "0.00";
+
+  if (settings.precision && settings.precision > 0) {
+    if (typeof num === "number") num = num.toFixed(settings.precision);
+
+    if (typeof num === "string" && num.indexOf(".") > -1) {
+      const parts = num.split(".");
+      if (parts.length > 1 && parts[1].length == 1) {
+        parts[1] = `${parts[1]}0`;
+      }
+      num = parts.join(".");
+    }
+  }
+
+  return num;
+};
+
+const formatDefaultValue = (val: any, settings: FieldNumberSettings) => {
+  let defaultValue = format(typeof val !== "undefined" ? val : "0.00", settings);
+
+  if (typeof defaultValue !== "string") defaultValue = defaultValue.toString();
+
+  return defaultValue;
+};
+
 export const FieldNumberInput = ({
   settings,
   id,
@@ -47,23 +75,11 @@ export const FieldNumberInput = ({
 }) => {
   const fieldRef = useRef<HTMLInputElement | null>(null);
 
-  let defaultValue = settings?.defaultValue ?? "0.00";
-  if (typeof defaultValue !== "string")
-    defaultValue = defaultValue.toString();
+  const [fieldValue, setFieldValue] = useState("");
 
-  const [fieldValue, setFieldValue] = useState(defaultValue);
-
-  const format = (val) => {
-    let num = val;
-
-    if (Number.isNaN(val))
-      num = "0.00";
-
-    if (typeof val !== "string")
-      num = val.toString();
-    
-    return num;
-  };
+  useEffect(() => {
+    setFieldValue(formatDefaultValue(settings?.defaultValue, settings));
+  }, [settings?.defaultValue]);
 
   const {
     formState: { errors },
@@ -81,6 +97,7 @@ export const FieldNumberInput = ({
   // value and the field does not validate successfully despite being
   // (visibly) filled.
   useEffect(() => {
+    console.log(123);
     let interval = setInterval(() => {
       if (fieldRef.current && fieldRef.current.value) {
         setValue(name, fieldRef.current.value);
@@ -91,8 +108,9 @@ export const FieldNumberInput = ({
     return () => {
       clearInterval(interval);
     };
-  });
+  }, []);
 
+  console.log("FV", fieldValue);
   return (
     <FormControl
       id={id}
@@ -126,6 +144,7 @@ export const FieldNumberInput = ({
           name={name}
           // render={({ field: { onChange, onBlur, value, ref } }) => {
           render={({ field: { ref, ...restField } }) => {
+            console.log("RFV", restField.value);
             return (
               <NumberInput
                 {...{
@@ -140,8 +159,8 @@ export const FieldNumberInput = ({
                     onChangeHandler(valueAsNumber);
                   },
                 }}
-                value={format(fieldValue)}
-                defaultValue={settings.defaultValue}
+                value={format(fieldValue, settings)}
+                defaultValue={fieldValue}
                 max={
                   typeof settings?.max !== "undefined"
                     ? settings.max

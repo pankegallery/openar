@@ -14,16 +14,20 @@ import {
 } from "@chakra-ui/react";
 
 import Image from "next/image";
+import Router from "next/router";
 
 import { useOpenARDappWeb3InjectedContext } from "~/providers";
 import { useTypedSelector, useWalletLogin } from "~/hooks";
+import { appConfig } from "~/config";
 
 export const WalletControl = ({
   color = "white",
   location = "menu",
+  onCloseMenu,
 }: {
   color?: string;
   location?: string;
+  onCloseMenu?: () => void;
 }) => {
   const stateUser = useTypedSelector(({ user }) => user);
   const stateCrypto = useTypedSelector(({ crypto }) => crypto);
@@ -32,25 +36,30 @@ export const WalletControl = ({
   const {
     awaitingUserInteraction,
     walletDisconnect,
+    walletReconnect,
     walletLoginError,
     connectInjected,
     connectWalletConnect,
     account,
-    active,
     isLoggingIn,
     library,
   } = useWalletLogin();
 
   const walletDisclosure = useDisclosure();
 
-  // TODO: change this to keep the disclosure open until signature has been provided
   useEffect(() => {
     if (
       (stateUser.authenticated || stateCrypto.signatureRequired) &&
       walletDisclosure.isOpen &&
       library
     ) {
+      console.log("useEffect walletDisclosure.onClose()");
       walletDisclosure.onClose();
+      if (typeof onCloseMenu === "function")
+        onCloseMenu.call(null);
+
+      if (Router.asPath.indexOf("/sign") !== 0)
+        Router.push("/sign")
     }
   }, [
     stateUser.authenticated,
@@ -66,7 +75,9 @@ export const WalletControl = ({
         {(!account || !stateUser.authenticated) && (
           <Button
             variant={location === "page" ? "outlineBlack" : "menuLink"}
-            onClick={walletDisclosure.onOpen}
+            onClick={() => {
+              walletDisclosure.onOpen()              
+            }}
             color={color}
           >
             Login
@@ -138,7 +149,14 @@ export const WalletControl = ({
                 />
               }
               onClick={async () => {
-                await connectInjected();
+
+                try {
+                  await connectInjected();
+
+                } catch (err) {
+                  console.log("connectInjected Error");
+                }
+                
               }}
             >
               MetaMask

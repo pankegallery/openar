@@ -8,13 +8,15 @@ export const AuthenticationSessionActiveGate = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [appUser] = useAuthentication();
-
+  const [appUser, {hasCookies}] = useAuthentication();
   const router = useRouter();
 
   useEffect(() => {
-    if (!appUser && router.asPath !== "/login")
+    if ((!appUser || !hasCookies()) && router.asPath !== "/login") {
+      
       router.replace("/login");    
+    }
+      
     // eslint-disable-next-line 
   }, []);
 

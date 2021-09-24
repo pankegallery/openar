@@ -104,13 +104,13 @@ export const AlertEmailVerification = () => {
 
   return (
     <>  
-      {showPopup && !data?.userProfileRead?.email && localEmailVerified !== "yes" && <AlertBox status="warning" hasClose >
+      {data && showPopup && !data?.userProfileRead?.email && localEmailVerified !== "yes" && <AlertBox status="warning" hasClose >
             <AlertTitle>Looks like you&#39;re new. Welcome!</AlertTitle>
             <AlertDescription>We would love to be able to get in touch with your. Please set your email address in your profile and claim your first badge</AlertDescription>
           </AlertBox>}
-      {data && showPopup && data?.userProfileRead?.email && !error &&
+      {(data && showPopup && data?.userProfileRead?.email && !error &&
         localEmailVerified === "no" &&
-        !requestMutationResults.loading && (
+        !requestMutationResults.loading) && (
           <AlertBox status="warning" hasClose>
             <Grid
               w="100%"

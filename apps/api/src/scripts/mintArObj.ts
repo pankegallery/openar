@@ -317,7 +317,7 @@ const processArObject = async (
         );
         mintMetaData.txHashes = [...mintMetaData.txHashes, tx.hash];
 
-        const txReceipt = await tx.wait(chainId === 31337 ? 0 : 4);
+        const txReceipt = await tx.wait(chainId === 31337 ? 0 : 8);
 
         if (txReceipt) {
           mintMetaData.blockNumbers = [
@@ -473,7 +473,7 @@ const doChores = async () => {
       const provider = new providers.JsonRpcProvider(process.env.RPC_ENDPOINT);
 
       const contractWallet = new Wallet(
-        `0x${process.env.PRIVATE_KEY_DEPLOYER?.replace("0x", "")}`,
+        `0x${process.env.PRIVATE_KEY_MINT?.replace("0x", "")}`,
         provider
       );
 

@@ -118,8 +118,31 @@ export function useWalletLogin() {
       setIsConnected(undefined);
       handleError(error);
     }
-    // }, []);
   });
+
+  const walletReconnect = useStableCallback(async (connector: string) => {
+    try {
+      setWalletLoginError(null);
+      setIsLoggingIn(false);
+      setIsConnected(connector);
+      setAwaitingUserInteraction(connector);
+
+      const appUser = getAppUser();
+      if (appUser) {
+        try {
+          await logoutMutation(appUser.id);
+        } catch (err) {
+          // just fail silently
+        }
+      }
+      await user.logout();
+      Router.replace(appConfig.reauthenticateRedirectUrl);
+    } catch (error) {
+      setIsConnected(connector);
+      handleError(error);
+    }
+  });
+
 
   const connectWalletConnect = useCallback(async () => {
     try {
@@ -335,6 +358,7 @@ export function useWalletLogin() {
     connectInjected,
     walletLoginError,
     walletDisconnect,
+    walletReconnect,
     account,
     walletLoginRequestSignature,
     chainId,

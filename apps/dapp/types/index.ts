@@ -30,6 +30,7 @@ export type AppConfigSettings = {
   reauthenticateRedirectUrl?: string | undefined;
   defaultPageSize?: number;
   chainId?: number;
+  numBlockConfirmations?: number;
   platformCuts: PlatformCuts;
 };
  

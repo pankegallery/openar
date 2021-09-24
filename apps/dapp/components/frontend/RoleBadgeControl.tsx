@@ -19,8 +19,6 @@ import {
 export const RoleBadgeControl = ({ role }: { role: any }) => {
   const roleDisclosure = useDisclosure();
 
-  console.log("roleDisclosure:", roleDisclosure);
-
   return (
     <Box>
       {/* ------- Link ------- */}

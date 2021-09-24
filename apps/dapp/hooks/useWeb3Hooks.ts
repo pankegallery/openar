@@ -97,7 +97,7 @@ export function useWeb3InactiveListener(suppress: boolean = false) {
 
 export function useWeb3ActiveListener(suppress: boolean = false) {
   const { active, error, activate, deactivate, account } = useWeb3React();
-  const { walletDisconnect } = useWalletLogin();
+  const { walletDisconnect, walletReconnect } = useWalletLogin();
   useWhyDidYouUpdate("w3AL", {
     active,
     error,
@@ -106,6 +106,7 @@ export function useWeb3ActiveListener(suppress: boolean = false) {
     deactivate,
     account,
     walletDisconnect,
+    walletReconnect,
   });
   useEffect((): any => {
     const { ethereum } = window as any;
@@ -117,6 +118,7 @@ export function useWeb3ActiveListener(suppress: boolean = false) {
       const handleConnect = () => {
         console.log("Handling 'useWeb3ActiveListener:connect' event");
         activate(injectedConnector);
+        walletReconnect("injected");
         // TODO: this one should also ensure that the login flow is happeing
       };
       const handleChainChanged = (chainId: string | number) => {
@@ -125,6 +127,7 @@ export function useWeb3ActiveListener(suppress: boolean = false) {
           chainId
         );
         activate(injectedConnector);
+        walletReconnect("injected");
       };
       const handleAccountsChanged = (accounts: string[]) => {
         console.log(
@@ -133,6 +136,7 @@ export function useWeb3ActiveListener(suppress: boolean = false) {
           account
         );
         activate(injectedConnector);
+        walletReconnect("injected");
       };
       const handleDisconnect = async () => {
         // TODO: remove ...
@@ -164,6 +168,7 @@ export function useWeb3ActiveListener(suppress: boolean = false) {
     deactivate,
     account,
     walletDisconnect,
+    walletReconnect,
   ]);
 }
 

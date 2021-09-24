@@ -11,17 +11,19 @@ import {
   Th,
   Td,
   chakra,
-  Text
+  Text,
+  Flex,
 } from "@chakra-ui/react";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { getArObjectTokenInfoGQL } from "~/graphql/queries";
-import { ShowUrlAndCopy } from "~/components/frontend";
+import { IncompleteOverlay, ShowUrlAndCopy } from "~/components/frontend";
 import { ArObjectStatusEnum } from "~/utils";
 import { appConfig } from "~/config";
 import { FieldRow, FieldNumberInput } from "~/components/forms";
 import LogoXDAI from "~/assets/img/xdai/xdai-white.svg";
 import { useFormContext } from "react-hook-form";
 import { WalletActionRequired } from "~/components/frontend";
+import { BeatLoader } from "react-spinners";
 
 import {
   OpenAR,
@@ -37,6 +39,8 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
   const { arObjectReadOwn, artworkReadOwn } = data ?? {};
   const [isAwaitingWalletInteraction, setIsAwaitingWalletInteraction] =
     useState(false);
+  const [isAwaitingBlockConfirmation, setIsAwaitingBlockConfirmation] =
+    useState(false);
   const [cryptoError, setCryptoError] = useState(undefined);
   const { library, account, chainId } = useWalletLogin();
   const [appUser] = useAuthentication();
@@ -46,12 +50,15 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
 
   const objectURL = `${appConfig.baseUrl}/a/${artworkReadOwn?.key}/${arObjectReadOwn?.key}/`;
 
-  const subgraphQuery = useQuery(getArObjectTokenInfoGQL, {
-    variables: {
-      arObjectKey: arObjectReadOwn.key,
-    },
-    context: { clientName: "subgraph" },
-  });
+  const [subgraphQueryTrigger, subgraphQuery] = useLazyQuery(
+    getArObjectTokenInfoGQL,
+    {
+      variables: {
+        arObjectKey: arObjectReadOwn.key,
+      },
+      context: { clientName: "subgraph" },
+    }
+  );
 
   const ownedToken = subgraphQuery?.data?.medias
     ? subgraphQuery?.data?.medias.filter(
@@ -64,22 +71,30 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
       ? bigNumberToEther(ownedToken[0].currentAsk.amount)
       : 0.0;
 
+  // eslint-disable-next-line react-hooks/no-exhaustive-deps
+  useEffect(() => {
+    subgraphQueryTrigger();
+  }, []);
+
   useEffect(() => {
     if (subgraphQuery.loading || subgraphQuery.error) return;
 
     if (subgraphQuery.data?.medias) {
+      // setValue({
+      //   askPrice: currentAsk,
+      // });
       setValue("askPrice", currentAsk);
     }
   }, [
     subgraphQuery.data,
     subgraphQuery.error,
     subgraphQuery.loading,
-    setValue,
     currentAsk,
   ]);
 
   const askPrice = watch("askPrice");
 
+  console.log("a", askPrice, "c", currentAsk);
   const setAskForBatch = async (tokenIds: number[], askAmount: number) => {
     let openAR: OpenAR;
     setCryptoError(undefined);
@@ -100,7 +115,7 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
           .value.sub(platformCuts.firstSalePool.value)
           .sub(platformCuts.firstSalePlatform.value)
       );
-      openAR
+      const tx = await openAR
         .setAskForBatch(
           tokenIds.map((id) => numberToBigNumber(id)),
           openAR.createAsk(askAmount),
@@ -110,27 +125,50 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
             owner: ownerCut,
             creator: Decimal.new(0),
             prevOwner: Decimal.new(0),
-          },
-          stringToHex(arObjectReadOwn.key)
+          }
         )
-        .then((transaction) => {
-          setIsAwaitingWalletInteraction(false);
-          reset({
-            askPrice: askAmount
-          })
-        })
         .catch((err) => {
-          if (err.message.indexOf("denied transaction") > -1 ) {
+          setIsAwaitingBlockConfirmation(false);
+          if (err.message.indexOf("denied transaction") > -1) {
             setCryptoError("You've rejected the transaction");
           } else {
             setCryptoError(err.message);
           }
-          reset({
-            askPrice: askAmount
-          })
+          // setValue({
+          //   askPrice: currentAsk,
+          // });
+          setValue("askPrice", currentAsk);
+        });
+
+      if (!tx) return;
+
+      setIsAwaitingWalletInteraction(false);
+      setIsAwaitingBlockConfirmation(true);
+
+      tx.wait(chainId === 31337 ? 0 : appConfig.numBlockConfirmations)
+        .catch((err) => {
+          setIsAwaitingBlockConfirmation(false);
+          setCryptoError(err.message);
+          // setValue({
+          //   askPrice: currentAsk,
+          // });
+          setValue("askPrice", currentAsk);
+        })
+        .finally(() => {
+          setTimeout(
+            () => {
+              subgraphQueryTrigger();
+              setIsAwaitingBlockConfirmation(false);
+              // setValue({
+              //   askPrice: askAmount,
+              // });
+              setValue("askPrice", askAmount);
+            },
+            chainId === 31337 ? 5000 : 0
+          );
         });
     } catch (err) {
-      console.log(err);
+      setIsAwaitingBlockConfirmation(false);
       setCryptoError(err.message);
     }
   };
@@ -150,26 +188,47 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
 
       setIsAwaitingWalletInteraction(true);
 
-      openAR
+      const tx = await openAR
         .removeAskForBatch(tokenIds.map((id) => numberToBigNumber(id)))
-        .then((transaction) => {
-          setIsAwaitingWalletInteraction(false);
-          reset({
-            askPrice: 0
-          })
-        })
         .catch((err) => {
-          if (err.message.indexOf("denied transaction") > -1 ) {
+          setIsAwaitingBlockConfirmation(false);
+          if (err.message.indexOf("denied transaction") > -1) {
             setCryptoError("You've rejected the transaction");
           } else {
             setCryptoError(err.message);
           }
-          reset({
-            askPrice: 0
-          })
+        });
+
+      if (!tx) return;
+
+      setIsAwaitingWalletInteraction(false);
+      setIsAwaitingBlockConfirmation(true);
+
+      tx.wait(chainId === 31337 ? 0 : appConfig.numBlockConfirmations)
+        .catch((err) => {
+          setIsAwaitingBlockConfirmation(false);
+          setCryptoError(err.message);
+          // setValue({
+          //   askPrice: 0,
+          // });
+          setValue("askPrice", 0);
+        })
+        .finally(() => {
+          setTimeout(
+            () => {
+              console.log(123);
+              subgraphQueryTrigger();
+              setIsAwaitingBlockConfirmation(false);
+              // setValue({
+              //   askPrice: 0,
+              // });
+              setValue("askPrice", 0);
+              console.log(askPrice, currentAsk);
+            },
+            chainId === 31337 ? 5000 : 0
+          );
         });
     } catch (err) {
-      console.log(err);
       setCryptoError(err.message);
     }
   };
@@ -179,6 +238,7 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
       ArObjectStatusEnum.MINT,
       ArObjectStatusEnum.MINTING,
       ArObjectStatusEnum.MINTRETRY,
+      ArObjectStatusEnum.MINTCONFIRM,
     ].includes(arObjectReadOwn?.status)
   )
     return (
@@ -202,10 +262,13 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
       <>
         {ownedToken.length > 0 && (
           <Box p="6" borderBottom="1px solid #fff">
-            <Box border="1px solid #fff">
+            <Box border="1px solid #fff" position="relative">
               <FieldRow>
                 <FieldNumberInput
                   name="askPrice"
+                  isDisabled={
+                    subgraphQuery.loading || isAwaitingBlockConfirmation
+                  }
                   id="askPrice"
                   label="Price per NFT"
                   isRequired={true}
@@ -252,18 +315,41 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
                     : "Set new asking price"}
                 </Button>
               </HStack>
+              {(subgraphQuery.loading || isAwaitingBlockConfirmation) && (
+                <IncompleteOverlay
+                  headline={
+                    isAwaitingBlockConfirmation
+                      ? "Awaiting transaction confirmation"
+                      : "Loading data"
+                  }
+                  height="100%"
+                  marginLeft="6"
+                  marginBottom="0"
+                  justifyContent="center"
+                  alignItems="center"
+                  subline={
+                    <Flex w="100%" justifyContent="center" pt="2">
+                      <BeatLoader color="#fff" />
+                    </Flex>
+                  }
+                />
+              )}
             </Box>
           </Box>
         )}
         <Box p="6" borderBottom="1px solid #fff">
           Your object has been minted as an edition of{" "}
           <b>{arObjectReadOwn.editionOf}</b>
-          {arObjectReadOwn.setInitialAsk && (
+          {ownedToken && ownedToken.length > 0 && (
             <>
               {" "}
-              and an intial ask price of{" "}
-              <b>{arObjectReadOwn.askPrice.toFixed(2)}</b> xDai
+              of which <b>{ownedToken.length}</b>{" "}
+              {ownedToken.length === 1 ? "is" : "are"} still available to
+              collectors
             </>
+          )}
+          {ownedToken && ownedToken.length === 0 && (
+            <> of which all have been sold</>
           )}
         </Box>
         <Box p="6" borderBottom="1px solid #fff">
@@ -309,7 +395,7 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
                             {media.id}
                           </Td>
                           <Td valign="top" pl="0">
-                            {media.editionOf}
+                            {media.editionNumber}/{media.editionOf}
                           </Td>
                           <Td valign="top" pl="0">
                             {media.creator.id === media.owner.id ? "No" : "Yes"}
@@ -320,7 +406,7 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
                               target="_blank"
                               href={url.join("/")}
                             >
-                              IPFS Deeplink (Modelviewer)
+                              IPFS Deeplink (model viewer)
                             </a>
                             ,
                             <a
@@ -338,7 +424,7 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
                               target="_blank"
                               href={media.contentURI}
                             >
-                              IPFS Content (Glb/Gltf)
+                              IPFS Content (glb/gltf)
                             </a>
                             ,
                             <a

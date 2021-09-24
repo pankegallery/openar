@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import type { ReactElement } from "react";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import Router from "next/router";
 
 import { LayoutBlank } from "~/components/app";
 import { Box, Text, Button, HStack } from "@chakra-ui/react";
@@ -10,28 +10,17 @@ import { decimalToHex } from "~/utils";
 import { appConfig, chainInfo } from "~/config";
 
 const Chain = () => {
-  const { account, walletDisconnect, library } = useWalletLogin();
+  const { account, walletDisconnect, library, chainId } = useWalletLogin();
   const [appUser] = useAuthentication();
   const stateUser = useTypedSelector(({ user }) => user);
   const stateCrypto = useTypedSelector(({ crypto }) => crypto);
-  const router = useRouter();
+  
   const [chainChangeError, setChainChangeError] = useState(undefined);
-
-  if (
-    library &&
-    library?.provider &&
-    account &&
-    appUser &&
-    stateUser.authenticated
-  ) {
-    router.push("/x/");
-  }
 
   useEffect(() => {
     if (!library || !library?.provider) {
-      if (stateCrypto.signatureRequired) {
-        walletDisconnect();
-      }
+      walletDisconnect();
+      Router.push(appConfig.reauthenticateRedirectUrl);
     }
   }, [
     library,
@@ -39,14 +28,6 @@ const Chain = () => {
     stateUser.justConnected,
     stateCrypto.signatureRequired,
   ]);
-
-  useEffect(() => {
-    if (library || library?.provider) {
-      if (stateUser.justConnected && !account) {
-        router.push("/login");
-      }
-    }
-  }, [library, walletDisconnect, stateUser.justConnected, router, account]);
 
   const switchChain = async () => {
     setChainChangeError(undefined);

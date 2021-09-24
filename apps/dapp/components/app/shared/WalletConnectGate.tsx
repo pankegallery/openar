@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useWeb3React } from "@web3-react/core";
 import Router from "next/router";
 
 import { appConfig } from "~/config";
@@ -15,8 +14,15 @@ export const WalletConnectGate = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { isLoggingIn, account, chainId, setIsLoggingIn, walletLoginPreLogin } =
-    useWalletLogin();
+  const {
+    isLoggingIn,
+    account,
+    chainId,
+    setIsLoggingIn,
+    walletLoginPreLogin,
+    walletDisconnect,
+    library,
+  } = useWalletLogin();
 
   const [loginStatus] = useAuthTabWideLogInOutReload();
 
@@ -30,8 +36,26 @@ export const WalletConnectGate = ({
       await walletLoginPreLogin(account);
     };
 
+    // no account no chain == not logged in 
+    // bail early. 
     if (!account || !chainId) return;
 
+    if (!library || !library?.provider) {
+      // looks like that the library has not been initalized 
+      // but a signature is required
+      // better to logout and get the user to reauthenticate
+      if (stateCrypto.signatureRequired) {
+        console.log(
+          "Wallet connect gate no library but signature required. Make sure to fully logout"
+        );
+        walletDisconnect();
+        Router.push(appConfig.reauthenticateRedirectUrl);
+        return;
+      }
+    }
+
+    // wallet is not connected to the correct chain
+    // let's get the user to rectify that
     if (
       chainId !== parseInt(process.env.NEXT_PUBLIC_CHAIN_ID) &&
       Router.asPath.indexOf("/chain") === -1
@@ -40,18 +64,21 @@ export const WalletConnectGate = ({
       return;
     }
 
+    // all good? if just connecting then ask for the pre login. 
     if (
       stateUser.justConnected &&
       !stateUser.authenticated &&
       !isLoggingIn &&
-      !stateCrypto.signatureRequired
+      !stateCrypto.signatureRequired 
     ) {
+      console.log("trigger pre login ...");
       setIsLoggingIn(true);
       preLogin();
     }
   }, [
     walletLoginPreLogin,
     account,
+    library,
     stateUser.justConnected,
     stateUser.authenticated,
     isLoggingIn,
@@ -66,7 +93,7 @@ export const WalletConnectGate = ({
       Router.asPath.indexOf("/x/") > -1 &&
       !isLoggingIn
     ) {
-      console.log("trigger redirect to /");
+      console.log("trigger redirect to / as loginStatus logged-out");
       Router.replace("/");
     }
   }, [loginStatus, isLoggingIn]);
@@ -93,7 +120,7 @@ export const WalletConnectGate = ({
               "So go through the login flow to establish a new connection",
               account
             );
-            Router.replace(appConfig.reauthenticateRedirectUrl);
+            Router.push(appConfig.reauthenticateRedirectUrl);
           }
         }
       } catch (error) {}

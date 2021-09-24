@@ -1,6 +1,5 @@
-
 import React from "react";
-import { Flex, chakra, Box, Button } from "@chakra-ui/react";
+import { Flex, Text, Box, Button } from "@chakra-ui/react";
 
 export const IncompleteOverlay = ({
   headline,
@@ -11,18 +10,24 @@ export const IncompleteOverlay = ({
   height,
   marginLeft,
   marginTop,
+  justifyContent,
+  alignItems,
+  marginBottom
 }: {
-  headline?: String;
-  subline?: String;
-  button?: Boolean;
-  buttonLabel?: String;
-  href?: String;
+  headline?: string;
+  align?: string;
+  subline?: React.ReactNode | string;
+  button?: boolean;
+  buttonLabel?: string;
+  href?: string;
+  justifyContent?: string;
+  alignItems?: string;
   height?: any;
   marginLeft?: any;
   marginTop?: any;
+  marginBottom?: any;
 }) => {
-
-  return(
+  return (
     <Flex
       layerStyle="backdropBlurred"
       w="100%"
@@ -33,7 +38,7 @@ export const IncompleteOverlay = ({
       display="flex"
       direction="column"
       _before={{
-        bg: "#95927fc0"
+        bg: "#95927fc0",
       }}
       top="0"
       left="0"
@@ -46,18 +51,16 @@ export const IncompleteOverlay = ({
         position: "absolute",
         width: "100%",
         height: "100%",
-        display: "block"
+        display: "block",
       }}
+      justifyContent={justifyContent ?? "flex-start"}
+      alignItems={alignItems ?? "flex-start"}
     >
-      <Box mr="auto" ml={marginLeft} mb="10" mt={marginTop}>
-        <chakra.p textStyle="subtitle">
-          {headline}
-        </chakra.p>
-        <chakra.p pb="6">
-          {subline}
-        </chakra.p>
-        {button && <Button type="submit">{buttonLabel}</Button>}
+      <Box mx={marginLeft} mb={marginBottom ?? "10"} mt={marginTop}>
+        {headline && <Text textStyle="subtitle">{headline}</Text>}
+        {subline && <Box>{subline}</Box>}
+        {button && <Box pt="6"><Button type="submit">{buttonLabel}</Button></Box>}
       </Box>
     </Flex>
   );
-}
+};
