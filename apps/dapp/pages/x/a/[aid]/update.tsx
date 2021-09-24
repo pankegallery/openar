@@ -73,8 +73,6 @@ export const artworkReadOwnQueryGQL = gql`
 `;
 
 const Update = () => {
-  const router = useRouter();
-
   const [appUser] = useAuthentication();
   const successToast = useSuccessfullySavedToast();
   const [disableNavigation, setDisableNavigation] = useState(false);
@@ -87,9 +85,11 @@ const Update = () => {
 
   const disableForm = firstMutationResults.loading;
 
+  const router = useRouter();
+  
   const formMethods = useForm({
     mode: "onTouched",
-    resolver: yupResolver(ModuleArtworkUpdateSchema),
+    resolver: yupResolver(ModuleArtworkUpdateSchema) as any,
     defaultValues: {
       status: ArtworkStatusEnum.DRAFT,
     },

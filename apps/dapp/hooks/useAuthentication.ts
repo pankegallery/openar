@@ -1,13 +1,12 @@
 import type { AuthenticatedAppUserData } from "~/appuser";
 import { createAuthenticatedAppUser } from "~/appuser";
 
-import { useRouter } from "next/router";
+import Router from "next/router";
 import { useTypedSelector } from "~/hooks";
 
 import { user, authentication } from "~/services";
 
 export const useAuthentication = () => {
-  const router = useRouter();
   const { authenticated, appUserData } = useTypedSelector(({ user }) => user);
 
   const appUser =
@@ -36,7 +35,7 @@ export const useAuthentication = () => {
 
   const logoutAndRedirect = async (path: string = "/login") => {
     const result = await user.logout();
-    router.push(path);
+    Router.push(path);
     return result;
   };
 

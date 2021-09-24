@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import type { ReactElement } from "react";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import Router from "next/router";
 
 import { LayoutBlank } from "~/components/app";
 import { Box, Text, Button } from "@chakra-ui/react";
@@ -13,9 +13,7 @@ const OpenARLogin = () => {
   const [appUser, { hasCookies }] = useAuthentication();
   const stateUser = useTypedSelector(({ user }) => user);
   const stateCrypto = useTypedSelector(({ crypto }) => crypto);
-  const router = useRouter();
-
-  let navigating = false;
+  const [isNavigating, setIsNavigating] = useState(false)
 
   useEffect(() => {
     if (
@@ -27,15 +25,15 @@ const OpenARLogin = () => {
       hasCookies()
     ) {
       console.log("/x/ 1");
-      router.push("/x/");
-      navigating = true;
+      Router.push("/x/");
+      setIsNavigating(true);
     }
   }, [library, library?.provider, account, appUser, stateUser.authenticated, hasCookies]);
 
   useEffect(() => {
     if (library || library?.provider) {
       if (stateUser.justConnected && account && stateCrypto.signatureRequired) {
-        router.push("/sign");
+        Router.push("/sign");
       }
     }
   }, [
@@ -43,7 +41,6 @@ const OpenARLogin = () => {
     walletDisconnect,
     stateUser.justConnected,
     stateCrypto.signatureRequired,
-    router,
     account,
   ]);
 
@@ -55,7 +52,7 @@ const OpenARLogin = () => {
       </Head>
       <Text mb="4">Hello, please click to connect your wallet to openAR.</Text>
 
-      {(((!appUser || !stateUser.authenticated) && !navigating) ||
+      {(((!appUser || !stateUser.authenticated) && !isNavigating) ||
         !account) && (
         <Box mt="6">
           <WalletControl location="page" color="black" />

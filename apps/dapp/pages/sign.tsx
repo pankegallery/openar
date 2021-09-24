@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 import type { ReactElement } from "react";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import Router from "next/router";
 
 import { LayoutBlank } from "~/components/app";
 import { WalletActionRequired } from "~/components/frontend";
 import { Box, Text, Button } from "@chakra-ui/react";
-import { useConfigContext } from "~/providers";
 import {
   useAuthentication,
   useTypedSelector,
@@ -14,7 +13,6 @@ import {
   useLocalStorage,
 } from "~/hooks";
 
-import { user, authentication } from "~/services";
 import { appConfig } from "~/config";
 
 const OpenARLogin = () => {
@@ -29,11 +27,9 @@ const OpenARLogin = () => {
   const [appUser, {hasCookies}] = useAuthentication();
   const stateUser = useTypedSelector(({ user }) => user);
   const stateCrypto = useTypedSelector(({ crypto }) => crypto);
-  const router = useRouter();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-
-  let navigating = false;
-
+  const [isNavigating, setIsNavigating] = useState(false)
+  
   useEffect(() => {
     if (
       library &&
@@ -44,16 +40,16 @@ const OpenARLogin = () => {
       hasCookies()
     ) {
       console.log("/x/ 1");
-      router.push("/x/");
-      navigating = true;
+      Router.push("/x/");
+      setIsNavigating(true);
     } else {
       if (!stateCrypto.signatureRequired) {
-        console.log("/login sign 1", router.asPath);
-        router.push(appConfig.reauthenticateRedirectUrl);
-        navigating = true;
+        console.log("/login sign 1", Router.asPath);
+        Router.push(appConfig.reauthenticateRedirectUrl);
+        setIsNavigating(true);
       }
     }
-  }, [library, library?.provider, account, appUser, stateUser.authenticated, stateCrypto.signatureRequired, hasCookies]);
+  }, [library, library?.provider, account, appUser, stateUser.authenticated, stateCrypto.signatureRequired, hasCookies, setIsNavigating]);
 
   useEffect(() => {
     if (!library || !library?.provider) {
@@ -112,7 +108,7 @@ const OpenARLogin = () => {
         )}
       {!stateUser.justConnected &&
         (appUser || stateUser.authenticated) &&
-        !navigating && (
+        !isNavigating && (
           <Box>
             <Text>
               We are logging you in.

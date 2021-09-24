@@ -35,8 +35,6 @@ export const artworkReadOwnQueryGQL = gql`
 `;
 
 const Create = () => {
-  const router = useRouter();
-
   const [appUser] = useAuthentication();
   const successToast = useSuccessfullySavedToast();
   const [disableNavigation, setDisableNavigation] = useState(false);
@@ -45,10 +43,11 @@ const Create = () => {
   const [isFormError, setIsFormError] = useState(false);
 
   const disableForm = firstMutationResults.loading;
-
+  const router = useRouter();
+  
   const formMethods = useForm({
     mode: "onTouched",
-    resolver: yupResolver(ModuleArObjectCreateSchema),
+    resolver: yupResolver(ModuleArObjectCreateSchema) as any,
   });
 
 

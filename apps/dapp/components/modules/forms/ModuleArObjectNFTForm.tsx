@@ -46,8 +46,6 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
   const [appUser] = useAuthentication();
   const { watch, setValue, reset } = useFormContext();
 
-  if (!arObjectReadOwn) return <></>;
-
   const objectURL = `${appConfig.baseUrl}/a/${artworkReadOwn?.key}/${arObjectReadOwn?.key}/`;
 
   const [subgraphQueryTrigger, subgraphQuery] = useLazyQuery(
@@ -71,18 +69,16 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
       ? bigNumberToEther(ownedToken[0].currentAsk.amount)
       : 0.0;
 
-  // eslint-disable-next-line react-hooks/no-exhaustive-deps
+  
   useEffect(() => {
     subgraphQueryTrigger();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (subgraphQuery.loading || subgraphQuery.error) return;
 
     if (subgraphQuery.data?.medias) {
-      // setValue({
-      //   askPrice: currentAsk,
-      // });
       setValue("askPrice", currentAsk);
     }
   }, [
@@ -90,6 +86,7 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
     subgraphQuery.error,
     subgraphQuery.loading,
     currentAsk,
+    setValue
   ]);
 
   const askPrice = watch("askPrice");
@@ -233,6 +230,8 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
     }
   };
 
+  if (!arObjectReadOwn) return <></>;
+
   if (
     [
       ArObjectStatusEnum.MINT,
@@ -252,7 +251,7 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
   if ([ArObjectStatusEnum.MINTERROR].includes(arObjectReadOwn?.status))
     return (
       <Box p="6" borderBottom="1px solid #fff" color="openar.error">
-        Unfortunately, the mint failed. Please get in touch with us and we'll
+        Unfortunately, the mint failed. Please get in touch with us and we&#39;ll
         try to help.
       </Box>
     );
@@ -402,7 +401,7 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
                           </Td>
                           <Td valign="top" pl="0">
                             <a
-                              rel="norefferer"
+                              rel="noreferrer"
                               target="_blank"
                               href={url.join("/")}
                             >
@@ -410,7 +409,7 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
                             </a>
                             ,
                             <a
-                              rel="norefferer"
+                              rel="noreferrer"
                               target="_blank"
                               href={url
                                 .join("/")
@@ -420,7 +419,7 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
                             </a>
                             ,
                             <a
-                              rel="norefferer"
+                              rel="noreferrer"
                               target="_blank"
                               href={media.contentURI}
                             >
@@ -428,7 +427,7 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
                             </a>
                             ,
                             <a
-                              rel="norefferer"
+                              rel="noreferrer"
                               target="_blank"
                               href={media.metadataURI}
                             >
@@ -436,7 +435,7 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
                             </a>
                             ,
                             <a
-                              rel="norefferer"
+                              rel="noreferrer"
                               target="_blank"
                               href={media.metadataURI}
                             >
@@ -444,7 +443,7 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
                             </a>
                             ,
                             <a
-                              rel="norefferer"
+                              rel="noreferrer"
                               target="_blank"
                               href={`https://blockscout.com/xdai/mainnet/search-results?q=${media.transactionHash}`}
                             >

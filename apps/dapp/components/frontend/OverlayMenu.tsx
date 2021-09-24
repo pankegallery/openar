@@ -9,7 +9,7 @@ import {
   Fade,
   chakra,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import Router from "next/router";
 import {RemoveScroll} from 'react-remove-scroll';
 
 import { ActiveLink } from "~/components/ui";
@@ -27,8 +27,6 @@ import MenuCornerDarkHover from "~/assets/img/menu-corner-dark-hover.svg";
 import MenuCornerDark from "~/assets/img/menu-corner-dark.svg";
 
 export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
-  const router = useRouter();
-
   const [appUser] = useAuthentication();
 
   const { account } = useWalletLogin();
@@ -68,10 +66,10 @@ export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
       onClose();
     };
 
-    router.events.on("routeChangeStart", handleRouteChange);
+    Router.events.on("routeChangeStart", handleRouteChange);
 
     return () => {
-      router.events.off("routeChangeStart", handleRouteChange);
+      Router.events.off("routeChangeStart", handleRouteChange);
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -10,7 +10,7 @@ import { decimalToHex } from "~/utils";
 import { appConfig, chainInfo } from "~/config";
 
 const Chain = () => {
-  const { account, walletDisconnect, library, chainId } = useWalletLogin();
+  const { walletDisconnect, library } = useWalletLogin();
   const [appUser] = useAuthentication();
   const stateUser = useTypedSelector(({ user }) => user);
   const stateCrypto = useTypedSelector(({ crypto }) => crypto);

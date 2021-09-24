@@ -156,7 +156,7 @@ export const FieldInput = ({
     return () => {
       clearInterval(interval);
     };
-  },[]);
+  },[name, setValue]);
 
   if (type === "password") {
     input = (

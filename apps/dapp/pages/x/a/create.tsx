@@ -2,7 +2,7 @@ import { useState, ReactElement } from "react";
 import type * as yup from "yup";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "next/router";
+import Router from "next/router";
 import { Text } from "@chakra-ui/react";
 
 import { LayoutOpenAR } from "~/components/app";
@@ -21,8 +21,6 @@ import {
 } from "~/components/modules";
 
 const Create = () => {
-  const router = useRouter();
-
   const [appUser] = useAuthentication();
   const successToast = useSuccessfullySavedToast();
   const [disableNavigation, setDisableNavigation] = useState(false);
@@ -34,7 +32,7 @@ const Create = () => {
 
   const formMethods = useForm({
     mode: "onTouched",
-    resolver: yupResolver(ModuleArtworkCreateSchema),
+    resolver: yupResolver(ModuleArtworkCreateSchema) as any,
   });
 
   const {
@@ -66,7 +64,7 @@ const Create = () => {
         if (!errors) {
           successToast();
           setIsNavigatingAway(true);
-          router.push(`${moduleConfig.rootPath}/${data?.artworkCreate?.id}/update`);
+          Router.push(`${moduleConfig.rootPath}/${data?.artworkCreate?.id}/update`);
         } else {
           setIsFormError(true);
         }

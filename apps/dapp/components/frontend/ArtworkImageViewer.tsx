@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { useRouter } from 'next/router'
+import Router from 'next/router'
 
 import { Box, Grid, Flex, chakra, Button, Link } from "@chakra-ui/react";
 import BoxIcon from "~/assets/img/box.svg";
@@ -24,11 +24,7 @@ import {
 // TODO: is the url attribute actually used anywhere? 
 export const ArtworkImageViewer = ({ artwork, object, url}: {artwork: any, object: any, url?: String}) => {
 
-//  const [thumbsSwiper, setThumbsSwiper] = useState(null);
-
-  const router = useRouter();
-//    console.log("[ArtworkImageViewer] router: ", router);
-  const baseURL = router.asPath.split(artwork.key)[0];
+  const baseURL = Router.asPath.split(artwork.key)[0];
   const artworkURL = baseURL + artwork.key;
 //    console.log("[ArtworkImageViewer] artwork url: ", artworkURL);
 

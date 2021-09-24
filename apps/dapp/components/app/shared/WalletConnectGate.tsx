@@ -76,9 +76,11 @@ export const WalletConnectGate = ({
       preLogin();
     }
   }, [
+    chainId,
     walletLoginPreLogin,
     account,
     library,
+    walletDisconnect,
     stateUser.justConnected,
     stateUser.authenticated,
     isLoggingIn,

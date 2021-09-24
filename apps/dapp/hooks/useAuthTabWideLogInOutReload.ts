@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import Router from "next/router";
 import { appConfig } from "~/config";
 import { useTypedSelector } from ".";
 
@@ -17,8 +17,7 @@ export const setTabWideAccessStatus = (loginStatus: TypeLoginStatus) => {
 export const useAuthTabWideLogInOutReload = () => {
   const authenticated = useTypedSelector(({ user }) => user.authenticated);
   const status = authenticated ? "logged-in" : "logged-out";
-  const router = useRouter();
-
+  
   if (typeof window !== "undefined" && !eventAttached) {
     eventAttached = true;
 
@@ -28,7 +27,7 @@ export const useAuthTabWideLogInOutReload = () => {
           document.location.reload();
         } else {
           console.log(`window.addEventListener(storage) push to ${appConfig.reauthenticateRedirectUrl}`);
-          router.push(appConfig.reauthenticateRedirectUrl);
+          Router.push(appConfig.reauthenticateRedirectUrl);
         }
       }
     });

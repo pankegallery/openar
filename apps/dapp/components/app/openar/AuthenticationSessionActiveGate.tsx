@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useRouter } from "next/router";
+import Router from "next/router";
 
 import { useAuthentication } from "~/hooks";
 
@@ -9,12 +9,11 @@ export const AuthenticationSessionActiveGate = ({
   children: React.ReactNode;
 }) => {
   const [appUser, {hasCookies}] = useAuthentication();
-  const router = useRouter();
-
+  
   useEffect(() => {
-    if ((!appUser || !hasCookies()) && router.asPath !== "/login") {
+    if ((!appUser || !hasCookies()) && Router.asPath !== "/login") {
       
-      router.replace("/login");    
+      Router.replace("/login");    
     }
       
     // eslint-disable-next-line 

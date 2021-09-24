@@ -2,7 +2,7 @@ import { useState, ReactElement, useEffect } from "react";
 import type * as yup from "yup";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "next/router";
+import Router, {useRouter} from "next/router";
 import { Text } from "@chakra-ui/react";
 import { useQuery, gql } from "@apollo/client";
 import Head from "next/head";
@@ -99,8 +99,6 @@ const isArObjectFormValid = (data, errors, getValues) => {
 };
 
 const Update = () => {
-  const router = useRouter();
-
   const [appUser] = useAuthentication();
   const successToast = useSuccessfullySavedToast();
   const [disableNavigation, setDisableNavigation] = useState(false);
@@ -113,10 +111,11 @@ const Update = () => {
   const [isFormError, setIsFormError] = useState(false);
 
   const disableForm = firstMutationResults.loading;
-
+  const router = useRouter();
+  
   const formMethods = useForm({
     mode: "onTouched",
-    resolver: yupResolver(ModuleArObjectUpdateSchema),
+    resolver: yupResolver(ModuleArObjectUpdateSchema) as any,
   });
   const {
     handleSubmit,
@@ -173,7 +172,7 @@ const Update = () => {
         if (!errors) {
           successToast();
           setIsNavigatingAway(true);
-          router.push(
+          Router.push(
             `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`
           );
         } else {
@@ -261,7 +260,7 @@ const Update = () => {
       isLoading: false,
       onClick: async () => {
         if (isArObjectFormValid(data, errors, getValues)) {
-          router.push(
+          Router.push(
             `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/check`
           );
         } else {
@@ -343,7 +342,7 @@ const Update = () => {
                     if (!errors) {
                       successToast();
                       setIsNavigatingAway(true);
-                      router.push(`${moduleConfig.rootPath}/${router.query.aid}/update`);
+                      Router.push(`${moduleConfig.rootPath}/${router.query.aid}/update`);
                     } else {
                       setIsFormError(true);
                     }

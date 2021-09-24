@@ -2,7 +2,7 @@ import { useState, ReactElement, useEffect } from "react";
 import type * as yup from "yup";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "next/router";
+import Router, {useRouter} from "next/router";
 import { Text, chakra, useDisclosure } from "@chakra-ui/react";
 import { useQuery, gql } from "@apollo/client";
 
@@ -34,6 +34,14 @@ import {
   isArObjectMinting,
 } from "~/components/modules";
 import { trimStringToLength } from "~/utils";
+
+export type ModuleArObjectMintableSchemaInputs = {
+  mintSignature?: string;
+  setInitialAsk: boolean;
+  askPrice?: number;
+  editionOf: number;
+};
+
 
 export const arObjectReadOwnQueryGQL = gql`
   query arObjectReadOwn($id: Int!, $aid: Int!) {
@@ -73,8 +81,6 @@ export const arObjectReadOwnQueryGQL = gql`
 `;
 
 const Update = () => {
-  const router = useRouter();
-
   const mintDisclosure = useDisclosure();
 
   const [appUser] = useAuthentication();
@@ -87,10 +93,11 @@ const Update = () => {
   const [isFormError, setIsFormError] = useState(false);
 
   const disableForm = firstMutationResults.loading;
+  const router = useRouter();
 
   const formMethods = useForm({
     mode: "onTouched",
-    resolver: yupResolver(ModuleArObjectMintableSchema),
+    resolver: yupResolver(ModuleArObjectMintableSchema) as any,
     defaultValues: {
       setInitialAsk: true,
       editionOf: 1,
@@ -192,7 +199,7 @@ const Update = () => {
               successToast();
               setIsNavigatingAway(true);
               cancelMintSignature();
-              router.push(
+              Router.push(
                 `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`
               );
             } else {
@@ -265,10 +272,10 @@ const Update = () => {
       formDataQuery?.data &&
       isArObjectMinting(formDataQuery?.data)
     )
-      router.replace(
-        `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`
+      Router.replace(
+        `${moduleConfig.rootPath}/${Router.query.aid}/${Router.query.oid}/update`
       );
-  }, [formDataQuery, isAwaitingSignature, router]);
+  }, [formDataQuery, isAwaitingSignature, isNavigatingAway]);
 
   return (
     <>

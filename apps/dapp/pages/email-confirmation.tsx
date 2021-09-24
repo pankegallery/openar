@@ -10,7 +10,7 @@ import {
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import {useRouter } from "next/router";
 
 import { LoadingIcon } from "~/components/ui";
 
@@ -23,8 +23,7 @@ import {
 import { useAuthentication } from "~/hooks";
 import { appConfig } from "~/config";
 const EmailConfirmation = () => {
-  const router = useRouter();
-
+  
   const [appUser, { isLoggedIn }] = useAuthentication();
 
   const [verificationMutation, verificationMutationResults] =
@@ -39,6 +38,7 @@ const EmailConfirmation = () => {
 
   const confirmingToken = verificationMutationResults.loading;
   const confirmationError = verificationMutationResults.error;
+  const router = useRouter();
 
   useEffect(() => {
     const token = (router.query.token ?? "") as string;

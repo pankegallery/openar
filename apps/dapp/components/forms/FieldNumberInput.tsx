@@ -79,7 +79,7 @@ export const FieldNumberInput = ({
 
   useEffect(() => {
     setFieldValue(formatDefaultValue(settings?.defaultValue, settings));
-  }, [settings?.defaultValue]);
+  }, [settings, settings?.defaultValue]);
 
   const {
     formState: { errors },
@@ -97,7 +97,6 @@ export const FieldNumberInput = ({
   // value and the field does not validate successfully despite being
   // (visibly) filled.
   useEffect(() => {
-    console.log(123);
     let interval = setInterval(() => {
       if (fieldRef.current && fieldRef.current.value) {
         setValue(name, fieldRef.current.value);
@@ -108,9 +107,9 @@ export const FieldNumberInput = ({
     return () => {
       clearInterval(interval);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log("FV", fieldValue);
   return (
     <FormControl
       id={id}
@@ -144,7 +143,6 @@ export const FieldNumberInput = ({
           name={name}
           // render={({ field: { onChange, onBlur, value, ref } }) => {
           render={({ field: { ref, ...restField } }) => {
-            console.log("RFV", restField.value);
             return (
               <NumberInput
                 {...{

@@ -113,7 +113,7 @@ export const ModuleProfileUpdateForm = ({
               label="I accept the terms and conditions"
               hint={
                 <>
-                  I've aggree with the platform's{" "}
+                  I&#39;ve aggree with the platform&#39;s{" "}
                   <Link href="/p/tandc">terms and conditions</Link>
                 </>
               }

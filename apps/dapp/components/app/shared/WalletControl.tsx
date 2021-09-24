@@ -66,6 +66,7 @@ export const WalletControl = ({
     stateCrypto.signatureRequired,
     walletDisclosure,
     library,
+    onCloseMenu,
   ]);
 
   return (

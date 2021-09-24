@@ -30,11 +30,11 @@ export const ModuleArtworkArObjectsList = ({
   disableNavigation?: Function;
 }) => {
   const { artworkReadOwn } = data ?? {};
-  const router = useRouter();
-
+  
   const columns = { base: "100%", t: "50% 50%" };
   const rows = { base: "auto 1fr", t: "1fr" };
 
+  const router = useRouter();
 
   return (
     <>  

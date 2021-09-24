@@ -11,7 +11,7 @@ import {
 import { ApiImage } from "../ui";
 import { ArtworkStatusEnum } from "~/utils";
 import Link from "next/link";
-import { useRouter } from 'next/router'
+import Router, {useRouter} from 'next/router'
 
 
 export const ArtworkListItem = ({
@@ -36,18 +36,18 @@ export const ArtworkListItem = ({
   isWhite?: boolean;
   isAdmin?: boolean;
 }) => {
+  const router = useRouter();
+
   let artist = creator?.pseudonym ? `${creator?.pseudonym}` : "";
 
   // `
   if (artist.trim().length === 0) artist = creator?.ethAddress;
 
-  const router = useRouter();
-  
   let cameFromExhibition;
 
-  // TODO: VVU router.components does not work, does it? TypeScript complains that the function is not known
+  // TODO: VVU Router.components does not work, does it? TypeScript complains that the function is not known
   // SO I changed the line to simply check if the pathname starts with /e/ should do the same thing
-  //if(router.components) cameFromExhibition = "/e/[slug]" in router.components, right? 
+  //if(Router.components) cameFromExhibition = "/e/[slug]" in Router.components, right? 
   cameFromExhibition = router.pathname.indexOf("/e/") > -1;
 
   

@@ -1,6 +1,6 @@
 import { useEffect, ReactElement } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import { Text, Box, Flex, Button } from "@chakra-ui/react";
 import { useQuery, gql } from "@apollo/client";
 import { LayoutOpenAR } from "~/components/app";
@@ -88,10 +88,10 @@ const Update = () => {
 
   useEffect(() => {
     if (data && isArObjectMinting(data))
-      router.replace(
-        `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`
+      Router.replace(
+        `${moduleConfig.rootPath}/${Router.query.aid}/${Router.query.oid}/update`
       );
-  }, [data, router]);
+  }, [data]);
 
   return (
     <>

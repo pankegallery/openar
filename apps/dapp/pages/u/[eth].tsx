@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import Router from "next/router";
 import { gql } from "@apollo/client";
 
 import { LayoutBlank } from "~/components/app";
@@ -21,8 +21,6 @@ import { ArrowLink } from "~/components/ui";
 import { useAuthentication, useSSRSaveMediaQuery } from "~/hooks";
 
 export const PublicUserProfile = ({ user }: { user: any }) => {
-
-  const router = useRouter();
   const [appUser] = useAuthentication();
 
   console.log(appUser, user);
@@ -30,7 +28,7 @@ export const PublicUserProfile = ({ user }: { user: any }) => {
   if (appUser && appUser.ethAddress === user.ethAddress) {
     console.log("PublicUserProfile Redirect to /x/");
     console.log("/x/ 3");
-    router.replace("/x/");
+    Router.replace("/x/");
   }
 
   console.log("[Profile] User", user);

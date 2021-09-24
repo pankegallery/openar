@@ -4,7 +4,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useQuery } from "@apollo/client";
 import { Divider, Text } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import Router from "next/router";
 
 import { LayoutOpenAR } from "~/components/app";
 import { FormNavigationBlock } from "~/components/forms";
@@ -34,8 +34,6 @@ import {
 
 
 const Update = () => {
-  const router = useRouter();
-
   const dispatch = useTypedDispatch();
   const [appUser] = useAuthentication();
   const successToast = useSuccessfullySavedToast();
@@ -56,7 +54,7 @@ const Update = () => {
 
   const formMethods = useForm({
     mode: "onTouched",
-    resolver: yupResolver(UserProfileUpdateValidationSchema),
+    resolver: yupResolver(UserProfileUpdateValidationSchema) as any,
   });
 
   const {
@@ -110,7 +108,7 @@ const Update = () => {
           );
           successToast();
           setIsNavigatingAway(true);
-          router.push(moduleConfig.rootPath);
+          Router.push(moduleConfig.rootPath);
           
         } else {
           setIsFormError(true);
