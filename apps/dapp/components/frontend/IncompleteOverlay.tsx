@@ -12,8 +12,10 @@ export const IncompleteOverlay = ({
   marginTop,
   justifyContent,
   alignItems,
-  marginBottom
+  marginBottom,
+  cornerRem =  "10rem",
 }: {
+  cornerRem?: string;
   headline?: string;
   align?: string;
   subline?: React.ReactNode | string;
@@ -33,7 +35,7 @@ export const IncompleteOverlay = ({
       w="100%"
       h={height}
       position="absolute"
-      clipPath="polygon(10rem 0%, 100% 0, 100% 100%, 0 100%, 0 10rem)"
+      clipPath={`polygon(${cornerRem} 0%, 100% 0, 100% 100%, 0 100%, 0 ${cornerRem})`}
       zIndex="10"
       display="flex"
       direction="column"
@@ -46,7 +48,7 @@ export const IncompleteOverlay = ({
         content: "''",
         bg: "white",
         clipPath:
-          "polygon(10rem 0, calc(10rem + 2px) 0%, 0 calc(10rem + 2px), 0 10rem)",
+          `polygon(${cornerRem} 0, calc(${cornerRem} + 2px) 0%, 0 calc(${cornerRem} + 2px), 0 ${cornerRem})`,
         zIndex: "100",
         position: "absolute",
         width: "100%",

@@ -28,7 +28,6 @@ import { BeatLoader } from "react-spinners";
 import {
   OpenAR,
   Decimal,
-  stringToHex,
   platformCuts,
   bigNumberToEther,
   numberToBigNumber,
@@ -53,6 +52,7 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
     {
       variables: {
         arObjectKey: arObjectReadOwn.key,
+        first: 100,
       },
       context: { clientName: "subgraph" },
     }
@@ -91,7 +91,6 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
 
   const askPrice = watch("askPrice");
 
-  console.log("a", askPrice, "c", currentAsk);
   const setAskForBatch = async (tokenIds: number[], askAmount: number) => {
     let openAR: OpenAR;
     setCryptoError(undefined);
@@ -131,9 +130,6 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
           } else {
             setCryptoError(err.message);
           }
-          // setValue({
-          //   askPrice: currentAsk,
-          // });
           setValue("askPrice", currentAsk);
         });
 
@@ -146,9 +142,6 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
         .catch((err) => {
           setIsAwaitingBlockConfirmation(false);
           setCryptoError(err.message);
-          // setValue({
-          //   askPrice: currentAsk,
-          // });
           setValue("askPrice", currentAsk);
         })
         .finally(() => {
@@ -156,9 +149,6 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
             () => {
               subgraphQueryTrigger();
               setIsAwaitingBlockConfirmation(false);
-              // setValue({
-              //   askPrice: askAmount,
-              // });
               setValue("askPrice", askAmount);
             },
             chainId === 31337 ? 5000 : 0
@@ -205,9 +195,6 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
         .catch((err) => {
           setIsAwaitingBlockConfirmation(false);
           setCryptoError(err.message);
-          // setValue({
-          //   askPrice: 0,
-          // });
           setValue("askPrice", 0);
         })
         .finally(() => {
@@ -216,9 +203,6 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
               console.log(123);
               subgraphQueryTrigger();
               setIsAwaitingBlockConfirmation(false);
-              // setValue({
-              //   askPrice: 0,
-              // });
               setValue("askPrice", 0);
               console.log(askPrice, currentAsk);
             },
@@ -272,7 +256,7 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
                   label="Price per NFT"
                   isRequired={true}
                   settings={{
-                    defaultValue: currentAsk,
+                    value: currentAsk,
                     precision: 2,
                     step: 0.01,
                     min: 0.0,

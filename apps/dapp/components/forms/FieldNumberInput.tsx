@@ -27,6 +27,7 @@ export interface FieldNumberSettings {
   placeholder?: string;
   helpText?: string;
   defaultValue?: any;
+  value?: any;
   valid?: boolean;
 }
 
@@ -75,15 +76,18 @@ export const FieldNumberInput = ({
 }) => {
   const fieldRef = useRef<HTMLInputElement | null>(null);
 
-  const [fieldValue, setFieldValue] = useState("");
+  const [fieldValue, setFieldValue] = useState(formatDefaultValue(settings?.defaultValue, settings));
 
   useEffect(() => {
-    setFieldValue(formatDefaultValue(settings?.defaultValue, settings));
-  }, [settings, settings?.defaultValue]);
+    if (settings?.value) {
+      console.log("called set value");
+      setFieldValue(formatDefaultValue(settings?.value, settings));
+    }
+      
+  }, [settings, settings?.value]);
 
   const {
     formState: { errors },
-    getValues,
     setValue,
     control,
   } = useFormContext();

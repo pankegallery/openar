@@ -1,10 +1,10 @@
 import gql from "graphql-tag";
 
 export const getArObjectTokenInfoGQL = gql`
-  query medias($arObjectKey: String!) {
+  query medias($arObjectKey: String!, $first: Int!) {
     medias(
       where: { arObjectKey: $arObjectKey }
-      first: 100
+      first: $first
       orderBy: editionNumber
       orderDirection: asc
     ) {

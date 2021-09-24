@@ -94,7 +94,6 @@ export const Artwork = ({
           h="100%"
           bg="white"
           color="var(--chakra-colors-openar-dark)"
-          pt="10"
           overflow="auto"
         >
 
@@ -183,7 +182,6 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 
   const okey = params.key[1] ? params.key[1] : "initial";
 
-  console.log(data?.artwork);
   return {
     props: {
       artwork: data?.artwork,

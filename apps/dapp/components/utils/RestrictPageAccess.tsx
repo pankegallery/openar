@@ -22,7 +22,6 @@ export const RestrictPageAccess = (
     hocComponent.getLayout = AccessRestrictedComponent.getLayout
 
   hocComponent.getInitialProps = async (context) => {
-    // TODO: is this safe? 
     let canPotentiallyReadPage: boolean;
     let redirectTo = appConfig.restrictedAccessRedirectUrl;
 

@@ -375,6 +375,30 @@ export class OpenAR {
   }
 
   /**
+   * Sets a bid on the specified media on an instance of the openAR Media Contract
+   * @param mediaId
+   * @param bid
+   */
+  public async setNativeBid(
+    mediaId: BigNumberish,
+    bid: Bid,
+    bidShares: BidShares
+  ): Promise<ContractTransaction> {
+    try {
+      this.ensureNotReadOnly();
+    } catch (err: any) {
+      return Promise.reject(err.message);
+    }
+
+    if (!validateBidOrAsk(Decimal.new(bid.amount.toString()), bidShares))
+      return Promise.reject("invalid bid");
+
+    return this.market.setBid(mediaId, bid, {
+      value: bid.amount,
+    });
+  }
+
+  /**
    * Removes the ask on the specified media on an instance of the openAR Media Contract
    * @param mediaId
    */
@@ -585,6 +609,16 @@ export class OpenAR {
     return {
       amount: Decimal.new(amount).value,
       currency: AddressZero,
+    };
+  }
+
+  public createBid(amount: number, bidder: string): Bid {
+    return {
+      amount: Decimal.new(amount).value,
+      currency: AddressZero,
+      bidder,
+      recipient: bidder,
+      sellOnShare: Decimal.new(0),
     };
   }
 

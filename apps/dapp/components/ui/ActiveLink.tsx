@@ -1,4 +1,4 @@
-import Router from "next/router";
+import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 import Link from "next/link";
 import React, { Children } from "react";
@@ -15,12 +15,13 @@ export const ActiveLink = ({
   href: string;
   onClick?: (event: any) => void;
 }) => {
-  
+  const router = useRouter();
+
   // pages/index.js will be matched via props.href
   // pages/about.js will be matched via props.href
   // pages/[slug].js will be matched via props.as
   const className =
-    Router.asPath === href || Router.asPath === (props as any).as
+    router.asPath === href || router.asPath === (props as any).as
       ? `${activeClassName}`.trim()
       : "";
 

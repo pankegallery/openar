@@ -113,7 +113,7 @@ const Update = () => {
   const disableForm = firstMutationResults.loading;
   const router = useRouter();
   
-  const formMethods = useForm({
+  const formMethods = useForm<yup.InferType<typeof ModuleArObjectUpdateSchema>>({
     mode: "onTouched",
     resolver: yupResolver(ModuleArObjectUpdateSchema) as any,
   });
@@ -122,7 +122,6 @@ const Update = () => {
     reset,
     setValue,
     getValues,
-    watch,
     formState: { isSubmitting, isDirty, errors, isValid },
   } = formMethods;
 
