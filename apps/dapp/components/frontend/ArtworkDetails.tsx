@@ -9,12 +9,12 @@ import {
   EmbeddedVideoPlayer,
   isValidEmbeddedVideoPlayerVideo,
   WalletActionRequired,
-  IncompleteOverlay
+  IncompleteOverlay,
 } from "~/components/frontend";
 
 import LogoXDAI from "~/assets/img/xdai/xdai-white.svg";
 import { useAuthentication, useWalletLogin, useAppToast } from "~/hooks";
-import { getArObjectTokenInfoGQL } from "~/graphql/queries";
+import { arObjectTokensQueryGQL } from "~/graphql/queries";
 import { BeatLoader } from "react-spinners";
 
 import {
@@ -44,11 +44,7 @@ export const ArtworkDetails = ({
     "success"
   );
 
-  const buyErrorToast = useAppToast(
-    "Oops",
-    "Please login to buy",
-    "error"
-  );
+  const buyErrorToast = useAppToast("Oops", "Please login to buy", "error");
 
   const [appUser, { hasCookies }] = useAuthentication();
   const [cryptoError, setCryptoError] = useState(undefined);
@@ -58,15 +54,17 @@ export const ArtworkDetails = ({
     useState(false);
   const { library, account, chainId } = useWalletLogin();
 
-  const [subgraphQueryTrigger, subgraphQuery] = useLazyQuery(getArObjectTokenInfoGQL, {
-    variables: {
-      arObjectKey: object?.key ?? "",
-      first: 100,
-    },
-    context: { clientName: "subgraph" },
-  });
+  const [subgraphQueryTrigger, subgraphQuery] = useLazyQuery(
+    arObjectTokensQueryGQL,
+    {
+      variables: {
+        key: object?.key ?? "",
+      },
+    }
+  );
 
   useEffect(() => {
+    console.log("trigger", object?.key);
     subgraphQueryTrigger();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -81,19 +79,45 @@ export const ArtworkDetails = ({
     }
   }, [appUser, artwork?.creator?.ethAddress]);
 
-  const ownedToken = subgraphQuery?.data?.medias
-    ? subgraphQuery?.data?.medias.filter(
-        (token) =>
-          token.creator.id === token.owner.id &&
-          token.creator.id.toLowerCase() ===
-            artwork.creator?.ethAddress.toLowerCase()
-      )
-    : [];
+  const ownedToken =
+    subgraphQuery?.data?.arObjectTokens?.totalCount > 0
+      ? subgraphQuery?.data?.arObjectTokens?.tokens.filter(
+          (token) =>
+            token.subgraphinfo.creator === token.subgraphinfo.owner &&
+            token.subgraphinfo.creator.toLowerCase() ===
+              artwork.creator?.ethAddress.toLowerCase()
+        )
+      : [];
+
+  const collectors =
+    subgraphQuery?.data?.arObjectTokens?.totalCount > 0
+      ? subgraphQuery?.data?.arObjectTokens?.tokens.reduce(
+          (agg: any, token) => {
+            if (token.subgraphinfo.creator !== token.subgraphinfo.owner) {
+              if (!(token.subgraphinfo.owner in agg)) {
+                agg[token.subgraphinfo.owner] = {
+                  tokens: [token],
+                  collector: token.collector,
+                };
+                return agg;
+              }
+              agg[token.subgraphinfo.owner].tokens = [
+                ...agg[token.subgraphinfo.owner].tokens,
+                token,
+              ];
+            }
+            return agg;
+          },
+          {}
+        )
+      : null;
 
   const currentAsk =
-    ownedToken.length > 0 && ownedToken[0]?.currentAsk?.amount
-      ? bigNumberToEther(ownedToken[0].currentAsk.amount)
+    ownedToken.length > 0 && ownedToken[0]?.subgraphinfo?.currentAsk
+      ? ownedToken[0]?.subgraphinfo.currentAsk
       : null;
+
+  console.log("TODO: collectors", collectors);
 
   /* --------- COL: Artwork details) --------- */
 
@@ -154,7 +178,10 @@ export const ArtworkDetails = ({
           setTimeout(
             () => {
               // TODO: make interaction nicer ...
-              buySuccessToast("Congratulations", `You've bought TODO: token number of `);
+              buySuccessToast(
+                "Congratulations",
+                `You've bought TODO: token number of `
+              );
               subgraphQueryTrigger();
               setIsAwaitingBlockConfirmation(false);
             },
@@ -173,6 +200,7 @@ export const ArtworkDetails = ({
     appUser &&
     account &&
     hasCookies();
+
   return (
     <Flex
       direction="column"
@@ -239,16 +267,16 @@ export const ArtworkDetails = ({
               emphasis
               onClick={() => {
                 if (canBuy) {
-                  buy(ownedToken[0].id, parseFloat(currentAsk ?? "0"));                  
+                  buy(ownedToken[0].id, parseFloat(currentAsk ?? "0"));
                 } else {
-
-                  if (`${artwork?.creator?.ethAddress}`.toLowerCase() ===
-                  `${appUser?.ethAddress}`.toLowerCase()) {
+                  if (
+                    `${artwork?.creator?.ethAddress}`.toLowerCase() ===
+                    `${appUser?.ethAddress}`.toLowerCase()
+                  ) {
                     buyErrorToast("Oops", "You can't buy your own token");
                   } else {
                     buyErrorToast("Oops", "Please login to buy");
                   }
-                  
                 }
               }}
               isDisabled={!canBuy}
@@ -263,40 +291,34 @@ export const ArtworkDetails = ({
             </chakra.p>
             {/* ======== TODO: Edition number  ======== */}
             <chakra.p mb="0 !important" textStyle="label" className="label">
-              Edition{" "}
+              Edition of {ownedToken[0].subgraphinfo.editionOf}
               <chakra.span fontWeight="300" pl="1rem">
-                {ownedToken.length} available. 
-                
-                {ownedToken[0].editionNumber}/{ownedToken[0].editionOf}
+                {ownedToken.length} available. Next for sale is edition number{" "}
+                {ownedToken[0].subgraphinfo.editionNumber}
               </chakra.span>
             </chakra.p>
             {(subgraphQuery.loading || isAwaitingBlockConfirmation) && (
-                <IncompleteOverlay
-                  cornerRem="8rem"
-                  headline={
-                    isAwaitingBlockConfirmation
-                      ? "Awaiting transaction confirmation"
-                      : "Loading data"
-                  }
-                  height="100%"
-                  marginLeft="6"
-                  marginBottom="0"
-                  justifyContent="center"
-                  alignItems="center"
-                  subline={
-                    <Flex w="100%" justifyContent="center" pt="2">
-                      <BeatLoader color="#fff" />
-                    </Flex>
-                  }
-                />
-              )}
+              <IncompleteOverlay
+                cornerRem="8rem"
+                headline={
+                  isAwaitingBlockConfirmation
+                    ? "Awaiting transaction confirmation"
+                    : "Loading data"
+                }
+                height="100%"
+                marginLeft="6"
+                marginBottom="0"
+                justifyContent="center"
+                alignItems="center"
+                subline={
+                  <Flex w="100%" justifyContent="center" pt="2">
+                    <BeatLoader color="#fff" />
+                  </Flex>
+                }
+              />
+            )}
           </Box>
         )}
-
-        {/* _____________________________
-
-                TODO: Buy Button onclick LINK
-            _______________________________*/}
 
         {/* ======== BOX: Artwork further link  ======== */}
         {artwork.url && (
@@ -325,11 +347,6 @@ export const ArtworkDetails = ({
           </Box>
         )}
 
-        {/* _____________________________
-
-                TODO: View Profile onclick LINK
-            _______________________________*/}
-
         {/* ======== BOX: Artwork video  ======== */}
         {artwork.video &&
           artwork.video.trim().length > 0 &&
@@ -352,6 +369,21 @@ export const ArtworkDetails = ({
               <EmbeddedVideoPlayer url={artwork.video} />
             </Box>
           )}
+
+        {collectors && Object.keys(collectors).length > 0 && (
+          <Box className="artworkURL" borderBottom="1px solid white" p="6">
+            <chakra.p textStyle="label" className="label">
+              Collectors
+            </chakra.p>
+            {Object.keys(collectors).map((ckey) => {
+              const collector = collectors[ckey];
+
+              return <Box key={`c-${collector.collector.ethAddres}`}>
+                {collector.collector.ethAddress}
+              </Box>;
+            })}
+          </Box>
+        )}
       </Box>
       <WalletActionRequired
         isOpen={isAwaitingWalletInteraction}

@@ -48,6 +48,7 @@ export const daoUserCreate = async (
   const user: User = await prisma.user.create({
     data: {
       ...data,
+      ethAddress: data.ethAddress?.toLowerCase() ?? "",
       // ...{ TODO: what needs to come here?
       //   password: await bcrypt.hash(
       //     data.password,
@@ -71,6 +72,30 @@ export const daoUserQuery = async (
 ): Promise<User[]> => {
   const users: User[] = await prisma.user.findMany({
     where,
+    orderBy,
+    skip: pageIndex * pageSize,
+    take: Math.min(pageSize, apiConfig.db.maxPageSize),
+  });
+
+  return filteredOutputByBlacklist(
+    users,
+    apiConfig.db.privateJSONDataKeys.user
+  );
+};
+
+export const daoPublicUserQuery = async (
+  where: Prisma.UserWhereInput,
+  orderBy: any,
+  pageIndex: number = 0,
+  pageSize: number = apiConfig.db.defaultPageSize
+): Promise<User[]> => {
+  const users = await prisma.user.findMany({
+    where: { ...where, isBanned: false },
+    select: {
+      id: true,
+      pseudonym: true,
+      ethAddress: true,
+    },
     orderBy,
     skip: pageIndex * pageSize,
     take: Math.min(pageSize, apiConfig.db.maxPageSize),
@@ -119,7 +144,7 @@ export const daoUserGetByEthAddress = async (
 ): Promise<User> => {
   const user: User | null = await prisma.user.findUnique({
     where: {
-      ethAddress,
+      ethAddress: ethAddress.toLowerCase(),
     },
   });
 
@@ -134,7 +159,7 @@ export const daoUserFindByEthAddress = async (
 ): Promise<User> => {
   const user: User | null = await prisma.user.findUnique({
     where: {
-      ethAddress,
+      ethAddress: ethAddress.toLowerCase(),
     },
   });
 
@@ -151,20 +176,14 @@ export const daoUserUpdate = async (
     throw new ApiError(httpStatus.BAD_REQUEST, "Email already taken");
   }
 
-  // TODO: will there be anything to replace the password
-  // if (data.password)
-  //   updateData = {
-  //     ...data,
-  //     ...{
-  //       password: await bcrypt.hash(
-  //         data.password as string,
-  //         apiConfig.security.saltRounds
-  //       ),
-  //     },
-  //   };
-
   const user: User = await prisma.user.update({
-    data: updateData,
+    data: {
+      ...updateData,
+      ethAddress:
+        "ethAddress" in updateData
+          ? (updateData?.ethAddress as string).toLowerCase()
+          : undefined,
+    },
     where: {
       id,
     },

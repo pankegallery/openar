@@ -36,6 +36,11 @@ import {
   daoArObjectGetByKey,
   daoArObjectGetOwnById,
   daoNanoidCustom16,
+  daoSubgraphGetOwnedTokenByEthAddress,
+  daoSubgraphGetParsedTokenInfo,
+  daoSubgraphGetArObjectTokens,
+  daoSubgraphGetParsedTokenInfos,
+  daoPublicUserQuery,
 } from "../../dao";
 
 const apiConfig = getApiConfig();
@@ -68,6 +73,10 @@ export const ArObject = objectType({
       type: "Image",
     });
 
+    t.field("artwork", {
+      type: "Artwork",
+    });
+
     t.string("ownerEthAddress");
 
     t.string("url");
@@ -87,6 +96,8 @@ export const ArObject = objectType({
       type: "ArModel",
     });
 
+    t.json("subgraphInfo");
+
     t.date("createdAt");
     t.date("updatedAt");
   },
@@ -95,7 +106,7 @@ export const ArObject = objectType({
 export const ArObjectQueryResult = objectType({
   name: "ArObjectQueryResult",
   description: dedent`
-    List all the ArObjects in the database.
+    List all the ArObjects in the database. Or the collection info of one user.
   `,
   definition: (t) => {
     t.int("totalCount");
@@ -105,11 +116,38 @@ export const ArObjectQueryResult = objectType({
   },
 });
 
+export const ArObjectToken = objectType({
+  name: "ArObjectToken",
+  description: dedent`
+    The user info and subgraph token info(s) for one collector.
+  `,
+  definition: (t) => {
+    t.int("id");
+    t.json("subgraphinfo");
+    t.field("collector", {
+      type: "User",
+    });
+  },
+});
+
+export const ArObjectTokens = objectType({
+  name: "ArObjectTokens",
+  description: dedent`
+    Lists all toeksn of one arObject
+  `,
+  definition: (t) => {
+    t.int("totalCount");
+    t.field("tokens", {
+      type: list("ArObjectToken"),
+    });
+  },
+});
+
 export const ArObjectQueries = extendType({
   type: "Query",
   definition(t) {
     t.field("arObjects", {
-      type: ArObjectQueryResult,
+      type: "ArObjectQueryResult",
 
       args: {
         pageIndex: intArg({
@@ -144,6 +182,9 @@ export const ArObjectQueries = extendType({
               ArObjectStatusEnum.MINTING,
               ArObjectStatusEnum.MINTED,
             ],
+          },
+          creator: {
+            isBanned: false,
           },
         };
 
@@ -354,6 +395,7 @@ export const ArObjectQueries = extendType({
           isBanned: false,
           creator: {
             id: ctx.appUser?.id ?? 0,
+            isBanned: false,
           },
         };
         if ((pRI?.fieldsByTypeName?.ArObjectQueryResult as any)?.totalCount) {
@@ -485,7 +527,15 @@ export const ArObjectQueries = extendType({
         if ((pRI?.fieldsByTypeName?.ArObject as any)?.creator)
           include = {
             ...include,
-            creator: true,
+            creator: {
+              select: {
+                id: true,
+                bio: true,
+                pseudonym: true,
+                ethAddress: true,
+                isBanned: true,
+              },
+            },
           };
 
         return daoArObjectGetOwnById(
@@ -493,6 +543,171 @@ export const ArObjectQueries = extendType({
           appUser?.id ?? 0,
           Object.keys(include).length > 0 ? include : undefined
         );
+      },
+    });
+
+    t.nonNull.field("collection", {
+      type: "ArObjectQueryResult",
+
+      args: {
+        ethAddress: nonNull(stringArg()),
+      },
+
+      // resolve(root, args, ctx, info)
+      async resolve(...[, args]) {
+        let ownedTokens = await daoSubgraphGetOwnedTokenByEthAddress(
+          args.ethAddress,
+          1000,
+          0
+        );
+        if (ownedTokens) {
+          ownedTokens = ownedTokens.filter((t) => t.creator.id !== t.owner.id);
+          if (!ownedTokens || ownedTokens.length === 0)
+            return {
+              totalCount: 0,
+              arObjects: [],
+            };
+
+          const tokensInfo = await daoSubgraphGetParsedTokenInfo(ownedTokens);
+
+          if (!tokensInfo || tokensInfo.length === 0)
+            return {
+              totalCount: 0,
+              arObjects: [],
+            };
+
+          const keys = Object.keys(tokensInfo);
+
+          let include: Prisma.ArObjectInclude = {
+            artwork: {
+              select: {
+                id: true,
+                key: true,
+                title: true,
+                heroImage: true,
+              },
+            },
+            heroImage: true,
+            creator: {
+              select: {
+                id: true,
+                pseudonym: true,
+                ethAddress: true,
+              },
+            },
+          };
+
+          const arObjects = await daoArObjectQuery(
+            {
+              key: {
+                in: keys,
+              },
+              artwork: {
+                isPublic: true,
+                isBanned: false,
+              },
+              isBanned: false,
+              isPublic: true,
+              creator: {
+                isBanned: false,
+              },
+            },
+            include,
+            {
+              updatedAt: "desc",
+            },
+            0,
+            1000
+          );
+
+          if (arObjects) {
+            return {
+              totalCount: arObjects.length,
+              arObjects: arObjects.map((arObj: any) => {
+                return {
+                  ...arObj,
+                  subgraphInfo: tokensInfo[arObj.key] ?? [],
+                };
+              }),
+            };
+          }
+        }
+        return {
+          totalCount: 0,
+          arObjects: [],
+        };
+      },
+    });
+
+    t.nonNull.field("arObjectTokens", {
+      type: "ArObjectTokens",
+
+      args: {
+        key: nonNull(stringArg()),
+      },
+
+      // resolve(root, args, ctx, info)
+      async resolve(...[, args]) {
+        const arObjTokens = await daoSubgraphGetArObjectTokens(
+          args.key,
+          100,
+          0
+        );
+
+        if (arObjTokens) {
+          const tokenInfo = await daoSubgraphGetParsedTokenInfos(arObjTokens);
+
+          if (!tokenInfo || tokenInfo.length === 0)
+            return {
+              totalCount: 0,
+              tokens: [],
+            };
+
+          const collectors = tokenInfo.reduce((colls: string[], token: any) => {
+            if (token.owner === token.creator || colls.includes(token.owner))
+              return colls;
+
+            return [...colls, token.owner];
+          }, []);
+
+          const arObjCollectors = await daoPublicUserQuery(
+            {
+              ethAddress: {
+                in: collectors,
+              },
+            },
+            {
+              pseudonym: "asc",
+            },
+            0,
+            1000
+          );
+
+          return {
+            totalCount: tokenInfo.length,
+            tokens: tokenInfo.map((token: any) => {
+              let collector = null;
+
+              if (collectors.includes(token.owner)) {
+                collector = arObjCollectors
+                  ? arObjCollectors.find(
+                      (c) => c.ethAddress?.toLowerCase() === token.owner
+                    )
+                  : null;
+              }
+
+              return {
+                id: token.id,
+                subgraphinfo: token,
+                collector,
+              };
+            }),
+          };
+        }
+        return {
+          totalCount: 0,
+          tokens: [],
+        };
       },
     });
   },

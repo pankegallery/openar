@@ -43,11 +43,40 @@ const userProfileQuery = gql`
         }
       }
     }
+    collection(ethAddress: $ethAddress) {
+      totalCount
+      arObjects {
+        id
+        key
+        title
+        editionOf
+        subgraphInfo
+        createdAt
+        creator {
+          pseudonym
+          id
+          ethAddress
+        }
+        heroImage {
+          id
+          meta
+          status
+        }
+        artwork {
+          title
+          key
+          heroImage {
+            id
+            meta
+            status
+          }
+        }
+      }
+    }
   }
 `;
 
 export const User = () => {
-
   // ___________________ Query user data __________________
 
   const [appUser] = useAuthentication();
@@ -59,11 +88,10 @@ export const User = () => {
     },
   });
 
-  const { userProfileRead } = data ?? {};
+  const { userProfileRead, collection } = data ?? {};
   console.log("[Profile] User", data?.userProfileRead);
 
   const name = userProfileRead?.pseudonym ?? userProfileRead?.ethAddress;
-
 
   // ___________________ Set MediaQuery const __________________
 
@@ -75,9 +103,8 @@ export const User = () => {
 
   // ___________________ Build page module logic __________________
 
-
   const hasArtworks = userProfileRead?.artworks.length > 0;
-  const hasCollection = false;
+  const hasCollection = collection && collection.totalCount > 0;
 
   const showCollectionColumn = hasCollection;
   const showCollectionPlaceholder = !hasCollection && isDesktop;
@@ -93,6 +120,7 @@ export const User = () => {
   if (!isMobile) {
     detailsColumnWidth = "auto";
   }
+
 
   return (
     <>
@@ -141,7 +169,8 @@ export const User = () => {
             {showCollectionColumn && (
               <CollectionList
                 userName={name}
-                artworks={userProfileRead.artworks}
+                isPublic={false}
+                objects={collection.arObjects}
                 width={collectionColumnWidth}
                 col={1}
               />
@@ -163,8 +192,6 @@ export const User = () => {
               user={userProfileRead}
               showArtworks={true}
             />
-
-
           </Flex>
         )}
       </ModulePage>

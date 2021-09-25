@@ -12,7 +12,8 @@ export const getArObjectTokenInfoGQL = gql`
         amount
       }
       id
-      transactionHash
+      arObjectKey
+      artworkKey
       contentURI
       metadataURI
       contentHash
@@ -24,6 +25,13 @@ export const getArObjectTokenInfoGQL = gql`
       }
       owner {
         id
+      }
+      inactiveBids {
+        id
+        amount
+        type
+        inactivatedAtTimestamp
+        inactivatedAtBlockNumber
       }
     }
   }

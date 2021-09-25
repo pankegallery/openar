@@ -5,3 +5,4 @@ export * from "./artwork";
 export * from "./arobject";
 export * from "./image";
 export * from "./armodel";
+export * from "./subgraph";

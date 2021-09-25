@@ -20,10 +20,14 @@ import {
 import { ArrowLink } from "~/components/ui";
 import { useAuthentication, useSSRSaveMediaQuery } from "~/hooks";
 
-export const PublicUserProfile = ({ user }: { user: any }) => {
+export const PublicUserProfile = ({
+  user,
+  collection,
+}: {
+  user: any;
+  collection: any;
+}) => {
   const [appUser] = useAuthentication();
-
-  console.log(appUser, user);
 
   if (appUser && appUser.ethAddress === user.ethAddress) {
     console.log("PublicUserProfile Redirect to /x/");
@@ -31,7 +35,6 @@ export const PublicUserProfile = ({ user }: { user: any }) => {
     Router.replace("/x/");
   }
 
-  console.log("[Profile] User", user);
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
   const isTablet = useSSRSaveMediaQuery(
     "(min-width: 45.000001rem) and (max-width: 74.9999rem)"
@@ -39,10 +42,8 @@ export const PublicUserProfile = ({ user }: { user: any }) => {
   const isMobile = useSSRSaveMediaQuery("(max-width: 45rem)");
 
   const hasArtworks = user.artworks.length > 0;
-  console.log("[Profile] hasArtworks", hasArtworks);
-
-
-  const hasCollection = false;
+  
+  const hasCollection = collection && collection.totalCount > 0;
   const name = user.pseudonym ?? user.ethAddress;
 
   const showArtworksUnderDetails =
@@ -117,7 +118,8 @@ export const PublicUserProfile = ({ user }: { user: any }) => {
         {showCollectionColumn && (
           <CollectionList
             userName={name}
-            artworks={user.artworks}
+            isPublic
+            objects={collection.arObjects}
             width={collectionColumnWidth}
             col={!hasArtworks ? 2 : 1}
           />
@@ -187,21 +189,51 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           }
         }
       }
+      collection(ethAddress: $ethAddress) {
+        totalCount
+        arObjects {
+          id
+          key
+          title
+          editionOf
+          subgraphInfo
+          createdAt
+          artwork {
+            id
+            key
+          }
+          creator {
+            pseudonym
+            id
+            ethAddress
+          }
+          heroImage {
+            id
+            meta
+            status
+          }
+          artwork {
+            title
+            heroImage {
+              id
+              meta
+              status
+            }
+          }
+        }
+      }
     }
   `;
-
-  console.log("params.eth: ", params.eth);
 
   const { data } = await client.query({
     query: userQuery,
     variables: {
-      ethAddress: params.eth,
+      ethAddress: params.eth.toLowerCase(),
     },
   });
 
-  console.log("user query: ", data?.user);
+  console.log(data?.collection?.arObjects);
 
-  //   TODO: access protect artwork here
   if (!data?.user) {
     return {
       notFound: true,
@@ -211,6 +243,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   return {
     props: {
       user: data?.user,
+      collection: data?.collection,
     },
   };
 };

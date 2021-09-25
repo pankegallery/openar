@@ -111,7 +111,14 @@ export const EventQueries = extendType({
             },
             {
               heroImage: true,
-              creator: true,
+              creator: {
+                select: {
+                  id: true,
+                  bio: true,
+                  pseudonym: true,
+                  ethAddress: true,
+                },
+              },
               arObjects: {
                 select: {
                   id: true,

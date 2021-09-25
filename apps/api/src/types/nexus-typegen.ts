@@ -164,6 +164,7 @@ export interface NexusGenObjects {
   }
   ArObject: { // root type
     arModels?: Array<NexusGenRootTypes['ArModel'] | null> | null; // [ArModel]
+    artwork?: NexusGenRootTypes['Artwork'] | null; // Artwork
     askPrice?: number | null; // Float
     collector?: NexusGenRootTypes['User'] | null; // User
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -182,6 +183,7 @@ export interface NexusGenObjects {
     ownerEthAddress?: string | null; // String
     setInitialAsk?: boolean | null; // Boolean
     status: number; // Int!
+    subgraphInfo?: NexusGenScalars['JSON'] | null; // JSON
     title?: string | null; // String
     type?: number | null; // Int
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -190,6 +192,15 @@ export interface NexusGenObjects {
   }
   ArObjectQueryResult: { // root type
     arObjects?: Array<NexusGenRootTypes['ArObject'] | null> | null; // [ArObject]
+    totalCount?: number | null; // Int
+  }
+  ArObjectToken: { // root type
+    collector?: NexusGenRootTypes['User'] | null; // User
+    id?: number | null; // Int
+    subgraphinfo?: NexusGenScalars['JSON'] | null; // JSON
+  }
+  ArObjectTokens: { // root type
+    tokens?: Array<NexusGenRootTypes['ArObjectToken'] | null> | null; // [ArObjectToken]
     totalCount?: number | null; // Int
   }
   Artwork: { // root type
@@ -339,6 +350,7 @@ export interface NexusGenFieldTypes {
   }
   ArObject: { // field return type
     arModels: Array<NexusGenRootTypes['ArModel'] | null> | null; // [ArModel]
+    artwork: NexusGenRootTypes['Artwork'] | null; // Artwork
     askPrice: number | null; // Float
     collector: NexusGenRootTypes['User'] | null; // User
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -357,6 +369,7 @@ export interface NexusGenFieldTypes {
     ownerEthAddress: string | null; // String
     setInitialAsk: boolean | null; // Boolean
     status: number; // Int!
+    subgraphInfo: NexusGenScalars['JSON'] | null; // JSON
     title: string | null; // String
     type: number | null; // Int
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -365,6 +378,15 @@ export interface NexusGenFieldTypes {
   }
   ArObjectQueryResult: { // field return type
     arObjects: Array<NexusGenRootTypes['ArObject'] | null> | null; // [ArObject]
+    totalCount: number | null; // Int
+  }
+  ArObjectToken: { // field return type
+    collector: NexusGenRootTypes['User'] | null; // User
+    id: number | null; // Int
+    subgraphinfo: NexusGenScalars['JSON'] | null; // JSON
+  }
+  ArObjectTokens: { // field return type
+    tokens: Array<NexusGenRootTypes['ArObjectToken'] | null> | null; // [ArObjectToken]
     totalCount: number | null; // Int
   }
   Artwork: { // field return type
@@ -489,12 +511,14 @@ export interface NexusGenFieldTypes {
     arModelStatus: NexusGenRootTypes['ArModelStatus']; // ArModelStatus!
     arObject: NexusGenRootTypes['ArObject']; // ArObject!
     arObjectReadOwn: NexusGenRootTypes['ArObject']; // ArObject!
+    arObjectTokens: NexusGenRootTypes['ArObjectTokens']; // ArObjectTokens!
     arObjects: NexusGenRootTypes['ArObjectQueryResult'] | null; // ArObjectQueryResult
     arObjectsReadOwn: NexusGenRootTypes['ArObjectQueryResult'] | null; // ArObjectQueryResult
     artwork: NexusGenRootTypes['Artwork']; // Artwork!
     artworkReadOwn: NexusGenRootTypes['Artwork']; // Artwork!
     artworks: NexusGenRootTypes['ArtworkQueryResult'] | null; // ArtworkQueryResult
     artworksReadOwn: NexusGenRootTypes['ArtworkQueryResult'] | null; // ArtworkQueryResult
+    collection: NexusGenRootTypes['ArObjectQueryResult']; // ArObjectQueryResult!
     exhibition: NexusGenRootTypes['Exhibition']; // Exhibition!
     imageRead: NexusGenRootTypes['Image']; // Image!
     imageStatus: NexusGenRootTypes['ImageStatus']; // ImageStatus!
@@ -554,6 +578,7 @@ export interface NexusGenFieldTypeNames {
   }
   ArObject: { // field return type name
     arModels: 'ArModel'
+    artwork: 'Artwork'
     askPrice: 'Float'
     collector: 'User'
     createdAt: 'DateTime'
@@ -572,6 +597,7 @@ export interface NexusGenFieldTypeNames {
     ownerEthAddress: 'String'
     setInitialAsk: 'Boolean'
     status: 'Int'
+    subgraphInfo: 'JSON'
     title: 'String'
     type: 'Int'
     updatedAt: 'DateTime'
@@ -580,6 +606,15 @@ export interface NexusGenFieldTypeNames {
   }
   ArObjectQueryResult: { // field return type name
     arObjects: 'ArObject'
+    totalCount: 'Int'
+  }
+  ArObjectToken: { // field return type name
+    collector: 'User'
+    id: 'Int'
+    subgraphinfo: 'JSON'
+  }
+  ArObjectTokens: { // field return type name
+    tokens: 'ArObjectToken'
     totalCount: 'Int'
   }
   Artwork: { // field return type name
@@ -704,12 +739,14 @@ export interface NexusGenFieldTypeNames {
     arModelStatus: 'ArModelStatus'
     arObject: 'ArObject'
     arObjectReadOwn: 'ArObject'
+    arObjectTokens: 'ArObjectTokens'
     arObjects: 'ArObjectQueryResult'
     arObjectsReadOwn: 'ArObjectQueryResult'
     artwork: 'Artwork'
     artworkReadOwn: 'Artwork'
     artworks: 'ArtworkQueryResult'
     artworksReadOwn: 'ArtworkQueryResult'
+    collection: 'ArObjectQueryResult'
     exhibition: 'Exhibition'
     imageRead: 'Image'
     imageStatus: 'ImageStatus'
@@ -834,6 +871,9 @@ export interface NexusGenArgTypes {
     arObjectReadOwn: { // args
       id: number; // Int!
     }
+    arObjectTokens: { // args
+      key: string; // String!
+    }
     arObjects: { // args
       orderBy?: NexusGenScalars['JSON'] | null; // JSON
       pageIndex?: number | null; // Int
@@ -863,6 +903,9 @@ export interface NexusGenArgTypes {
       pageIndex?: number | null; // Int
       pageSize: number | null; // Int
       where?: NexusGenScalars['JSON'] | null; // JSON
+    }
+    collection: { // args
+      ethAddress: string; // String!
     }
     exhibition: { // args
       slug: string; // String!

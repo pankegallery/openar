@@ -125,6 +125,9 @@ export const ArtworkQueries = extendType({
             ],
           },
           arObjects: {
+            every: {
+              isBanned: false,
+            },
             some: {
               status: {
                 in: [
@@ -137,6 +140,9 @@ export const ArtworkQueries = extendType({
               },
             },
           },
+          creator: {
+            isBanned: false,
+          }
         };
 
         if ((pRI?.fieldsByTypeName?.ArtworkQueryResult as any)?.totalCount) {
@@ -257,6 +263,9 @@ export const ArtworkQueries = extendType({
         let where: Prisma.ArtworkWhereInput = {
           key: args.key,
           isBanned: false,
+          creator: {
+            isBanned: false,
+          },
           status: {
             in: [
               ArtworkStatusEnum.PUBLISHED,
@@ -264,6 +273,9 @@ export const ArtworkQueries = extendType({
             ],
           },
           arObjects: {
+            every: {
+              isBanned: false,
+            },
             some: {
               status: {
                 in: [
@@ -402,6 +414,7 @@ export const ArtworkQueries = extendType({
           ...where,
           creator: {
             id: ctx.appUser?.id ?? 0,
+            isBanned: false,
           },
         };
         if ((pRI?.fieldsByTypeName?.ArtworkQueryResult as any)?.totalCount) {

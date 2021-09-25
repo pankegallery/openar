@@ -24,6 +24,9 @@ export const ArtworkListItem = ({
   status,
   isWhite = false,
   isAdmin = false,
+  isPublic = true,
+  isCollectedObject = false,
+  subgraphInfo
 }: {
   id: number;
   title: string;
@@ -35,29 +38,39 @@ export const ArtworkListItem = ({
   status: number;
   isWhite?: boolean;
   isAdmin?: boolean;
+  isPublic?: boolean;
+  isCollectedObject?: boolean;
+  subgraphInfo?: any[];
 }) => {
   const router = useRouter();
 
   let artist = creator?.pseudonym ? `${creator?.pseudonym}` : "";
 
-  // `
   if (artist.trim().length === 0) artist = creator?.ethAddress;
 
-  let cameFromExhibition;
+  const baseURL = router.pathname.indexOf("/e/") > -1 ? router.asPath : "/a"
 
-  // TODO: VVU Router.components does not work, does it? TypeScript complains that the function is not known
-  // SO I changed the line to simply check if the pathname starts with /e/ should do the same thing
-  //if(Router.components) cameFromExhibition = "/e/[slug]" in Router.components, right? 
-  cameFromExhibition = router.pathname.indexOf("/e/") > -1;
-
-  
-
-  const baseURL = cameFromExhibition ? router.asPath : "/a"
-
-  // CHANGED: There is an edit button now when logged in.
-  //  const href = isAdmin ? `/x/a/${id}/update` : `${baseURL}/${urlKey}/`;
   const href = `${baseURL}/${urlKey}/`;
 
+  let editionInfos, purchasePrices;
+
+  if (isCollectedObject && subgraphInfo && subgraphInfo.length > 0) {
+    const eNumbers = subgraphInfo.map((token) =>  token.editionNumber)
+    if (eNumbers)
+      editionInfos =  <Box fontSize="sm">
+      Edition # {eNumbers.join(", ")} of {subgraphInfo[0].editionOf}
+      </Box> 
+
+    if (!isPublic) {
+      const pPrices = subgraphInfo.map((token) =>  token.boughtFor)
+      if (pPrices)
+      purchasePrices =  <Box fontSize="sm">
+        Bought for {pPrices.join(", ")} xDai
+        </Box> 
+    }
+  } 
+    
+  console.log(subgraphInfo);
   return (
     <LinkBox
       as="article"
@@ -80,6 +93,8 @@ export const ArtworkListItem = ({
           whiteSpace="nowrap"
           className="artist"
           textStyle="meta">{artist}</chakra.span>
+        {editionInfos}
+        {purchasePrices}
       </Box>
       <Box
         className={`${

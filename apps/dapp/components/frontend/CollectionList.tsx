@@ -10,21 +10,23 @@ import pick from "lodash/pick";
 import { useSSRSaveMediaQuery } from "~/hooks";
 
 export const CollectionList = ({
-  artworks,
+  objects,
   width,
   userName,
-  isPublic,
+  isPublic = false,
+  isAdmin = false,
   col,
 }: {
-  artworks?: any[],
-  width: string,
-  userName: string,
-  isPublic?: Boolean,
-  col: number,
+  objects?: any[];
+  width: string;
+  userName: string;
+  isPublic?: boolean;
+  isAdmin?: boolean;
+  col: number;
 }) => {
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
 
-  const isCollectionItems = artworks;
+  const hasCollectionItems = objects && objects.length > 0;
 
   return (
     <Flex
@@ -56,32 +58,34 @@ export const CollectionList = ({
 
       {/* --------- ROW: Artworks --------- */}
 
-      {isCollectionItems && (
+      {hasCollectionItems && (
         <Box height="100%" width="100%" overflow="scroll">
-          {artworks.length > 0 && (
-            <Flex width="100%" flexWrap="wrap">
-              {artworks.map((artwork) => (
-                <ArtworkListItem
-                  isAdmin={false}
-                  urlKey={artwork.key}
-                  col={col}
-                  key={artwork.key}
-                  {...pick(artwork, [
-                    "id",
-                    "key",
-                    "heroImage",
-                    "title",
-                    "creator",
-                    "status",
-                  ])}
-                />
-              ))}
-            </Flex>
-          )}
+          <Flex width="100%" flexWrap="wrap">
+            {objects.map((object) => (
+              <ArtworkListItem
+                isAdmin={isAdmin}
+                isPublic={isPublic}
+                urlKey={`${object.artwork.key}/${object.key}`}
+                col={col}
+                key={object.key}
+                isCollectedObject={true}
+                subgraphInfo={object?.subgraphInfo}
+                {...pick(object, [
+                  "id",
+                  "key",
+                  "artwork",
+                  "heroImage",
+                  "title",
+                  "creator",
+                  "status",
+                ])}
+              />
+            ))}
+          </Flex>
         </Box>
       )}
 
-      {!isCollectionItems && (
+      {!hasCollectionItems && (
         <Flex
           layerStyle="backdropBlurred"
           w={width}
@@ -103,13 +107,14 @@ export const CollectionList = ({
             position: "absolute",
             width: "100%",
             height: "100%",
-            display: "block"
+            display: "block",
           }}
         >
-          {isPublic &&
+          {isPublic && (
             <Box m="auto" w="60%" pb="10">
               <chakra.p textStyle="subtitle">
-                {userName ? userName : "The user"} hasn’t started collecting yet.
+                {userName ? userName : "The user"} hasn’t started collecting
+                yet.
               </chakra.p>
               <chakra.p>
                 It’s not too late. There is still a chance for{" "}
@@ -117,7 +122,7 @@ export const CollectionList = ({
                 collectors badge.
               </chakra.p>
             </Box>
-          }
+          )}
           {!isPublic && (
             <>
               <Box mt="auto" w="60%" pb="10" mb="10" mx="auto">
@@ -125,7 +130,8 @@ export const CollectionList = ({
                   Seems like you haven’t started collecting yet.
                 </chakra.p>
                 <chakra.p>
-                  Purchase artworks to build up your collection and receive your first collector badge.
+                  Purchase artworks to build up your collection and receive your
+                  first collector badge.
                 </chakra.p>
               </Box>
               <Box
@@ -136,10 +142,7 @@ export const CollectionList = ({
                 borderTop="1px solid white"
               >
                 <Box className="info" p="4">
-                  <chakra.h2
-                    className="title"
-                    fontWeight="600"
-                  >
+                  <chakra.h2 className="title" fontWeight="600">
                     Collector’s Badge 2021
                   </chakra.h2>
                   <chakra.span
@@ -149,11 +152,12 @@ export const CollectionList = ({
                     text-overflow="ellipsis"
                     white-space="nowrap"
                     className="artist"
-                    textStyle="meta">Anna Luise Lorenz</chakra.span>
+                    textStyle="meta"
+                  >
+                    Anna Luise Lorenz
+                  </chakra.span>
                 </Box>
-                <Box
-                  className="img"
-                >
+                <Box className="img">
                   <Image
                     src="/images/collector-blurred.png"
                     width="66.66%"

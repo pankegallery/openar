@@ -21,6 +21,7 @@ type ArModelStatus {
 
 type ArObject {
   arModels: [ArModel]
+  artwork: Artwork
   askPrice: Float
   collector: User
   createdAt: DateTime
@@ -39,6 +40,7 @@ type ArObject {
   ownerEthAddress: String
   setInitialAsk: Boolean
   status: Int!
+  subgraphInfo: JSON
   title: String
   type: Int
   updatedAt: DateTime
@@ -54,9 +56,24 @@ input ArObjectMintInput {
   setInitialAsk: Boolean
 }
 
-"""List all the ArObjects in the database."""
+"""
+List all the ArObjects in the database. Or the collection info of one user.
+"""
 type ArObjectQueryResult {
   arObjects: [ArObject]
+  totalCount: Int
+}
+
+"""The user info and subgraph token info(s) for one collector."""
+type ArObjectToken {
+  collector: User
+  id: Int
+  subgraphinfo: JSON
+}
+
+"""Lists all toeksn of one arObject"""
+type ArObjectTokens {
+  tokens: [ArObjectToken]
   totalCount: Int
 }
 
@@ -276,12 +293,14 @@ type Query {
   arModelStatus(id: Int!): ArModelStatus!
   arObject(key: String!): ArObject!
   arObjectReadOwn(id: Int!): ArObject!
+  arObjectTokens(key: String!): ArObjectTokens!
   arObjects(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ArObjectQueryResult
   arObjectsReadOwn(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ArObjectQueryResult
   artwork(key: String!): Artwork!
   artworkReadOwn(id: Int!): Artwork!
   artworks(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ArtworkQueryResult
   artworksReadOwn(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ArtworkQueryResult
+  collection(ethAddress: String!): ArObjectQueryResult!
   exhibition(slug: String!): Exhibition!
   imageRead(id: Int!): Image!
   imageStatus(id: Int!): ImageStatus!
