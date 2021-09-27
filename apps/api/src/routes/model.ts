@@ -11,6 +11,7 @@ import { arModelCreate } from "../services/serviceArModel";
 
 import { getApiConfig } from "../config";
 import { ApiError } from "../utils";
+import { authAuthenticateUserByToken } from "../services/serviceAuth";
 
 const apiConfig = getApiConfig();
 
@@ -79,9 +80,22 @@ const createArModelMetaInfo = (
 };
 
 export const postArModel = async (req: Request, res: Response) => {
-  // TODO: access protection
-  // TODO: howto trigger refresh?
-  // Maybe autosend auth token
+  const refreshToken = req?.cookies?.refreshToken ?? "";
+  if (refreshToken) {
+    try {
+      const appUserInRefreshToken = authAuthenticateUserByToken(refreshToken);
+      if (appUserInRefreshToken) {
+        if (appUserInRefreshToken.id !== parseInt(req.body.ownerId)) {
+          throw new ApiError(httpStatus.FORBIDDEN, "Access denied");
+        }
+      }
+    } catch (Err) {
+      throw new ApiError(httpStatus.FORBIDDEN, "Access denied");
+    }
+  } else {
+    throw new ApiError(httpStatus.FORBIDDEN, "Access denied");
+  }
+
   // Userland fix attempt for https://github.com/expressjs/multer/pull/971
   req.socket.on("error", (error) => {
     logger.warn(error);

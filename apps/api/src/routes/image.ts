@@ -11,6 +11,7 @@ import { imageCreate } from "../services/serviceImage";
 
 import { getApiConfig } from "../config";
 import { ApiError } from "../utils";
+import { authAuthenticateUserByToken } from "../services/serviceAuth";
 
 const apiConfig = getApiConfig();
 
@@ -74,9 +75,22 @@ const createImageMetaInfo = (
 };
 
 export const postImage = async (req: Request, res: Response) => {
-  // TODO: access protection
-  // TODO: howto trigger refresh?
-  // Maybe autosend auth token
+  
+  const refreshToken = req?.cookies?.refreshToken ?? "";
+  if (refreshToken) {
+    try {
+      const appUserInRefreshToken = authAuthenticateUserByToken(refreshToken);
+      if (appUserInRefreshToken) {
+        if (appUserInRefreshToken.id !== parseInt(req.body.ownerId)) {
+          throw new ApiError(httpStatus.FORBIDDEN, "Access denied");
+        }
+      }
+    } catch (Err) {
+      throw new ApiError(httpStatus.FORBIDDEN, "Access denied");
+    }
+  } else {
+    throw new ApiError(httpStatus.FORBIDDEN, "Access denied");
+  }
 
   try {
     if (req.body.ownerId && !Number.isNaN(req.body.ownerId)) {
@@ -117,9 +131,22 @@ export const postImage = async (req: Request, res: Response) => {
 };
 
 export const postProfileImage = async (req: Request, res: Response) => {
-  // TODO: access protection
-  // TODO: howto trigger refresh?
-  // Maybe autosend auth token
+
+  const refreshToken = req?.cookies?.refreshToken ?? "";
+  if (refreshToken) {
+    try {
+      const appUserInRefreshToken = authAuthenticateUserByToken(refreshToken);
+      if (appUserInRefreshToken) {
+        if (appUserInRefreshToken.id !== parseInt(req.body.ownerId)) {
+          throw new ApiError(httpStatus.FORBIDDEN, "Access denied");
+        }
+      }
+    } catch (Err) {
+      throw new ApiError(httpStatus.FORBIDDEN, "Access denied");
+    }
+  } else {
+    throw new ApiError(httpStatus.FORBIDDEN, "Access denied");
+  }
 
   try {
     if (req.body.ownerId && !Number.isNaN(req.body.ownerId)) {

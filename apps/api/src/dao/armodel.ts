@@ -113,7 +113,6 @@ export const daoArModelDelete = async (id: number): Promise<ArModel> => {
     },
   });
 
-  // TODO: schedule task to wipe file off the disk
   return filteredOutputByBlacklistOrNotFound(
     arModel,
     apiConfig.db.privateJSONDataKeys.armodel
@@ -151,7 +150,6 @@ export const daoArModelSetToDelete = async (id: number): Promise<ArModel> => {
     },
   });
 
-  // TODO: schedule task to wipe file off the disk
   return filteredOutputByBlacklistOrNotFound(
     arModel,
     apiConfig.db.privateJSONDataKeys.armodel

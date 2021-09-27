@@ -113,7 +113,6 @@ export const daoImageDelete = async (id: number): Promise<Image> => {
     },
   });
 
-  // TODO: schedule task to wipe file off the disk
   return filteredOutputByBlacklistOrNotFound(
     image,
     apiConfig.db.privateJSONDataKeys.image
@@ -165,7 +164,6 @@ export const daoImageSetToDelete = async (id: number): Promise<Image> => {
     },
   });
 
-  // TODO: schedule task to wipe file off the disk
   return filteredOutputByBlacklistOrNotFound(
     image,
     apiConfig.db.privateJSONDataKeys.image
