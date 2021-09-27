@@ -115,6 +115,11 @@ type Artwork {
   video: String
 }
 
+input ArtworkArObjectOrderInput {
+  id: Int
+  orderNumber: Int
+}
+
 """List all the artworks in the database."""
 type ArtworkQueryResult {
   artworks: [Artwork]
@@ -261,6 +266,7 @@ type Mutation {
   arObjectUpdate(data: ArObjectUpsertInput!, id: Int!): ArObject!
   artworkCreate(data: ArtworkUpsertInput!): Artwork!
   artworkDelete(id: Int!): BooleanResult!
+  artworkReorderArObjects(data: [ArtworkArObjectOrderInput]!, id: Int!): Artwork!
   artworkUpdate(data: ArtworkUpsertInput!, id: Int!): Artwork!
   authLogin(ethAddress: String!, signedMessage: String!): AuthPayload!
   authLogout(userId: Int!): BooleanResult!

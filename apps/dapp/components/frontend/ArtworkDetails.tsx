@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { useLazyQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
 import { Box, Text, Flex, chakra } from "@chakra-ui/react";
 import { ArrowLink } from "~/components/ui";
@@ -26,6 +26,7 @@ import {
 } from "@openar/crypto";
 
 import { appConfig } from "~/config";
+import { getArtistName } from "~/utils";
 
 export const ArtworkDetails = ({
   artwork,
@@ -54,7 +55,7 @@ export const ArtworkDetails = ({
     useState(false);
   const { library, account, chainId } = useWalletLogin();
 
-  const [subgraphQueryTrigger, subgraphQuery] = useLazyQuery(
+  const subgraphQuery = useQuery(
     arObjectTokensQueryGQL,
     {
       variables: {
@@ -63,15 +64,10 @@ export const ArtworkDetails = ({
     }
   );
 
-  useEffect(() => {
-    console.log("trigger", object?.key);
-    subgraphQueryTrigger();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const artist = artwork.creator?.pseudonym
-    ? artwork.creator?.pseudonym
-    : artwork.creator?.ethAddress;
+  const artist = getArtistName(
+    artwork.creator?.pseudonym,
+    artwork.creator?.ethAddress
+  );
 
   useEffect(() => {
     if (appUser && appUser.ethAddress === artwork?.creator?.ethAddress) {
@@ -144,8 +140,9 @@ export const ArtworkDetails = ({
       );
 
       const tx = await openAR
-        .setNativeBid(
-          numberToBigNumber(tokenId),
+        .buyFirstAvailableNative(
+          ownedToken.map((token) => token.subgraphinfo.id),
+          artwork.creator?.ethAddress.toLowerCase(),
           openAR.createBid(bid, account),
           {
             platform: platformCuts.furtherSalesPlatform,
@@ -156,7 +153,7 @@ export const ArtworkDetails = ({
           }
         )
         .catch((err) => {
-          setIsAwaitingBlockConfirmation(false);
+          setIsAwaitingBlockConfirmation(false); 
           if (err.message.indexOf("denied transaction") > -1) {
             setCryptoError("You've rejected the transaction");
           } else {
@@ -178,11 +175,14 @@ export const ArtworkDetails = ({
           setTimeout(
             () => {
               // TODO: make interaction nicer ...
+              // Communicate the token number of the just bought token
+              // Query subgraph by owner wallet for the tokens of this object.
+              // Latest inactive bid should reveal the 
               buySuccessToast(
                 "Congratulations",
-                `You've bought TODO: token number of `
+                `You've bought an edition of this object `
               );
-              subgraphQueryTrigger();
+              subgraphQuery.refetch();
               setIsAwaitingBlockConfirmation(false);
             },
             chainId === 31337 ? 5000 : 0
@@ -354,18 +354,11 @@ export const ArtworkDetails = ({
             <Box
               className="artworkVideo"
               borderBottom="1px solid white"
-              p="6"
-              sx={{
-                ".chakra-aspect-ratio": {
-                  mx: "-6",
-                  mt: "6",
-                  mb: "-10",
-                },
-              }}
+              
             >
-              <chakra.p textStyle="label" className="label">
+              <Box p="6" textStyle="label" className="label" mb="0px !important">
                 Artwork video
-              </chakra.p>
+              </Box>
               <EmbeddedVideoPlayer url={artwork.video} />
             </Box>
           )}
@@ -378,9 +371,16 @@ export const ArtworkDetails = ({
             {Object.keys(collectors).map((ckey) => {
               const collector = collectors[ckey];
 
-              return <Box key={`c-${collector.collector.ethAddres}`}>
-                {collector.collector.ethAddress}
-              </Box>;
+              return (
+                <Box key={`c-${collector.collector.ethAddress}`}>
+                  <ArrowLink href={`/u/${collector.collector.ethAddress}`}>
+                    {getArtistName(
+                      collector.collector.pseudonym,
+                      collector.collector.ethAddress
+                    )}
+                  </ArrowLink>
+                </Box>
+              );
             })}
           </Box>
         )}

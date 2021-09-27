@@ -5,20 +5,16 @@ import { gql } from "@apollo/client";
 
 import { LayoutBlank } from "~/components/app";
 import { Box, Grid, Flex, chakra } from "@chakra-ui/react";
-import Link from "next/link";
-import Image from "next/image";
 
 import { getApolloClient } from "~/services/apolloClient";
 
-import Arrow from "~/assets/img/arrow.svg";
 import {
-  ArtworkListItem,
   CollectionList,
   ArtworkList,
   UserDetails,
 } from "~/components/frontend";
-import { ArrowLink } from "~/components/ui";
 import { useAuthentication, useSSRSaveMediaQuery } from "~/hooks";
+import { getArtistName } from "~/utils";
 
 export const PublicUserProfile = ({
   user,
@@ -44,7 +40,7 @@ export const PublicUserProfile = ({
   const hasArtworks = user.artworks.length > 0;
   
   const hasCollection = collection && collection.totalCount > 0;
-  const name = user.pseudonym ?? user.ethAddress;
+  const name = getArtistName(user.pseudonym, user.ethAddress);
 
   const showArtworksUnderDetails =
     (hasArtworks && !isDesktop && hasCollection) || (hasArtworks && isMobile);

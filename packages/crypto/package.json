@@ -10,7 +10,7 @@
   "source": "src/index.ts",
   "main": "dist/index.js",
   "private": true,
-  "typings": "dist/index.d.ts",
+  "typings": "src/index.ts",
   "files": [
     "dist"
   ],

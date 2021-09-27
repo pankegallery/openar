@@ -677,6 +677,17 @@ export async function isMintDataVerified(
   return isTokenURIVerified && isMetadataURIVerified;
 }
 
+export const parseWalletErrors = (str: string) => {
+  if (str.indexOf("denied transaction") > -1) {
+    return "You've rejected the transaction";
+  } else if (str.indexOf("once too low") > -1) {
+    return "The nonce given for the transaction was too low";
+  } else if (str.indexOf("once too high") > -1) {
+    return "The nonce given for the transaction was too high";
+  }
+  return str;
+};
+
 export const stringToHex = (str: string) => utils.formatBytes32String(str);
 
 export const stringToSha256 = (str: string) => utils.sha256(str);

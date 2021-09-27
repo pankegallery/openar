@@ -31,13 +31,13 @@ export interface FieldNumberSettings {
   valid?: boolean;
 }
 
-const format = (val: any, settings: FieldNumberSettings) => {
+const format = (val: any, precision: number | undefined) => {
   let num = val;
 
   if (Number.isNaN(val)) return "0.00";
 
-  if (settings.precision && settings.precision > 0) {
-    if (typeof num === "number") num = num.toFixed(settings.precision);
+  if (precision && precision > 0) {
+    if (typeof num === "number") num = num.toFixed(precision);
 
     if (typeof num === "string" && num.indexOf(".") > -1) {
       const parts = num.split(".");
@@ -51,7 +51,7 @@ const format = (val: any, settings: FieldNumberSettings) => {
   return num;
 };
 
-const formatDefaultValue = (val: any, settings: FieldNumberSettings) => {
+const formatDefaultValue = (val: any, settings: number | undefined) => {
   let defaultValue = format(typeof val !== "undefined" ? val : "0.00", settings);
 
   if (typeof defaultValue !== "string") defaultValue = defaultValue.toString();
@@ -76,15 +76,15 @@ export const FieldNumberInput = ({
 }) => {
   const fieldRef = useRef<HTMLInputElement | null>(null);
 
-  const [fieldValue, setFieldValue] = useState(formatDefaultValue(settings?.defaultValue, settings));
+  const [fieldValue, setFieldValue] = useState(formatDefaultValue(settings?.defaultValue, settings.precision));
 
   useEffect(() => {
     if (settings?.value) {
       console.log("called set value");
-      setFieldValue(formatDefaultValue(settings?.value, settings));
+      setFieldValue(formatDefaultValue(settings?.value, settings.precision));
     }
       
-  }, [settings, settings?.value]);
+  }, [settings?.value, settings?.precision]);
 
   const {
     formState: { errors },
@@ -161,7 +161,7 @@ export const FieldNumberInput = ({
                     onChangeHandler(valueAsNumber);
                   },
                 }}
-                value={format(fieldValue, settings)}
+                value={format(fieldValue, settings.precision)}
                 defaultValue={fieldValue}
                 max={
                   typeof settings?.max !== "undefined"

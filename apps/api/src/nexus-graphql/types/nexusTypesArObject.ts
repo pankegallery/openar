@@ -561,7 +561,9 @@ export const ArObjectQueries = extendType({
           0
         );
         if (ownedTokens) {
-          ownedTokens = ownedTokens.filter((t) => t.creator.id !== t.owner.id);
+          ownedTokens = ownedTokens.filter(
+            (token: any) => token.creator.id !== token.owner.id
+          );
           if (!ownedTokens || ownedTokens.length === 0)
             return {
               totalCount: 0,

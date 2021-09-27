@@ -1,16 +1,5 @@
 import gql from "graphql-tag";
 
-export const userCreateMutationGQL = gql`
-  mutation userCreate($data: UserCreateInput!) {
-    userCreate(data: $data) {
-      id
-      firstName
-      lastName
-      email
-    }
-  }
-`;
-
 export const userDeleteMutationGQL = gql`
   mutation userDelete($id: Int!) {
     userDelete(id: $id) {

@@ -79,6 +79,10 @@ export interface NexusGenInputs {
     status?: number | null; // Int
     title: string; // String!
   }
+  ArtworkArObjectOrderInput: { // input type
+    id?: number | null; // Int
+    orderNumber?: number | null; // Int
+  }
   ArtworkUpsertInput: { // input type
     creator?: NexusGenScalars['JSON'] | null; // JSON
     description: string; // String!
@@ -481,6 +485,7 @@ export interface NexusGenFieldTypes {
     arObjectUpdate: NexusGenRootTypes['ArObject']; // ArObject!
     artworkCreate: NexusGenRootTypes['Artwork']; // Artwork!
     artworkDelete: NexusGenRootTypes['BooleanResult']; // BooleanResult!
+    artworkReorderArObjects: NexusGenRootTypes['Artwork']; // Artwork!
     artworkUpdate: NexusGenRootTypes['Artwork']; // Artwork!
     authLogin: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     authLogout: NexusGenRootTypes['BooleanResult']; // BooleanResult!
@@ -707,6 +712,7 @@ export interface NexusGenFieldTypeNames {
     arObjectUpdate: 'ArObject'
     artworkCreate: 'Artwork'
     artworkDelete: 'BooleanResult'
+    artworkReorderArObjects: 'Artwork'
     artworkUpdate: 'Artwork'
     authLogin: 'AuthPayload'
     authLogout: 'BooleanResult'
@@ -807,6 +813,10 @@ export interface NexusGenArgTypes {
       data: NexusGenInputs['ArtworkUpsertInput']; // ArtworkUpsertInput!
     }
     artworkDelete: { // args
+      id: number; // Int!
+    }
+    artworkReorderArObjects: { // args
+      data: Array<NexusGenInputs['ArtworkArObjectOrderInput'] | null>; // [ArtworkArObjectOrderInput]!
       id: number; // Int!
     }
     artworkUpdate: { // args

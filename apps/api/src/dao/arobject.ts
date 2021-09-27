@@ -63,8 +63,28 @@ export const daoArObjectCreate = async (
   data: Prisma.ArObjectCreateInput
 ): Promise<ArObject> => {
   const arObject = await prisma.arObject.create({
-    data,
+    data: {
+      ...data,
+      orderNumber: 1,
+    },
   });
+
+  const count = await prisma.arObject.count({
+    where: {
+      artworkId: arObject.artworkId,
+    },
+  });
+
+  if (count > 1) {
+    await prisma.arObject.update({
+      data: {
+        orderNumber: count,
+      },
+      where: {
+        id: arObject.id,
+      },
+    });
+  }
 
   return filteredOutputByBlacklistOrNotFound(
     arObject,
@@ -140,6 +160,26 @@ export const daoArObjectUpdate = async (
   );
 };
 
+export const daoArObjectReorder = async (
+  id: number,
+  data: any
+): Promise<number> => {
+  const promises = await prisma.$transaction(
+    data.map(async (arO: any) => {
+      return prisma.arObject.update({
+        data: {
+          orderNumber: arO.orderNumber,
+        },
+        where: {
+          id: arO.id,
+        },
+      });
+    })
+  );
+
+  return promises.length;
+};
+
 export const daoArObjectDelete = async (id: number): Promise<ArObject> => {
   const currentObject = await daoArObjectGetById(id, {
     arModels: true,
@@ -154,7 +194,7 @@ export const daoArObjectDelete = async (id: number): Promise<ArObject> => {
   )
     throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Delete failed");
 
-  await Promise.all(
+  await prisma.$transaction(
     (currentObject as any).arModels.map(async (obj: any) => {
       await daoArModelSetToDelete(obj.id);
     })
@@ -185,4 +225,5 @@ export default {
   daoArObjectUpdate,
   daoArObjectDelete,
   daoArObjectGetOwnById,
+  daoArObjectReorder,
 };

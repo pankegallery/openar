@@ -9,7 +9,7 @@ import {
   Button
 } from "@chakra-ui/react";
 import { ApiImage } from "../ui";
-import { ArtworkStatusEnum } from "~/utils";
+import { ArtworkStatusEnum, getArtistName } from "~/utils";
 import Link from "next/link";
 import Router, {useRouter} from 'next/router'
 
@@ -44,9 +44,7 @@ export const ArtworkListItem = ({
 }) => {
   const router = useRouter();
 
-  let artist = creator?.pseudonym ? `${creator?.pseudonym}` : "";
-
-  if (artist.trim().length === 0) artist = creator?.ethAddress;
+  let artist = getArtistName(creator?.pseudonym, creator?.ethAddress);
 
   const baseURL = router.pathname.indexOf("/e/") > -1 ? router.asPath : "/a"
 

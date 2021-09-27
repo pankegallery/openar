@@ -11,6 +11,7 @@ import {
 
 import { useAuthentication, useSSRSaveMediaQuery } from "~/hooks";
 import { AlertEmailVerification } from "../utils";
+import { getArtistName } from "~/utils";
 
 export const UserDetails = ({
   user,
@@ -21,7 +22,7 @@ export const UserDetails = ({
   showArtworks: boolean;
   isPublic: boolean;
 }) => {
-  let name = user?.pseudonym ? user?.pseudonym : user?.ethAddress;
+  let name = getArtistName(user?.pseudonym, user?.ethAddress);
   const isIncomplete = !isPublic && !user?.acceptedTerms;
 
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");

@@ -87,8 +87,15 @@ export class OpenAR {
       this.marketAddress = addresses[chainId].market;
     }
 
-    this.media = Media__factory.connect(this.mediaAddress, signerOrProvider);
-    this.market = Market__factory.connect(this.marketAddress, signerOrProvider);
+    this.media = Media__factory.connect(
+      this.mediaAddress,
+      signerOrProvider
+    ) as Media;
+
+    this.market = Market__factory.connect(
+      this.marketAddress,
+      signerOrProvider
+    ) as Market;
   }
 
   /*********************
@@ -394,6 +401,65 @@ export class OpenAR {
       return Promise.reject("invalid bid");
 
     return this.market.setBid(mediaId, bid, {
+      value: bid.amount,
+    });
+  }
+
+  /**
+   * Sets a bid for the first token that is still available from the specified seller. This function is 
+   * used to avoid that the user accidentally bids (aka instant buys) a token which has either been already sold
+   * which might mean the user makes an empty bid to a token without ask. Or the user could by a token from the edition 
+   * but misses out as setBid is only accepting a single id. 
+   * 
+   * @param tokenIds
+   * @param seller
+   * @param bid
+   * @param bidShare
+   */
+
+  public async buyFirstAvailable(
+    tokenIds: number[],
+    seller: string,
+    bid: Bid,
+    bidShares: BidShares
+  ) {
+    try {
+      this.ensureNotReadOnly();
+    } catch (err: any) {
+      return Promise.reject(err.message);
+    }
+
+    if (!validateBidOrAsk(Decimal.new(bid.amount.toString()), bidShares))
+      return Promise.reject("invalid bid");
+
+    return this.market.buyFirstAvailable(tokenIds, bid, seller);
+  }
+
+  /**
+   * See buyFirstAvailable()
+   * 
+   * @param tokenIds
+   * @param seller
+   * @param bid
+   * @param bidShare
+   */
+
+  public async buyFirstAvailableNative(
+    tokenIds: number[],
+    seller: string,
+    bid: Bid,
+    bidShares: BidShares
+  ) {
+    try {
+      this.ensureNotReadOnly();
+    } catch (err: any) {
+      return Promise.reject(err.message);
+    }
+
+    if (!validateBidOrAsk(Decimal.new(bid.amount.toString()), bidShares))
+      return Promise.reject("invalid bid");
+
+    return this.market.buyFirstAvailable(tokenIds, bid, seller, {
       value: bid.amount,
     });
   }

@@ -35,6 +35,7 @@ import {
   daoArtworkGetByKey,
   daoArtworkGetOwnById,
   daoNanoidCustom16,
+  daoArObjectReorder,
 } from "../../dao";
 
 const apiConfig = getApiConfig();
@@ -142,7 +143,7 @@ export const ArtworkQueries = extendType({
           },
           creator: {
             isBanned: false,
-          }
+          },
         };
 
         if ((pRI?.fieldsByTypeName?.ArtworkQueryResult as any)?.totalCount) {
@@ -609,6 +610,13 @@ export const ArtworkUpsertInput = inputObjectType({
     t.json("images");
   },
 });
+export const ArtworkArObjectOrderInput = inputObjectType({
+  name: "ArtworkArObjectOrderInput",
+  definition(t) {
+    t.int("id");
+    t.int("orderNumber");
+  },
+});
 
 export const ArtworkMutations = extendType({
   type: "Mutation",
@@ -691,6 +699,52 @@ export const ArtworkMutations = extendType({
           throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Update failed");
 
         return artwork;
+      },
+    });
+
+    t.nonNull.field("artworkReorderArObjects", {
+      type: "Artwork",
+
+      args: {
+        id: nonNull(intArg()),
+        data: nonNull(list("ArtworkArObjectOrderInput")),
+      },
+
+      authorize: async (...[, args, ctx]) => {
+        if (!authorizeApiUser(ctx, "artworkUpdateOwn")) return false;
+
+        const count = await daoArtworkQueryCount({
+          id: args.id,
+          status: {
+            notIn: [ArtworkStatusEnum.DELETED],
+          },
+          creator: {
+            id: ctx.appUser?.id ?? 0,
+          },
+        });
+
+        return count === 1;
+      },
+
+      async resolve(...[, args, ctx]) {
+        const currentArtwork = await daoArtworkGetOwnById(
+          args.id,
+          ctx?.appUser?.id ?? 0
+        );
+
+        if (
+          !currentArtwork ||
+          !Array.isArray(args.data) ||
+          args.data.length <= 1
+        )
+          throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Update failed");
+
+        const count = await daoArObjectReorder(args.id, args.data);
+
+        if (count !== args.data.length)
+          throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Update failed");
+
+        return currentArtwork;
       },
     });
 

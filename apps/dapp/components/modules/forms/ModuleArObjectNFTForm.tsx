@@ -14,7 +14,7 @@ import {
   Text,
   Flex,
 } from "@chakra-ui/react";
-import { useLazyQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { getArObjectTokenInfoGQL } from "~/graphql/queries";
 import { IncompleteOverlay, ShowUrlAndCopy } from "~/components/frontend";
 import { ArObjectStatusEnum } from "~/utils";
@@ -31,6 +31,7 @@ import {
   platformCuts,
   bigNumberToEther,
   numberToBigNumber,
+  parseWalletErrors,
 } from "@openar/crypto";
 import { useAuthentication, useWalletLogin } from "~/hooks";
 
@@ -47,13 +48,14 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
 
   const objectURL = `${appConfig.baseUrl}/a/${artworkReadOwn?.key}/${arObjectReadOwn?.key}/`;
 
-  const [subgraphQueryTrigger, subgraphQuery] = useLazyQuery(
+  const subgraphQuery = useQuery(
     getArObjectTokenInfoGQL,
     {
       variables: {
         arObjectKey: arObjectReadOwn.key,
         first: 100,
       },
+      fetchPolicy: 'network-only',
       context: { clientName: "subgraph" },
     }
   );
@@ -71,14 +73,10 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
 
   
   useEffect(() => {
-    subgraphQueryTrigger();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     if (subgraphQuery.loading || subgraphQuery.error) return;
 
     if (subgraphQuery.data?.medias) {
+      console.log(122);
       setValue("askPrice", currentAsk);
     }
   }, [
@@ -104,6 +102,8 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
         return;
       }
 
+      console.log("Nonce:", await library.getSigner(account).getTransactionCount());
+      
       setIsAwaitingWalletInteraction(true);
 
       const ownerCut = Decimal.rawBigNumber(
@@ -125,11 +125,7 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
         )
         .catch((err) => {
           setIsAwaitingBlockConfirmation(false);
-          if (err.message.indexOf("denied transaction") > -1) {
-            setCryptoError("You've rejected the transaction");
-          } else {
-            setCryptoError(err.message);
-          }
+          setCryptoError(parseWalletErrors(err.message));
           setValue("askPrice", currentAsk);
         });
 
@@ -141,13 +137,13 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
       tx.wait(chainId === 31337 ? 0 : appConfig.numBlockConfirmations)
         .catch((err) => {
           setIsAwaitingBlockConfirmation(false);
-          setCryptoError(err.message);
+          setCryptoError(parseWalletErrors(err.message));
           setValue("askPrice", currentAsk);
         })
         .finally(() => {
           setTimeout(
             () => {
-              subgraphQueryTrigger();
+              subgraphQuery.refetch();
               setIsAwaitingBlockConfirmation(false);
               setValue("askPrice", askAmount);
             },
@@ -156,7 +152,7 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
         });
     } catch (err) {
       setIsAwaitingBlockConfirmation(false);
-      setCryptoError(err.message);
+      setCryptoError(parseWalletErrors(err.message));
     }
   };
 
@@ -179,11 +175,7 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
         .removeAskForBatch(tokenIds.map((id) => numberToBigNumber(id)))
         .catch((err) => {
           setIsAwaitingBlockConfirmation(false);
-          if (err.message.indexOf("denied transaction") > -1) {
-            setCryptoError("You've rejected the transaction");
-          } else {
-            setCryptoError(err.message);
-          }
+          setCryptoError(parseWalletErrors(err.message));
         });
 
       if (!tx) return;
@@ -194,23 +186,22 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
       tx.wait(chainId === 31337 ? 0 : appConfig.numBlockConfirmations)
         .catch((err) => {
           setIsAwaitingBlockConfirmation(false);
-          setCryptoError(err.message);
+          setCryptoError(parseWalletErrors(err.message));
           setValue("askPrice", 0);
         })
         .finally(() => {
           setTimeout(
             () => {
               console.log(123);
-              subgraphQueryTrigger();
+              subgraphQuery.refetch();
               setIsAwaitingBlockConfirmation(false);
               setValue("askPrice", 0);
-              console.log(askPrice, currentAsk);
             },
             chainId === 31337 ? 5000 : 0
           );
         });
     } catch (err) {
-      setCryptoError(err.message);
+      setCryptoError(parseWalletErrors(err.message));
     }
   };
 
@@ -240,6 +231,7 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
       </Box>
     );
 
+  console.log(askPrice, currentAsk, cryptoError, !cryptoError);
   if ([ArObjectStatusEnum.MINTED].includes(arObjectReadOwn?.status))
     return (
       <>
@@ -285,7 +277,7 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
                   Stop selling
                 </Button>
                 <Button
-                  isDisabled={askPrice < 0.001 || askPrice === currentAsk}
+                  isDisabled={askPrice < 0.001 || (askPrice === currentAsk && !cryptoError)}
                   onClick={() => {
                     setAskForBatch(
                       ownedToken.map((media: any) => media.id),
@@ -421,14 +413,6 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
                             <a
                               rel="noreferrer"
                               target="_blank"
-                              href={media.metadataURI}
-                            >
-                              IPFS Metadata
-                            </a>
-                            ,
-                            <a
-                              rel="noreferrer"
-                              target="_blank"
                               href={`https://blockscout.com/xdai/mainnet/search-results?q=${media.transactionHash}`}
                             >
                               xDai Transaction
@@ -450,8 +434,7 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
           isOpen={isAwaitingWalletInteraction}
           showClose={!!cryptoError}
           onClose={() => {
-            setIsAwaitingWalletInteraction(false);
-            setCryptoError(false);
+            setIsAwaitingWalletInteraction(false);            
           }}
           title="Confirmation required"
           error={cryptoError}

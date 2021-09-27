@@ -221,7 +221,6 @@ const Update = () => {
     },
   ];
 
-  console.log(data?.artworkReadOwn?.status);
   return (
     <>
       <FormNavigationBlock

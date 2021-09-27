@@ -1,20 +1,14 @@
-import { imageDeleteMutationGQL } from "~/graphql/mutations";
-
-import { AspectRatio, Box, Button, Grid, Text, chakra } from "@chakra-ui/react";
+import { Box, Button, Flex, Text, chakra, Icon } from "@chakra-ui/react";
 
 import Link from "next/link";
+import { GrDrag } from "react-icons/gr";
 
-import {
-  FieldInput,
-  FieldRow,
-  FieldTextEditor,
-  FieldImageUploader,
-} from "~/components/forms";
+import { SortableList } from "~/components/ui";
 
-import { yupIsFieldRequired, ModuleArtworkCreateSchema } from "../validation";
 import { useRouter } from "next/router";
 import { moduleArtworksConfig as moduleConfig } from "../config";
 import { ArObjectStatusEnum } from "~/utils";
+import { useArtworkReorderArObjectsMutation } from "~/hooks/mutations";
 
 export const ModuleArtworkArObjectsList = ({
   data,
@@ -30,62 +24,107 @@ export const ModuleArtworkArObjectsList = ({
   disableNavigation?: Function;
 }) => {
   const { artworkReadOwn } = data ?? {};
-  
-  const columns = { base: "100%", t: "50% 50%" };
-  const rows = { base: "auto 1fr", t: "1fr" };
 
   const router = useRouter();
+  const [reorderMutation, reorderMutationResults] =
+    useArtworkReorderArObjectsMutation();
+
+  const items = artworkReadOwn?.arObjects
+    ? artworkReadOwn?.arObjects.map((arObject) => {
+        let status = "Draft";
+
+        switch (arObject.status) {
+          case ArObjectStatusEnum.DRAFT:
+            status = "draft";
+            break;
+
+          case ArObjectStatusEnum.PUBLISHED:
+            status = "published";
+            break;
+
+          case ArObjectStatusEnum.MINT:
+          case ArObjectStatusEnum.MINTING:
+          case ArObjectStatusEnum.MINTRETRY:
+          case ArObjectStatusEnum.MINTCONFIRM:
+            status = "minting";
+            break;
+
+          case ArObjectStatusEnum.MINTERROR:
+            status = "error";
+            break;
+
+          case ArObjectStatusEnum.MINTED:
+            status = "minted";
+            break;
+        }
+
+        return {
+          id: `ar-${arObject.id}`,
+          arObjectId: arObject.id,
+          content: (
+            <Box
+              key={`arObj${arObject.key}`}
+              borderTop="1px solid #fff"
+              listStyleType="none"
+              lineHeight="2.5rem"
+              bg="openar.muddygreen"
+            >
+              <Link
+                href={`${moduleConfig.rootPath}/${router.query.aid}/${arObject.id}/update`}
+                passHref
+              >
+                <chakra.a
+                  display="flex"
+                  justifyContent="space-between"
+                  transform="all 0.3s"
+                  _hover={{
+                    opacity: 0.6,
+                  }}
+                >
+                  <Flex justifyContent="flex-start" alignItems="center">
+                    <Icon
+                      as={GrDrag}
+                      w="4"
+                      height="4"
+                      filter="invert(100%)"
+                      mr="1"
+                    />
+                    [{status}] {arObject.title}
+                  </Flex>
+                  <chakra.span>update</chakra.span>
+                </chakra.a>
+              </Link>
+            </Box>
+          ),
+        };
+      })
+    : [];
 
   return (
-    <>  
+    <>
       <Text mt="3">Objects</Text>
 
-      <ul>
-      {data?.artworkReadOwn?.arObjects &&
-        data?.artworkReadOwn?.arObjects.map((arObject) => {
-          let status = "Draft";
+      {items && (
+        <Box borderBottom="1px solid #fff">
+          <SortableList
+            items={items}
+            onSortUpdate={(items) => {
 
-          switch (arObject.status) {
-            case ArObjectStatusEnum.DRAFT:
-              status = "draft";
-              break;
-
-            case ArObjectStatusEnum.PUBLISHED:
-              status = "published";
-              break;
-
-            case ArObjectStatusEnum.MINT:
-            case ArObjectStatusEnum.MINTING:            
-            case ArObjectStatusEnum.MINTRETRY:
-            case ArObjectStatusEnum.MINTCONFIRM:
-              status = "minting";
-              break;
-
-            case ArObjectStatusEnum.MINTERROR:
-              status = "error"
-              break;
-
-            case ArObjectStatusEnum.MINTED:
-              status = "minted";
-              break;
-          }
-
-          return (
-          <chakra.li key={`arObj${arObject.key}`} borderTop="1px solid #fff" listStyleType="none" _last={{
-            borderBottom: "1px solid #fff"
-          }} lineHeight="2.5rem">
-            <Link
-              href={`${moduleConfig.rootPath}/${router.query.aid}/${arObject.id}/update`}
-              passHref
-            >
-              <chakra.a display="flex" justifyContent="space-between" transform="all 0.3s"_hover={{
-                opacity: 0.6
-              }}>[{status}] {arObject.title}<chakra.span>update</chakra.span></chakra.a>
-            </Link>
-          </chakra.li>
-        )}
-        )}
-      </ul>
+              console.log("Items", items, items.map((item, index: number) => ({
+                id: item.arObjectId,
+                orderNumber: index + 1,
+              })));
+              reorderMutation(
+                artworkReadOwn.id,
+                items.map((item, index: number) => ({
+                  id: item.arObjectId,
+                  orderNumber: index + 1,
+                }))
+              );
+            }}
+          />
+        </Box>
+      )}
       <Box mt="4">
         <Button
           onClick={() => {
@@ -96,8 +135,6 @@ export const ModuleArtworkArObjectsList = ({
         </Button>
       </Box>
     </>
-
-
   );
 };
 export default ModuleArtworkArObjectsList;
