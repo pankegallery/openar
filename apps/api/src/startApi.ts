@@ -51,7 +51,7 @@ export const startApi = async () => {
         root: join(apiConfig.packageBaseDir, codeFolderLocation, "workers"),
         jobs: [
           {
-            name: "dbExpireTokens",
+            name: "dbHouseKeeping",
             interval: process.env.NODE_ENV === "production" ? "1m" : "1hr",
           },
           {
