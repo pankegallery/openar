@@ -26,7 +26,7 @@ export const ModuleArtworkArObjectsList = ({
   const { artworkReadOwn } = data ?? {};
 
   const router = useRouter();
-  const [reorderMutation, reorderMutationResults] =
+  const [reorderMutation] =
     useArtworkReorderArObjectsMutation();
 
   const items = artworkReadOwn?.arObjects

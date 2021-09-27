@@ -51,7 +51,7 @@ export const SortableList = ({
 
   return (
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="droppable"is>
+        <Droppable droppableId="droppable">
           {(provided, doppableSnapshot) => (
             <Box {...provided.droppableProps} ref={provided.innerRef}>
               {storedItems.items.map((item, index) => (
