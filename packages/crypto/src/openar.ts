@@ -295,6 +295,7 @@ export class OpenAR {
     creator: string,
     mintData: MintData,
     bidShares: BidShares,
+    nonce: BigNumber,
     sig: EIP712Signature
   ): Promise<ContractTransaction> {
     try {
@@ -312,7 +313,7 @@ export class OpenAR {
       return Promise.reject(err.message);
     }
 
-    return this.media.mintWithSig(creator, mintData, bidShares, sig);
+    return this.media.mintWithSig(creator, mintData, bidShares, nonce, sig);
   }
 
   /**
@@ -406,11 +407,11 @@ export class OpenAR {
   }
 
   /**
-   * Sets a bid for the first token that is still available from the specified seller. This function is 
+   * Sets a bid for the first token that is still available from the specified seller. This function is
    * used to avoid that the user accidentally bids (aka instant buys) a token which has either been already sold
-   * which might mean the user makes an empty bid to a token without ask. Or the user could by a token from the edition 
-   * but misses out as setBid is only accepting a single id. 
-   * 
+   * which might mean the user makes an empty bid to a token without ask. Or the user could by a token from the edition
+   * but misses out as setBid is only accepting a single id.
+   *
    * @param tokenIds
    * @param seller
    * @param bid
@@ -437,7 +438,7 @@ export class OpenAR {
 
   /**
    * See buyFirstAvailable()
-   * 
+   *
    * @param tokenIds
    * @param seller
    * @param bid

@@ -110,7 +110,7 @@ export const AuthMutations = extendType({
         ethAddress: nonNull(stringArg()),
         signedMessage: nonNull(stringArg()),
       },
-      
+
       async resolve(...[, args, ctx]) {
         try {
           const authPayload = await authLoginUserWithSignature(

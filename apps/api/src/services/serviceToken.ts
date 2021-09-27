@@ -80,7 +80,6 @@ export const generateSignToken = (
   type: TokenTypesEnum,
   secret?: string
 ) => {
-  
   const payload = {
     message: `${apiConfig.signaturePrefixes.login}${nanoid(10).replace(
       /_/g,

@@ -87,7 +87,7 @@ const Update = () => {
 
   const router = useRouter();
   
-  const formMethods = useForm({
+  const formMethods = useForm<Record<string, any>>({
     mode: "onTouched",
     resolver: yupResolver(ModuleArtworkUpdateSchema) as any,
     defaultValues: {

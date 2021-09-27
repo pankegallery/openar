@@ -73,7 +73,6 @@ const createImageMetaInfo = (
 };
 
 export const postImage = async (req: Request, res: Response) => {
-  
   const refreshToken = req?.cookies?.refreshToken ?? "";
   if (refreshToken) {
     try {
@@ -129,7 +128,6 @@ export const postImage = async (req: Request, res: Response) => {
 };
 
 export const postProfileImage = async (req: Request, res: Response) => {
-
   const refreshToken = req?.cookies?.refreshToken ?? "";
   if (refreshToken) {
     try {

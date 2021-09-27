@@ -45,7 +45,8 @@ const Create = () => {
   const disableForm = firstMutationResults.loading;
   const router = useRouter();
   
-  const formMethods = useForm({
+  // TODO: there should be a nicer way to use react hook form in TS 
+  const formMethods = useForm<Record<string, any>>({
     mode: "onTouched",
     resolver: yupResolver(ModuleArObjectCreateSchema) as any,
   });
