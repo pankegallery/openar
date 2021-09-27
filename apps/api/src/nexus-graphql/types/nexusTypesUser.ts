@@ -28,6 +28,7 @@ import { GQLJson } from "./nexusTypesShared";
 import {
   authorizeApiUser,
   isCurrentApiUser,
+  isNotCurrentApiUser,
   isCurrentApiUserByEthAddress,
 } from "../helpers";
 import { getApiConfig } from "../../config";
@@ -132,7 +133,7 @@ export const UserQueries = extendType({
         }),
       },
 
-      // TODO:authorize:   (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
+      authorize: (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
 
       async resolve(...[, args]) {
         const totalCount = await daoUserQueryCount(args.where);
@@ -153,47 +154,12 @@ export const UserQueries = extendType({
       },
     });
 
-    // TODO: this needs to go ...
-    // t.field("adminUsers", {
-    //   type: list("AdminUser"),
-    //   deprecation:
-    //     "A publicly accessible list Lists all users that have a the given roles",
-
-    //   args: {
-    //     roles: nonNull(list(stringArg())),
-    //   },
-
-    //   // // TODO:authorize:   (...[, , ctx]) =>
-    //   //   authorizeApiUser(ctx, "accessAsAuthenticatedUser"),
-
-    //   async resolve(...[, args]) {
-    //     const users = await daoUserQuery(
-    //       {
-    //         role: {
-    //           in: (args.roles ?? []) as Prisma.Enumerable<string>,
-    //         },
-    //       },
-    //       [{ firstName: "asc" }, { lastName: "asc" }],
-    //       0,
-    //       10000
-    //     );
-
-    //     return filteredOutputByWhitelist(users, [
-    //       "id",
-    //       "firstName",
-    //       "lastName",
-    //     ]);
-    //   },
-    // });
-
     t.field("user", {
       type: "PublicUser",
 
       args: {
         ethAddress: nonNull(stringArg()),
       },
-
-      // TODO:authorize:   (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
 
       // resolve(root, args, ctx, info)
       async resolve(...[, args, , info]) {
@@ -518,24 +484,6 @@ export const UserMutations = extendType({
   type: "Mutation",
 
   definition(t) {
-    // t.nonNull.field("userSignup", {
-    //   type: "AuthPayload",
-    //   args: {
-    //     data: nonNull(UserSignupInput),
-    //   },
-
-    //   // TODO:authorize:   () => apiConfig.enablePublicRegistration,
-
-    //   async resolve(...[, args, { res }]) {
-    //     const authPayload = await userRegister(args.data);
-
-    //     if (!authPayload)
-    //       throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Signup Failed");
-
-    //     return tokenProcessRefreshToken(res, authPayload);
-    //   },
-    // });
-
     t.nonNull.field("userProfileUpdate", {
       type: "User",
 
@@ -558,28 +506,6 @@ export const UserMutations = extendType({
       },
     });
 
-    t.nonNull.field("userCreate", {
-      type: "User",
-
-      args: {
-        data: nonNull(UserCreateInput),
-      },
-
-      // TODO: how to lock down the API // TODO:authorize:   (...[, , ctx]) => authorizeApiUser(ctx, "userCreate"),
-
-      async resolve(...[, args]) {
-        const user = await userCreate(args.data);
-
-        if (!user)
-          throw new ApiError(
-            httpStatus.INTERNAL_SERVER_ERROR,
-            "Creation failed"
-          );
-
-        return user;
-      },
-    });
-
     t.nonNull.field("userUpdate", {
       type: "BooleanResult",
 
@@ -588,7 +514,7 @@ export const UserMutations = extendType({
         data: nonNull(UserUpdateInput),
       },
 
-      // TODO:authorize:   (...[, , ctx]) => authorizeApiUser(ctx, "userUpdate"),
+      authorize: (...[, , ctx]) => authorizeApiUser(ctx, "userUpdate"),
 
       async resolve(...[, args]) {
         const user = await userUpdate(args.id, args.data);
@@ -643,9 +569,9 @@ export const UserMutations = extendType({
         id: nonNull(intArg()),
       },
 
-      // TODO:authorize:   (...[, args, ctx]) =>
-      // authorizeApiUser(ctx, "userDelete") &&
-      // isNotCurrentApiUser(ctx, args.id),
+      authorize: (...[, args, ctx]) =>
+        authorizeApiUser(ctx, "userDelete") &&
+        isNotCurrentApiUser(ctx, args.id),
 
       async resolve(...[, args]) {
         const user = await userDelete(args.id);

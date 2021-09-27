@@ -8,7 +8,6 @@ import {
   extendType,
   inputObjectType,
   nonNull,
-  // stringArg,
   intArg,
   arg,
   list,
@@ -19,14 +18,14 @@ import { ApiError } from "../../utils";
 
 import { GQLJson } from "./nexusTypesShared";
 
-// import { authorizeApiUser } from "../helpers"; TODO: enable!
+import { authorizeApiUser } from "../helpers";
 
 import { getApiConfig } from "../../config";
 
 import {
   daoImageQuery,
   // daoImageCreate,
-  daoImageUpdate,
+  // daoImageUpdate,
   daoImageQueryCount,
   daoImageGetById,
   daoImageGetStatusById,
@@ -172,26 +171,6 @@ export const ImageMutations = extendType({
   type: "Mutation",
 
   definition(t) {
-    t.nonNull.field("imageUpdate", {
-      type: "Image",
-
-      args: {
-        id: nonNull(intArg()),
-        data: nonNull("ImageUpdateInput"),
-      },
-
-      // TODO: how to lock down the API authorize: (...[, , ctx]) => authorizeApiUser(ctx, "imageUpdate"),
-
-      async resolve(...[, args]) {
-        const image = await daoImageUpdate(args.id, args.data);
-
-        if (!image)
-          throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Update failed");
-
-        return image;
-      },
-    });
-
     t.nonNull.field("imageDelete", {
       type: "BooleanResult",
 
@@ -199,7 +178,7 @@ export const ImageMutations = extendType({
         id: nonNull(intArg()),
       },
 
-      // TODO enable later also check if user owns if not full access ... authorize: (...[, , ctx]) => authorizeApiUser(ctx, "imageDelete"),
+      authorize: (...[, , ctx]) => authorizeApiUser(ctx, "imageDeleteOwn"),
 
       async resolve(...[, args]) {
         const image = await daoImageSetToDelete(args.id);

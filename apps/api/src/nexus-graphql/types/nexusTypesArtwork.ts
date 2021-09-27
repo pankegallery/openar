@@ -247,7 +247,6 @@ export const ArtworkQueries = extendType({
       },
     });
 
-    // TODO: properly enable read protection of non published artworks
     t.nonNull.field("artwork", {
       type: "Artwork",
 
@@ -677,7 +676,6 @@ export const ArtworkMutations = extendType({
         if (!currentArtwork)
           throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Update failed");
 
-        // TODO: remove once all keys are set
         const data: any = {
           ...args.data,
           type: 1,

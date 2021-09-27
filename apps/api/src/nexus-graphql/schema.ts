@@ -10,10 +10,6 @@ import { getApiConfig } from "../config";
 import * as types from "./types";
 
 const apiConfig = getApiConfig();
-// TODO: interesting plugins:
-// https://www.npmjs.com/package/nexus-args-validation
-// https://www.npmjs.com/package/@jcm/nexus-plugin-datetime
-// https://nexusjs.org/docs/plugins/query-complexity
 
 let schemaConfig: core.SchemaConfig = {
   types,

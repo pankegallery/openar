@@ -25,7 +25,6 @@ const storage = multer.diskStorage({
     const uploadPath = `${apiConfig.baseDir}/${apiConfig.publicDir}/${uploadFolder}`;
 
     try {
-      // TODO: how to make this non blocking?
       mkdirSync(uploadPath, { recursive: true });
     } catch (e) {
       logger.error(e);
@@ -60,7 +59,6 @@ const createImageMetaInfo = (
 
   const fileNanoId = file.filename.replace(extension, "");
 
-  // TODO: what to do about the image type?
   const metainfo: ApiImageMetaInformation = {
     uploadFolder,
     originalFileName: file.filename,

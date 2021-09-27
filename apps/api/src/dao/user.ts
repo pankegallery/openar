@@ -49,12 +49,6 @@ export const daoUserCreate = async (
     data: {
       ...data,
       ethAddress: data.ethAddress?.toLowerCase() ?? "",
-      // ...{ TODO: what needs to come here?
-      //   password: await bcrypt.hash(
-      //     data.password,
-      //     apiConfig.security.saltRounds
-      //   ),
-      // },
     },
   });
 

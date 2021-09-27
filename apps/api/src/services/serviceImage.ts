@@ -77,8 +77,6 @@ export const imageCreate = async (
       "New profile image could not be created"
     );
 
-  // TODO: xxx schedule resizing tasks.
-
   return image;
 };
 

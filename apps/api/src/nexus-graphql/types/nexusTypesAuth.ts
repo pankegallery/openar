@@ -110,7 +110,7 @@ export const AuthMutations = extendType({
         ethAddress: nonNull(stringArg()),
         signedMessage: nonNull(stringArg()),
       },
-      // TODO: add skip of login if refreshtoken is set ...
+      
       async resolve(...[, args, ctx]) {
         try {
           const authPayload = await authLoginUserWithSignature(

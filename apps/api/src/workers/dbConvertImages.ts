@@ -18,7 +18,6 @@ const apiConfig = getApiConfig();
 // if (parentPort)
 //   parentPort.once("message", (message) => {
 //     //
-//     // TODO: once we can manipulate concurrency option to p-map
 //     // we could make it `Number.MAX_VALUE` here to speed cancellation up
 //     // <https://github.com/sindresorhus/p-map/issues/28>
 //     //

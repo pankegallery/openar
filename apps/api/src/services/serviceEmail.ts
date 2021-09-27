@@ -40,13 +40,11 @@ export const sendEmail = (to: string, subject: string, text: string) => {
 };
 
 export const sendEmailConfirmationEmail = async (to: string, token: string) => {
-  // TODO: multilang?
   const subject = `${apiConfig.email.subjectPrefix} Please verify your email`;
 
   // replace this url with the link to the reset password page of your front-end app
   const verificationEmailUrl = `${apiConfig.baseUrl.dapp}/email-confirmation/?token=${token}`;
 
-  // multilang, how? Multilang TODO: Multilang
   const text = `Dear user,
 
 To verify your email, click on this link: ${verificationEmailUrl}

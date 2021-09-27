@@ -90,7 +90,6 @@ export const authLoginUserWithSignature = async (
   if (user.isBanned)
     throw new ApiError(httpStatus.UNAUTHORIZED, "[auth] Access denied");
 
-  // TODO: Implement
   logger.info(signedMessage);
 
   daoTokenDeleteMany({

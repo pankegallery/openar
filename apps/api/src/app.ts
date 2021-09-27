@@ -1,6 +1,3 @@
-// TODO: Make use of https://github.com/godaddy/terminus https://stackoverflow.com/questions/43003870/how-do-i-shut-down-my-express-server-gracefully-when-its-process-is-killed
-//
-
 import express, { Application, urlencoded } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";

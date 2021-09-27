@@ -34,7 +34,8 @@ export type PermissionsOfUser =
   | "exhibitionReadOwn"
   | "critiqueReadOwn"
   | "exhibitionUpdateOwn"
-  | "exhibitionDeleteOwn";
+  | "exhibitionDeleteOwn"
+  | "imageDeleteOwn";
 
 // !!! Also add new permissions to the constructing arrays on the bottom
 export type PermissionsOfNewUser =

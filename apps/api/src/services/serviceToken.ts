@@ -65,7 +65,6 @@ export const generateToken = (
       };
   }
 
-  // expose roles in token TODO: expose roles
   const payload = {
     user,
     iat: new Date().getTime() / 1000,
@@ -81,7 +80,7 @@ export const generateSignToken = (
   type: TokenTypesEnum,
   secret?: string
 ) => {
-  // expose roles in token TODO: expose roles
+  
   const payload = {
     message: `${apiConfig.signaturePrefixes.login}${nanoid(10).replace(
       /_/g,
@@ -284,7 +283,7 @@ export const tokenGenerateVerifyEmailToken = async (
 };
 
 export const tokenProcessRefreshToken = (
-  res: any, // TODO: this should be properly typed
+  res: Response,
   authPayload: AuthPayload
 ): AuthPayload => {
   const secureCookie = apiConfig.baseUrl.api.indexOf("localhost") === -1;
