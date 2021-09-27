@@ -32,7 +32,6 @@ export const UserDetails = ({
 
   const [appUser] = useAuthentication();
 
-
   const allRoles = [
     {
       slug: "user",
@@ -60,7 +59,6 @@ export const UserDetails = ({
         },
       ],
     },
-    ,
     {
       slug: "curator",
       title: "Curator",
@@ -70,6 +68,19 @@ export const UserDetails = ({
         {
           year: 2021,
           image: "badges2021/curator@6x-100.jpg",
+          artist: "Anna-Luise Lorenz",
+        },
+      ],
+    },
+    {
+      slug: "collector",
+      title: "Collector",
+      description:
+        "The collector badge will be assigned to users, that have bought an AR object on our platform.",
+      badges: [
+        {
+          year: 2021,
+          image: "badges2021/collector@6x-100.jpg",
           artist: "Anna-Luise Lorenz",
         },
       ],
@@ -119,7 +130,7 @@ export const UserDetails = ({
         pt="20"
         minHeight={isIncomplete ? "400px" : "unset"}
       >
-        {!isPublic  && <AlertEmailVerification />}
+        {!isPublic && <AlertEmailVerification />}
         {!isPublic && !isIncomplete && (
           <Link href="/x/profile/update" passHref>
             <Button position="absolute" top="6" right="6">
@@ -228,8 +239,9 @@ export const UserDetails = ({
               (!badges || badges.length === 0) && (
                 <chakra.p py="6">
                   You haven’t earned any badges yet, begin by adding some
-                  details about yourself and confirming your email address, starting to collect, or adding your own
-                  artworks to collect further badges.
+                  details about yourself and confirming your email address,
+                  starting to collect, or adding your own artworks to collect
+                  further badges.
                 </chakra.p>
               )}
           </Box>

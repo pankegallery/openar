@@ -89,3 +89,11 @@ export const userUpdateMutationGQL = gql`
     }
   }
 `;
+
+export const userMaybeClaimCollectorsRoleUpdateMutationGQL = gql`
+  mutation userMaybeClaimCollectorsRoleUpdate($id: Int!) {
+    userMaybeClaimCollectorsRoleUpdate(id: $id) {
+      result
+    }
+  }
+`;

@@ -18,7 +18,6 @@ import httpStatus from "http-status";
 
 import {
   userRead,
-  userCreate,
   userUpdate,
   userDelete,
   userProfileUpdate,
@@ -34,6 +33,8 @@ import {
 import { getApiConfig } from "../../config";
 import {
   daoUserQuery,
+  daoSubgraphGetOwnedTokenByEthAddress,
+  daoUserGetById,
   daoUserQueryCount,
   daoUserFindFirst,
   daoUserProfileImageDelete,
@@ -521,6 +522,47 @@ export const UserMutations = extendType({
 
         if (!user)
           throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Update failed");
+
+        return { result: true };
+      },
+    });
+
+    t.nonNull.field("userMaybeClaimCollectorsRoleUpdate", {
+      type: "BooleanResult",
+
+      args: {
+        id: nonNull(intArg()),
+      },
+
+      authorize: (...[, args, ctx]) =>
+        authorizeApiUser(ctx, "profileUpdate") &&
+        isCurrentApiUser(ctx, args.id),
+
+      async resolve(...[, args]) {
+        const userInDb = await daoUserGetById(args.id);
+
+        if (!userInDb)
+          throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Update failed");
+
+        if (userInDb.roles.includes("collector")) return { result: true };
+
+        const tokens = await daoSubgraphGetOwnedTokenByEthAddress(
+          userInDb.ethAddress ?? "",
+          1,
+          0
+        );
+
+        if (tokens && tokens.length === 1) {
+          const user = await userUpdate(args.id, {
+            roles: [...new Set([...userInDb.roles, "collector"])],
+          });
+
+          if (!user)
+            throw new ApiError(
+              httpStatus.INTERNAL_SERVER_ERROR,
+              "Update failed"
+            );
+        }
 
         return { result: true };
       },

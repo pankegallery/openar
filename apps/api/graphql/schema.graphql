@@ -276,6 +276,7 @@ type Mutation {
   authVerifyEmail(token: String!): BooleanResult!
   imageDelete(id: Int!): BooleanResult!
   userDelete(id: Int!): BooleanResult!
+  userMaybeClaimCollectorsRoleUpdate(id: Int!): BooleanResult!
   userProfileImageDelete(id: Int!): BooleanResult!
   userProfileUpdate(data: UserProfileUpdateInput!, id: Int!): User!
   userUpdate(data: UserUpdateInput!, id: Int!): BooleanResult!

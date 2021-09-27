@@ -27,6 +27,7 @@ import {
 
 import { appConfig } from "~/config";
 import { getArtistName } from "~/utils";
+import { useUserMaybeClaimCollectorsRoleUpdateMutation } from "~/hooks/mutations";
 
 export const ArtworkDetails = ({
   artwork,
@@ -38,13 +39,15 @@ export const ArtworkDetails = ({
   const [profileUrl, setProfileUrl] = useState(
     `/u/${artwork.creator.ethAddress}`
   );
+  const [claimCollectorRoleMutation] =
+    useUserMaybeClaimCollectorsRoleUpdateMutation();
 
   const buySuccessToast = useAppToast(
     "Congratulations",
     "You've bought an edtion of this object",
     "success"
   );
-
+  useUserMaybeClaimCollectorsRoleUpdateMutation;
   const buyErrorToast = useAppToast("Oops", "Please login to buy", "error");
 
   const [appUser, { hasCookies }] = useAuthentication();
@@ -55,14 +58,11 @@ export const ArtworkDetails = ({
     useState(false);
   const { library, account, chainId } = useWalletLogin();
 
-  const subgraphQuery = useQuery(
-    arObjectTokensQueryGQL,
-    {
-      variables: {
-        key: object?.key ?? "",
-      },
-    }
-  );
+  const subgraphQuery = useQuery(arObjectTokensQueryGQL, {
+    variables: {
+      key: object?.key ?? "",
+    },
+  });
 
   const artist = getArtistName(
     artwork.creator?.pseudonym,
@@ -153,7 +153,7 @@ export const ArtworkDetails = ({
           }
         )
         .catch((err) => {
-          setIsAwaitingBlockConfirmation(false); 
+          setIsAwaitingBlockConfirmation(false);
           if (err.message.indexOf("denied transaction") > -1) {
             setCryptoError("You've rejected the transaction");
           } else {
@@ -173,16 +173,23 @@ export const ArtworkDetails = ({
         })
         .finally(() => {
           setTimeout(
-            () => {
+            async () => {
               // TODO: make interaction nicer ...
               // Communicate the token number of the just bought token
               // Query subgraph by owner wallet for the tokens of this object.
-              // Latest inactive bid should reveal the 
+              // Latest inactive bid should reveal the
               buySuccessToast(
                 "Congratulations",
                 `You've bought an edition of this object `
               );
               subgraphQuery.refetch();
+
+              if (!appUser.roles.includes("collector")) {
+                try {
+                  const result = await claimCollectorRoleMutation(appUser.id);
+                } catch (err) {}
+              }
+
               setIsAwaitingBlockConfirmation(false);
             },
             chainId === 31337 ? 5000 : 0
@@ -351,12 +358,13 @@ export const ArtworkDetails = ({
         {artwork.video &&
           artwork.video.trim().length > 0 &&
           isValidEmbeddedVideoPlayerVideo(artwork.video) && (
-            <Box
-              className="artworkVideo"
-              borderBottom="1px solid white"
-              
-            >
-              <Box p="6" textStyle="label" className="label" mb="0px !important">
+            <Box className="artworkVideo" borderBottom="1px solid white">
+              <Box
+                p="6"
+                textStyle="label"
+                className="label"
+                mb="0px !important"
+              >
                 Artwork video
               </Box>
               <EmbeddedVideoPlayer url={artwork.video} />

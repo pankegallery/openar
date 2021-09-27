@@ -495,6 +495,7 @@ export interface NexusGenFieldTypes {
     authVerifyEmail: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     imageDelete: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     userDelete: NexusGenRootTypes['BooleanResult']; // BooleanResult!
+    userMaybeClaimCollectorsRoleUpdate: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     userProfileImageDelete: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     userProfileUpdate: NexusGenRootTypes['User']; // User!
     userUpdate: NexusGenRootTypes['BooleanResult']; // BooleanResult!
@@ -722,6 +723,7 @@ export interface NexusGenFieldTypeNames {
     authVerifyEmail: 'BooleanResult'
     imageDelete: 'BooleanResult'
     userDelete: 'BooleanResult'
+    userMaybeClaimCollectorsRoleUpdate: 'BooleanResult'
     userProfileImageDelete: 'BooleanResult'
     userProfileUpdate: 'User'
     userUpdate: 'BooleanResult'
@@ -843,6 +845,9 @@ export interface NexusGenArgTypes {
       id: number; // Int!
     }
     userDelete: { // args
+      id: number; // Int!
+    }
+    userMaybeClaimCollectorsRoleUpdate: { // args
       id: number; // Int!
     }
     userProfileImageDelete: { // args
