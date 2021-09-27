@@ -614,6 +614,63 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "uint256[]",
+        name: "tokenIds",
+        type: "uint256[]",
+      },
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "currency",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "bidder",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "recipient",
+            type: "address",
+          },
+          {
+            components: [
+              {
+                internalType: "uint256",
+                name: "value",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct Decimal.D256",
+            name: "sellOnShare",
+            type: "tuple",
+          },
+        ],
+        internalType: "struct IMarket.Bid",
+        name: "bid",
+        type: "tuple",
+      },
+      {
+        internalType: "address",
+        name: "seller",
+        type: "address",
+      },
+    ],
+    name: "buyFirstAvailable",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "mediaContractAddress",
         type: "address",

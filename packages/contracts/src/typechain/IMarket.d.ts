@@ -25,6 +25,7 @@ interface IMarketInterface extends ethers.utils.Interface {
     "acceptBid(uint256,tuple)": FunctionFragment;
     "bidForTokenBidder(uint256,address)": FunctionFragment;
     "bidSharesForToken(uint256)": FunctionFragment;
+    "buyFirstAvailable(uint256[],tuple,address)": FunctionFragment;
     "configure(address)": FunctionFragment;
     "configureEnforcePlatformCuts(bool)": FunctionFragment;
     "configurePausedUnpaused(bool)": FunctionFragment;
@@ -65,6 +66,20 @@ interface IMarketInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "bidSharesForToken",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "buyFirstAvailable",
+    values: [
+      BigNumberish[],
+      {
+        amount: BigNumberish;
+        currency: string;
+        bidder: string;
+        recipient: string;
+        sellOnShare: { value: BigNumberish };
+      },
+      string
+    ]
   ): string;
   encodeFunctionData(functionFragment: "configure", values: [string]): string;
   encodeFunctionData(
@@ -177,6 +192,10 @@ interface IMarketInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "bidSharesForToken",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "buyFirstAvailable",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "configure", data: BytesLike): Result;
@@ -407,6 +426,32 @@ export class IMarket extends Contract {
         }
       ]
     >;
+
+    buyFirstAvailable(
+      tokenIds: BigNumberish[],
+      bid: {
+        amount: BigNumberish;
+        currency: string;
+        bidder: string;
+        recipient: string;
+        sellOnShare: { value: BigNumberish };
+      },
+      seller: string,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "buyFirstAvailable(uint256[],(uint256,address,address,address,(uint256)),address)"(
+      tokenIds: BigNumberish[],
+      bid: {
+        amount: BigNumberish;
+        currency: string;
+        bidder: string;
+        recipient: string;
+        sellOnShare: { value: BigNumberish };
+      },
+      seller: string,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     configure(
       mediaContractAddress: string,
@@ -740,6 +785,32 @@ export class IMarket extends Contract {
       prevOwner: [BigNumber] & { value: BigNumber };
     }
   >;
+
+  buyFirstAvailable(
+    tokenIds: BigNumberish[],
+    bid: {
+      amount: BigNumberish;
+      currency: string;
+      bidder: string;
+      recipient: string;
+      sellOnShare: { value: BigNumberish };
+    },
+    seller: string,
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "buyFirstAvailable(uint256[],(uint256,address,address,address,(uint256)),address)"(
+    tokenIds: BigNumberish[],
+    bid: {
+      amount: BigNumberish;
+      currency: string;
+      bidder: string;
+      recipient: string;
+      sellOnShare: { value: BigNumberish };
+    },
+    seller: string,
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   configure(
     mediaContractAddress: string,
@@ -1085,6 +1156,32 @@ export class IMarket extends Contract {
         prevOwner: [BigNumber] & { value: BigNumber };
       }
     >;
+
+    buyFirstAvailable(
+      tokenIds: BigNumberish[],
+      bid: {
+        amount: BigNumberish;
+        currency: string;
+        bidder: string;
+        recipient: string;
+        sellOnShare: { value: BigNumberish };
+      },
+      seller: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "buyFirstAvailable(uint256[],(uint256,address,address,address,(uint256)),address)"(
+      tokenIds: BigNumberish[],
+      bid: {
+        amount: BigNumberish;
+        currency: string;
+        bidder: string;
+        recipient: string;
+        sellOnShare: { value: BigNumberish };
+      },
+      seller: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     configure(
       mediaContractAddress: string,
@@ -1591,6 +1688,32 @@ export class IMarket extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    buyFirstAvailable(
+      tokenIds: BigNumberish[],
+      bid: {
+        amount: BigNumberish;
+        currency: string;
+        bidder: string;
+        recipient: string;
+        sellOnShare: { value: BigNumberish };
+      },
+      seller: string,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "buyFirstAvailable(uint256[],(uint256,address,address,address,(uint256)),address)"(
+      tokenIds: BigNumberish[],
+      bid: {
+        amount: BigNumberish;
+        currency: string;
+        bidder: string;
+        recipient: string;
+        sellOnShare: { value: BigNumberish };
+      },
+      seller: string,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     configure(
       mediaContractAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1879,6 +2002,32 @@ export class IMarket extends Contract {
     "bidSharesForToken(uint256)"(
       tokenId: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    buyFirstAvailable(
+      tokenIds: BigNumberish[],
+      bid: {
+        amount: BigNumberish;
+        currency: string;
+        bidder: string;
+        recipient: string;
+        sellOnShare: { value: BigNumberish };
+      },
+      seller: string,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "buyFirstAvailable(uint256[],(uint256,address,address,address,(uint256)),address)"(
+      tokenIds: BigNumberish[],
+      bid: {
+        amount: BigNumberish;
+        currency: string;
+        bidder: string;
+        recipient: string;
+        sellOnShare: { value: BigNumberish };
+      },
+      seller: string,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     configure(
