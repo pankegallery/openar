@@ -41,7 +41,7 @@ const format = (val: any, precision: number | undefined) => {
 
     if (typeof num === "string" && num.indexOf(".") > -1) {
       const parts = num.split(".");
-      if (parts.length > 1 && parts[1].length == 1) {
+      if (parts.length > 1 && parts[1].length === 1) {
         parts[1] = `${parts[1]}0`;
       }
       num = parts.join(".");
@@ -52,7 +52,10 @@ const format = (val: any, precision: number | undefined) => {
 };
 
 const formatDefaultValue = (val: any, settings: number | undefined) => {
-  let defaultValue = format(typeof val !== "undefined" ? val : "0.00", settings);
+  let defaultValue = format(
+    typeof val !== "undefined" ? val : "0.00",
+    settings
+  );
 
   if (typeof defaultValue !== "string") defaultValue = defaultValue.toString();
 
@@ -76,20 +79,21 @@ export const FieldNumberInput = ({
 }) => {
   const fieldRef = useRef<HTMLInputElement | null>(null);
 
-  const [fieldValue, setFieldValue] = useState(formatDefaultValue(settings?.defaultValue, settings.precision));
+  const [fieldValue, setFieldValue] = useState(
+    formatDefaultValue(settings?.defaultValue, settings?.precision)
+  );
 
   useEffect(() => {
-    if (settings?.value) {
-      console.log("called set value");
-      setFieldValue(formatDefaultValue(settings?.value, settings.precision));
-    }
-      
+    if (typeof settings?.value !== "undefined")
+      setFieldValue(formatDefaultValue(settings?.value, settings?.precision));
   }, [settings?.value, settings?.precision]);
 
   const {
     formState: { errors },
     setValue,
+    getValues,
     control,
+    trigger,
   } = useFormContext();
 
   const onChangeHandler = (value: number) => {
@@ -152,8 +156,18 @@ export const FieldNumberInput = ({
                 {...{
                   ...restField,
                   onBlur: (event) => {
+                    // weirdly restField.onBlur()
+                    // sets the field value to undefined
+                    // and then the validation fails.
+                    // so we have to store it for the moment
+                    const v = getValues(restField.name);
                     restField.onBlur();
-                    onChangeHandler(restField.value);
+
+                    // and reset the value and retrigger the validation again.
+                    setValue(restField.name, v);
+                    trigger(restField.name);
+
+                    onChangeHandler(v);
                   },
                   onChange: (valueAsString, valueAsNumber) => {
                     setFieldValue(valueAsString);
@@ -161,7 +175,11 @@ export const FieldNumberInput = ({
                     onChangeHandler(valueAsNumber);
                   },
                 }}
-                value={format(fieldValue, settings.precision)}
+                value={
+                  typeof settings?.value !== "undefined"
+                    ? format(fieldValue, settings?.precision)
+                    : undefined
+                }
                 defaultValue={fieldValue}
                 max={
                   typeof settings?.max !== "undefined"
@@ -188,7 +206,10 @@ export const FieldNumberInput = ({
               >
                 <NumberInputField
                   variant="flushed"
-                  ref={ref}
+                  ref={(e: HTMLInputElement) => {
+                    ref(e);
+                    fieldRef.current = e; // you can still assign to ref
+                  }}
                   name={restField.name}
                   _placeholder={{
                     opacity: "0.6",
