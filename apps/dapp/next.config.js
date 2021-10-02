@@ -1,9 +1,10 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
   // distDir: 'build', TODO: better build management
+  optimizeFonts: false,
   reactStrictMode: true,
   images: {
-    domains: ['localhost'], //TODO: add Api
+    domains: ['localhost','api.openar.art','openar.art'], 
   },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     config.module.rules.push(

@@ -10,7 +10,7 @@ import {
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import {useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 import { LoadingIcon } from "~/components/ui";
 
@@ -23,7 +23,6 @@ import {
 import { useAuthentication } from "~/hooks";
 import { appConfig } from "~/config";
 const EmailConfirmation = () => {
-  
   const [appUser, { isLoggedIn }] = useAuthentication();
 
   const [verificationMutation, verificationMutationResults] =
@@ -97,8 +96,11 @@ const EmailConfirmation = () => {
 
   let buttonDashboardLogin = (
     <Text>
-      <Link href={isLoggedIn() ? "/x/" : appConfig.reauthenticateRedirectUrl } passHref>
-        <Button as={ChakraLink}  variant="outlineBlack">
+      <Link
+        href={isLoggedIn() ? "/x/" : appConfig.reauthenticateRedirectUrl}
+        passHref
+      >
+        <Button as={ChakraLink} variant="outlineBlack">
           {isLoggedIn() ? "Goto dashboard" : "Goto login"}
         </Button>
       </Link>
@@ -112,9 +114,7 @@ const EmailConfirmation = () => {
           <Heading as="h2" mb="2">
             {(isRequestingError || requestMutationResults.error) &&
               "We are sorry"}
-            {!isRequestingError &&
-              !requestMutationResults.error &&
-              "Thank you"}
+            {!isRequestingError && !requestMutationResults.error && "Thank you"}
           </Heading>
           <Text>
             {(isRequestingError || requestMutationResults.error) &&
@@ -134,7 +134,7 @@ const EmailConfirmation = () => {
     (isTokenError || confirmationError) &&
     !hasRequestedEmail
   )
-   content = (
+    content = (
       <>
         <Box mb="6">
           <Heading as="h2" mb="2">
@@ -179,9 +179,12 @@ const EmailConfirmation = () => {
       </>
     );
 
-  return <Box p="6" minH="100%">{content}</Box>;
+  return (
+    <Box p="6" minH="100%">
+      {content}
+    </Box>
+  );
 };
-
 
 EmailConfirmation.getLayout = function getLayout(page: ReactElement) {
   return <LayoutBlank>{page}</LayoutBlank>;

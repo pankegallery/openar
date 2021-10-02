@@ -78,7 +78,6 @@ const Create = () => {
           title: newData.title,
           description: newData.description,
           editionOf: newData.editionOf ?? null,
-          orderNumber: newData.orderNumber ?? null,
           askPrice: newData.editionOf ?? null,
 
           artwork: {

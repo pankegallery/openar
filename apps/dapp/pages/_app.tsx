@@ -38,7 +38,7 @@ function OpenARApp({ Component, pageProps }: AppPropsWithLayout) {
         <Provider store={store}>
           <AppApolloProvider>
             <OpenARDappProvider>
-              {getLayout(<Component {...pageProps} />)}
+              {getLayout(<Component {...pageProps} />)}            
             </OpenARDappProvider>
           </AppApolloProvider>
         </Provider>

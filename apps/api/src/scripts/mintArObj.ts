@@ -459,7 +459,7 @@ const doChores = async () => {
         throw Error("No USDZ present");
 
       const creatorEthAddress = validateAndParseAddress(
-        arObject?.creator?.ethAddress ?? ""
+        (arObject?.creator?.ethAddress ?? "").toLowerCase()
       );
 
       const mediaAddress = validateAndParseAddress(

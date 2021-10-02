@@ -102,7 +102,7 @@ export const User = () => {
 
   // ___________________ Build page module logic __________________
 
-  const hasArtworks = userProfileRead?.artworks.length > 0;
+  const hasArtworks = Array.isArray(userProfileRead?.artworks) && userProfileRead?.artworks.length > 0;
   const hasCollection = collection && collection.totalCount > 0;
 
   const showCollectionColumn = hasCollection;

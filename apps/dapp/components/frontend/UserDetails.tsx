@@ -122,6 +122,7 @@ export const UserDetails = ({
       position="relative"
     >
       {/* ======== BOX: Profile title  ======== */}
+      {!isPublic && <AlertEmailVerification />}
       <Box
         className="artworkTitle"
         position="relative"
@@ -130,7 +131,7 @@ export const UserDetails = ({
         pt="20"
         minHeight={isIncomplete ? "400px" : "unset"}
       >
-        {!isPublic && <AlertEmailVerification />}
+        
         {!isPublic && !isIncomplete && (
           <Link href="/x/profile/update" passHref>
             <Button position="absolute" top="6" right="6">
@@ -264,7 +265,7 @@ export const UserDetails = ({
         {/* ======== BOX: User artworks  ======== */}
 
         {showArtworks && (
-          <ArtworkList artworks={user.artworks} col={1} isPublic={isPublic} />
+          <ArtworkList artworks={user.artworks} col={1} isPublic={isPublic} isIncomplete={isIncomplete} />
         )}
       </Box>
     </Flex>

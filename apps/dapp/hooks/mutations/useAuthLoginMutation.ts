@@ -28,7 +28,7 @@ export const useAuthLoginMutation = () => {
     preLoginLogout();
     return mutation({
       variables: {
-        ethAddress,
+        ethAddress: ethAddress.toLowerCase(),
         signedMessage,
       },
     });

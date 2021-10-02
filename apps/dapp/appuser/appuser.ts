@@ -55,6 +55,7 @@ export const createAuthenticatedAppUser = (
 ): AuthenticatedAppUser => {
   const user: AuthenticatedAppUser = {
     ...appUserData,
+    ethAddress: appUserData.ethAddress.toLowerCase(),
     is(name: RoleName) {
       return is(this.role, name);
     },

@@ -1,15 +1,13 @@
 import { useEffect, useCallback, useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 
-import { AlertBox } from "~/components/ui";
 import { useTypedDispatch, useAuthentication, useTypedSelector } from "~/hooks";
+import Arrow from "~/assets/img/arrow.svg";
 
 import { userEmailVerificationState } from "~/redux/slices/user";
 import {
-  AlertDescription,
-  AlertTitle,
   Box,
-  Grid,
+  Text,
   Button,
 } from "@chakra-ui/react";
 import { useAuthRequestEmailVerificationEmail } from "~/hooks/mutations";
@@ -43,9 +41,9 @@ export const AlertEmailVerification = () => {
     setShowPopup(true);
     return () => {
       setShowPopup(false);
-    }
-  }, [])
-  
+    };
+  }, []);
+
   const [appUser, { isLoggedIn }] = useAuthentication();
 
   const { data, error } = useQuery(GET_EMAIL_VERIFICATION_STATUS, {
@@ -57,7 +55,9 @@ export const AlertEmailVerification = () => {
 
   let localEmailVerified =
     typeof data?.userProfileRead?.emailVerified === "boolean"
-      ? data?.userProfileRead?.emailVerified && data?.userProfileRead?.email && `${data?.userProfileRead?.email}`.trim() !== ""
+      ? data?.userProfileRead?.emailVerified &&
+        data?.userProfileRead?.email &&
+        `${data?.userProfileRead?.email}`.trim() !== ""
         ? "yes"
         : "no"
       : emailVerified;
@@ -103,43 +103,41 @@ export const AlertEmailVerification = () => {
   }
 
   return (
-    <>  
-      {data && showPopup && !data?.userProfileRead?.email && localEmailVerified !== "yes" && <AlertBox status="warning" hasClose >
-            <AlertTitle>Looks like you&#39;re new. Welcome!</AlertTitle>
-            <AlertDescription>We would love to be able to get in touch with your. Please set your email address in your profile and claim your first badge</AlertDescription>
-          </AlertBox>}
-      {(data && showPopup && data?.userProfileRead?.email && !error &&
+    <>
+      {data &&
+        showPopup &&
+        data?.userProfileRead?.email &&
+        !error &&
         localEmailVerified === "no" &&
-        !requestMutationResults.loading) && (
-          <AlertBox status="warning" hasClose>
-            <Grid
-              w="100%"
-              templateRows="1fr"
-              templateColumns={{ base: "1fr", tw: "66% 34%" }}
-              gap="4"
-              alignItems={{ base: "start", tw: "center" }}
-            >
-              <Box>
-                <AlertTitle>{title}</AlertTitle>
-                <AlertDescription>{desc}</AlertDescription>
-              </Box>
-              <Box textAlign="center">
-                {!requestMutationResults.error &&
-                  !isRequestingError &&
-                  !requestMutationResults.called && (
-                    <Button
-                      borderColor="black"
-                      color="black"
-                      isLoading={!!requestMutationResults.loading}
-                      variant="outline"
-                      onClick={requestAnotherEmail}
-                    >
-                      Request verification email
-                    </Button>
-                  )}
-              </Box>
-            </Grid>
-          </AlertBox>
+        !requestMutationResults.loading && (
+          <Box
+            className="header"
+            p="6"
+            w="100%"
+            textAlign="left"
+            flexDirection="column"
+            layerStyle="backdropGradient"
+            borderBottom="1px solid #fff"
+          >
+            <Box m="6">
+              <Text pb="6">
+                <b>{title}</b><br/>{desc}
+              </Text>
+              {!requestMutationResults.error &&
+                !isRequestingError &&
+                !requestMutationResults.called && (
+                  <Button
+                    borderColor="white"
+                    color="white"
+                    isLoading={!!requestMutationResults.loading}
+                    variant="outline"
+                    onClick={requestAnotherEmail}
+                  >
+                    Request verification email
+                  </Button>
+                )}
+            </Box>
+          </Box>
         )}
     </>
   );

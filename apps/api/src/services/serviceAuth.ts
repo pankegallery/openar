@@ -132,7 +132,7 @@ export const authPreLoginUserWithEthAddress = async (
 
   if (!user) {
     user = await daoUserCreate({
-      ethAddress,
+      ethAddress: ethAddress.toLowerCase(),
       roles: ["newuser"],
     });
     authPayload = await tokenGenerateAuthTokens(
@@ -140,7 +140,7 @@ export const authPreLoginUserWithEthAddress = async (
         id: user.id,
         pseudonym: user.pseudonym,
         email: user.email,
-        ethAddress,
+        ethAddress: ethAddress.toLowerCase(),
       },
       user.roles as RoleName[]
     );
@@ -168,7 +168,7 @@ export const authPreLoginUserWithEthAddress = async (
         id: user.id,
         pseudonym: user.pseudonym,
         email: user.email,
-        ethAddress,
+        ethAddress: ethAddress.toLowerCase(),
       },
       user.roles as RoleName[]
     );
@@ -185,14 +185,14 @@ export const authPreLoginUserWithEthAddress = async (
     });
     authPayload = await tokenGenerateSignatureToken({
       id: user.id,
-      ethAddress,
+      ethAddress: ethAddress.toLowerCase(),
     });
   }
 
   authPayload.user = {
     id: user.id,
     pseudonym: user.pseudonym,
-    ethAddress,
+    ethAddress: ethAddress.toLowerCase(),
     email: user.email,
   };
 
@@ -244,7 +244,7 @@ export const authRefresh = async (refreshToken: string) => {
       {
         id: user.id,
         pseudonym: user.pseudonym,
-        ethAddress: user.ethAddress ?? "",
+        ethAddress: (user.ethAddress ?? "").toLowerCase(),
         email: user.email,
       },
       user.roles as RoleName[]
@@ -266,7 +266,7 @@ export const authRequestEmailVerificationEmail = async (
     if (userInDb && userInDb.email)
       return await authSendEmailConfirmationEmail(
         userInDb.id,
-        userInDb.ethAddress ?? "",
+        (userInDb.ethAddress ?? "").toLowerCase(),
         userInDb.email
       );
 

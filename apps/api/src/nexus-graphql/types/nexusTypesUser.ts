@@ -159,7 +159,7 @@ export const UserQueries = extendType({
         let include = {};
         let where: Prisma.UserWhereInput = {
           isBanned: false,
-          ethAddress: args.ethAddress,
+          ethAddress: args.ethAddress.toLowerCase(),
         };
         if ((pRI?.fieldsByTypeName?.PublicUser as any)?.profileImage) {
           include = {
@@ -312,7 +312,7 @@ export const UserQueries = extendType({
 
       authorize: (...[, args, ctx]) =>
         authorizeApiUser(ctx, "profileRead") &&
-        isCurrentApiUserByEthAddress(ctx, args.ethAddress),
+        isCurrentApiUserByEthAddress(ctx, args.ethAddress.toLowerCase()),
 
       // resolve(root, args, ctx, info)
       async resolve(...[, args, , info]) {
@@ -320,7 +320,7 @@ export const UserQueries = extendType({
         let include = {};
         let where: Prisma.UserWhereInput = {
           isBanned: false,
-          ethAddress: args.ethAddress,
+          ethAddress: args.ethAddress.toLowerCase(),
         };
 
         if ((pRI?.fieldsByTypeName?.User as any)?.profileImage) {
@@ -418,6 +418,7 @@ export const UserQueries = extendType({
             },
           };
         }
+
         return daoUserFindFirst(
           where,
           Object.keys(include).length > 0 ? include : undefined
@@ -538,7 +539,7 @@ export const UserMutations = extendType({
         if (userInDb.roles.includes("collector")) return { result: true };
 
         const tokens = await daoSubgraphGetOwnedTokenByEthAddress(
-          userInDb.ethAddress ?? "",
+          (userInDb.ethAddress ?? "").toLowerCase(),
           1,
           0
         );

@@ -23,7 +23,12 @@ export const isCurrentApiUserByEthAddress = (
   )
     return Error("Authentication failed (maybe refresh)");
 
-  if (!(ctx.appUser && ctx.appUser.ethAddress === ethAddress))
+  if (
+    !(
+      ctx.appUser &&
+      ctx.appUser.ethAddress.toLowerCase() === ethAddress.toLowerCase()
+    )
+  )
     throw Error("GQL authorization rejected");
 
   return true;
