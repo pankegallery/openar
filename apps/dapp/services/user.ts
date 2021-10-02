@@ -26,19 +26,15 @@ const canRefresh = () => store.getState().user.allowRefresh;
 
 // TODO: xxx is the autorefresh really needed? Or is it good enough to rely on the refresh by use of the API?
 const refreshToken = async () => {
-  console.log("refreshToken", canRefresh(), getRefreshCookie());
-
   if (client && canRefresh() && getRefreshCookie()) {
     setAllowRefresh(false);
     setRefreshing(true);
-    console.log("Triggering refreshToken via timeOut");
-
+  
     client
       .mutate({
         fetchPolicy: "no-cache",
         mutation: authRefreshMutationGQL,
       })
-      // TODO: is there a way to get a typed query here?
       .then(({ data }: any) => {
         if (
           data?.authRefresh?.tokens?.access &&
@@ -61,12 +57,9 @@ const refreshToken = async () => {
         }
       })
       .catch((error) => {
-        console.log("triggering logout() in user.refreshToken() 1")
-        console.log(error);
         logout();
       });
   } else if (canRefresh()) {
-    console.log("triggering logout() in user.refreshToken() 2");
     await logout();
   }
 };
@@ -88,14 +81,12 @@ const login = async (u: AuthenticatedAppUserData): Promise<boolean> =>
     const token = getAuthToken();
     
     if (token) {
-      console.log("setting refresh token")
       refreshTimeoutId = setTimeout(
         refreshToken,
         new Date(token.expires).getTime() - Date.now() - 10000
       );
     }
 
-    console.log("LOGIN USER DATA", u);
     store.dispatch(userLogin({ appUserData: u, expires: getRefreshCookie() }));
 
     resolve(true);
@@ -121,7 +112,7 @@ const preLoginLogout = async (): Promise<boolean> =>
 
 const logout = async (): Promise<boolean> =>
   new Promise(async (resolve) => {
-    console.log("logout");
+    
     clearTimeout(refreshTimeoutId);
     
     setRefreshing(false);
@@ -130,7 +121,6 @@ const logout = async (): Promise<boolean> =>
 
     store.dispatch(userLogout());
 
-    console.log("logout cryptostate reset");
     store.dispatch(cryptoStateReset());
     
     // we're using resetStore (as clearStore cancels all ongoing queries)

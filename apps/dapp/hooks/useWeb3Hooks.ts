@@ -19,7 +19,6 @@ export function useWeb3EagerConnect() {
     injectedConnector.isAuthorized().then((isAuthorized: boolean) => {
       if (isAuthorized) {
         activate(injectedConnector, undefined, true).catch(() => {
-          console.log('activated injectedConnector')
           setTried(true);
         });
       } else {
@@ -45,34 +44,17 @@ export function useWeb3InactiveListener(suppress: boolean = false) {
 
   useEffect((): any => {
     const { ethereum } = window as any;
-    console.log(
-      `useWeb3InactiveListener useEffect Active:${active} Error:${error} Suppres:${suppress} Ethereum:${!!ethereum}`
-    );
     if (ethereum && ethereum.on && !active && !error && !suppress) {
-      console.log("useWeb3InactiveListener attach events");
       const handleConnect = () => {
-        console.log("Handling 'connect' event");
         activate(injectedConnector);
-        // TODO: this one should also ensure that the login flow is happeing
       };
       const handleChainChanged = (chainId: string | number) => {
-        console.log(
-          "useWeb3InactiveListener: Handling 'chainChanged' event with payload",
-          chainId
-        );
         activate(injectedConnector);
       };
       const handleAccountsChanged = (accounts: string[]) => {
-        console.log(
-          "useWeb3InactiveListener: Handling 'accountsChanged' event with payload (possibly logout?)",
-          accounts,
-          account
-        );
         activate(injectedConnector);
       };
       const handleDisconnect = () => {
-        // TODO: remove ...
-        console.log("useWeb3InactiveListener: Handling 'disconnect' event");
         deactivate();
       };
 
@@ -83,7 +65,6 @@ export function useWeb3InactiveListener(suppress: boolean = false) {
 
       return () => {
         if (ethereum.removeListener) {
-          console.log("useWeb3InactiveListener: remove listener");
           ethereum.removeListener("connect", handleConnect);
           ethereum.removeListener("chainChanged", handleChainChanged);
 
@@ -110,37 +91,20 @@ export function useWeb3ActiveListener(suppress: boolean = false) {
   });
   useEffect((): any => {
     const { ethereum } = window as any;
-    console.log(
-      `useWeb3ActiveListener useEffect Active:${active} Error:${error} Suppres:${suppress} Ethereum:${!!ethereum}`
-    );
     if (ethereum && ethereum.on && active && !error && !suppress) {
-      console.log("useWeb3ActiveListener attach events");
       const handleConnect = () => {
-        console.log("Handling 'useWeb3ActiveListener:connect' event");
         activate(injectedConnector);
         walletReconnect("injected");
-        // TODO: this one should also ensure that the login flow is happeing
       };
       const handleChainChanged = (chainId: string | number) => {
-        console.log(
-          "Handling 'useWeb3ActiveListener:chainChanged' event with payload",
-          chainId
-        );
         activate(injectedConnector);
         walletReconnect("injected");
       };
       const handleAccountsChanged = (accounts: string[]) => {
-        console.log(
-          "useWeb3ActiveListener: Handling 'accountsChanged' event with payload (possibly logout?)",
-          accounts,
-          account
-        );
         activate(injectedConnector);
         walletReconnect("injected");
       };
       const handleDisconnect = async () => {
-        // TODO: remove ...
-        console.log("Handling 'useWebActiveListener:disconnect' event");
         await walletDisconnect();
       };
 
@@ -151,7 +115,6 @@ export function useWeb3ActiveListener(suppress: boolean = false) {
 
       return () => {
         if (ethereum.removeListener) {
-          console.log("useWeb3ActiveListener: remove listener");
           ethereum.removeListener("connect", handleConnect);
           ethereum.removeListener("chainChanged", handleChainChanged);
 
@@ -179,12 +142,6 @@ export function useWeb3ReactListener() {
   useEffect((): any => {
     if (connector && connector.addListener) {
       const handleEvent = async (a, b, c) => {
-        console.log(
-          "Handling 'useDisconnectListener:useWeb3ReactListener' event calling: walletDisconnect",
-          a,
-          b,
-          caches
-        );
         await walletDisconnect();
       };
 

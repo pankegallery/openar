@@ -39,12 +39,10 @@ const OpenARLogin = () => {
       stateUser.authenticated && 
       hasCookies()
     ) {
-      console.log("/x/ 1");
       Router.push("/x/");
       setIsNavigating(true);
     } else {
       if (!stateCrypto.signatureRequired) {
-        console.log("/login sign 1", Router.asPath);
         Router.push(appConfig.reauthenticateRedirectUrl);
         setIsNavigating(true);
       }
@@ -54,7 +52,6 @@ const OpenARLogin = () => {
   useEffect(() => {
     if (!library || !library?.provider) {
       if (stateCrypto.signatureRequired && connectedVia === "walletconnect") {
-        console.log("Trigger walletDisconnect in OpenARLogin");
         walletDisconnect();
       }
     }

@@ -86,8 +86,6 @@ addMethod(
       try {
         const str = htmlToString(value ?? "");
 
-        console.log(str);
-        
         const length = str ? str.length : 0;
 
         if (

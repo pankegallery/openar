@@ -26,8 +26,6 @@ export const PublicUserProfile = ({
   const [appUser] = useAuthentication();
 
   if (appUser && appUser.ethAddress === user.ethAddress) {
-    console.log("PublicUserProfile Redirect to /x/");
-    console.log("/x/ 3");
     Router.replace("/x/");
   }
 
@@ -227,8 +225,6 @@ export const getStaticProps = async ({ params }: { params: any }) => {
       ethAddress: params.eth.toLowerCase(),
     },
   });
-
-  console.log(data?.collection?.arObjects);
 
   if (!data?.user) {
     return {

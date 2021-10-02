@@ -113,8 +113,6 @@ export const ArtworkDetails = ({
       ? ownedToken[0]?.subgraphinfo.currentAsk
       : null;
 
-  console.log("TODO: collectors", collectors);
-
   /* --------- COL: Artwork details) --------- */
 
   const buy = async (tokenId: number, bid: number) => {

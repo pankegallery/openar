@@ -23,7 +23,6 @@ const authLink = new ApolloLink((operation, forward) => {
   // retrieve access token from memory
   const accessToken = authentication.getAuthToken();
   
-  console.log("Appollo Link:", accessToken, authentication.getRefreshCookie());
   if (accessToken) {
     operation.setContext(({ headers = {} }) => ({
       headers: {
@@ -48,9 +47,6 @@ const retryWithRefreshTokenLink = onError(
           if (message === "Access Denied" && extensions?.code === "FORBIDDEN") {
             const observableForbidden = new Observable((observer) => {
               new Promise(async (resolve) => {
-                console.log(
-                  "logout() ApolloClient.retryWithRefreshTokenLink: FORBIDDEN"
-                );
                 await user.logout();
                 observer.error(new Error("Access Denied - FORBIDDEN "));
               });
@@ -67,7 +63,7 @@ const retryWithRefreshTokenLink = onError(
                 .mutate({
                   fetchPolicy: "no-cache",
                   mutation: authRefreshMutationGQL,
-                }) // TODO: is there a way to get a typed query here?
+                }) 
                 .then(({ data }: any) => {
                   if (
                     data?.authRefresh?.tokens?.access &&
@@ -111,9 +107,6 @@ const retryWithRefreshTokenLink = onError(
                   forward(operation).subscribe(subscriber);
                 })
                 .catch(async (error) => {
-                  console.log(
-                    "logout() ApolloClient.retryWithRefreshTokenLink: refresh error"
-                  );
                   await user.logout();
 
                   observer.error(error);
@@ -134,12 +127,12 @@ const retryWithRefreshTokenLink = onError(
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
     // TODO: remove?
-    graphQLErrors.forEach((err) =>
-      console.log(
-        err,
-        `[GQLError error]: ${err.message} ${err?.extensions?.code ?? ""}`
-      )
-    );
+    // graphQLErrors.forEach((err) =>
+    //   console.log(
+    //     err,
+    //     `[GQLError error]: ${err.message} ${err?.extensions?.code ?? ""}`
+    //   )
+    // );
 
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });

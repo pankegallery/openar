@@ -61,16 +61,16 @@ export const context = ({
   }
 
   // TODO: REMOVE
-  logger.debug(`Context: Auth token: ${accessToken}`);
+  // logger.debug(`Context: Auth token: ${accessToken}`);
 
   const refreshToken = req?.cookies?.refreshToken ?? "";
 
   // TODO: REMOVE
-  logger.debug(`Context: Refresh token: ${refreshToken}`);
+  // logger.debug(`Context: Refresh token: ${refreshToken}`);
 
   // TODO: Remove
-  if (refreshToken)
-    console.log(refreshToken, authAuthenticateUserByToken(refreshToken ?? ""));
+  // if (refreshToken)
+  //   console.log(refreshToken, authAuthenticateUserByToken(refreshToken ?? ""));
 
   if (refreshToken) {
     refreshTokenProvided = true;

@@ -6,19 +6,17 @@ import { authentication } from "~/services";
 export const useAuthPreLoginMutation = () => {
   const [, { login, preLoginLogout }] = useAuthentication();
 
-  const [mutation, mutationResults] = useMutation( authPreLoginMutationGQL, {
+  const [mutation, mutationResults] = useMutation(authPreLoginMutationGQL, {
     onCompleted: (data) => {
-      
       const tokens = data?.authPreLogin?.tokens;
 
       if (tokens && tokens?.access && tokens?.refresh) {
         const payload = authentication.getTokenPayload(tokens.access);
 
         if (payload) {
-
           authentication.setAuthToken(tokens.access);
           authentication.setRefreshCookie(tokens.refresh);
-          console.log("logging in ", payload.user);
+
           login(payload.user);
         }
       }

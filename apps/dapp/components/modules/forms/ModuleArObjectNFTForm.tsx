@@ -76,7 +76,6 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
     if (subgraphQuery.loading || subgraphQuery.error) return;
 
     if (subgraphQuery.data?.medias) {
-      console.log(122);
       setValue("askPrice", currentAsk);
     }
   }, [
@@ -101,8 +100,6 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
         setCryptoError("Could not initialize connection to wallet");
         return;
       }
-
-      console.log("Nonce:", await library.getSigner(account).getTransactionCount());
       
       setIsAwaitingWalletInteraction(true);
 
@@ -192,7 +189,6 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
         .finally(() => {
           setTimeout(
             () => {
-              console.log(123);
               subgraphQuery.refetch();
               setIsAwaitingBlockConfirmation(false);
               setValue("askPrice", 0);
@@ -231,7 +227,6 @@ export const ModuleArObjectNFTForm = ({ data }: { data: any }) => {
       </Box>
     );
 
-  console.log(askPrice, currentAsk, cryptoError, !cryptoError);
   if ([ArObjectStatusEnum.MINTED].includes(arObjectReadOwn?.status))
     return (
       <>

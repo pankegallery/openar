@@ -34,10 +34,6 @@ export const Artwork = ({
     selectedObject = artwork.arObjects.find(o => o.key === okey)
   }
 
-//  console.log("[... key] sel obj: ", selectedObject)
-//  console.log("[... key] artwork: ", artwork)
-
-
   return (
     <>
       <Head>

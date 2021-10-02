@@ -30,9 +30,7 @@ export const WalletConnectGate = ({
   const stateCrypto = useTypedSelector(({ crypto }) => crypto);
 
   useEffect(() => {
-    console.log("WalletConnectGate account", account);
     const preLogin = async () => {
-      console.log("WalletConnectGate preLogin");
       await walletLoginPreLogin(account);
     };
 
@@ -45,9 +43,6 @@ export const WalletConnectGate = ({
       // but a signature is required
       // better to logout and get the user to reauthenticate
       if (stateCrypto.signatureRequired) {
-        console.log(
-          "Wallet connect gate no library but signature required. Make sure to fully logout"
-        );
         walletDisconnect();
         Router.push(appConfig.reauthenticateRedirectUrl);
         return;
@@ -71,7 +66,6 @@ export const WalletConnectGate = ({
       !isLoggingIn &&
       !stateCrypto.signatureRequired 
     ) {
-      console.log("trigger pre login ...");
       setIsLoggingIn(true);
       preLogin();
     }
@@ -95,7 +89,6 @@ export const WalletConnectGate = ({
       Router.asPath.indexOf("/x/") > -1 &&
       !isLoggingIn
     ) {
-      console.log("trigger redirect to / as loginStatus logged-out");
       Router.replace("/");
     }
   }, [loginStatus, isLoggingIn]);
@@ -116,12 +109,7 @@ export const WalletConnectGate = ({
           walletConnect.connected &&
           !account
         ) {
-          console.log("Wallet Connect might be connected", account);
           if (Router.pathname !== appConfig.reauthenticateRedirectUrl) {
-            console.log(
-              "So go through the login flow to establish a new connection",
-              account
-            );
             Router.push(appConfig.reauthenticateRedirectUrl);
           }
         }
@@ -132,6 +120,5 @@ export const WalletConnectGate = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(`Account ${account}`);
   return <>{children}</>;
 };

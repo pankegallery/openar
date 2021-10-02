@@ -413,6 +413,6 @@ export const chakraTheme = extendTheme(
   }
 );
 
-if (typeof window !== "undefined") console.log(chakraTheme);
+// TODO: if (typeof window !== "undefined") console.log(chakraTheme);
 
 export default chakraTheme;

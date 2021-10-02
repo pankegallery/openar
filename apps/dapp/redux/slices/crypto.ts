@@ -17,14 +17,12 @@ const cryptoSlice = createSlice({
   initialState,
   reducers: {
     cryptoStateUpdate(state, action: PayloadAction<CryptoState>) {
-      console.log("crypto state update");
       return state = {
         ...state,
         ...action.payload,
       };
     },
     cryptoStateReset(state) {
-      console.log("ctypro state reset");
       return initialState;
     },
   },

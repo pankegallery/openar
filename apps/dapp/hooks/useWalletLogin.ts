@@ -81,8 +81,6 @@ export function useWalletLogin() {
       msg = "Oops, an error occured. Please reload the page and try again.";
     }
 
-    // TODO: how to handle errors best?
-    console.log("HandleError:", error);
     setWalletLoginError(msg);
     setAwaitingUserInteraction(null);
   }, []);
@@ -110,9 +108,6 @@ export function useWalletLogin() {
 
       deactivate();
 
-      console.log(
-        `walletDisconnect: PUSH ${appConfig.reauthenticateRedirectUrl}`
-      );
       Router.replace(appConfig.reauthenticateRedirectUrl);
     } catch (error) {
       setIsConnected(undefined);
@@ -196,7 +191,6 @@ export function useWalletLogin() {
     setWalletLoginError(null);
     setIsLoggingIn(false);
     triggerToast();
-    console.log("/x/ 4");
     Router.replace("/x/");
   }, [triggerToast, setIsLoggingIn, setWalletLoginError]);
 
@@ -277,7 +271,6 @@ export function useWalletLogin() {
   const walletLoginPreLogin = useCallback(
     async (account: string) => {
       setWalletLoginError(null);
-      console.log("walletLoginPreLogin");
       const { data, errors } = await preloginMutation(account);
 
       try {
@@ -316,21 +309,7 @@ export function useWalletLogin() {
           if (!library?.provider?.send)
             throw Error("Neccessary provider not found");
 
-          // let directSignatureRequest = false;
-
-          // if (typeof navigator !== "undefined")
-          //   directSignatureRequest = /Android/i.test(navigator.userAgent);
-
-          // if (
-          //   directSignatureRequest ||
-          //   primaryInput === "mouse" ||
-          //   (web3Injected && connector instanceof InjectedConnector)
-          // ) {
-          //   await walletLoginRequestSignature(payload?.message, account);
-          // } else {
-          console.log("walletLoginPreLogin push /sign");
           Router.replace("/sign");
-          //}
         } else if (errors) {
           throw errors[0];
         } else {

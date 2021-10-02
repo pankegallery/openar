@@ -67,8 +67,7 @@ export const ArtworkListItem = ({
         </Box> 
     }
   } 
-    
-  console.log(subgraphInfo);
+
   return (
     <LinkBox
       as="article"

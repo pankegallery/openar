@@ -24,7 +24,6 @@ const OpenARLogin = () => {
       stateUser.authenticated && 
       hasCookies()
     ) {
-      console.log("/x/ 1");
       Router.push("/x/");
       setIsNavigating(true);
     }

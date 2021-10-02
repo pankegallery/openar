@@ -89,8 +89,7 @@ export const User = () => {
   });
 
   const { userProfileRead, collection } = data ?? {};
-  console.log("[Profile] User", data?.userProfileRead);
-
+  
   const name = userProfileRead?.pseudonym ?? userProfileRead?.ethAddress;
 
   // ___________________ Set MediaQuery const __________________

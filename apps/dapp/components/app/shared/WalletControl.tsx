@@ -53,7 +53,6 @@ export const WalletControl = ({
       walletDisclosure.isOpen &&
       library
     ) {
-      console.log("useEffect walletDisclosure.onClose()");
       walletDisclosure.onClose();
       if (typeof onCloseMenu === "function")
         onCloseMenu.call(null);
