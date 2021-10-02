@@ -12,8 +12,8 @@ import { components } from "./chakra.components";
 
 const themeConfig = {
   fonts: {
-    heading: "Manrope",
-    body: "Manrope",
+    heading: "Manrope, Helvetica, Arial, sans-serif",
+    body: "Manrope, Helvetica, Arial, sans-serif",
   },
   components,
   breakpoints: createBreakpoints({

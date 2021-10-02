@@ -37,7 +37,7 @@ export const Beta = (props) => {
               base: "3rem",
               t: "4rem"
             }}
-            fontWeight="900"
+            fontWeight="700"
             lineHeight="1.0em"
             mb="2rem"
           >

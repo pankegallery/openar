@@ -9,8 +9,8 @@
     <line id="Line_20" data-name="Line 20" x2="125" y2="125" fill="none" stroke="#fff" stroke-width="1"/>
     <g id="Mask_Group_2" data-name="Mask Group 2" clip-path="url(#clip-path)">
       <g id="Logo" transform="translate(47.5 6.482)">
-        <text id="AR" transform="translate(25 30)" fill="#fff" font-size="28" font-family="Manrope-Bold, Manrope" font-weight="700"><tspan x="0" y="0">AR</tspan></text>
-        <text id="Open" transform="translate(6 13) rotate(90)" fill="#fff" font-size="21" font-family="Manrope-ExtraLight, Manrope" font-weight="200"><tspan x="0" y="0">OPEN</tspan></text>
+        <text id="AR" transform="translate(25 30)" fill="#fff" font-size="28" font-family="Manrope-Bold, Manrope, Helvetica, Arial, sans-serif" font-weight="700"><tspan x="0" y="0">AR</tspan></text>
+        <text id="Open" transform="translate(6 13) rotate(90)" fill="#fff" font-size="21" font-family="Manrope-ExtraLight, Manrope, Helvetica, Arial, sans-serif" font-weight="200"><tspan x="0" y="0">OPEN</tspan></text>
       </g>
     </g>
   </g>
