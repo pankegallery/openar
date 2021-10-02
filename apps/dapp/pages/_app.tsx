@@ -15,11 +15,11 @@ import {
 } from "~/providers";
 import { chakraTheme } from "~/theme";
 
-import "@fontsource/manrope/300.css";
-import "@fontsource/manrope/400.css";
-import "@fontsource/manrope/500.css";
-import "@fontsource/manrope/600.css";
-import "@fontsource/manrope/800.css";
+// import "@fontsource/manrope/300.css";
+// import "@fontsource/manrope/400.css";
+// import "@fontsource/manrope/500.css";
+// import "@fontsource/manrope/600.css";
+// import "@fontsource/manrope/800.css";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -31,40 +31,6 @@ type AppPropsWithLayout = AppProps & {
 
 function OpenARApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
-
-  // TODO: Still needed? VVU: 
-  // useIsomorphicLayoutEffect(() => {
-  //   const calculateScrollbarWidth = () => {
-  //     var outer = document.createElement("div");
-  //     outer.style.visibility = "hidden";
-  //     outer.style.width = "100px";
-
-  //     document.body.appendChild(outer);
-
-  //     var widthNoScroll = outer.offsetWidth;
-  //     // force scrollbars
-  //     outer.style.overflow = "scroll";
-
-  //     // add innerdiv
-  //     var inner = document.createElement("div");
-  //     inner.style.width = "100%";
-  //     outer.appendChild(inner);
-
-  //     var widthWithScroll = inner.offsetWidth;
-
-  //     // remove divs
-  //     outer.parentNode.removeChild(outer);
-
-  //     return widthNoScroll - widthWithScroll;
-  //   };
-
-  //   if (!document) return;
-
-  //   // document.documentElement.style.setProperty(
-  //   //   "--sbw",
-  //   //   `${calculateScrollbarWidth()}px`
-  //   // );
-  // }, []);
 
   return (
     <ConfigContextProvider>

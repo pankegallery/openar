@@ -247,11 +247,6 @@ export const UserDetails = ({
           </Box>
         )}
 
-        {/* _____________________________
-
-                TODO: Buy Button onclick LINK
-            _______________________________*/}
-
         {/* ======== BOX: User reviews  ======== */}
         {user.reviews && (
           <Box className="reviews" borderBottom="1px solid white" p="6">

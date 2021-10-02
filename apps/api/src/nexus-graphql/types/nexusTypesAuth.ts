@@ -136,23 +136,15 @@ export const AuthMutations = extendType({
         authorizeApiUser(ctx, "canRefreshAccessToken", true),
 
       async resolve(...[, , { res, req }]) {
-        // throw new AuthenticationError("Access Denied"); TODO: REmove
-        logger.debug("Auth refresh #1");
         const token = req?.cookies?.refreshToken;
 
         if (!token) throw new AuthenticationError("Access Denied");
 
-        logger.debug("Auth refresh #2");
         const authPayload = await authRefresh(token);
 
-        logger.debug("Auth refresh #3");
         if (!authPayload || !authPayload?.tokens?.refresh?.token)
           throw new AuthenticationError("Access Denied");
 
-        logger.debug("Auth refresh #4");
-        logger.debug(
-          `authRefresh, about toe set new refresh token cookie ${authPayload.tokens.refresh.token}`
-        );
         return tokenProcessRefreshToken(res, authPayload);
       },
     });

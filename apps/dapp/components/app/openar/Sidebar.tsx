@@ -3,6 +3,7 @@ import React from "react";
 import { Box, chakra } from "@chakra-ui/react";
 import { useAuthentication } from "~/hooks";
 import { Menu } from "~/components/frontend";
+import { appConfig } from "~/config";
 
 export const Sidebar = () => {
   const [appUser] = useAuthentication();
@@ -21,29 +22,6 @@ export const Sidebar = () => {
       slug: "newArtwork",
       label: " + Artwork",
       url: "/x/a/create",
-    },
-  ];
-
-  const footerMenu = [
-    {
-      slug: "discord",
-      label: "Discord",
-      url: "discord",
-    },
-    {
-      slug: "imprint",
-      label: "Imprint",
-      url: "/p/imprint",
-    },
-    {
-      slug: "tandc",
-      label: "Terms and Conditions",
-      url: "/p/tandc",
-    },
-    {
-      slug: "logout",
-      label: "Logout",
-      url: "/p/funding",
     },
   ];
 
@@ -118,7 +96,7 @@ export const Sidebar = () => {
             },
           }}
         >
-          <Menu pages={footerMenu} />
+          <Menu pages={appConfig.secondaryMenu} />
         </chakra.nav>
       </Box>
     </>

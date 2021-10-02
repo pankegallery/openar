@@ -151,7 +151,7 @@ export const PublicUserProfile = ({
 
 // This function gets called at build time
 export async function getStaticPaths() {
-  return { paths: [], fallback: "blocking" }; // TODO: probably we need somehow configure the refresh timeout.
+  return { paths: [], fallback: "blocking" };
 }
 
 export const getStaticProps = async ({ params }: { params: any }) => {
@@ -237,6 +237,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
       user: data?.user,
       collection: data?.collection,
     },
+    revalidate: 240, 
   };
 };
 

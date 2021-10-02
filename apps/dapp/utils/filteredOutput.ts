@@ -11,10 +11,7 @@ export const filteredOutputByBlacklist = (
 ): any => {
   if (!obj) return obj;
 
-  if (!keys) {
-    // TODO: better error logging
-    return obj;
-  }
+  if (!keys) return obj;
 
   if (obj !== Object(obj)) {
     return obj;
@@ -48,10 +45,8 @@ export const filteredOutputByWhitelist = (
 ): any => {
   if (!obj) return obj;
 
-  if (!keys) {
-    // TODO: better error logging
-    return obj;
-  }
+  if (!Array.isArray(keys))
+    return Array.isArray(obj) ? obj.map(() => ({})) : {};
 
   if (obj !== Object(obj)) {
     return obj;
@@ -88,10 +83,8 @@ export const filteredOutputByWhitelistNullToUndefined = (
 
   if (!obj) return obj;
 
-  if (!keys) {
-    // TODO: better error logging
-    return obj;
-  }
+  if (!Array.isArray(keys))
+    return Array.isArray(obj) ? obj.map(() => ({})) : {};
 
   if (obj !== Object(obj)) {
     return obj;

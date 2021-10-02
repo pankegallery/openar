@@ -13,10 +13,7 @@ export const filteredOutputByBlacklist = (
 ): any => {
   if (!obj) return obj;
 
-  if (!keys) {
-    // TODO: better error logging
-    return obj;
-  }
+  if (!keys) return obj;
 
   if (obj !== Object(obj)) {
     return obj;
@@ -50,10 +47,8 @@ export const filteredOutputByWhitelist = (
 ): any => {
   if (!obj) return obj;
 
-  if (!keys) {
-    // TODO: better error logging
-    return obj;
-  }
+  if (!Array.isArray(keys))
+    return Array.isArray(obj) ? obj.map(() => ({})) : {};
 
   if (obj !== Object(obj)) {
     return obj;
@@ -86,10 +81,7 @@ export const filteredOutputByBlacklistOrNotFound = (
 ): any => {
   if (!obj) throw new ApiError(httpStatus.NOT_FOUND, "Not found");
 
-  if (!keys) {
-    // TODO: better error logging
-    return obj;
-  }
+  if (!keys) return obj;
 
   return filteredOutputByBlacklist(obj, keys);
 };
@@ -100,10 +92,8 @@ export const filteredOutputByWhitelistOrNotFound = (
 ): any => {
   if (!obj) throw new ApiError(httpStatus.NOT_FOUND, "Not found");
 
-  if (!keys) {
-    // TODO: better error logging
-    return obj;
-  }
+  if (!Array.isArray(keys))
+    return Array.isArray(obj) ? obj.map(() => ({})) : {};
 
   return filteredOutputByWhitelist(obj, keys);
 };

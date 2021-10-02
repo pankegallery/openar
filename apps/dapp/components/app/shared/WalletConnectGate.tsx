@@ -89,7 +89,7 @@ export const WalletConnectGate = ({
       Router.asPath.indexOf("/x/") > -1 &&
       !isLoggingIn
     ) {
-      Router.replace("/");
+      Router.replace(appConfig.reauthenticateRedirectUrl);
     }
   }, [loginStatus, isLoggingIn]);
 

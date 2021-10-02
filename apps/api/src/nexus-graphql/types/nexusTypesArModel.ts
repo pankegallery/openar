@@ -3,13 +3,12 @@ import { objectType, extendType, nonNull, intArg } from "nexus";
 import httpStatus from "http-status";
 
 import { ApiError } from "../../utils";
-
-// import { authorizeApiUser } from "../helpers"; TODO: enable!
+import { authorizeApiUser } from "../helpers";
 
 import {
-  daoArModelGetById,
   daoArModelGetStatusById,
   daoArModelSetToDelete,
+  daoArModelQueryCount,
 } from "../../dao";
 
 export const ArModel = objectType({
@@ -38,21 +37,6 @@ export const ArModelStatus = objectType({
 export const ArModelQueries = extendType({
   type: "Query",
   definition(t) {
-    t.nonNull.field("arModelRead", {
-      type: "ArModel",
-
-      args: {
-        id: nonNull(intArg()),
-      },
-
-      // TODO: how to protect individual assets only own or authorize: (...[, , ctx]) => authorizeApiUser(ctx, "artworkReadOwn"),
-
-      // resolve(root, args, ctx, info)
-      async resolve(...[, args]) {
-        return daoArModelGetById(args.id);
-      },
-    });
-
     t.nonNull.field("arModelStatus", {
       type: "ArModelStatus",
 
@@ -85,7 +69,19 @@ export const ArModelMutations = extendType({
         id: nonNull(intArg()),
       },
 
-      // TODO enable later also check if user owns if not full access ... authorize: (...[, , ctx]) => authorizeApiUser(ctx, "arModelDelete"),
+      authorize: async (...[, args, ctx]) => {
+        if (!authorizeApiUser(ctx, "artworkDeleteOwn")) return false;
+
+        const count = await daoArModelQueryCount({
+          id: args.id,
+
+          owner: {
+            id: ctx.appUser?.id ?? 0,
+          },
+        });
+
+        return count === 1;
+      },
 
       async resolve(...[, args]) {
         const arModel = await daoArModelSetToDelete(args.id);

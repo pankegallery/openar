@@ -103,7 +103,7 @@ export const ArObject = ({ arObject }: { arObject: any }) => {
 
 // This function gets called at build time
 export async function getStaticPaths() {
-  return { paths: [], fallback: "blocking" }; // TODO: probably we need somehow configure the refresh timeout.
+  return { paths: [], fallback: "blocking" };
 }
 
 export const getStaticProps = async ({ params }: { params: any }) => {
@@ -164,7 +164,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     props: {
       arObject: data?.arObject,
     },
-    revalidate: 60, 
+    revalidate: 240, 
   };
 };
 

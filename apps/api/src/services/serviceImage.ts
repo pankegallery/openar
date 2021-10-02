@@ -83,6 +83,4 @@ export const imageCreate = async (
 export default {
   imageGetUploadInfo,
   imageCreate,
-  // imageUpdate,
-  // imageRead,
 };

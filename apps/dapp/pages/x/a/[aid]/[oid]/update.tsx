@@ -139,7 +139,6 @@ const Update = () => {
       ...filteredOutputByWhitelist(data.arObjectReadOwn, [
         "title",
         "description",
-        "orderNumber",
         "status",
       ]),
     });
@@ -157,8 +156,6 @@ const Update = () => {
           {
             title: newData.title,
             description: newData.description,
-            // TODO: remove order number
-            orderNumber: newData.orderNumber ?? null,
             status: newData.status ?? null,
             creator: {
               connect: {

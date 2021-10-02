@@ -134,8 +134,7 @@ const EmailConfirmation = () => {
     (isTokenError || confirmationError) &&
     !hasRequestedEmail
   )
-    // todo make better TODO:
-    content = (
+   content = (
       <>
         <Box mb="6">
           <Heading as="h2" mb="2">

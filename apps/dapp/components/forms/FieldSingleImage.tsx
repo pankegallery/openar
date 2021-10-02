@@ -47,7 +47,6 @@ export const FieldSingleImage = ({
   const config = useConfigContext();
   const { setValue, getValues } = useFormContext();
 
-  // TODO: Fix layout
   return (
     <chakra.fieldset
       border="1px solid"

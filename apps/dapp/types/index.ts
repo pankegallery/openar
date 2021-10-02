@@ -17,6 +17,12 @@ export type MutationProgressInfo = {
   percent: string;
 };
 
+export interface AppMenuItem {
+  slug: String;
+  label: String;
+  url: String;
+}
+
 export type AppConfigSettings = {
   apiUrl?: string | undefined;
   restrictedAccessRedirectUrl?: string | undefined;
@@ -32,6 +38,8 @@ export type AppConfigSettings = {
   chainId?: number;
   numBlockConfirmations?: number;
   platformCuts: PlatformCuts;
+  mainMenu: AppMenuItem[];
+  secondaryMenu: AppMenuItem[];
 };
  
 export type AppConfig = Complete<AppConfigSettings>;

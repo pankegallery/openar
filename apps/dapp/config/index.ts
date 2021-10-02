@@ -34,6 +34,20 @@ export const appConfig: AppConfig = {
     furtherSalesPool: Decimal.new(5),
     furtherSalesCreator: Decimal.new(5),
   },
+  mainMenu: [
+    { slug: "exhibitions", label: "Exhibitions", url: "/" },
+    { slug: "artworks", label: "Artworks", url: "/artworks" },
+    { slug: "about", label: "About", url: "/p/about" },
+    { slug: "blog", label: "Blog", url: "/p/blog" },
+  ],
+  secondaryMenu: [
+    { slug: "discord", label: "Discord", url: "https://discord.gg/efGHVEKM" },
+    { slug: "badges", label: "Roles and Badges", url: "/p/badges" },
+    //    { slug: "funding", label: "Platform funding", url: "p/funding" },
+    { slug: "privpol", label: "Privacy policy", url: "/p/privpol" },
+    //    { slug: "tandc", label: "Terms and Conditions", url: "p/tandc" },
+    { slug: "imprint", label: "Imprint", url: "/p/imprint" },
+  ]
 };
 
 export const chainInfo = {

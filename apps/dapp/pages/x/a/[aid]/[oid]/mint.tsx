@@ -221,8 +221,6 @@ const Update = () => {
     newData: yup.InferType<typeof ModuleArObjectMintableSchema>
   ) => {};
 
-  // TODO: make more general
-
   const breadcrumb = [
     {
       path: `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/update`,

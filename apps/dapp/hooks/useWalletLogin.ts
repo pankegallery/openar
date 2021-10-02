@@ -230,7 +230,6 @@ export function useWalletLogin() {
               await walletLoginLogin(result?.result);
             } else {
               if (error?.code && error?.code === 4001) {
-                // TODO: make better
                 setAwaitingUserInteraction(null);
 
                 const msg =

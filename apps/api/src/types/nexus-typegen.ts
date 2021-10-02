@@ -319,10 +319,6 @@ export interface NexusGenObjects {
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
     url?: string | null; // String
   }
-  UsersQueryResult: { // root type
-    totalCount?: number | null; // Int
-    users?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
-  }
 }
 
 export interface NexusGenInterfaces {
@@ -511,7 +507,6 @@ export interface NexusGenFieldTypes {
     url: string | null; // String
   }
   Query: { // field return type
-    arModelRead: NexusGenRootTypes['ArModel']; // ArModel!
     arModelStatus: NexusGenRootTypes['ArModelStatus']; // ArModelStatus!
     arObject: NexusGenRootTypes['ArObject']; // ArObject!
     arObjectReadOwn: NexusGenRootTypes['ArObject']; // ArObject!
@@ -524,13 +519,11 @@ export interface NexusGenFieldTypes {
     artworksReadOwn: NexusGenRootTypes['ArtworkQueryResult'] | null; // ArtworkQueryResult
     collection: NexusGenRootTypes['ArObjectQueryResult']; // ArObjectQueryResult!
     exhibition: NexusGenRootTypes['Exhibition']; // Exhibition!
-    imageRead: NexusGenRootTypes['Image']; // Image!
     imageStatus: NexusGenRootTypes['ImageStatus']; // ImageStatus!
     images: NexusGenRootTypes['ImageQueryResult'] | null; // ImageQueryResult
     user: NexusGenRootTypes['PublicUser'] | null; // PublicUser
     userProfileRead: NexusGenRootTypes['User'] | null; // User
     userRead: NexusGenRootTypes['User'] | null; // User
-    users: NexusGenRootTypes['UsersQueryResult'] | null; // UsersQueryResult
   }
   User: { // field return type
     acceptedTerms: boolean | null; // Boolean
@@ -547,10 +540,6 @@ export interface NexusGenFieldTypes {
     roles: Array<string | null> | null; // [String]
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
     url: string | null; // String
-  }
-  UsersQueryResult: { // field return type
-    totalCount: number | null; // Int
-    users: Array<NexusGenRootTypes['User'] | null> | null; // [User]
   }
   UserBaseNode: { // field return type
     artworks: Array<NexusGenRootTypes['Artwork'] | null> | null; // [Artwork]
@@ -739,7 +728,6 @@ export interface NexusGenFieldTypeNames {
     url: 'String'
   }
   Query: { // field return type name
-    arModelRead: 'ArModel'
     arModelStatus: 'ArModelStatus'
     arObject: 'ArObject'
     arObjectReadOwn: 'ArObject'
@@ -752,13 +740,11 @@ export interface NexusGenFieldTypeNames {
     artworksReadOwn: 'ArtworkQueryResult'
     collection: 'ArObjectQueryResult'
     exhibition: 'Exhibition'
-    imageRead: 'Image'
     imageStatus: 'ImageStatus'
     images: 'ImageQueryResult'
     user: 'PublicUser'
     userProfileRead: 'User'
     userRead: 'User'
-    users: 'UsersQueryResult'
   }
   User: { // field return type name
     acceptedTerms: 'Boolean'
@@ -775,10 +761,6 @@ export interface NexusGenFieldTypeNames {
     roles: 'String'
     updatedAt: 'DateTime'
     url: 'String'
-  }
-  UsersQueryResult: { // field return type name
-    totalCount: 'Int'
-    users: 'User'
   }
   UserBaseNode: { // field return type name
     artworks: 'Artwork'
@@ -863,9 +845,6 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
-    arModelRead: { // args
-      id: number; // Int!
-    }
     arModelStatus: { // args
       id: number; // Int!
     }
@@ -914,9 +893,6 @@ export interface NexusGenArgTypes {
     exhibition: { // args
       slug: string; // String!
     }
-    imageRead: { // args
-      id: number; // Int!
-    }
     imageStatus: { // args
       id: number; // Int!
     }
@@ -935,12 +911,6 @@ export interface NexusGenArgTypes {
     }
     userRead: { // args
       id: number; // Int!
-    }
-    users: { // args
-      orderBy?: NexusGenScalars['JSON'] | null; // JSON
-      pageIndex?: number | null; // Int
-      pageSize: number | null; // Int
-      where?: NexusGenScalars['JSON'] | null; // JSON
     }
   }
 }

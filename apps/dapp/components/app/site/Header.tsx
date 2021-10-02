@@ -1,44 +1,25 @@
 import { ActiveLink } from "~/components/ui";
 import { Menu } from "~/components/frontend";
-import {
-  Box,
-  chakra
-} from "@chakra-ui/react";
+import { Box, chakra } from "@chakra-ui/react";
+import { appConfig } from "~/config";
 
 export const Header = (/* props */) => {
 
   const headerMenu = [
-    {
-      slug: "exhibitions",
-      label:"Exhibitions",
-      url:"/"
-    },
-    {
-      slug: "artworks",
-      label: "Artworks",
-      url: "/artworks"
-    },
-    {
-      slug: "about",
-      label: "About",
-      url: "/p/about"
-    },
-    {
-      slug: "blog",
-      label :"Blog",
-      url: "/p/blog"
-    },
-    {
-      slug: "help",
-      label: "Help",
-      url: "/p/help"
-    },
-    {
-      slug: "badges",
-      label: "Roles and Badges",
-      url: "/p/tandc"
-    },
-  ]
+    ...appConfig.mainMenu,
+    [
+      {
+        slug: "help",
+        label: "Help",
+        url: "/p/help",
+      },
+      {
+        slug: "badges",
+        label: "Roles and Badges",
+        url: "/p/tandc",
+      },
+    ],
+  ];
 
   return (
     <Box
@@ -65,16 +46,15 @@ export const Header = (/* props */) => {
         textStyle="h2"
         justifyContent="center"
         sx={{
-          "a": {
+          a: {
             display: "block",
             my: "1",
-            mr: "20"
-          }
+            mr: "20",
+          },
         }}
       >
         <Menu pages={headerMenu} />
       </chakra.nav>
     </Box>
-    );
+  );
 };
-

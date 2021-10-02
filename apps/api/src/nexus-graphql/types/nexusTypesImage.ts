@@ -124,21 +124,6 @@ export const ImageQueries = extendType({
       },
     });
 
-    t.nonNull.field("imageRead", {
-      type: "Image",
-
-      args: {
-        id: nonNull(intArg()),
-      },
-
-      // TODO: how to protect individual assets only own or authorize: (...[, , ctx]) => authorizeApiUser(ctx, "imageRead"),
-
-      // resolve(root, args, ctx, info)
-      async resolve(...[, args]) {
-        return daoImageGetById(args.id);
-      },
-    });
-
     t.nonNull.field("imageStatus", {
       type: "ImageStatus",
 

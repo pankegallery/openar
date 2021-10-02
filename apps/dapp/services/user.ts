@@ -24,7 +24,6 @@ let refreshTimeoutId: ReturnType<typeof setTimeout>;
 
 const canRefresh = () => store.getState().user.allowRefresh;
 
-// TODO: xxx is the autorefresh really needed? Or is it good enough to rely on the refresh by use of the API?
 const refreshToken = async () => {
   if (client && canRefresh() && getRefreshCookie()) {
     setAllowRefresh(false);

@@ -12,8 +12,6 @@ export const RestrictPageAccess = (
 ) => {
   const appUser = getAppUser();
   
-  // TODO: this must be more complicated
-
   const hocComponent = ({ ...props }) => (
     <AccessRestrictedComponent {...props} />
   );

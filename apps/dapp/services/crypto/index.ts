@@ -11,21 +11,20 @@ export const xDAI = "0x6b175474e89094c44da98b954eedeac495271d0f";
 export const supportedChainIds = [
   // TODO: what chain ids should be supported? 
   ChainId.Mainnet,
-  ChainId.Ropsten,
+  // ChainId.Ropsten,
   ChainId.xDai,
   ChainId.Hardhat,
-  ChainId.Localhost,
+  // ChainId.Localhost,
 ];
 
 export const readOnlyUrls = {
   [ChainId.Mainnet]: `https://mainnet.infura.io/v3/${appConfig.infuraApiKey}`,
-  [ChainId.Ropsten]: `https://ropsten.infura.io/v3/${appConfig.infuraApiKey}`,
+  // [ChainId.Ropsten]: `https://ropsten.infura.io/v3/${appConfig.infuraApiKey}`,
   [ChainId.xDai]: `${appConfig.ankrXDaiRPCURL}`,
   [ChainId.Hardhat]: "http://localhost:8545",
-  [ChainId.Localhost]: "http://localhost:8545",
+  // [ChainId.Localhost]: "http://localhost:8545",
 };
 
-// TODO: make better ...
 const POLLING_INTERVAL = 12000;
 
 export const injectedConnector = new InjectedConnector({

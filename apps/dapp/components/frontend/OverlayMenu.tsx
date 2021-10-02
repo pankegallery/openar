@@ -25,6 +25,7 @@ import MenuCornerWhiteHover from "~/assets/img/menu-corner-light-hover.svg";
 import MenuCornerWhite from "~/assets/img/menu-corner-light.svg";
 import MenuCornerDarkHover from "~/assets/img/menu-corner-dark-hover.svg";
 import MenuCornerDark from "~/assets/img/menu-corner-dark.svg";
+import {appConfig } from "~/config";
 
 export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
   const [appUser] = useAuthentication();
@@ -42,24 +43,6 @@ export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
       sodales nulla, sed semper nisi.
     </Box>
   );
-
-  /* TODO: We define menu items here and in the pages header and footer elements, should be defined somewhere centrally */
-
-  const mainMenu = [
-    { slug: "exhibitions", label: "Exhibitions", url: "/" },
-    { slug: "artworks", label: "Artworks", url: "/artworks" },
-    { slug: "about", label: "About", url: "/p/about" },
-    { slug: "blog", label: "Blog", url: "/p/blog" },
-  ];
-
-  const secondaryMenu = [
-    { slug: "discord", label: "Discord", url: "https://discord.gg/efGHVEKM" },
-    { slug: "badges", label: "Roles and Badges", url: "/p/badges" },
-    //    { slug: "funding", label: "Platform funding", url: "p/funding" },
-    { slug: "privpol", label: "Privacy policy", url: "/p/privpol" },
-    //    { slug: "tandc", label: "Terms and Conditions", url: "p/tandc" },
-    { slug: "imprint", label: "Imprint", url: "/p/imprint" },
-  ];
 
   useEffect(() => {
     const handleRouteChange = (url, { shallow }) => {
@@ -277,7 +260,7 @@ export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
                       },
                     }}
                   >
-                    <Menu pages={mainMenu} />
+                    <Menu pages={appConfig.mainMenu} />
                   </chakra.nav>
                 </Flex>
                 <Box
@@ -354,7 +337,7 @@ export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
                     },
                   }}
                 >
-                  <Menu pages={secondaryMenu} />
+                  <Menu pages={appConfig.secondaryMenu} />
                 </chakra.nav>
               </Box>
             </Grid>

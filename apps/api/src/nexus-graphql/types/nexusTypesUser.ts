@@ -1,7 +1,6 @@
 /// <reference path="../../types/nexus-typegen.ts" />
 import { parseResolveInfo } from "graphql-parse-resolve-info";
-import dedent from "dedent";
-import { Prisma, User as PrismaTypeUser } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 import {
   objectType,
@@ -10,8 +9,6 @@ import {
   nonNull,
   stringArg,
   intArg,
-  arg,
-  list,
   interfaceType,
 } from "nexus";
 import httpStatus from "http-status";
@@ -23,19 +20,18 @@ import {
   userProfileUpdate,
 } from "../../services/serviceUser";
 
-import { GQLJson } from "./nexusTypesShared";
 import {
   authorizeApiUser,
   isCurrentApiUser,
   isNotCurrentApiUser,
   isCurrentApiUserByEthAddress,
 } from "../helpers";
-import { getApiConfig } from "../../config";
+
 import {
-  daoUserQuery,
+  // daoUserQuery,
   daoSubgraphGetOwnedTokenByEthAddress,
   daoUserGetById,
-  daoUserQueryCount,
+  // daoUserQueryCount,
   daoUserFindFirst,
   daoUserProfileImageDelete,
 } from "../../dao";
@@ -46,8 +42,6 @@ import {
   ArtworkStatusEnum,
   ApiError,
 } from "../../utils";
-
-const apiConfig = getApiConfig();
 
 const UserBaseNode = interfaceType({
   name: "UserBaseNode",
@@ -98,62 +92,59 @@ export const User = objectType({
   },
 });
 
-export const UsersQueryResult = objectType({
-  name: "UsersQueryResult",
-  description: dedent`
-    TODO: write better descriptions
-    last item in the list. Pass this cuSimple wrapper around our list of launches that contains a cursor to the
-    last item in the list. Pass this cursor to the launches query to fetch results
-    after these.
-  `,
-  definition: (t) => {
-    t.int("totalCount");
-    t.field("users", { type: list(User) });
-  },
-});
+// export const UsersQueryResult = objectType({
+//   name: "UsersQueryResult",
+//   description: dedent`
+//     Allows to query the registered users.
+//   `,
+//   definition: (t) => {
+//     t.int("totalCount");
+//     t.field("users", { type: list(User) });
+//   },
+// });
 
 export const UserQueries = extendType({
   type: "Query",
   definition(t) {
-    t.field("users", {
-      type: UsersQueryResult,
-      args: {
-        pageIndex: intArg({
-          default: 0,
-        }),
-        pageSize: intArg({
-          default: apiConfig.db.defaultPageSize,
-        }),
-        orderBy: arg({
-          type: GQLJson,
-          default: undefined,
-        }),
-        where: arg({
-          type: GQLJson,
-          default: undefined,
-        }),
-      },
+    // t.field("users", {
+    //   type: UsersQueryResult,
+    //   args: {
+    //     pageIndex: intArg({
+    //       default: 0,
+    //     }),
+    //     pageSize: intArg({
+    //       default: apiConfig.db.defaultPageSize,
+    //     }),
+    //     orderBy: arg({
+    //       type: GQLJson,
+    //       default: undefined,
+    //     }),
+    //     where: arg({
+    //       type: GQLJson,
+    //       default: undefined,
+    //     }),
+    //   },
 
-      authorize: (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
+    //   authorize: (...[, , ctx]) => authorizeApiUser(ctx, "userRead"),
 
-      async resolve(...[, args]) {
-        const totalCount = await daoUserQueryCount(args.where);
-        let users: PrismaTypeUser[] = [];
+    //   async resolve(...[, args]) {
+    //     const totalCount = await daoUserQueryCount(args.where);
+    //     let users: PrismaTypeUser[] = [];
 
-        if (totalCount)
-          users = await daoUserQuery(
-            args.where,
-            args.orderBy,
-            args.pageIndex as number,
-            args.pageSize as number
-          );
+    //     if (totalCount)
+    //       users = await daoUserQuery(
+    //         args.where,
+    //         args.orderBy,
+    //         args.pageIndex as number,
+    //         args.pageSize as number
+    //       );
 
-        return {
-          totalCount,
-          users,
-        };
-      },
-    });
+    //     return {
+    //       totalCount,
+    //       users,
+    //     };
+    //   },
+    // });
 
     t.field("user", {
       type: "PublicUser",

@@ -139,7 +139,8 @@ export const userDelete = async (id: number): Promise<User> => {
     throw new ApiError(httpStatus.UNPROCESSABLE_ENTITY, "Invalid input data");
 
   // TODO: this must more solid,
-  // Also other content will have to be taken over by someone else.
+  // Also other content will have to be taken over by someone else or deleted
+  // TODO: also how could we unpin the files on IPFS?
   await daoTokenDeleteMany({
     ownerId: id,
   });

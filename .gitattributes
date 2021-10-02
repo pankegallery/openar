@@ -113,6 +113,7 @@ AUTHORS text
 *.ttf binary
 *.eot binary
 *.woff binary
+*.woff2 binary
 *.pyc binary
 *.pdf binary
 *.glb binary

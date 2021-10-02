@@ -160,14 +160,14 @@ const createApolloClient = (appConfig: AppConfig) => {
           },
         }),
         onError(({ graphQLErrors, networkError }) => {
-          if (graphQLErrors)
-            // TODO: remove?
-            graphQLErrors.forEach((err) =>
-              console.log(
-                err,
-                `[Subgraph GQLError error]: ${err.message} ${err?.extensions?.code ?? ""}`
-              )
-            );
+          // if (graphQLErrors)
+          //   // TODO: remove?
+          //   graphQLErrors.forEach((err) =>
+          //     console.log(
+          //       err,
+          //       `[Subgraph GQLError error]: ${err.message} ${err?.extensions?.code ?? ""}`
+          //     )
+          //   );
         
           if (networkError) console.log(`[Network error]: ${networkError}`);
         }),
