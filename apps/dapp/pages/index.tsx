@@ -209,14 +209,14 @@ export const Home = (props) => {
       >
         {!beta && (
           <AspectRatio ratio={1}>
-            <chakra.img src="images/beta.svg" width="100%" height="100%" alt="We are in beta" />
+            <chakra.img src="images/corner.svg" width="100%" height="100%" alt="We are in beta" />
           </AspectRatio>
         )}
         {beta && (
           <chakra.span cursor="pointer">
             <Link href="/beta" passHref>
               <AspectRatio ratio={1}>
-                <chakra.img src="images/beta.svg" width="100%" height="100%" alt="We are in beta" />
+                <chakra.img src="images/corner.svg" width="100%" height="100%" alt="We are in beta" />
               </AspectRatio>
             </Link>
           </chakra.span>
