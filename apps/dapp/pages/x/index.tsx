@@ -84,7 +84,7 @@ export const User = () => {
   const { data, loading, error } = useQuery(userProfileQuery, {
     skip: !appUser, // if user is not logged in skip the query
     variables: {
-      ethAddress: appUser?.ethAddress ?? "",
+      ethAddress: (appUser?.ethAddress ?? "").toLowerCase(),
     },
   });
 

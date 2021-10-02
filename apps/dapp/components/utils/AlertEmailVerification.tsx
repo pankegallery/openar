@@ -49,7 +49,7 @@ export const AlertEmailVerification = () => {
   const { data, error } = useQuery(GET_EMAIL_VERIFICATION_STATUS, {
     skip: !isLoggedIn() || emailVerified === "yes" || !showPopup,
     variables: {
-      ethAddress: appUser?.ethAddress ?? "",
+      ethAddress: (appUser?.ethAddress ?? "").toLowerCase(),
     },
   });
 

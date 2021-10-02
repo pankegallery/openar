@@ -42,7 +42,7 @@ const Update = () => {
 
   const { data, loading, error } = useQuery(userProfileReadQueryGQL, {
     variables: {
-      ethAddress: appUser?.ethAddress ?? "",
+      ethAddress: (appUser?.ethAddress ?? "").toLowerCase(),
     },
   });
 

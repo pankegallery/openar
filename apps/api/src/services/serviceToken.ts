@@ -188,7 +188,7 @@ export const tokenGenerateAuthTokens = async (
   const refreshToken = generateToken(
     {
       id: user.id,
-      ethAddress: user.ethAddress,
+      ethAddress: user.ethAddress.toLowerCase(),
     },
     roles,
     refreshTokenExpires,
@@ -266,7 +266,7 @@ export const tokenGenerateVerifyEmailToken = async (
   const verifyEmailToken = generateToken(
     {
       id: ownerId,
-      ethAddress,
+      ethAddress: ethAddress.toLowerCase(),
     },
     ["api"],
     expires,
