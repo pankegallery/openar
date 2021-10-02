@@ -185,8 +185,8 @@ const Update = () => {
             const { errors } = await firstMutation(
               parseInt(router.query.oid as string, 10),
               {
-                editionOf: newData.editionOf ?? 1,
-                askPrice: newData.askPrice ?? 0,
+                editionOf: parseInt(newData.editionOf ?? 1),
+                askPrice: parseFloat(newData.askPrice ?? 0),
                 setInitialAsk: !!newData.setInitialAsk,
                 mintSignature: {
                   signature,
@@ -276,6 +276,17 @@ const Update = () => {
       );
   }, [formDataQuery, isAwaitingSignature, isNavigatingAway]);
 
+  console.log(getValues("askPrice"), typeof getValues("askPrice"));
+
+  let askPriceFormatted = getValues("askPrice");
+  if (askPriceFormatted) {
+    if (typeof askPriceFormatted === "string")
+      askPriceFormatted = parseFloat(askPriceFormatted);
+    
+      console.log(askPriceFormatted);
+    askPriceFormatted = askPriceFormatted.toFixed(2);
+  } 
+  
   return (
     <>
       <FormNavigationBlock
@@ -354,7 +365,7 @@ const Update = () => {
               {" "}
               with an intitial ask of{" "}
               <chakra.span fontWeight="bold" color="gray.400">
-                {getValues("askPrice").toFixed(2)}
+                {askPriceFormatted}
               </chakra.span>{" "}
               xDai
             </>
