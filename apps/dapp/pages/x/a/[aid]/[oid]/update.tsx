@@ -7,7 +7,7 @@ import { Text } from "@chakra-ui/react";
 import { useQuery, gql } from "@apollo/client";
 import Head from "next/head";
 import { LayoutOpenAR } from "~/components/app";
-import { FormNavigationBlock } from "~/components/forms";
+import { FormNavigationBlock, FormScrollInvalidIntoView } from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
 import {
   ModuleArtworkArObjectForm,
@@ -294,6 +294,7 @@ const Update = () => {
       />
       <FormProvider {...formMethods}>
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
+          <FormScrollInvalidIntoView hasFormError={isFormError} />
           <fieldset disabled={disableForm}>
             <ModuleSubNav breadcrumb={breadcrumb} buttonList={buttonList} />
             <ModulePage

@@ -20,8 +20,7 @@ import {
   FieldRow,
   FieldTextEditor,
   FieldImageUploader,
-  FieldModelUploader,
-  FormScrollInvalidIntoView,
+  FieldModelUploader
 } from "~/components/forms";
 
 import { IncompleteOverlay } from "~/components/frontend";
@@ -70,7 +69,6 @@ export const ModuleArtworkArObjectForm = ({
         templateRows={rows}
         minH="calc(100vh - 4rem)"
       >
-        <FormScrollInvalidIntoView />
         <Box>
           <FieldRow>
             <FieldInput

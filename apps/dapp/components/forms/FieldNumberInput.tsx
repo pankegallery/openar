@@ -53,11 +53,15 @@ const format = (val: any, precision: number | undefined) => {
 
 const formatDefaultValue = (val: any, settings: number | undefined) => {
   let defaultValue = format(
-    typeof val !== "undefined" ? val : "0.00",
+    val,
     settings
   );
 
-  if (typeof defaultValue !== "string") defaultValue = defaultValue.toString();
+  if (typeof defaultValue !== "undefined" && defaultValue !== null && typeof defaultValue !== "string")
+    defaultValue = defaultValue.toString();
+  
+  if (!defaultValue)
+    return "";
 
   return defaultValue;
 };

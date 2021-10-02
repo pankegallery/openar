@@ -109,11 +109,6 @@ export const ModuleArtworkArObjectsList = ({
           <SortableList
             items={items}
             onSortUpdate={(items) => {
-
-              console.log("Items", items, items.map((item, index: number) => ({
-                id: item.arObjectId,
-                orderNumber: index + 1,
-              })));
               reorderMutation(
                 artworkReadOwn.id,
                 items.map((item, index: number) => ({

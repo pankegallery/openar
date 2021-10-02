@@ -8,8 +8,7 @@ import {
   FieldRow,
   FieldTextEditor,
   FieldImageUploader,
-  FieldSwitch,
-  FormScrollInvalidIntoView,
+  FieldSwitch
 } from "~/components/forms";
 
 import {
@@ -39,7 +38,6 @@ export const ModuleProfileUpdateForm = ({
       templateRows={rows}
       minH="calc(100vh - 4rem)"
     >
-      <FormScrollInvalidIntoView />
       <Box>
         <FieldRow>
           <FieldInput

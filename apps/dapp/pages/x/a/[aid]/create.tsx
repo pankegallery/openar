@@ -8,7 +8,7 @@ import { Text } from "@chakra-ui/react";
 import { useQuery, gql } from "@apollo/client";
 
 import { LayoutOpenAR } from "~/components/app";
-import { FormNavigationBlock } from "~/components/forms";
+import { FormNavigationBlock, FormScrollInvalidIntoView } from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
 import { ModuleArtworkArObjectForm } from "~/components/modules/forms";
 import { ModuleArObjectCreateSchema } from "~/components/modules/validation";
@@ -143,6 +143,7 @@ const Create = () => {
     <>
       <FormNavigationBlock shouldBlock={!isNavigatingAway && isDirty && !isSubmitting} />
       <FormProvider {...formMethods}>
+        <FormScrollInvalidIntoView hasFormError={isFormError} />
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={disableForm}>
             <ModuleSubNav breadcrumb={breadcrumb} buttonList={buttonList} />

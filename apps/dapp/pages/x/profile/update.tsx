@@ -7,7 +7,7 @@ import { Divider, Text } from "@chakra-ui/react";
 import Router from "next/router";
 
 import { LayoutOpenAR } from "~/components/app";
-import { FormNavigationBlock } from "~/components/forms";
+import { FormNavigationBlock, FormScrollInvalidIntoView } from "~/components/forms";
 import { moduleProfileConfig as moduleConfig } from "~/components/modules/config";
 import { ModuleProfileUpdateForm } from "~/components/modules/forms";
 import { UserProfileUpdateValidationSchema } from "~/components/modules/validation";
@@ -155,6 +155,7 @@ const Update = () => {
     <>
       <FormNavigationBlock shouldBlock={(isDirty && !isSubmitting && !isNavigatingAway) || activeUploadCounter > 0} />
       <FormProvider {...formMethods}>
+        <FormScrollInvalidIntoView hasFormError={isFormError} />
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={disableForm}>
             <ModuleSubNav breadcrumb={breadcrumb} buttonList={buttonList} />

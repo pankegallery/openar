@@ -62,7 +62,7 @@ export const daoArObjectQueryCount = async (
 export const daoArObjectCreate = async (
   data: Prisma.ArObjectCreateInput
 ): Promise<ArObject> => {
-  const arObject = await prisma.arObject.create({
+  let arObject = await prisma.arObject.create({
     data: {
       ...data,
       orderNumber: 1,
@@ -76,7 +76,7 @@ export const daoArObjectCreate = async (
   });
 
   if (count > 1) {
-    await prisma.arObject.update({
+    arObject = await prisma.arObject.update({
       data: {
         orderNumber: count,
       },
@@ -165,7 +165,7 @@ export const daoArObjectReorder = async (
   data: any
 ): Promise<number> => {
   const promises = await prisma.$transaction(
-    data.map(async (arO: any) => {
+    data.map((arO: any) => {
       return prisma.arObject.update({
         data: {
           orderNumber: arO.orderNumber,

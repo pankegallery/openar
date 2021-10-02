@@ -17,7 +17,7 @@ import {
 
 import { LayoutOpenAR } from "~/components/app";
 import { WalletActionRequired } from "~/components/frontend";
-import { FormNavigationBlock } from "~/components/forms";
+import { FormNavigationBlock, FormScrollInvalidIntoView } from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
 import { ModuleArtworkArObjectMint } from "~/components/modules/forms";
 import { ModuleArObjectMintableSchema } from "~/components/modules/validation";
@@ -284,6 +284,7 @@ const Update = () => {
         shouldBlock={!isNavigatingAway && isAwaitingSignature}
       />
       <FormProvider {...formMethods}>
+        <FormScrollInvalidIntoView hasFormError={isFormError} />
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={disableForm}>
             <ModuleSubNav breadcrumb={breadcrumb} buttonList={buttonList} />

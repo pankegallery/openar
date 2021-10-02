@@ -12,8 +12,7 @@ import {
   FieldRow,
   FieldTextEditor,
   FieldSwitch,
-  FieldImageUploader,
-  FormScrollInvalidIntoView
+  FieldImageUploader
 } from "~/components/forms";
 
 import { IncompleteOverlay, ShowUrlAndCopy } from "~/components/frontend";
@@ -55,7 +54,6 @@ export const ModuleArtworkForm = ({
       templateRows={rows}
       minH="calc(100vh - 4rem)"
     >
-      <FormScrollInvalidIntoView />
       <Box>
         <FieldRow>
           <FieldInput
