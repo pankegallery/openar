@@ -28,9 +28,5 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "skipLibCheck": true
-  },
-  "typeRoots": ["./src","./src/typechain"],
-  "paths": {
-    "*": ["*", "./src/*","./src/typechain/*"]
   }
 }
