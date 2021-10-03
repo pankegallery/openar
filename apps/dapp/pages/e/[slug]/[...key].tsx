@@ -265,7 +265,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     !data ||
     !data?.artwork ||
     !data?.exhibition ||
-    !data?.exhibitions?.artworks ||
+    !data?.exhibition?.artworks ||
     data?.exhibition?.artworks.length === 0
   ) {
     return {

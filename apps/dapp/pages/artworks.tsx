@@ -46,22 +46,34 @@ export const Artworks = ({ artworks }: { artworks: any }) => {
         <Box height="100%" width="100%" overflow="scroll">
           {artworks.length > 0 && (
             <Flex width="100%" flexWrap="wrap">
-              {artworks.map((artwork) => (
-                <ArtworkListItem
-                  isAdmin={false}
-                  key={artwork.key}
-                  urlKey={artwork.key}
-                  col={3}
-                  {...pick(artwork, [
-                    "id",
-                    "key",
-                    "status",
-                    "heroImage",
-                    "title",
-                    "creator",
-                  ])}
-                />
-              ))}
+              {artworks.map((artwork) => {
+                let image = artwork?.heroImage;
+                if (!image) {
+                  if (
+                    artwork?.arObjects &&
+                    Array.isArray(artwork?.arObjects) &&
+                    artwork?.arObjects.length > 0
+                  ) {
+                    image = artwork?.arObjects[0].heroImage;                    
+                  }
+                }
+                return (
+                  <ArtworkListItem
+                    isAdmin={false}
+                    key={artwork.key}
+                    urlKey={artwork.key}
+                    col={3}
+                    heroImage={image}
+                    {...pick(artwork, [
+                      "id",
+                      "key",
+                      "status",
+                      "title",
+                      "creator",
+                    ])}
+                  />
+                )
+              } )}
             </Flex>
           )}
         </Box>

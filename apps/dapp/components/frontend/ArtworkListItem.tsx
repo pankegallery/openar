@@ -68,6 +68,9 @@ export const ArtworkListItem = ({
     }
   } 
 
+  if (!heroImage?.id)
+    return <></>
+
   return (
     <LinkBox
       as="article"

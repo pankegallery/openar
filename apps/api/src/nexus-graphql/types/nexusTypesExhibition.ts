@@ -110,7 +110,13 @@ export const EventQueries = extendType({
               },
             },
             {
-              heroImage: true,
+              heroImage: {
+                select: {
+                  status: true,
+                  id: true,
+                  meta: true,
+                },
+              },
               creator: {
                 select: {
                   id: true,
@@ -141,6 +147,7 @@ export const EventQueries = extendType({
                     in: [
                       ArObjectStatusEnum.PUBLISHED,
                       ArObjectStatusEnum.MINTING,
+                      ArObjectStatusEnum.MINTCONFIRM,
                       ArObjectStatusEnum.MINTED,
                     ],
                   },

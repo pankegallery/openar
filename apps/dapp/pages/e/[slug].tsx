@@ -47,6 +47,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
       });
     }
   };
+
   return (
     <>
       <Head>
@@ -301,22 +302,34 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
           {exhibition.artworks.length > 0 && (
             <Flex width="100%" flexWrap="wrap">
               {" "}
-              {exhibition.artworks.map((artwork) => (
-                <ArtworkListItem
-                  col={1}
-                  isAdmin={false}
-                  exSlug={exhibition.slug}
-                  urlKey={artwork.key}
-                  key={artwork.key}
-                  {...pick(artwork, [
-                    "id",
-                    "status",
-                    "heroImage",
-                    "title",
-                    "creator",
-                  ])}
-                />
-              ))}
+              {exhibition.artworks.map((artwork) => {
+                let image = artwork?.heroImage;
+                if (!image) {
+                  if (
+                    artwork?.arObjects &&
+                    Array.isArray(artwork?.arObjects) &&
+                    artwork?.arObjects.length > 0
+                  ) {
+                    image = artwork?.arObjects[0].heroImage;                    
+                  }
+                }
+                return (
+                  <ArtworkListItem
+                    col={1}
+                    isAdmin={false}
+                    exSlug={exhibition.slug}
+                    urlKey={artwork.key}
+                    key={artwork.key}
+                    heroImage={image}
+                    {...pick(artwork, [
+                      "id",
+                      "status",
+                      "title",
+                      "creator",
+                    ])}
+                  />
+                );
+              })}
             </Flex>
           )}
         </Box>
@@ -364,6 +377,15 @@ export const getStaticProps = async ({ params }: { params: any }) => {
             meta
             status
           }
+          arObjects {
+            id
+            status
+            heroImage {
+              id
+              meta
+              status
+            }
+          }
         }
       }
     }
@@ -390,7 +412,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     props: {
       exhibition: data?.exhibition,
     },
-    revalidate: 240, 
+    revalidate: 240,
   };
 };
 
