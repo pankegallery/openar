@@ -45,10 +45,6 @@ const OpenARLogin = () => {
 
   return (
     <Box p="6">
-      <Head>
-        <title>OpenAR</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <Text mb="4">Hello, please click to connect your wallet to openAR.</Text>
 
       {(((!appUser || !stateUser.authenticated) && !isNavigating) ||
