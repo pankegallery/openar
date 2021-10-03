@@ -561,10 +561,29 @@ const doChores = async () => {
       throw Error("Not found");
     }
     await prisma.$disconnect();
-  } catch (Err) {
+  } catch (err: any) {
+    const arObject = await prisma.arObject.findUnique({
+      where: {
+        id: args.objectId,
+      },
+    });
+
+    if (arObject) {
+      await prisma.arObject.update({
+        data: {
+          status: ArObjectStatusEnum.MINTERROR,
+          mintMetaData: {
+            error: err.message,
+          },
+        },
+        where: {
+          id: arObject.id,
+        },
+      });
+    }
     if (prisma) await prisma.$disconnect();
-    logger.error(Err);
-    throw Err;
+    logger.error(err);
+    throw err;
   }
 };
 
