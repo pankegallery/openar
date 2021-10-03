@@ -60,24 +60,29 @@ const doChores = async () => {
 
     if (images && images.length > 0) {
       await Promise.all(
-        images.map(async (image) => {
-          if (image?.meta) {
-            const meta = image?.meta as any;
-            try {
+        images.map(async (image: any) => {
+          const { meta } = image;
+          try {
+            if (meta && meta?.availableSizes) {
               const uploadPath = `${apiConfig.baseDir}/${apiConfig.publicDir}${meta.uploadFolder}/`;
 
-              Object.keys(meta.availableSizes).forEach((size) => {
-                const fileName = meta.availableSizes[size].url.split("/").pop();
-                unlinkSync(`${uploadPath}${fileName}`);
-              });
-              await prisma.image.delete({
-                where: {
-                  id: image.id,
-                },
-              });
-            } catch (err: any) {
-              postMessage(`Error ${err.message}`);
+              if (meta?.availableSizes) {
+                Object.keys(meta.availableSizes).forEach((size) => {
+                  const fileName = meta.availableSizes[size].url
+                    .split("/")
+                    .pop();
+                  unlinkSync(`${uploadPath}${fileName}`);
+                });
+              }
             }
+
+            await prisma.image.delete({
+              where: {
+                id: image.id,
+              },
+            });
+          } catch (err: any) {
+            postMessage(`Error ${err.message}`);
           }
         })
       );
@@ -99,20 +104,18 @@ const doChores = async () => {
 
     if (models && models.length > 0) {
       await Promise.all(
-        models.map(async (model) => {
-          if (model?.meta) {
-            const meta = model?.meta as any;
-            try {
-              unlinkSync(`${meta.originalFilePath}`);
+        models.map(async (model: any) => {
+          const { meta } = model;
+          try {
+            if (meta?.originalFilePath) unlinkSync(`${meta.originalFilePath}`);
 
-              await prisma.arModel.delete({
-                where: {
-                  id: model.id,
-                },
-              });
-            } catch (err: any) {
-              postMessage(`Error ${err.message}`);
-            }
+            await prisma.arModel.delete({
+              where: {
+                id: model.id,
+              },
+            });
+          } catch (err: any) {
+            postMessage(`Error ${err.message}`);
           }
         })
       );
