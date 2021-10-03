@@ -108,7 +108,6 @@ const doChores = async () => {
           const { meta } = model;
           try {
             if (meta?.originalFilePath) unlinkSync(`${meta.originalFilePath}`);
-
             await prisma.arModel.delete({
               where: {
                 id: model.id,
