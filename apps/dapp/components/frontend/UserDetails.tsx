@@ -9,7 +9,7 @@ import {
   ArtworkList,
 } from "~/components/frontend";
 
-import { useAuthentication, useSSRSaveMediaQuery } from "~/hooks";
+import { useAuthentication } from "~/hooks";
 import { AlertEmailVerification } from "../utils";
 import { getArtistName } from "~/utils";
 
@@ -25,10 +25,11 @@ export const UserDetails = ({
   let name = getArtistName(user?.pseudonym, user?.ethAddress);
   const isIncomplete = !isPublic && !user?.acceptedTerms;
 
-  const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
-  const isTablet = useSSRSaveMediaQuery(
-    "(min-width: 45rem) and (max-width: 75rem)"
-  );
+  console.log(user);
+  // const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
+  // const isTablet = useSSRSaveMediaQuery(
+  //   "(min-width: 45rem) and (max-width: 75rem)"
+  // );
 
   const [appUser] = useAuthentication();
 
@@ -265,7 +266,7 @@ export const UserDetails = ({
         {/* ======== BOX: User artworks  ======== */}
 
         {showArtworks && (
-          <ArtworkList artworks={user.artworks} col={1} isPublic={isPublic} isIncomplete={isIncomplete} />
+          <ArtworkList artworks={user.artworks} col={1} isPublic={isPublic} isIncomplete={isIncomplete || !user?.emailVerified} />
         )}
       </Box>
     </Flex>

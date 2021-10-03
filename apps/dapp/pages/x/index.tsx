@@ -26,6 +26,7 @@ const userProfileQuery = gql`
       url
       pseudonym
       roles
+      emailVerified
       acceptedTerms
       artworks {
         id
