@@ -121,6 +121,9 @@ export const ApiArModel = ({
               color="openar.dark"
               m="6"
               slot="ar-button" 
+              position="absolute"
+              b="6"
+              r="6"
             >
               View in AR <BoxIcon viewBox="-10 -7 50 50" width="30px" height="25px" />
             </Button>
