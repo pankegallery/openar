@@ -363,6 +363,7 @@ const processArObject = async (
           newStatus = ArObjectStatusEnum.MINTRETRY;
         }
       } catch (err: any) {
+        logger.debug("processArObject() error");
         logger.error(err);
 
         let canRetry = false;
@@ -379,6 +380,8 @@ const processArObject = async (
         console.error(err);
         reject(false);
       } finally {
+        logger.debug("processArObject() finally");
+        console.log("update 3");
         await prisma.arObject.update({
           data: {
             status: newStatus,
@@ -495,20 +498,22 @@ const doChores = async () => {
         generateEIP712Domain(name, args.chainId, mediaContract.address),
         signature
       );
-
+      console.log(" ");
+      console.log("XXXXXXXXX");
+      console.log(" ");
       console.log(
         stringToHexHash(arObject?.artwork?.key ?? ""),
         stringToHexHash(arObject?.key ?? ""),
         numberToBigNumber(arObject.editionOf ?? 1).toString(),
         arObject.setInitialAsk,
-        Decimal.new(arObject.askPrice ?? 0),
+        Decimal.new(arObject.askPrice ?? 0).value.toString(),
         numberToBigNumber((arObject?.mintSignature as any)?.nonce).toString(),
         numberToBigNumber(
           (arObject?.mintSignature as any)?.deadline
         ).toString(),
         generateEIP712Domain(name, args.chainId, mediaContract.address)
       );
-      
+
       console.log(creatorEthAddress, recoveredEthAddress);
 
       if (creatorEthAddress.toLowerCase() !== recoveredEthAddress.toLowerCase())
@@ -540,7 +545,7 @@ const doChores = async () => {
       }
 
       mintMetaData.nextBatchSize = mintMetaData.batchSize;
-
+      console.log("update 2");
       await prisma.arObject.update({
         data: {
           status: ArObjectStatusEnum.MINTING,
@@ -551,15 +556,17 @@ const doChores = async () => {
         },
       });
 
-      await processArObject(
-        mediaContract,
-        contractWallet,
-        creatorEthAddress,
-        arObject,
-        mintMetaData,
-        prisma,
-        args.chainId
-      );
+      try {
+        await processArObject(
+          mediaContract,
+          contractWallet,
+          creatorEthAddress,
+          arObject,
+          mintMetaData,
+          prisma,
+          args.chainId
+        );
+      } catch (err) {}
     } else {
       throw Error("Not found");
     }
@@ -572,6 +579,7 @@ const doChores = async () => {
     });
 
     if (arObject) {
+      console.log("update 1");
       await prisma.arObject.update({
         data: {
           status: ArObjectStatusEnum.MINTERROR,

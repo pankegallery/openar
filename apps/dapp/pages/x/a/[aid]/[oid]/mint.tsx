@@ -174,6 +174,17 @@ const Update = () => {
     library
       .send("eth_signTypedData_v4", params)
       .then((signature) => {
+        console.log(
+          awKeyHash,
+          objKeyHash,
+          numberToBigNumber(getValues("editionOf")).toString(),
+          getValues("setInitialAsk"),
+          Decimal.new(getValues("askPrice")).value.toString(),
+          nonceBN.toString(),
+          deadlineBN.toString(),
+          openAR.eip712Domain()
+        );
+
         recoverSignatureFromMintArObject(
           awKeyHash,
           objKeyHash,
@@ -282,14 +293,11 @@ const Update = () => {
       );
   }, [formDataQuery, isAwaitingSignature, isNavigatingAway]);
 
-  console.log(getValues("askPrice"), typeof getValues("askPrice"));
-
   let askPriceFormatted = getValues("askPrice");
   if (askPriceFormatted) {
     if (typeof askPriceFormatted === "string")
       askPriceFormatted = parseFloat(askPriceFormatted);
 
-    console.log(askPriceFormatted);
     askPriceFormatted = askPriceFormatted.toFixed(2);
   }
 

@@ -25,12 +25,6 @@ export const UserDetails = ({
   let name = getArtistName(user?.pseudonym, user?.ethAddress);
   const isIncomplete = !isPublic && !user?.acceptedTerms;
 
-  console.log(user);
-  // const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
-  // const isTablet = useSSRSaveMediaQuery(
-  //   "(min-width: 45rem) and (max-width: 75rem)"
-  // );
-
   const [appUser] = useAuthentication();
 
   const allRoles = [
