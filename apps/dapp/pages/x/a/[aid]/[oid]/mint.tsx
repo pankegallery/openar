@@ -2,7 +2,7 @@ import { useState, ReactElement, useEffect } from "react";
 import type * as yup from "yup";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Router, {useRouter} from "next/router";
+import Router, { useRouter } from "next/router";
 import { Text, chakra, useDisclosure } from "@chakra-ui/react";
 import { useQuery, gql } from "@apollo/client";
 
@@ -17,14 +17,21 @@ import {
 
 import { LayoutOpenAR } from "~/components/app";
 import { WalletActionRequired } from "~/components/frontend";
-import { FormNavigationBlock, FormScrollInvalidIntoView } from "~/components/forms";
+import {
+  FormNavigationBlock,
+  FormScrollInvalidIntoView,
+} from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
 import { ModuleArtworkArObjectMint } from "~/components/modules/forms";
 import { ModuleArObjectMintableSchema } from "~/components/modules/validation";
-import { RestrictPageAccess } from "~/components/utils";
+// import { RestrictPageAccess } from "~/components/utils";
 import { BeatLoader } from "react-spinners";
 
-import { useAuthentication, useSuccessfullySavedToast, useWalletLogin } from "~/hooks";
+import {
+  useAuthentication,
+  useSuccessfullySavedToast,
+  useWalletLogin,
+} from "~/hooks";
 import { useArObjectMintMutation } from "~/hooks/mutations";
 import {
   ModuleSubNav,
@@ -41,7 +48,6 @@ export type ModuleArObjectMintableSchemaInputs = {
   askPrice?: number;
   editionOf: number;
 };
-
 
 export const arObjectReadOwnQueryGQL = gql`
   query arObjectReadOwn($id: Int!, $aid: Int!) {
@@ -95,7 +101,7 @@ const Update = () => {
   const disableForm = firstMutationResults.loading;
   const router = useRouter();
 
-  // TODO: there should be a nicer way to use react hook form in TS 
+  // TODO: there should be a nicer way to use react hook form in TS
   const formMethods = useForm<Record<string, any>>({
     mode: "onTouched",
     resolver: yupResolver(ModuleArObjectMintableSchema) as any,
@@ -282,11 +288,11 @@ const Update = () => {
   if (askPriceFormatted) {
     if (typeof askPriceFormatted === "string")
       askPriceFormatted = parseFloat(askPriceFormatted);
-    
-      console.log(askPriceFormatted);
+
+    console.log(askPriceFormatted);
     askPriceFormatted = askPriceFormatted.toFixed(2);
-  } 
-  
+  }
+
   return (
     <>
       <FormNavigationBlock
@@ -383,10 +389,5 @@ Update.getLayout = function getLayout(page: ReactElement) {
   return <LayoutOpenAR>{page}</LayoutOpenAR>;
 };
 
-export const getStaticProps = () => {
-  return {
-    props: {}
-  }
-}
-
-export default RestrictPageAccess(Update, "artworkUpdateOwn");
+// export default RestrictPageAccess(Update, "artworkUpdateOwn");
+export default Update;

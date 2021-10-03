@@ -1,17 +1,16 @@
 import Router from "next/router";
 import type { PermissionName } from "~/appuser";
 import cookie from 'cookie';
-import { walletConntectConnector } from "~/services/crypto";
 
 import { appConfig } from "~/config";
 import { getAppUser } from "~/services/authentication";
 
+// TODO: this migh be worth to port to serverSideProps
+// https://github.com/vercel/next.js/discussions/10925
 export const RestrictPageAccess = (
   AccessRestrictedComponent: any,
   permission: PermissionName
 ) => {
-  const appUser = getAppUser();
-  
   const hocComponent = ({ ...props }) => (
     <AccessRestrictedComponent {...props} />
   );

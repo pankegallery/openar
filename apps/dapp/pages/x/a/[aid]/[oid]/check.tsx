@@ -5,7 +5,7 @@ import { Text, Box, Flex, Button } from "@chakra-ui/react";
 import { useQuery, gql } from "@apollo/client";
 import { LayoutOpenAR } from "~/components/app";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
-import { RestrictPageAccess } from "~/components/utils";
+// import { RestrictPageAccess } from "~/components/utils";
 import { BeatLoader } from "react-spinners";
 
 import {
@@ -13,7 +13,7 @@ import {
   ModulePage,
   ButtonListElement,
   isArObjectReadyToMint,
-  isArObjectMinting
+  isArObjectMinting,
 } from "~/components/modules";
 import { ShowUrlAndCopy } from "~/components/frontend";
 
@@ -143,10 +143,5 @@ Update.getLayout = function getLayout(page: ReactElement) {
   return <LayoutOpenAR>{page}</LayoutOpenAR>;
 };
 
-export const getStaticProps = () => {
-  return {
-    props: {}
-  }
-}
-
-export default RestrictPageAccess(Update, "artworkUpdateOwn");
+// export default RestrictPageAccess(Update, "artworkUpdateOwn");
+export default Update;

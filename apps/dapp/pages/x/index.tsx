@@ -199,12 +199,6 @@ export const User = () => {
   );
 };
 
-export const getStaticProps = () => {
-  return {
-    props: {}
-  }
-}
-
 User.getLayout = function getLayout(page: ReactElement) {
   return <LayoutOpenAR>{page}</LayoutOpenAR>;
 };

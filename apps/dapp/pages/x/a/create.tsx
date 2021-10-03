@@ -10,7 +10,7 @@ import { FormNavigationBlock } from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
 import { ModuleArtworkForm } from "~/components/modules/forms";
 import { ModuleArtworkCreateSchema } from "~/components/modules/validation";
-import { RestrictPageAccess } from "~/components/utils";
+// import { RestrictPageAccess } from "~/components/utils";
 
 import { useAuthentication, useSuccessfullySavedToast } from "~/hooks";
 import { useArtworkCreateMutation } from "~/hooks/mutations";
@@ -24,13 +24,13 @@ const Create = () => {
   const [appUser] = useAuthentication();
   const successToast = useSuccessfullySavedToast();
   const [disableNavigation, setDisableNavigation] = useState(false);
-  const [isNavigatingAway, setIsNavigatingAway] = useState(false)
+  const [isNavigatingAway, setIsNavigatingAway] = useState(false);
   const [firstMutation, firstMutationResults] = useArtworkCreateMutation();
   const [isFormError, setIsFormError] = useState(false);
 
   const disableForm = firstMutationResults.loading;
 
-  // TODO: there should be a nicer way to use react hook form in TS 
+  // TODO: there should be a nicer way to use react hook form in TS
   const formMethods = useForm<Record<string, any>>({
     mode: "onTouched",
     resolver: yupResolver(ModuleArtworkCreateSchema) as any,
@@ -65,7 +65,9 @@ const Create = () => {
         if (!errors) {
           successToast();
           setIsNavigatingAway(true);
-          Router.push(`${moduleConfig.rootPath}/${data?.artworkCreate?.id}/update`);
+          Router.push(
+            `${moduleConfig.rootPath}/${data?.artworkCreate?.id}/update`
+          );
         } else {
           setIsFormError(true);
         }
@@ -106,7 +108,9 @@ const Create = () => {
 
   return (
     <>
-      <FormNavigationBlock shouldBlock={!isNavigatingAway && isDirty && !isSubmitting} />
+      <FormNavigationBlock
+        shouldBlock={!isNavigatingAway && isDirty && !isSubmitting}
+      />
       <FormProvider {...formMethods}>
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={disableForm}>
@@ -140,10 +144,5 @@ Create.getLayout = function getLayout(page: ReactElement) {
   return <LayoutOpenAR>{page}</LayoutOpenAR>;
 };
 
-export const getStaticProps = () => {
-  return {
-    props: {}
-  }
-}
-
-export default RestrictPageAccess(Create, "artworkCreate");
+// export default RestrictPageAccess(Create, "artworkCreate");
+export default Create;

@@ -1,4 +1,3 @@
-
 import { useState, ReactElement } from "react";
 import type * as yup from "yup";
 import { useForm, FormProvider } from "react-hook-form";
@@ -8,11 +7,14 @@ import { Text } from "@chakra-ui/react";
 import { useQuery, gql } from "@apollo/client";
 
 import { LayoutOpenAR } from "~/components/app";
-import { FormNavigationBlock, FormScrollInvalidIntoView } from "~/components/forms";
+import {
+  FormNavigationBlock,
+  FormScrollInvalidIntoView,
+} from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
 import { ModuleArtworkArObjectForm } from "~/components/modules/forms";
 import { ModuleArObjectCreateSchema } from "~/components/modules/validation";
-import { RestrictPageAccess } from "~/components/utils";
+// import { RestrictPageAccess } from "~/components/utils";
 import { BeatLoader } from "react-spinners";
 
 import { useAuthentication, useSuccessfullySavedToast } from "~/hooks";
@@ -38,29 +40,24 @@ const Create = () => {
   const [appUser] = useAuthentication();
   const successToast = useSuccessfullySavedToast();
   const [disableNavigation, setDisableNavigation] = useState(false);
-  const [isNavigatingAway, setIsNavigatingAway] = useState(false)
+  const [isNavigatingAway, setIsNavigatingAway] = useState(false);
   const [firstMutation, firstMutationResults] = useArObjectCreateMutation();
   const [isFormError, setIsFormError] = useState(false);
 
   const disableForm = firstMutationResults.loading;
   const router = useRouter();
-  
-  // TODO: there should be a nicer way to use react hook form in TS 
+
+  // TODO: there should be a nicer way to use react hook form in TS
   const formMethods = useForm<Record<string, any>>({
     mode: "onTouched",
     resolver: yupResolver(ModuleArObjectCreateSchema) as any,
   });
 
-
-  const { data, loading, error } = useQuery(
-    artworkReadOwnQueryGQL,
-    {
-      variables: {
-        id: parseInt(router.query.aid as string, 10),
-      },
-    }
-  );
-
+  const { data, loading, error } = useQuery(artworkReadOwnQueryGQL, {
+    variables: {
+      id: parseInt(router.query.aid as string, 10),
+    },
+  });
 
   const {
     handleSubmit,
@@ -83,7 +80,7 @@ const Create = () => {
           artwork: {
             connect: {
               id: parseInt(router.query.aid as string, 10),
-            }
+            },
           },
           creator: {
             connect: {
@@ -95,7 +92,12 @@ const Create = () => {
         if (!errors) {
           successToast();
           setIsNavigatingAway(true);
-          router.push(`${moduleConfig.rootPath}/${parseInt(router.query.aid as string, 10)}/${data?.arObjectCreate?.id}/update`);
+          router.push(
+            `${moduleConfig.rootPath}/${parseInt(
+              router.query.aid as string,
+              10
+            )}/${data?.arObjectCreate?.id}/update`
+          );
         } else {
           setIsFormError(true);
         }
@@ -110,7 +112,13 @@ const Create = () => {
   const breadcrumb = [
     {
       path: `${moduleConfig.rootPath}/${router.query.aid}/update`,
-      title: data && (data.artworkReadOwn?.title ? trimStringToLength(data.artworkReadOwn?.title, 13) : <BeatLoader size="10px" color="#fff"/>),
+      title:
+        data &&
+        (data.artworkReadOwn?.title ? (
+          trimStringToLength(data.artworkReadOwn?.title, 13)
+        ) : (
+          <BeatLoader size="10px" color="#fff" />
+        )),
     },
     {
       title: "Create object ",
@@ -140,7 +148,9 @@ const Create = () => {
 
   return (
     <>
-      <FormNavigationBlock shouldBlock={!isNavigatingAway && isDirty && !isSubmitting} />
+      <FormNavigationBlock
+        shouldBlock={!isNavigatingAway && isDirty && !isSubmitting}
+      />
       <FormProvider {...formMethods}>
         <FormScrollInvalidIntoView hasFormError={isFormError} />
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -148,9 +158,7 @@ const Create = () => {
             <ModuleSubNav breadcrumb={breadcrumb} buttonList={buttonList} />
             <ModulePage
               isLoading={loading}
-              isError={
-                !!error || (!error && !loading && !data?.artworkReadOwn)
-              }
+              isError={!!error || (!error && !loading && !data?.artworkReadOwn)}
             >
               {isFormError && (
                 <Text
@@ -159,8 +167,8 @@ const Create = () => {
                   borderBottom="1px solid #fff"
                   color="openar.error"
                 >
-                  Unfortunately, we could not save your object. Please try
-                  again in a little bit.
+                  Unfortunately, we could not save your object. Please try again
+                  in a little bit.
                 </Text>
               )}
               <ModuleArtworkArObjectForm
@@ -181,10 +189,5 @@ Create.getLayout = function getLayout(page: ReactElement) {
   return <LayoutOpenAR>{page}</LayoutOpenAR>;
 };
 
-export const getStaticProps = () => {
-  return {
-    props: {}
-  }
-}
-
-export default RestrictPageAccess(Create, "artworkCreate");
+// export default RestrictPageAccess(Create, "artworkCreate");
+export default Create;

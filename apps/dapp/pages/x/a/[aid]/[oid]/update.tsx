@@ -2,12 +2,15 @@ import { useState, ReactElement, useEffect } from "react";
 import type * as yup from "yup";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Router, {useRouter} from "next/router";
+import Router, { useRouter } from "next/router";
 import { Text } from "@chakra-ui/react";
 import { useQuery, gql } from "@apollo/client";
 import Head from "next/head";
 import { LayoutOpenAR } from "~/components/app";
-import { FormNavigationBlock, FormScrollInvalidIntoView } from "~/components/forms";
+import {
+  FormNavigationBlock,
+  FormScrollInvalidIntoView,
+} from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
 import {
   ModuleArtworkArObjectForm,
@@ -15,12 +18,15 @@ import {
   ModuleDeleteButton,
 } from "~/components/modules/forms";
 import { ModuleArObjectUpdateSchema } from "~/components/modules/validation";
-import { RestrictPageAccess } from "~/components/utils";
+// import { RestrictPageAccess } from "~/components/utils";
 import { BeatLoader } from "react-spinners";
 import pick from "lodash/pick";
 
 import { useAuthentication, useSuccessfullySavedToast } from "~/hooks";
-import { useArObjectUpdateMutation, useArObjectDeleteMutation } from "~/hooks/mutations";
+import {
+  useArObjectUpdateMutation,
+  useArObjectDeleteMutation,
+} from "~/hooks/mutations";
 import {
   ModuleSubNav,
   ModulePage,
@@ -31,7 +37,7 @@ import {
   filteredOutputByWhitelist,
   ArObjectStatusEnum,
   ArtworkStatusEnum,
-  trimStringToLength
+  trimStringToLength,
 } from "~/utils";
 
 // TODO
@@ -112,7 +118,7 @@ const Update = () => {
 
   const disableForm = firstMutationResults.loading;
   const router = useRouter();
-  
+
   const formMethods = useForm<Record<string, any>>({
     mode: "onTouched",
     resolver: yupResolver(ModuleArObjectUpdateSchema) as any,
@@ -339,7 +345,9 @@ const Update = () => {
                     if (!errors) {
                       successToast();
                       setIsNavigatingAway(true);
-                      Router.push(`${moduleConfig.rootPath}/${router.query.aid}/update`);
+                      Router.push(
+                        `${moduleConfig.rootPath}/${router.query.aid}/update`
+                      );
                     } else {
                       setIsFormError(true);
                     }
@@ -358,10 +366,5 @@ Update.getLayout = function getLayout(page: ReactElement) {
   return <LayoutOpenAR>{page}</LayoutOpenAR>;
 };
 
-export const getStaticProps = () => {
-  return {
-    props: {}
-  }
-}
-
-export default RestrictPageAccess(Update, "artworkUpdateOwn");
+// export default RestrictPageAccess(Update, "artworkUpdateOwn");
+export default Update;

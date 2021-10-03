@@ -7,14 +7,17 @@ import { Text } from "@chakra-ui/react";
 import { useQuery, gql } from "@apollo/client";
 
 import { LayoutOpenAR } from "~/components/app";
-import { FormNavigationBlock, FormScrollInvalidIntoView } from "~/components/forms";
+import {
+  FormNavigationBlock,
+  FormScrollInvalidIntoView,
+} from "~/components/forms";
 import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
 import {
   ModuleArtworkForm,
   ModuleDeleteButton,
 } from "~/components/modules/forms";
 import { ModuleArtworkUpdateSchema } from "~/components/modules/validation";
-import { RestrictPageAccess } from "~/components/utils";
+// import { RestrictPageAccess } from "~/components/utils";
 
 import { useAuthentication, useSuccessfullySavedToast } from "~/hooks";
 import {
@@ -86,7 +89,7 @@ const Update = () => {
   const disableForm = firstMutationResults.loading;
 
   const router = useRouter();
-  
+
   const formMethods = useForm<Record<string, any>>({
     mode: "onTouched",
     resolver: yupResolver(ModuleArtworkUpdateSchema) as any,
@@ -294,10 +297,5 @@ Update.getLayout = function getLayout(page: ReactElement) {
   return <LayoutOpenAR>{page}</LayoutOpenAR>;
 };
 
-export const getStaticProps = () => {
-  return {
-    props: {}
-  }
-}
-
-export default RestrictPageAccess(Update, "artworkUpdateOwn");
+// export default RestrictPageAccess(Update, "artworkUpdateOwn");
+export default Update;

@@ -7,11 +7,14 @@ import { Divider, Text } from "@chakra-ui/react";
 import Router from "next/router";
 
 import { LayoutOpenAR } from "~/components/app";
-import { FormNavigationBlock, FormScrollInvalidIntoView } from "~/components/forms";
+import {
+  FormNavigationBlock,
+  FormScrollInvalidIntoView,
+} from "~/components/forms";
 import { moduleProfileConfig as moduleConfig } from "~/components/modules/config";
 import { ModuleProfileUpdateForm } from "~/components/modules/forms";
 import { UserProfileUpdateValidationSchema } from "~/components/modules/validation";
-import { RestrictPageAccess } from "~/components/utils";
+// import { RestrictPageAccess } from "~/components/utils";
 
 import { useUserProfileUpdateMutation } from "~/hooks/mutations";
 import { filteredOutputByWhitelistNullToUndefined } from "~/utils";
@@ -24,14 +27,11 @@ import { userProfileUpdate } from "~/redux/slices/user";
 
 import { userProfileReadQueryGQL } from "~/graphql/queries";
 
-
 import {
   ModuleSubNav,
   ModulePage,
   ButtonListElement,
 } from "~/components/modules";
-
-
 
 const Update = () => {
   const dispatch = useTypedDispatch();
@@ -52,7 +52,7 @@ const Update = () => {
 
   const disableForm = firstMutationResults.loading;
 
-  // TODO: there should be a nicer way to use react hook form in TS 
+  // TODO: there should be a nicer way to use react hook form in TS
   const formMethods = useForm<Record<string, any>>({
     mode: "onTouched",
     resolver: yupResolver(UserProfileUpdateValidationSchema) as any,
@@ -71,7 +71,7 @@ const Update = () => {
         "email",
         "bio",
         "url",
-        "acceptedTerms"
+        "acceptedTerms",
       ])
     );
   }, [reset, data]);
@@ -82,17 +82,13 @@ const Update = () => {
     setIsFormError(false);
     try {
       if (appUser) {
-      
-        const { errors } = await firstMutation(
-          appUser?.id,
-          {
-            pseudonym: newData.pseudonym ?? "",
-            email: newData.email ?? "",
-            bio: newData.bio ?? "",
-            url: newData.url ?? "",
-            acceptedTerms: !!newData.acceptedTerms,
-          }
-        );
+        const { errors } = await firstMutation(appUser?.id, {
+          pseudonym: newData.pseudonym ?? "",
+          email: newData.email ?? "",
+          bio: newData.bio ?? "",
+          url: newData.url ?? "",
+          acceptedTerms: !!newData.acceptedTerms,
+        });
 
         if (!errors) {
           dispatch(
@@ -110,7 +106,6 @@ const Update = () => {
           successToast();
           setIsNavigatingAway(true);
           Router.push(moduleConfig.rootPath);
-          
         } else {
           setIsFormError(true);
         }
@@ -149,18 +144,34 @@ const Update = () => {
     },
   ];
 
-  const errorMessage = firstMutationResults.error ? firstMutationResults?.error?.message : "";
+  const errorMessage = firstMutationResults.error
+    ? firstMutationResults?.error?.message
+    : "";
 
   return (
     <>
-      <FormNavigationBlock shouldBlock={(isDirty && !isSubmitting && !isNavigatingAway) || activeUploadCounter > 0} />
+      <FormNavigationBlock
+        shouldBlock={
+          (isDirty && !isSubmitting && !isNavigatingAway) ||
+          activeUploadCounter > 0
+        }
+      />
       <FormProvider {...formMethods}>
         <FormScrollInvalidIntoView hasFormError={isFormError} />
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <fieldset disabled={disableForm}>
             <ModuleSubNav breadcrumb={breadcrumb} buttonList={buttonList} />
             <ModulePage isLoading={loading} isError={!!error}>
-              {isFormError && <Text width="100%" p="6" borderBottom="1px solid #fff" color="openar.error">{errorMessage}</Text>}
+              {isFormError && (
+                <Text
+                  width="100%"
+                  p="6"
+                  borderBottom="1px solid #fff"
+                  color="openar.error"
+                >
+                  {errorMessage}
+                </Text>
+              )}
               <ModuleProfileUpdateForm
                 data={data?.userProfileRead}
                 setActiveUploadCounter={setActiveUploadCounter}
@@ -178,10 +189,5 @@ Update.getLayout = function getLayout(page: ReactElement) {
   return <LayoutOpenAR>{page}</LayoutOpenAR>;
 };
 
-export const getStaticProps = () => {
-  return {
-    props: {}
-  }
-}
-
-export default RestrictPageAccess(Update, "profileUpdate");
+// export default RestrictPageAccess(Update, "profileUpdate");
+export default Update;
