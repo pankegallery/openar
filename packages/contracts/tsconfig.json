@@ -1,5 +1,5 @@
 {
-  "include": ["src/**/*","typechain/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "outDir": "./dist",
@@ -28,5 +28,9 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "skipLibCheck": true
+  },
+  "typeRoots": ["./src","./src/typechain"],
+  "paths": {
+    "*": ["*", "./src/*","./src/typechain/*"]
   }
 }
