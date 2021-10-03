@@ -143,4 +143,10 @@ Update.getLayout = function getLayout(page: ReactElement) {
   return <LayoutOpenAR>{page}</LayoutOpenAR>;
 };
 
+export const getStaticProps = () => {
+  return {
+    props: {}
+  }
+}
+
 export default RestrictPageAccess(Update, "artworkUpdateOwn");
