@@ -16,6 +16,7 @@ import {
 } from "~/components/frontend";
 import { ArrowLink } from "~/components/ui";
 import { useSSRSaveMediaQuery, useAuthentication } from "~/hooks";
+import { getStatic } from "@ethersproject/properties";
 
 const userProfileQuery = gql`
   query ($ethAddress: String!) {
@@ -197,6 +198,12 @@ export const User = () => {
     </>
   );
 };
+
+export const getStaticProps = () => {
+  return {
+    props: {}
+  }
+}
 
 User.getLayout = function getLayout(page: ReactElement) {
   return <LayoutOpenAR>{page}</LayoutOpenAR>;

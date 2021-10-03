@@ -11,8 +11,6 @@ import {
 import Link from "next/link";
 
 
-const beta = true;
-
 export const Beta = (props) => {
 
   return (

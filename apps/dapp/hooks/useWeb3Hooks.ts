@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
 import { useWeb3React } from "@web3-react/core";
-import { useWhyDidYouUpdate } from "@chakra-ui/react";
 
-import { walletConntectConnector, injectedConnector } from "~/services/crypto";
+import { injectedConnector } from "~/services/crypto";
 import { useLocalStorage, useWalletLogin } from ".";
 
 export function useWeb3EagerConnect() {
-  const { activate, active, account } = useWeb3React();
+  const { activate, active } = useWeb3React();
 
   const [connected] = useLocalStorage("connected", undefined);
-  const [walletConnect] = useLocalStorage("walletconnect", {});
-
+  
   const [tried, setTried] = useState(false);
 
   useEffect(() => {
@@ -18,6 +16,7 @@ export function useWeb3EagerConnect() {
 
     injectedConnector.isAuthorized().then((isAuthorized: boolean) => {
       if (isAuthorized) {
+        console.log("useWeb3EagerConnect() isAuthorized activate()");
         activate(injectedConnector, undefined, true).catch(() => {
           setTried(true);
         });
@@ -46,15 +45,19 @@ export function useWeb3InactiveListener(suppress: boolean = false) {
     const { ethereum } = window as any;
     if (ethereum && ethereum.on && !active && !error && !suppress) {
       const handleConnect = () => {
+        console.log("useWeb3InactiveListener() handleConnect()");
         activate(injectedConnector);
       };
       const handleChainChanged = (chainId: string | number) => {
+        console.log("useWeb3InactiveListener() handleChainChanged()");
         activate(injectedConnector);
       };
       const handleAccountsChanged = (accounts: string[]) => {
+        console.log("useWeb3InactiveListener() handleAccountsChanged()");
         activate(injectedConnector);
       };
       const handleDisconnect = () => {
+        console.log("useWeb3InactiveListener() handleDisconnect()");
         deactivate();
       };
 
@@ -79,32 +82,30 @@ export function useWeb3InactiveListener(suppress: boolean = false) {
 export function useWeb3ActiveListener(suppress: boolean = false) {
   const { active, error, activate, deactivate, account } = useWeb3React();
   const { walletDisconnect, walletReconnect } = useWalletLogin();
-  useWhyDidYouUpdate("w3AL", {
-    active,
-    error,
-    suppress,
-    activate,
-    deactivate,
-    account,
-    walletDisconnect,
-    walletReconnect,
-  });
+
   useEffect((): any => {
     const { ethereum } = window as any;
     if (ethereum && ethereum.on && active && !error && !suppress) {
       const handleConnect = () => {
         activate(injectedConnector);
+        console.log("useWeb3ActiveListener() handleConnect()");
         walletReconnect("injected");
       };
       const handleChainChanged = (chainId: string | number) => {
-        activate(injectedConnector);
-        walletReconnect("injected");
+        console.log("useWeb3ActiveListener() handleChainChanged()");
+        walletDisconnect();
+
+        console.log("handle chain changed");
+
+        
       };
       const handleAccountsChanged = (accounts: string[]) => {
+        console.log("useWeb3ActiveListener() handleAccountsChanged()");
         activate(injectedConnector);
         walletReconnect("injected");
       };
       const handleDisconnect = async () => {
+        console.log("useWeb3ActiveListener() walletDisconnect()");
         await walletDisconnect();
       };
 

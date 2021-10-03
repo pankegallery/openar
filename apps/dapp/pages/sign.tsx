@@ -27,7 +27,7 @@ const OpenARLogin = () => {
   const [appUser, {hasCookies}] = useAuthentication();
   const stateUser = useTypedSelector(({ user }) => user);
   const stateCrypto = useTypedSelector(({ crypto }) => crypto);
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isAwaitingSignature, setIsAwaitingSignature] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false)
   
   useEffect(() => {
@@ -81,7 +81,7 @@ const OpenARLogin = () => {
             <Button
               mt="4"
               onClick={async () => {
-                setIsLoggingIn(true);
+                setIsAwaitingSignature(true);
                 try {
                   await walletLoginRequestSignature(
                     stateCrypto.loginMessage,
@@ -97,7 +97,7 @@ const OpenARLogin = () => {
             <WalletActionRequired
               title="Signature required"
               showClose={false}
-              isOpen={isLoggingIn && !walletLoginError}
+              isOpen={isAwaitingSignature && !walletLoginError}
             >
               Please sign the login signature in your connected wallet
             </WalletActionRequired>

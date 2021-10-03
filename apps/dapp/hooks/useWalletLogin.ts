@@ -105,10 +105,12 @@ export function useWalletLogin() {
         }
       }
       await user.logout();
-
+      console.log("walletDisconnect() user.logout();")
       deactivate();
 
-      Router.replace(appConfig.reauthenticateRedirectUrl);
+      try {
+        Router.replace(appConfig.reauthenticateRedirectUrl);
+      } catch (err) {}
     } catch (error) {
       setIsConnected(undefined);
       handleError(error);
@@ -141,8 +143,10 @@ export function useWalletLogin() {
 
   const connectWalletConnect = useCallback(async () => {
     try {
+      setIsLoggingIn(false);
       setWalletLoginError(null);
       setAwaitingUserInteraction("walletconnect");
+      console.log("connectWalletConnect() activate()")
       await activate(walletConntectConnector, undefined, true);
       setIsConnected("walletconnect");
       connected();
@@ -151,6 +155,7 @@ export function useWalletLogin() {
       handleError(error);
     }
   }, [
+    setIsLoggingIn,
     setWalletLoginError,
     setAwaitingUserInteraction,
     activate,
@@ -161,9 +166,10 @@ export function useWalletLogin() {
 
   const connectInjected = useCallback(async () => {
     try {
+      setIsLoggingIn(false);
       setWalletLoginError(null);
       setAwaitingUserInteraction("injected");
-
+      console.log("connectInjected() activate()");
       await activate(injectedConnector, undefined, true);
       setIsConnected("injected");
       connected();
@@ -172,6 +178,7 @@ export function useWalletLogin() {
       handleError(error);
     }
   }, [
+    setIsLoggingIn,
     setWalletLoginError,
     setAwaitingUserInteraction,
     activate,

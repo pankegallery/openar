@@ -2,21 +2,18 @@ import type { ReactElement } from "react";
 import Head from "next/head";
 
 import { LayoutBlank } from "~/components/app";
-import {
-  Box,
-  Grid,
-  Flex,
-  chakra,
-  AspectRatio
-} from "@chakra-ui/react";
+import { Box, Grid, Flex, chakra, AspectRatio } from "@chakra-ui/react";
 import Link from "next/link";
 import Image from "next/image";
 
 import openingBg from "~/assets/img/opening-bg.png";
 
-const beta = process && process.env.NODE_ENV !== "development";
+import { useAuthentication } from "~/hooks";
 
 export const Home = (props) => {
+  const [appUser] = useAuthentication();
+  const beta = process && process.env.NODE_ENV !== "development" && !appUser;
+
   return (
     <>
       <Head>
@@ -209,14 +206,24 @@ export const Home = (props) => {
       >
         {!beta && (
           <AspectRatio ratio={1}>
-            <chakra.img src="images/corner.svg" width="100%" height="100%" alt="We are in beta" />
+            <chakra.img
+              src="images/corner.svg"
+              width="100%"
+              height="100%"
+              alt="We are in beta"
+            />
           </AspectRatio>
         )}
         {beta && (
           <chakra.span cursor="pointer">
             <Link href="/beta" passHref>
               <AspectRatio ratio={1}>
-                <chakra.img src="images/corner.svg" width="100%" height="100%" alt="We are in beta" />
+                <chakra.img
+                  src="images/corner.svg"
+                  width="100%"
+                  height="100%"
+                  alt="We are in beta"
+                />
               </AspectRatio>
             </Link>
           </chakra.span>
@@ -226,17 +233,19 @@ export const Home = (props) => {
   );
 };
 
-Home.getInitialProps = () => {
+export const getStaticProps = () => {
   return {
-    pageTitle: "OpenAR",
-    pageSlogan: "The cooperative and crypto platform for AR artworks",
-    pageDescription:
-      "OpenAR makes it easy to exhibit, collect and discuss Augmented Reality (AR) works and allows artists to sell their works as NFTs. The open platform is organised as a cooperative, profits will be shared among the artists.",
+    props: {
+      pageTitle: "OpenAR",
+      pageSlogan: "The cooperative and crypto platform for AR artworks",
+      pageDescription:
+        "OpenAR makes it easy to exhibit, collect and discuss Augmented Reality (AR) works and allows artists to sell their works as NFTs. The open platform is organised as a cooperative, profits will be shared among the artists.",
+    },
   };
 };
 
 Home.getLayout = function getLayout(page: ReactElement) {
-  return <LayoutBlank beta={beta}>{page}</LayoutBlank>;
+  return <LayoutBlank>{page}</LayoutBlank>;
 };
 
 export default Home;

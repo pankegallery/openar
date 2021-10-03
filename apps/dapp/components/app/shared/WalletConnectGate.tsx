@@ -33,17 +33,17 @@ export const WalletConnectGate = ({
     const preLogin = async () => {
       await walletLoginPreLogin(account);
     };
-
     // no account no chain == not logged in 
     // bail early. 
     if (!account || !chainId) return;
-
+  
     if (!library || !library?.provider) {
       // looks like that the library has not been initalized 
       // but a signature is required
       // better to logout and get the user to reauthenticate
       if (stateCrypto.signatureRequired) {
         walletDisconnect();
+        setIsLoggingIn(false);
         Router.push(appConfig.reauthenticateRedirectUrl);
         return;
       }
@@ -55,6 +55,7 @@ export const WalletConnectGate = ({
       chainId !== parseInt(process.env.NEXT_PUBLIC_CHAIN_ID) &&
       Router.asPath.indexOf("/chain") === -1
     ) {
+      setIsLoggingIn(false);
       Router.replace("/chain");
       return;
     }

@@ -6,20 +6,21 @@ import { WalletConnectGate } from "./shared";
 import {LoadingBar} from "~/components/app/shared";
 import { OverlayMenu} from "../frontend";
 import { useSSRSaveMediaQuery} from "~/hooks";
+import { useAuthentication } from "~/hooks";
 
 export const LayoutBlank = ({
   mode = "dark",
   modeSize,
   size,
-  beta = false,
   children,
 } : {
   mode?: String;
   modeSize?: String;
   size?: String;
-  beta?: boolean;
   children: ReactNode;
 }) => {
+  const [appUser] = useAuthentication();
+  const beta = process && process.env.NODE_ENV !== "development" && !appUser;
 
   const isMobile = useSSRSaveMediaQuery("(max-width: 45rem)");
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
