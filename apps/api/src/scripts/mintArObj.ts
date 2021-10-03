@@ -496,6 +496,18 @@ const doChores = async () => {
         signature
       );
 
+      console.log(
+        stringToHexHash(arObject?.artwork?.key ?? ""),
+        stringToHexHash(arObject?.key ?? ""),
+        numberToBigNumber(arObject.editionOf ?? 1),
+        arObject.setInitialAsk,
+        Decimal.new(arObject.askPrice ?? 0),
+        numberToBigNumber((arObject?.mintSignature as any)?.nonce),
+        numberToBigNumber((arObject?.mintSignature as any)?.deadline),
+        generateEIP712Domain(name, args.chainId, mediaContract.address)
+      );
+      console.log(creatorEthAddress, recoveredEthAddress);
+
       if (creatorEthAddress.toLowerCase() !== recoveredEthAddress.toLowerCase())
         throw Error("Signature verification failed");
 
