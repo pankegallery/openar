@@ -18,7 +18,6 @@ import Router from "next/router";
 
 import { useOpenARDappWeb3InjectedContext } from "~/providers";
 import { useTypedSelector, useWalletLogin } from "~/hooks";
-import { appConfig } from "~/config";
 
 export const WalletControl = ({
   color = "white",
@@ -36,7 +35,6 @@ export const WalletControl = ({
   const {
     awaitingUserInteraction,
     walletDisconnect,
-    walletReconnect,
     walletLoginError,
     connectInjected,
     connectWalletConnect,
