@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { AspectRatio, Box, chakra, Flex, Text } from "@chakra-ui/react";
+import { AspectRatio, Box, Button } from "@chakra-ui/react";
 import { primaryInput } from "detect-it";
+import BoxIcon from "~/assets/img/box.svg";
 
 export type ApiArModelProps = {
   alt?: string;
@@ -114,7 +115,17 @@ export const ApiArModel = ({
             autoplay={autoplay}
             alt={alt}
             {...props}
-          >{renderNotice}</model-viewer>
+          >{renderNotice}
+            <Button
+              borderColor="openar.dark"
+              color="openar.dark"
+              m="6"
+              slot="ar-button" 
+            >
+              View in AR <BoxIcon viewBox="-10 -7 50 50" width="30px" height="25px" />
+            </Button>
+       
+          </model-viewer>
         );
 
     }
