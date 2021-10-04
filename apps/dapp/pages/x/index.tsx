@@ -43,6 +43,14 @@ const userProfileQuery = gql`
           meta
           status
         }
+        arObjects {
+          status
+          heroImage {
+            id
+            meta
+            status
+          }
+        }
       }
     }
     collection(ethAddress: $ethAddress) {

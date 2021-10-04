@@ -102,7 +102,7 @@ export const ArtworkList = ({
                   if (firstWithHero) image = firstWithHero.heroImage;
                 }
               }
-              
+
               return (
                 <ArtworkListItem
                   isAdmin={!isPublic}
