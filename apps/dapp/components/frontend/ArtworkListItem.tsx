@@ -30,7 +30,7 @@ export const ArtworkListItem = ({
 }: {
   id: number;
   title: string;
-  col: number;
+  col: number | string;
   urlKey: string;
   exSlug?: string;
   creator: any;

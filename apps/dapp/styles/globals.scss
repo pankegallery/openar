@@ -256,12 +256,13 @@ a {
   .info {
     width: 33.333%;
     height: 66.66vw;
-//    padding: 0.5rem;
     writing-mode:vertical-rl;
     transform: rotate(180deg);
     a::before {
       width: 100vw;
-//      background-color: rgba(255,0,0,0.6);
+      // background-color: rgba(255,0,0,0.6);
+      left: auto;
+      right: 0px;
     }
   } 
 
@@ -272,6 +273,7 @@ a {
       height: 100%;
       width: 100%;
       object-fit: cover;
+      // opacity: 0.6;
     }
     pointer-events: none;
   }
@@ -289,9 +291,9 @@ a {
 
     .info {
       a::before {
-//        background-color: rgba(0,250,0,0.6);
-        left: auto;
-        right: 0px;
+        // background-color: rgba(0,250,0,0.6);
+        right: auto;
+        left: 0px;
       }
     }
   }
@@ -306,6 +308,10 @@ a {
 
     .info {
       height: 33.333vw;
+      a::before {
+        left: 0;
+        right: auto;
+      }
     } 
 
     &:nth-child(4n + 1),
@@ -319,27 +325,17 @@ a {
       }
     }
 
-    &.col-1{
-      width: 100%;
-      flex-direction: row;
-    }
-
+    &.col-1, 
     &.col-1:nth-child(2n) {
       flex-direction: row-reverse;
       .info {
-       a::before {
-         left: auto;
-         right: 0;
-       }
+        a::before {
+          left: auto;
+          right: 0;
+        }
       }
     }
   }
-
-
-
-//    .corner-light + .openOverlayMenu {
-//        right: 50vw;
-//    }
 }
 
 @media (min-width: 75rem){
@@ -349,6 +345,15 @@ a {
       .info {
         height: 22.19vw;
       }
+
+      &.col-1-or-two {
+        .info {
+          a::before {
+            left: auto;
+            right: 0;
+          }
+        }
+      } 
 
       &.col-2{
         width: 50%;
@@ -369,6 +374,12 @@ a {
       &.col-3{
         width: 33.33%;
         flex-direction: row-reverse;
+        .info {
+          a::before {
+            left: 0;
+            right: auto;
+          }
+         }
       }
 
       &.col-3:nth-child(6n + 1),
@@ -378,7 +389,7 @@ a {
         .info {
          a::before {
            left: auto;
-           right: 0;
+           right: 0;           
          }
         }
       }
@@ -386,51 +397,11 @@ a {
 
 }
 
-//    .corner-light + .openOverlayMenu {
-//        right: 33.33vw;
-//    }
-
-// @media (max-width: 45rem){
-//     .artwork.item {
-//         .info {
-//             //height: 66.66vw;
-//         }
-//     }
-// }
-
 .artworkDetails, .userDetails{
     .label{
         margin-bottom: 0.5em;
     }
 }
-
-
-//.css-1hnz6hu::before {
-//width: 100%;
-//height: 100%;
-//border: 2px solid red;
-//transform: rotate(90deg) translate(0, -17%);
-//transform-origin: left top;
-//width: 200%;
-//height: 234%;
-//}
-
-// Styled mainly return of in FieldErrorMessage.tsx
-
-//.chakra-form-control{
-//
-//  label > .chakra-form__required-indicator{
-//    color: white !important;
-//  }
-//
-//  .chakra-form__helper-text{
-//    color: inherit;
-//    opacity: 0.6;
-//    margin-bottom: 0.5rem;
-//    margin-top: 0.1rem;
-//    font-size: 0.8rem;
-//  }
-//}
 
 .muted{
   opacity: 0.6;
