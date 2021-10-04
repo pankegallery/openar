@@ -139,7 +139,7 @@ export const ArtworkDetails = ({
 
       const tx = await openAR
         .buyFirstAvailableNative(
-          ownedToken.map((token) => token.subgraphinfo.id),
+          ownedToken.map((token) => parseInt(token.subgraphinfo.id)).sort(),
           artwork.creator?.ethAddress.toLowerCase(),
           openAR.createBid(bid, account),
           {

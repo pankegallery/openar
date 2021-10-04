@@ -171,8 +171,8 @@ export const daoSubgraphGetParsedTokenInfo = async (ownedTokens: any) => {
       ...(token.arObjectKey in agg ? agg[token.arObjectKey] : []),
       tokenInfo,
     ].sort((a, b) => {
-      if (a.editionOf < b.editionOf) return -1;
-      if (a.editionOf > b.editionOf) return -1;
+      if (a.editionNumber < b.editionNumber) return -1;
+      if (a.editionNumber > b.editionNumber) return 1;
       return 0;
     });
     return {
