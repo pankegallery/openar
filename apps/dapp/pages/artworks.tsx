@@ -51,12 +51,18 @@ export const Artworks = ({ artworks }: { artworks: any }) => {
                 if (!image) {
                   if (
                     artwork?.arObjects &&
-                    Array.isArray(artwork?.arObjects) &&
-                    artwork?.arObjects.length > 0
+                    Array.isArray(artwork?.arObjects)
                   ) {
-                    image = artwork?.arObjects[0].heroImage;                    
+                    const firstWithHero = artwork?.arObjects.find(
+                      (o) => !!o?.heroImage?.id
+                    );
+
+                    if (firstWithHero) image = firstWithHero.heroImage;
                   }
                 }
+
+                //console.log(image, artwork?.arObjects);
+
                 return (
                   <ArtworkListItem
                     isAdmin={false}
@@ -72,8 +78,8 @@ export const Artworks = ({ artworks }: { artworks: any }) => {
                       "creator",
                     ])}
                   />
-                )
-              } )}
+                );
+              })}
             </Flex>
           )}
         </Box>
@@ -104,6 +110,15 @@ export const getStaticProps = async ({ params }: { params: any }) => {
             id
             ethAddress
           }
+          arObjects {
+            id
+            status
+            heroImage {
+              id
+              meta
+              status
+            }
+          }
         }
       }
     }
@@ -113,7 +128,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     query: artworkStreamQuery,
   });
 
-  if (!data?.artworks) {
+  if (!data?.artworks?.totalCount) {
     return {
       notFound: true,
     };

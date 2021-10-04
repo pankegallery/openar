@@ -85,17 +85,33 @@ export const ArtworkList = ({
         {Array.isArray(artworks) && artworks.length > 0 && (
           <Flex width="100%" flexWrap="wrap">
             {artworks.map((artwork) => {
+
+
               if (isPublic && !isArtworkAccessible(artwork, appUser)) return;
 
+              let image = artwork?.heroImage;
+              if (!image) {
+                if (
+                  artwork?.arObjects &&
+                  Array.isArray(artwork?.arObjects)
+                ) {
+                  const firstWithHero = artwork?.arObjects.find(
+                    (o) => !!o?.heroImage?.id
+                  );
+
+                  if (firstWithHero) image = firstWithHero.heroImage;
+                }
+              }
+              
               return (
                 <ArtworkListItem
                   isAdmin={!isPublic}
                   urlKey={artwork.key}
                   col={col}
                   key={artwork.key}
+                  heroImage={image}
                   {...pick(artwork, [
                     "id",
-                    "heroImage",
                     "title",
                     "creator",
                     "status",

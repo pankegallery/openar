@@ -307,7 +307,6 @@ type Query {
   collection(ethAddress: String!): ArObjectQueryResult!
   exhibition(slug: String!): Exhibition!
   imageStatus(id: Int!): ImageStatus!
-  images(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, taxonomyId: Int, where: JSON): ImageQueryResult
   user(ethAddress: String!): PublicUser
   userProfileRead(ethAddress: String!): User
   userRead(id: Int!): User

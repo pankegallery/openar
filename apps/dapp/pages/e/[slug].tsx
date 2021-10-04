@@ -307,10 +307,13 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
                 if (!image) {
                   if (
                     artwork?.arObjects &&
-                    Array.isArray(artwork?.arObjects) &&
-                    artwork?.arObjects.length > 0
+                    Array.isArray(artwork?.arObjects)
                   ) {
-                    image = artwork?.arObjects[0].heroImage;                    
+                    const firstWithHero = artwork?.arObjects.find(
+                      (o) => !!o?.heroImage?.id
+                    );
+
+                    if (firstWithHero) image = firstWithHero.heroImage;
                   }
                 }
                 return (

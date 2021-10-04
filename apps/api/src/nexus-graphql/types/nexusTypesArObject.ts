@@ -189,7 +189,7 @@ export const ArObjectQueries = extendType({
         };
 
         if ((pRI?.fieldsByTypeName?.ArObjectQueryResult as any)?.totalCount) {
-          totalCount = await daoArObjectQueryCount(args.where);
+          totalCount = await daoArObjectQueryCount(where);
 
           if (totalCount === 0)
             return {

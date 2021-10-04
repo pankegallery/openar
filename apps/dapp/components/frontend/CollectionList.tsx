@@ -61,7 +61,23 @@ export const CollectionList = ({
       {hasCollectionItems && (
         <Box height="100%" width="100%" overflow="scroll">
           <Flex width="100%" flexWrap="wrap">
-            {objects.map((object) => (
+            {objects.map((object) => {
+              
+              let image = object?.artwork?.heroImage;
+              if (!image) {
+                if (
+                  object?.artwork?.arObjects &&
+                  Array.isArray(object?.artwork?.arObjects)
+                ) {
+                  const firstWithHero = object?.artwork?.arObjects.find(
+                    (o) => !!o?.heroImage?.id
+                  );
+
+                  if (firstWithHero) image = firstWithHero.heroImage;
+                }
+              }
+
+              return (
               <ArtworkListItem
                 isAdmin={isAdmin}
                 isPublic={isPublic}
@@ -70,17 +86,17 @@ export const CollectionList = ({
                 key={object.key}
                 isCollectedObject={true}
                 subgraphInfo={object?.subgraphInfo}
+                heroImage={image}
                 {...pick(object, [
                   "id",
                   "key",
                   "artwork",
-                  "heroImage",
                   "title",
                   "creator",
                   "status",
                 ])}
               />
-            ))}
+            )})}
           </Flex>
         </Box>
       )}

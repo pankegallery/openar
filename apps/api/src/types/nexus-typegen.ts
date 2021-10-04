@@ -520,7 +520,6 @@ export interface NexusGenFieldTypes {
     collection: NexusGenRootTypes['ArObjectQueryResult']; // ArObjectQueryResult!
     exhibition: NexusGenRootTypes['Exhibition']; // Exhibition!
     imageStatus: NexusGenRootTypes['ImageStatus']; // ImageStatus!
-    images: NexusGenRootTypes['ImageQueryResult'] | null; // ImageQueryResult
     user: NexusGenRootTypes['PublicUser'] | null; // PublicUser
     userProfileRead: NexusGenRootTypes['User'] | null; // User
     userRead: NexusGenRootTypes['User'] | null; // User
@@ -741,7 +740,6 @@ export interface NexusGenFieldTypeNames {
     collection: 'ArObjectQueryResult'
     exhibition: 'Exhibition'
     imageStatus: 'ImageStatus'
-    images: 'ImageQueryResult'
     user: 'PublicUser'
     userProfileRead: 'User'
     userRead: 'User'
@@ -895,13 +893,6 @@ export interface NexusGenArgTypes {
     }
     imageStatus: { // args
       id: number; // Int!
-    }
-    images: { // args
-      orderBy?: NexusGenScalars['JSON'] | null; // JSON
-      pageIndex?: number | null; // Int
-      pageSize: number | null; // Int
-      taxonomyId?: number | null; // Int
-      where?: NexusGenScalars['JSON'] | null; // JSON
     }
     user: { // args
       ethAddress: string; // String!

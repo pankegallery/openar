@@ -1,6 +1,6 @@
 /// <reference path="../../types/nexus-typegen.ts" />
-import { parseResolveInfo } from "graphql-parse-resolve-info";
-import { Image as PrismaImage } from "@prisma/client";
+// import { parseResolveInfo } from "graphql-parse-resolve-info";
+// import { Image as PrismaImage } from "@prisma/client";
 
 import dedent from "dedent";
 import {
@@ -9,30 +9,30 @@ import {
   inputObjectType,
   nonNull,
   intArg,
-  arg,
+  // arg,
   list,
 } from "nexus";
 import httpStatus from "http-status";
 
 import { ApiError } from "../../utils";
 
-import { GQLJson } from "./nexusTypesShared";
+// import { GQLJson } from "./nexusTypesShared";
 
 import { authorizeApiUser } from "../helpers";
 
-import { getApiConfig } from "../../config";
+// import { getApiConfig } from "../../config";
 
 import {
-  daoImageQuery,
+  // daoImageQuery,
   // daoImageCreate,
   // daoImageUpdate,
   daoImageQueryCount,
-  daoImageGetById,
+  // daoImageGetById,
   daoImageGetStatusById,
   daoImageSetToDelete,
 } from "../../dao";
 
-const apiConfig = getApiConfig();
+// const apiConfig = getApiConfig();
 
 export const Image = objectType({
   name: "Image",
@@ -72,57 +72,57 @@ export const ImageQueryResult = objectType({
 export const ImageQueries = extendType({
   type: "Query",
   definition(t) {
-    t.field("images", {
-      type: "ImageQueryResult",
+    // t.field("images", {
+    //   type: "ImageQueryResult",
 
-      args: {
-        taxonomyId: intArg(),
-        pageIndex: intArg({
-          default: 0,
-        }),
-        pageSize: intArg({
-          default: apiConfig.db.defaultPageSize,
-        }),
-        orderBy: arg({
-          type: GQLJson,
-          default: undefined,
-        }),
-        where: arg({
-          type: GQLJson,
-          default: undefined,
-        }),
-      },
+    //   args: {
+    //     taxonomyId: intArg(),
+    //     pageIndex: intArg({
+    //       default: 0,
+    //     }),
+    //     pageSize: intArg({
+    //       default: apiConfig.db.defaultPageSize,
+    //     }),
+    //     orderBy: arg({
+    //       type: GQLJson,
+    //       default: undefined,
+    //     }),
+    //     where: arg({
+    //       type: GQLJson,
+    //       default: undefined,
+    //     }),
+    //   },
 
-      async resolve(...[, args, , info]) {
-        const pRI = parseResolveInfo(info);
+    //   async resolve(...[, args, , info]) {
+    //     const pRI = parseResolveInfo(info);
 
-        let totalCount;
-        let images: PrismaImage[] | null = [];
+    //     let totalCount;
+    //     let images: PrismaImage[] | null = [];
 
-        if ((pRI?.fieldsByTypeName?.ImageQueryResult as any)?.totalCount) {
-          totalCount = await daoImageQueryCount(args.where);
+    //     if ((pRI?.fieldsByTypeName?.ImageQueryResult as any)?.totalCount) {
+    //       totalCount = await daoImageQueryCount(args.where);
 
-          if (totalCount === 0)
-            return {
-              totalCount,
-              images: [],
-            };
-        }
+    //       if (totalCount === 0)
+    //         return {
+    //           totalCount,
+    //           images: [],
+    //         };
+    //     }
 
-        if ((pRI?.fieldsByTypeName?.ImageQueryResult as any)?.images)
-          images = await daoImageQuery(
-            args.where,
-            args.orderBy,
-            args.pageIndex as number,
-            args.pageSize as number
-          );
+    //     if ((pRI?.fieldsByTypeName?.ImageQueryResult as any)?.images)
+    //       images = await daoImageQuery(
+    //         args.where,
+    //         args.orderBy,
+    //         args.pageIndex as number,
+    //         args.pageSize as number
+    //       );
 
-        return {
-          totalCount,
-          images,
-        };
-      },
-    });
+    //     return {
+    //       totalCount,
+    //       images,
+    //     };
+    //   },
+    // });
 
     t.nonNull.field("imageStatus", {
       type: "ImageStatus",
@@ -163,7 +163,18 @@ export const ImageMutations = extendType({
         id: nonNull(intArg()),
       },
 
-      authorize: (...[, , ctx]) => authorizeApiUser(ctx, "imageDeleteOwn"),
+      authorize: async (...[, args, ctx]) => {
+        if (!authorizeApiUser(ctx, "imageDeleteOwn")) return false;
+
+        const count = await daoImageQueryCount({
+          id: args.id,
+          owner: {
+            id: ctx.appUser?.id ?? 0,
+          },
+        });
+
+        return count === 1;
+      },
 
       async resolve(...[, args]) {
         const image = await daoImageSetToDelete(args.id);

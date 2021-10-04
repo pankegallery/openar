@@ -68,7 +68,7 @@ export const ArtworkListItem = ({
     }
   } 
 
-  if (!heroImage?.id)
+  if (!isAdmin && !heroImage?.id)
     return <></>
 
   return (

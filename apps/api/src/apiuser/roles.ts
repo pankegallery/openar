@@ -140,6 +140,10 @@ apiRolesAndPermissions.add("user", [
   "artworkReadOwn",
   "critiqueReadOwn",
   "exhibitionReadOwn",
+  "collectionUpdateOwn",
+  "collectionSellOwn",
+  "collectionReadOwn",
+  "imageDeleteOwn",
 ]);
 
 apiRolesAndPermissions.add("newuser", [

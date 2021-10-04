@@ -147,7 +147,7 @@ export const ArtworkQueries = extendType({
         };
 
         if ((pRI?.fieldsByTypeName?.ArtworkQueryResult as any)?.totalCount) {
-          totalCount = await daoArtworkQueryCount(args.where);
+          totalCount = await daoArtworkQueryCount(where);
 
           if (totalCount === 0)
             return {
@@ -173,13 +173,6 @@ export const ArtworkQueries = extendType({
                 },
               },
             };
-
-            where = {
-              ...where,
-              heroImage: {
-                status: ImageStatusEnum.READY,
-              },
-            };
           }
 
           if (
@@ -198,6 +191,13 @@ export const ArtworkQueries = extendType({
                   askPrice: true,
                   editionOf: true,
                   isPublic: true,
+                  heroImage: {
+                    select: {
+                      id: true,
+                      meta: true,
+                      status: true,
+                    },
+                  },
                 },
                 where: {
                   isBanned: false,
@@ -210,6 +210,9 @@ export const ArtworkQueries = extendType({
                       ArObjectStatusEnum.MINTED,
                     ],
                   },
+                },
+                orderBy: {
+                  orderNumber: "asc",
                 },
               },
             };
@@ -418,7 +421,7 @@ export const ArtworkQueries = extendType({
           },
         };
         if ((pRI?.fieldsByTypeName?.ArtworkQueryResult as any)?.totalCount) {
-          totalCount = await daoArtworkQueryCount(args.where);
+          totalCount = await daoArtworkQueryCount(where);
 
           if (totalCount === 0)
             return {

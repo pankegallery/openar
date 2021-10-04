@@ -108,7 +108,7 @@ export const Artwork = ({
 
 // This function gets called at build time
 export async function getStaticPaths() {
-  return { paths: [], fallback: "blocking" }; // TODO: probably we need somehow configure the refresh timeout.
+  return { paths: [], fallback: "blocking" };
 }
 
 export const getStaticProps = async ({ params }: { params: any }) => {
@@ -183,6 +183,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
       artwork: data?.artwork,
       okey: okey,
     },
+    revalidate: 240,
   };
 };
 

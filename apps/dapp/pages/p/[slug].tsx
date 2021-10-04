@@ -177,6 +177,7 @@ export const getStaticProps = async (context) => {
       content: pageData.content,
       data: pageData.data,
     },
+    revalidate: 240,
   };
 };
 
