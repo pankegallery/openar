@@ -315,7 +315,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
                 }
                 return (
                   <ArtworkListItem
-                    col={1}
+                    col="1-or-2"
                     isAdmin={false}
                     exSlug={exhibition.slug}
                     urlKey={artwork.key}
