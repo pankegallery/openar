@@ -151,7 +151,7 @@ export const PublicUserProfile = ({
 
 // This function gets called at build time
 export async function getStaticPaths() {
-  return { paths: [], fallback: "blocking" };
+  return { paths: [], fallback: "blocking", ref };
 }
 
 export const getStaticProps = async ({ params }: { params: any }) => {
