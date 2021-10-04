@@ -208,7 +208,7 @@ const writeToIPFS = async (
       path.parse(glbMeta?.originalFilePath).base
     }`;
 
-    metaDataURI = `https://ipfs.io/ipfs/${cidMetaData}/metadata.json`;
+    metaDataURI = `https://ipfs.io/ipfs/${cidMetaData}/`;
 
     logger.info(
       `[Done] Preparing IPFS data for object ${arObject.key} ${editionNumber}/${arObject.editionOf}`
