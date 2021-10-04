@@ -54,6 +54,7 @@ const Create = () => {
   });
 
   const { data, loading, error } = useQuery(artworkReadOwnQueryGQL, {
+    skip: !router?.query?.aid,
     variables: {
       id: parseInt(router.query.aid as string, 10),
     },

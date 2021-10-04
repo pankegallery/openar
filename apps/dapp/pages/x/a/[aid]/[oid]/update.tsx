@@ -132,6 +132,7 @@ const Update = () => {
   } = formMethods;
 
   const { data, loading, error } = useQuery(arObjectReadOwnQueryGQL, {
+    skip: !router?.query?.oid || !router?.query?.aid,
     variables: {
       id: parseInt(router.query.oid as string, 10),
       aid: parseInt(router.query.aid as string, 10),

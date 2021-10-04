@@ -115,6 +115,7 @@ const Update = () => {
   const { handleSubmit, setValue, watch, getValues } = formMethods;
 
   const formDataQuery = useQuery(arObjectReadOwnQueryGQL, {
+    skip: !router?.query?.oid || !router?.query?.aid,
     variables: {
       id: parseInt(router.query.oid as string, 10),
       aid: parseInt(router.query.aid as string, 10),
@@ -174,17 +175,6 @@ const Update = () => {
     library
       .send("eth_signTypedData_v4", params)
       .then((signature) => {
-        console.log(
-          awKeyHash,
-          objKeyHash,
-          numberToBigNumber(getValues("editionOf")).toString(),
-          getValues("setInitialAsk"),
-          Decimal.new(getValues("askPrice")).value.toString(),
-          nonceBN.toString(),
-          deadlineBN.toString(),
-          openAR.eip712Domain()
-        );
-
         recoverSignatureFromMintArObject(
           awKeyHash,
           objKeyHash,
