@@ -36,7 +36,7 @@ export const PublicUserProfile = ({
   const isMobile = useSSRSaveMediaQuery("(max-width: 45rem)");
 
   const hasArtworks = user.artworks.length > 0;
-  
+
   const hasCollection = collection && collection.totalCount > 0;
   const name = getArtistName(user.pseudonym, user.ethAddress);
 
@@ -151,7 +151,7 @@ export const PublicUserProfile = ({
 
 // This function gets called at build time
 export async function getStaticPaths() {
-  return { paths: [], fallback: "blocking", ref };
+  return { paths: [], fallback: "blocking" };
 }
 
 export const getStaticProps = async ({ params }: { params: any }) => {
@@ -237,7 +237,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
       user: data?.user,
       collection: data?.collection,
     },
-    revalidate: 240, 
+    revalidate: 240,
   };
 };
 
