@@ -3,6 +3,7 @@ import { GraphQLClient, gql } from "graphql-request";
 import { bigNumberToEther } from "@openar/crypto";
 
 import { getApiConfig } from "../config";
+import logger from "../services/serviceLogging";
 
 const apiConfig = getApiConfig();
 
@@ -65,16 +66,20 @@ export const daoSubgraphGetOwnedTokenByEthAddress = async (
     }
   `;
 
-  const client = new GraphQLClient(apiConfig.baseUrl.subgraph);
+  try {
+    const client = new GraphQLClient(apiConfig.baseUrl.subgraph);
 
-  const tokenInfo = await client.request(query, {
-    ethAddress: ethAddress.toLowerCase(),
-    first,
-    skip,
-  });
+    const tokenInfo = await client.request(query, {
+      ethAddress: ethAddress.toLowerCase(),
+      first,
+      skip,
+    });
 
-  if (tokenInfo && tokenInfo.medias && tokenInfo.medias.length > 0)
-    return tokenInfo.medias;
+    if (tokenInfo && tokenInfo.medias && tokenInfo.medias.length > 0)
+      return tokenInfo.medias;
+  } catch (err: any) {
+    logger.error(err);
+  }
 
   return null;
 };
