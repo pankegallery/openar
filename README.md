@@ -40,6 +40,8 @@ Please create a `.env.local` file in `/apps/dapp` and provide the following info
 ```bash
 NEXT_PUBLIC_INFURA_ID=[INFURA_API_KEY]
 NEXT_PUBLIC_API_URL=[API_URL]
+NEXT_PUBLIC_SUBGRAPH_URL=[SUBGRAPH_GRAPHQL_URL]
+NEXT_PUBLIC_CHAIN_ID=[100 for xDai or 31337 for local hardhat]
 NEXT_PUBLIC_ANKR_XDAI_RPC=[ANKR_XDAI_RPC_URL]
 ```
 
