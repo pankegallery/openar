@@ -19,6 +19,7 @@ export const getArObjectTokenInfoGQL = gql`
       contentHash
       metadataHash
       editionNumber
+      transactionHash
       editionOf
       creator {
         id
