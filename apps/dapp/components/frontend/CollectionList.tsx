@@ -63,20 +63,8 @@ export const CollectionList = ({
           <Flex width="100%" flexWrap="wrap">
             {objects.map((object) => {
               
-              let image = object?.artwork?.heroImage;
-              if (!image) {
-                if (
-                  object?.artwork?.arObjects &&
-                  Array.isArray(object?.artwork?.arObjects)
-                ) {
-                  const firstWithHero = object?.artwork?.arObjects.find(
-                    (o) => !!o?.heroImage?.id
-                  );
-
-                  if (firstWithHero) image = firstWithHero.heroImage;
-                }
-              }
-
+              let image = object?.heroImage ?? object?.artwork?.heroImage;
+              
               return (
               <ArtworkListItem
                 isAdmin={isAdmin}
