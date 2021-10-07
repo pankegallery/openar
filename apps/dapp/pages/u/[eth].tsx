@@ -228,7 +228,6 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     },
   });
 
-
   if (!data?.user) {
     return {
       notFound: true,
