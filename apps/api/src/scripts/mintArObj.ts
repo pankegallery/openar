@@ -18,6 +18,7 @@ import minimist from "minimist";
 // TODO: influence gas price for transaction
 // We should be able to use the gas price oracle to have cheaper mint costs
 // https://www.xdaichain.com/for-developers/developer-resources/gas-price-oracle
+// Here is how to set a custom gas price ... https://github.com/ethers-io/ethers.js/issues/40
 
 import {
   ipfsCreateClient,
