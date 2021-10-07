@@ -27,7 +27,6 @@ model User {
   isNew         Boolean @default(true)
   
   artworks   Artwork[] @relation("artworks")
-  collection ArObject2Collector[]
   arObjects  ArObject[] @relation("arObjects")
   
   tokens      Token[]
@@ -36,7 +35,7 @@ model User {
   files       File[]
 
   profileImageId Int?
-  profileImage   Image? @relation(fields: [profileImageId], references: [id], name: "userProfileImage")
+  profileImage   Image? @relation(fields: [profileImageId], references: [id], name: "userProfileImage", onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -60,7 +59,7 @@ model Artwork {
   isPublic        Boolean @default(true)
 
   creatorId Int
-  creator   User? @relation(fields: [creatorId], references: [id], name: "artworks")
+  creator   User? @relation(fields: [creatorId], references: [id], name: "artworks", onDelete: Cascade)
 
   lat           Float?
   lng           Float?
@@ -70,7 +69,7 @@ model Artwork {
   arObjects ArObject[]
 
   heroImageId Int?
-  heroImage   Image? @relation(fields: [heroImageId], references: [id], name: "artworkHeroImage")
+  heroImage   Image? @relation(fields: [heroImageId], references: [id], name: "artworkHeroImage", onDelete: Cascade)
 
   images Image[] @relation("imagesArtwork")
 
@@ -103,35 +102,19 @@ model ArObject {
   isBanned      Boolean @default(false)
 
   creatorId Int
-  creator   User? @relation(fields: [creatorId], references: [id], name: "arObjects")
+  creator   User? @relation(fields: [creatorId], references: [id], name: "arObjects", onDelete: Cascade)
 
-  collectors  ArObject2Collector[] 
-  
   artworkId Int
-  artwork   Artwork? @relation(fields: [artworkId], references: [id])
+  artwork   Artwork? @relation(fields: [artworkId], references: [id], onDelete: Cascade)
 
   heroImageId Int?
-  heroImage   Image? @relation(fields: [heroImageId], references: [id], name: "arObjectHeroImage")
+  heroImage   Image? @relation(fields: [heroImageId], references: [id], name: "arObjectHeroImage", onDelete: Cascade)
 
   images Image[] @relation("imagesObject")
   arModels ArModel[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-}
-
-model ArObject2Collector {
-  id              Int     @id @default(autoincrement())
-  arObjectId      Int
-  
-  userId          Int?
-  tokenId         String
-  editonNumber    Int
-  ownerEthAddress String? 
-  sold            Boolean?
-  
-  collector User? @relation(fields: [userId], references: [id])
-  arObject  ArObject? @relation(fields: [arObjectId], references: [id])
 }
 
 model Image {
@@ -145,7 +128,7 @@ model Image {
   arObjects  ArObject[]  @relation("imagesObject")
 
   ownerId    Int  
-  owner      User   @relation(fields: [ownerId], references: [id])
+  owner      User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   
   profileImageUsers User[]    @relation("userProfileImage")
   heroImageArtworks Artwork[] @relation("artworkHeroImage")
@@ -163,9 +146,9 @@ model ArModel {
   retryCount Int    @default(0)
   type       String @db.VarChar(8)
   arObjectId   Int?
-  arObject     ArObject? @relation(fields: [arObjectId], references: [id])
+  arObject     ArObject? @relation(fields: [arObjectId], references: [id], onDelete: Cascade)
   ownerId    Int  
-  owner      User   @relation(fields: [ownerId], references: [id])
+  owner      User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -177,9 +160,9 @@ model File {
   meta Json
 
   artworkId Int
-  artwork   Artwork @relation(fields: [artworkId], references: [id])
+  artwork   Artwork @relation(fields: [artworkId], references: [id], onDelete: Cascade)
   ownerId    Int  
-  owner      User   @relation(fields: [ownerId], references: [id])
+  owner      User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -191,7 +174,7 @@ model Token {
   type  Int
 
   ownerId Int
-  owner   User     @relation(fields: [ownerId], references: [id])
+  owner   User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   expires DateTime
 
   createdAt DateTime @default(now())
