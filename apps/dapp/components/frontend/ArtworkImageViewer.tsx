@@ -110,7 +110,10 @@ export const ArtworkImageViewer = ({
     return (
       <Flex
         w="100%"
-        h="100%"
+        h={{
+          base: "72vh",
+          t: "100%"
+        }}
         justifyContent="center"
         alignItems="center"
         direction="column"
