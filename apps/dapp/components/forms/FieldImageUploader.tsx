@@ -160,7 +160,7 @@ export const FieldImageUploader = ({
   const [isUploading, setIsUploading] = useState(false);
   const [isUploadError, setIsUploadError] = useState(false);
   const [uploadedImgId, setUploadedImgId] = useState();
-  const [imageIsDeleted, setimageIsDeleted] = useState(false);
+  const [imageIsDeleted, setImageIsDeleted] = useState(false);
 
   const [showFileDropError, setShowFileDropError] = useState(false);
   const [fileDropError, setFileDropError] = useState("");
@@ -233,6 +233,7 @@ export const FieldImageUploader = ({
             .then(({ data }) => {
               if (getCancelToken()) {
                 setIsUploading(false);
+                setImageIsDeleted(false);
 
                 if (setActiveUploadCounter)
                   setActiveUploadCounter((state: number) => state - 1);
@@ -241,7 +242,7 @@ export const FieldImageUploader = ({
                   clearErrors(name);
                   setUploadedImgId(data?.id ?? undefined);
                   setValue(name, data?.id, {
-                    shouldDirty: shouldSetFormDirtyOnDelete,
+                    shouldDirty: shouldSetFormDirtyOnUpload,
                   });
                   if (typeof onUpload === "function")
                     onUpload.call(this, data?.id);
@@ -282,7 +283,7 @@ export const FieldImageUploader = ({
       deleteButtonGQL,
       () => {
         setUploadedImgId(undefined);
-        setimageIsDeleted(true);
+        setImageIsDeleted(true);
         setIsUploading(false);
         setValue(name, undefined, { shouldDirty: shouldSetFormDirtyOnUpload });
         if (typeof onDelete === "function") onDelete.call(null);
