@@ -114,7 +114,7 @@ export const Artwork = ({
             {/* --------- ROW: Header row --------- */}
 
             <Flex w="33.33vw" h="var(--openar-header-height-desktop)" p="10">
-              <Link href={`/e/openar-art`}>
+              <Link href={`/e/${exhibition.slug}`}>
                 <a>
                   <Arrow className="arrow" />
                 </a>

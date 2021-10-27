@@ -90,7 +90,7 @@ export const EventQueries = extendType({
       },
 
       async resolve(...[, args]) {
-        if (args.slug !== "open-ar")
+        if (args.slug !== "openar-art")
           throw new ApiError(httpStatus.NOT_FOUND, "Not found");
 
         return {
