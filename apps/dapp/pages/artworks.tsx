@@ -88,11 +88,6 @@ export const Artworks = ({ artworks }: { artworks: any }) => {
   );
 };
 
-// This function gets called at build time
-export async function getStaticPaths() {
-  return { paths: [], fallback: "blocking" };
-}
-
 export const getStaticProps = async ({ params }: { params: any }) => {
   const client = getApolloClient();
 
