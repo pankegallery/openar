@@ -36,13 +36,13 @@ export const Artwork = ({
     (a: any) => a.key === artwork.key
   );
 
-  const prevArtworkKey = exhibition.artworks[
+  const prevArtworkKey = exhibition?.artworks?.[
     thisArtworkIndex === 0 ? exhibition.artworks.length - 1 : thisArtworkIndex - 1
-  ];
+  ]?.key;
 
-  const nextArtworkKey = exhibition.artworks[
+  const nextArtworkKey = exhibition?.artworks?.[
     thisArtworkIndex === exhibition.artworks.length - 1 ? 0 : thisArtworkIndex + 1
-  ];
+  ]?.key;
   
   // _____________ Get initial or selected object _____________
 
@@ -50,7 +50,7 @@ export const Artwork = ({
   if (okey === "initial") {
     selectedObject = artwork.arObjects[0];
   } else {
-    selectedObject = artwork.arObjects.find((o) => o.key === okey);
+    selectedObject = artwork.arObjects.find((o: any) => o.key === okey);
   }
 
   // _____________ RETURN _____________
