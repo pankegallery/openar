@@ -117,8 +117,12 @@ export const ArtworkQueries = extendType({
 
         where = {
           ...where,
-          isBanned: false,
-          isPublic: true,
+          isBanned: {
+            equals: false,
+          },
+          isPublic: {
+            equals: true,
+          },
           status: {
             in: [
               ArtworkStatusEnum.PUBLISHED,
@@ -127,7 +131,9 @@ export const ArtworkQueries = extendType({
           },
           arObjects: {
             every: {
-              isBanned: false,
+              isBanned: {
+                equals: false,
+              },
             },
             some: {
               status: {
@@ -142,7 +148,9 @@ export const ArtworkQueries = extendType({
             },
           },
           creator: {
-            isBanned: false,
+            isBanned: {
+              equals: false,
+            },
           },
         };
 
@@ -200,7 +208,9 @@ export const ArtworkQueries = extendType({
                   },
                 },
                 where: {
-                  isBanned: false,
+                  isBanned: {
+                    equals: false,
+                  },
                   status: {
                     in: [
                       ArObjectStatusEnum.PUBLISHED,
@@ -265,9 +275,13 @@ export const ArtworkQueries = extendType({
         let include = {};
         let where: Prisma.ArtworkWhereInput = {
           key: args.key,
-          isBanned: false,
+          isBanned: {
+            equals: false,
+          },
           creator: {
-            isBanned: false,
+            isBanned: {
+              equals: false,
+            },
           },
           status: {
             in: [
@@ -277,7 +291,9 @@ export const ArtworkQueries = extendType({
           },
           arObjects: {
             every: {
-              isBanned: false,
+              isBanned: {
+                equals: false,
+              },
             },
             some: {
               status: {
