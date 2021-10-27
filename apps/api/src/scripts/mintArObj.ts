@@ -19,6 +19,7 @@ import minimist from "minimist";
 // We should be able to use the gas price oracle to have cheaper mint costs
 // https://www.xdaichain.com/for-developers/developer-resources/gas-price-oracle
 // Here is how to set a custom gas price ... https://github.com/ethers-io/ethers.js/issues/40
+// gas usage between 750.000 and 800.000 per mint
 
 import {
   ipfsCreateClient,
@@ -63,7 +64,9 @@ class GasPriceProvider extends providers.JsonRpcProvider {
       const client = axios.create();
 
       await client
-        .get("https://blockscout.com/xdai/mainnet/api/v1/gas-price-oracle")
+        .get("https://blockscout.com/xdai/mainnet/api/v1/gas-price-oracle", {
+          timeout: 500,
+        })
         .then(async (response: AxiosResponse<any>) => {
           if (response?.data?.average) {
             gasPrice = response?.data?.average;
@@ -78,9 +81,11 @@ class GasPriceProvider extends providers.JsonRpcProvider {
             `mintArObject: GasPriceProvider could not retrieve price from oracle: ${err.message}`
           );
         });
-    } catch (Err) {
-      logger.error(Err);
-      throw Err;
+    } catch (err: any) {
+      logger.error(
+        `mintArObject: GasPriceProvider could not retrieve price from oracle: ${err.message}`
+      );
+      throw err;
     }
 
     return utils.parseUnits(gasPrice.toString(), "gwei");
@@ -610,6 +615,7 @@ const doChores = async () => {
           status: ArObjectStatusEnum.MINTERROR,
           mintMetaData: {
             error: err.message,
+            ...((arObject.mintMetaData as object) ?? {}),
           },
         },
         where: {
