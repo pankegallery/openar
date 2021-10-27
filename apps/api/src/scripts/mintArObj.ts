@@ -376,6 +376,13 @@ const processArObject = async (
         if (err.message.indexOf("nonce has already been used") > -1)
           canRetry = true;
 
+        if (err.message.indexOf("transaction was replaced") > -1)
+          canRetry = true;
+
+        if (err.message.indexOf("FeeTooLowToCompete") > -1) canRetry = true;
+
+        if (canRetry) logger.info("will retry");
+
         newStatus = canRetry
           ? ArObjectStatusEnum.MINTRETRY
           : ArObjectStatusEnum.MINTERROR;
