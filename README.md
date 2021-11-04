@@ -69,18 +69,18 @@ npm run app:dapp:lint #to lint the next js dApp
 
 /pages/...
 
-/login - conect to wallet
-/chain - if the wallet is set to the wrong chain the user will be asked to switch
-/sign - once connected this screen does allow to sign the login
-/artworks - the artwork listing
-/a/ - Artworks detail, using dynamic [...keys] to also allow access to individual objects of the artwork /a/[akey]/[okey]
-/e/ - The exhibtion detail page
-/o/ - Object deep link not sure if we're going to use it
-/p/ - Pages using markup in /content/
-/u/ - Public user profile
-/x/ - Authenticated only "My" user profile
-/x/a/create - Create artwork
-/x/a/[aid]/update - Update artwork
-/x/a/[aid]/create - Create arObject
-/x/a/[aid]/[oid]/update - Create arObject
-/x/profile/update - Update user profile
+- /login - conect to wallet
+- /chain - if the wallet is set to the wrong chain the user will be asked to switch
+- /sign - once connected this screen does allow to sign the login
+- /artworks - the artwork listing
+- /a/ - Artworks detail, using dynamic [...keys] to also allow access to individual objects of the artwork /a/[akey]/[okey]
+- /e/ - The exhibtion detail page
+- /o/ - Object deep link not sure if we're going to use it
+- /p/ - Pages using markup in /content/
+- /u/ - Public user profile
+- /x/ - Authenticated only "My" user profile
+- /x/a/create - Create artwork
+- /x/a/[aid]/update - Update artwork
+- /x/a/[aid]/create - Create arObject
+- /x/a/[aid]/[oid]/update - Create arObject
+- /x/profile/update - Update user profile
