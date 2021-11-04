@@ -183,6 +183,15 @@ export const getStaticProps = async ({ params }: { params: any }) => {
             meta
             status
           }
+          arObjects {
+            id
+            status
+            heroImage {
+              id
+              meta
+              status
+            }
+          }
         }
       }
       collection(ethAddress: $ethAddress) {
@@ -234,6 +243,8 @@ export const getStaticProps = async ({ params }: { params: any }) => {
       revalidate: 240,
     };
   }
+
+  console.log(data);
 
   return {
     props: {
