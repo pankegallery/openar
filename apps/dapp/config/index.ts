@@ -41,12 +41,12 @@ export const appConfig: AppConfig = {
     { slug: "blog", label: "Blog", url: "/p/blog" },
   ],
   secondaryMenu: [
-    { slug: "discord", label: "Discord", url: "https://discord.gg/efGHVEKM" },
-    { slug: "badges", label: "Roles and Badges", url: "/p/badges" },
+    { slug: "discord", label: "Discord", url: "https://discord.gg/CTajTS68bt", target: "_blank", rel: "noopener, noreferrer"},
+    { slug: "badges", label: "Roles and Badges", url: "/p/badges", target: "_blank", rel: "noopener, noreferrer"},
     //    { slug: "funding", label: "Platform funding", url: "p/funding" },
-    { slug: "privpol", label: "Privacy policy", url: "/p/privpol" },
+    { slug: "privpol", label: "Privacy policy", url: "/p/privpol", target: "_blank", rel: "noopener, noreferrer"},
     //    { slug: "tandc", label: "Terms and Conditions", url: "p/tandc" },
-    { slug: "imprint", label: "Imprint", url: "/p/imprint" },
+    { slug: "imprint", label: "Imprint", url: "/p/imprint", target: "_blank", rel: "noopener, noreferrer"},
   ]
 };
 

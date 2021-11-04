@@ -7,12 +7,16 @@ import { chakra, transition } from "@chakra-ui/react";
 export const ActiveLink = ({
   children,
   activeClassName = "active",
+  target,
+  rel,
   href,
   ...props
 }: {
   children: React.ReactNode;
   activeClassName?: string;
   href: string;
+  target?: string;
+  rel?: string;
   onClick?: (event: any) => void;
 }) => {
   const router = useRouter();
@@ -29,7 +33,7 @@ export const ActiveLink = ({
     return (
       <chakra.a
         htmlref="nofollow"
-        {...{ className, href }}
+        {...{ className, href, target, rel }}
         _hover={{
           opacity: 0.6,
         }}
@@ -48,7 +52,7 @@ export const ActiveLink = ({
   return (
     <Link href={href} passHref>
       <chakra.a
-        {...{ className }}
+        {...{ className, target, rel }}
         onClick={(props as any)?.onClick}
         _hover={{
           opacity: 0.6,

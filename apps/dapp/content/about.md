@@ -7,7 +7,7 @@ subPages:
     url: "p/getStarted"
   - slug: "roles"
     label: "Roles and Badges"
-    url: "p/roles"
+    url: "p/badges"
 ---
 
 ## About OpenAR
