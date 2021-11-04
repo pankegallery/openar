@@ -138,6 +138,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     props: {
       artworks: data?.artworks.artworks,
     },
+    revalidate: 240,
   };
 };
 

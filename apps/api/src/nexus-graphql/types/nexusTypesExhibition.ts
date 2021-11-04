@@ -13,8 +13,9 @@ import {
   //   arg,
   //   list,
 } from "nexus";
-// import httpStatus from "http-status";
-// import { ApiError } from "../../utils";
+
+import httpStatus from "http-status";
+import { ApiError } from "../../utils";
 
 // import { GQLJson } from "./nexusTypesShared";
 
@@ -88,8 +89,10 @@ export const EventQueries = extendType({
         slug: nonNull(stringArg()),
       },
 
-      // resolve(...[, args, , info])
-      async resolve() {
+      async resolve(...[, args]) {
+        if (args.slug !== "openar-art")
+          throw new ApiError(httpStatus.NOT_FOUND, "Not found");
+
         return {
           id: 1,
           title: "OpenAR.art",
@@ -107,6 +110,10 @@ export const EventQueries = extendType({
                   ArtworkStatusEnum.PUBLISHED,
                   ArtworkStatusEnum.HASMINTEDOBJECTS,
                 ],
+              },
+              isPublic: true,
+              id: {
+                in: [3, 4, 5, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 21, 22],
               },
             },
             {

@@ -9,14 +9,15 @@ import { Box, Flex, chakra } from "@chakra-ui/react";
 import { Footer } from "~/components/app/site";
 
 import { useSSRSaveMediaQuery } from "~/hooks";
-
+import { GetStaticProps, GetStaticPaths } from "next";
 
 function PageTemplate({ content, data }) {
-
   const frontmatter = data;
 
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
-  const isTablet = useSSRSaveMediaQuery("(min-width: 45rem) and (max-width: 75rem)");
+  const isTablet = useSSRSaveMediaQuery(
+    "(min-width: 45rem) and (max-width: 75rem)"
+  );
 
   return (
     <Flex
@@ -28,27 +29,25 @@ function PageTemplate({ content, data }) {
       }}
       pt={{
         base: "0",
-        t: "var(--openar-header-height-desktop)"
+        t: "var(--openar-header-height-desktop)",
       }}
     >
-
       {/* --------- COL: Title Tile + Footer--------- */}
       <Flex
         direction="column"
-         w={{
-            base: "100%",
-            t: "50vw",
-            d: "33.33vw",
-          }}
+        w={{
+          base: "100%",
+          t: "50vw",
+          d: "33.33vw",
+        }}
         height={{
           base: "auto",
           d: "100%",
         }}
         borderRight={{
           base: "none",
-          t: "1px solid black"
+          t: "1px solid black",
         }}
-
       >
         {/* --------- TILE: Back + Title + Subpages --------- */}
         <Flex
@@ -79,7 +78,7 @@ function PageTemplate({ content, data }) {
         >
           {frontmatter.parentPage && (
             <Box className="parentPage" mb="4">
-                <ArrowLink type="back" href={`/${frontmatter.parentPage[0].url}`}>
+              <ArrowLink type="back" href={`/${frontmatter.parentPage[0].url}`}>
                 {frontmatter.parentPage[0].label}
               </ArrowLink>
             </Box>
@@ -89,7 +88,7 @@ function PageTemplate({ content, data }) {
             {frontmatter.title}
           </chakra.h1>
 
-          {frontmatter.subPages &&
+          {frontmatter.subPages && (
             <Box
               className="subPages"
               mt="auto"
@@ -113,13 +112,10 @@ function PageTemplate({ content, data }) {
                 </ArrowLink>
               ))}
             </Box>
-          }
-          </Flex>
+          )}
+        </Flex>
 
-          {isDesktop &&
-            <Footer />
-          }
-
+        {isDesktop && <Footer />}
       </Flex>
 
       {/* --------- Page content --------- */}
@@ -134,7 +130,7 @@ function PageTemplate({ content, data }) {
           base: "auto",
           t: "100%",
         }}
-        overflowY="auto"       
+        overflowY="auto"
         pb={{
           base: "10",
           t: "var(--openar-header-height-desktop)",
@@ -148,16 +144,12 @@ function PageTemplate({ content, data }) {
       >
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
       </Box>
-      {!isDesktop &&
-        <Footer />
-      }
-
+      {!isDesktop && <Footer />}
     </Flex>
-
-);
+  );
 }
 
-export const getStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async (context) => {
   const { slug } = context.params;
   let fileContent;
 
@@ -181,7 +173,7 @@ export const getStaticProps = async (context) => {
   };
 };
 
-export const getStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: [], //indicates that no page needs be created at build time
     fallback: "blocking", //indicates the type of fallback

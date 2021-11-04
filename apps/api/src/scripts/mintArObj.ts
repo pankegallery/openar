@@ -1,7 +1,7 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
 import { Bytes, providers, utils, Wallet, BigNumber } from "ethers";
 import { AddressZero } from "@ethersproject/constants";
-
+import axios, { AxiosResponse } from "axios";
 import fs from "fs";
 import os from "os";
 import dotenv from "dotenv";
@@ -18,6 +18,8 @@ import minimist from "minimist";
 // TODO: influence gas price for transaction
 // We should be able to use the gas price oracle to have cheaper mint costs
 // https://www.xdaichain.com/for-developers/developer-resources/gas-price-oracle
+// Here is how to set a custom gas price ... https://github.com/ethers-io/ethers.js/issues/40
+// gas usage between 750.000 and 800.000 per mint
 
 import {
   ipfsCreateClient,
@@ -54,6 +56,41 @@ const apiConfig = getApiConfig();
 
 // connect to a different API
 const ipfs = ipfsCreateClient(apiConfig.ipfsApiUrl);
+
+class GasPriceProvider extends providers.JsonRpcProvider {
+  async getGasPrice() {
+    let gasPrice = 2;
+    try {
+      const client = axios.create();
+
+      await client
+        .get("https://blockscout.com/xdai/mainnet/api/v1/gas-price-oracle", {
+          timeout: 500,
+        })
+        .then(async (response: AxiosResponse<any>) => {
+          if (response?.data?.average) {
+            gasPrice = response?.data?.average;
+            if (response?.data?.fast) {
+              gasPrice +=
+                (response?.data?.fast - response?.data?.average) * 0.1;
+            }
+          }
+        })
+        .catch((err) => {
+          logger.error(
+            `mintArObject: GasPriceProvider could not retrieve price from oracle: ${err.message}`
+          );
+        });
+    } catch (err: any) {
+      logger.error(
+        `mintArObject: GasPriceProvider could not retrieve price from oracle: ${err.message}`
+      );
+      throw err;
+    }
+
+    return utils.parseUnits(gasPrice.toString(), "gwei");
+  }
+}
 
 const writeTemplateFile = async (
   templatePath: string,
@@ -375,6 +412,14 @@ const processArObject = async (
         if (err.message.indexOf("nonce has already been used") > -1)
           canRetry = true;
 
+        if (err.message.indexOf("transaction was replaced") > -1)
+          canRetry = true;
+
+        if (err.message.indexOf("FeeTooLowToCompete") > -1) canRetry = true;
+
+        // {"error":"Error cannot estimate gas; transaction may fail or may require manual gas limit
+        if (canRetry) logger.info("will retry");
+
         newStatus = canRetry
           ? ArObjectStatusEnum.MINTRETRY
           : ArObjectStatusEnum.MINTERROR;
@@ -476,7 +521,7 @@ const doChores = async () => {
 
       if (!signature) throw Error("No Signature present");
 
-      const provider = new providers.JsonRpcProvider(process.env.RPC_ENDPOINT);
+      const provider = new GasPriceProvider(process.env.RPC_ENDPOINT);
 
       const contractWallet = new Wallet(
         `0x${process.env.PRIVATE_KEY_MINT?.replace("0x", "")}`,
@@ -570,6 +615,7 @@ const doChores = async () => {
           status: ArObjectStatusEnum.MINTERROR,
           mintMetaData: {
             error: err.message,
+            ...((arObject.mintMetaData as object) ?? {}),
           },
         },
         where: {

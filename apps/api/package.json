@@ -24,6 +24,7 @@
     "apollo-server-express": "^3.0.0",
     "apollo-server-plugin-base": "^3.0.1",
     "apollo-server-types": "^3.0.1",
+    "axios": "^0.24.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "bree": "^6.2.1",

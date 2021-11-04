@@ -17,7 +17,7 @@ export const FormScrollInvalidIntoView = ({
     if (!window) return;
 
     if (errors || hasFormError) {
-      const firstError = document.querySelector("[aria-invalid],.editor.is-error,.form-error");
+      const firstError = document.querySelector("[aria-invalid=\"true\"],.editor.is-error,.form-error");
       
       if (firstError) {
         firstError.scrollIntoView({

@@ -18,9 +18,11 @@ import { getArtistName } from "~/utils";
 
 export const PublicUserProfile = ({
   user,
+  artworks,
   collection,
 }: {
   user: any;
+  artworks: any;
   collection: any;
 }) => {
   const [appUser] = useAuthentication();
@@ -35,7 +37,7 @@ export const PublicUserProfile = ({
   );
   const isMobile = useSSRSaveMediaQuery("(max-width: 45rem)");
 
-  const hasArtworks = user.artworks.length > 0;
+  const hasArtworks = Array.isArray(artworks) && artworks.length > 0;
 
   const hasCollection = collection && collection.totalCount > 0;
   const name = getArtistName(user.pseudonym, user.ethAddress);
@@ -235,6 +237,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   return {
     props: {
       user: data?.user,
+      artworks: data?.user?.artworks,
       collection: data?.collection,
     },
     revalidate: 240,
