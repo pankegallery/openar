@@ -18,9 +18,11 @@ export type MutationProgressInfo = {
 };
 
 export interface AppMenuItem {
-  slug: String;
-  label: String;
-  url: String;
+  slug: string;
+  label: string;
+  url: string;
+  target?: string;
+  rel?: string;
 }
 
 export type AppConfigSettings = {
@@ -41,7 +43,7 @@ export type AppConfigSettings = {
   mainMenu: AppMenuItem[];
   secondaryMenu: AppMenuItem[];
 };
- 
+
 export type AppConfig = Complete<AppConfigSettings>;
 
 export type AppScopes = "api" | "dapp";
@@ -81,7 +83,6 @@ export interface ModuleAccessRules {
   userCan?: PermissionName | PermissionName[] | undefined;
 }
 
-
 interface ModelViewerJSX {
-  src: string
+  src: string;
 }
