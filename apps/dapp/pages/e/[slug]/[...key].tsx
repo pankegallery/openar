@@ -270,6 +270,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   ) {
     return {
       notFound: true,
+      revalidate: 240,
     };
   }
 
