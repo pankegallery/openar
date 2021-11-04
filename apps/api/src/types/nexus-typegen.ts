@@ -258,7 +258,7 @@ export interface NexusGenObjects {
   Exhibition: { // root type
     artworks?: Array<NexusGenRootTypes['Artwork'] | null> | null; // [Artwork]
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
-    curators?: NexusGenRootTypes['User'] | null; // User
+    curators?: Array<NexusGenRootTypes['ExhibitionCurator'] | null> | null; // [ExhibitionCurator]
     dateBegin?: NexusGenScalars['DateTime'] | null; // DateTime
     dateEnd?: NexusGenScalars['DateTime'] | null; // DateTime
     description?: string | null; // String
@@ -267,7 +267,12 @@ export interface NexusGenObjects {
     status: number; // Int!
     subtitle?: string | null; // String
     title?: NexusGenScalars['JSON'] | null; // JSON
+    type?: string | null; // String
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+  }
+  ExhibitionCurator: { // root type
+    orderNumber?: number | null; // Int
+    user?: NexusGenRootTypes['User'] | null; // User
   }
   GeoPoint: { // root type
     lat?: number | null; // Float
@@ -440,7 +445,7 @@ export interface NexusGenFieldTypes {
   Exhibition: { // field return type
     artworks: Array<NexusGenRootTypes['Artwork'] | null> | null; // [Artwork]
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
-    curators: NexusGenRootTypes['User'] | null; // User
+    curators: Array<NexusGenRootTypes['ExhibitionCurator'] | null> | null; // [ExhibitionCurator]
     dateBegin: NexusGenScalars['DateTime'] | null; // DateTime
     dateEnd: NexusGenScalars['DateTime'] | null; // DateTime
     description: string | null; // String
@@ -449,7 +454,12 @@ export interface NexusGenFieldTypes {
     status: number; // Int!
     subtitle: string | null; // String
     title: NexusGenScalars['JSON'] | null; // JSON
+    type: string | null; // String
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+  }
+  ExhibitionCurator: { // field return type
+    orderNumber: number | null; // Int
+    user: NexusGenRootTypes['User'] | null; // User
   }
   GeoPoint: { // field return type
     lat: number | null; // Float
@@ -660,7 +670,7 @@ export interface NexusGenFieldTypeNames {
   Exhibition: { // field return type name
     artworks: 'Artwork'
     createdAt: 'DateTime'
-    curators: 'User'
+    curators: 'ExhibitionCurator'
     dateBegin: 'DateTime'
     dateEnd: 'DateTime'
     description: 'String'
@@ -669,7 +679,12 @@ export interface NexusGenFieldTypeNames {
     status: 'Int'
     subtitle: 'String'
     title: 'JSON'
+    type: 'String'
     updatedAt: 'DateTime'
+  }
+  ExhibitionCurator: { // field return type name
+    orderNumber: 'Int'
+    user: 'User'
   }
   GeoPoint: { // field return type name
     lat: 'Float'

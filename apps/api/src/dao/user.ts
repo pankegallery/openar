@@ -77,6 +77,27 @@ export const daoUserQuery = async (
   );
 };
 
+export const daoUserSelectQuery = async (
+  where: Prisma.UserWhereInput,
+  select: Prisma.UserSelect,
+  orderBy: any,
+  pageIndex: number = 0,
+  pageSize: number = apiConfig.db.defaultPageSize
+): Promise<User[]> => {
+  const users = await prisma.user.findMany({
+    where,
+    select,
+    orderBy,
+    skip: pageIndex * pageSize,
+    take: Math.min(pageSize, apiConfig.db.maxPageSize),
+  });
+
+  return filteredOutputByBlacklist(
+    users,
+    apiConfig.db.privateJSONDataKeys.user
+  );
+};
+
 export const daoPublicUserQuery = async (
   where: Prisma.UserWhereInput,
   orderBy: any,
@@ -108,6 +129,21 @@ export const daoUserFindFirst = async (
   const user = await prisma.user.findFirst({
     where,
     include,
+  });
+
+  return filteredOutputByBlacklistOrNotFound(
+    user,
+    apiConfig.db.privateJSONDataKeys.user
+  );
+};
+
+export const daoUserSelectFindFirst = async (
+  where: Prisma.UserWhereInput,
+  select: Prisma.UserSelect
+): Promise<User> => {
+  const user = await prisma.user.findFirst({
+    where,
+    select,
   });
 
   return filteredOutputByBlacklistOrNotFound(
@@ -228,11 +264,13 @@ export const daoUserProfileImageDelete = async (
 export default {
   daoUserCreate,
   daoUserQuery,
+  daoUserSelectQuery,
   daoUserQueryCount,
   daoUserGetById,
   daoUserUpdate,
   daoUserDelete,
   daoUserFindFirst,
+  daoUserSelectFindFirst,
   daoUserProfileImageDelete,
   daoUserCheckIsEmailTaken,
   daoUserGetByEthAddress,

@@ -205,7 +205,7 @@ scalar EmailAddress @specifiedBy(url: "https://www.w3.org/Protocols/rfc822/")
 type Exhibition {
   artworks: [Artwork]
   createdAt: DateTime
-  curators: User
+  curators: [ExhibitionCurator]
   dateBegin: DateTime
   dateEnd: DateTime
   description: String
@@ -214,7 +214,13 @@ type Exhibition {
   status: Int!
   subtitle: String
   title: JSON
+  type: String
   updatedAt: DateTime
+}
+
+type ExhibitionCurator {
+  orderNumber: Int
+  user: User
 }
 
 type GeoPoint {

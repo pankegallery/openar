@@ -25,6 +25,7 @@ import { ApiError } from "../../utils";
 
 import {
   daoArtworkQuery,
+  daoUserSelectFindFirst,
   //   daoEventQueryCount,
   //   daoEventQueryFirst,
   //   daoEventCreate,
@@ -40,34 +41,31 @@ import {
   ArObjectStatusEnum,
 } from "../../utils";
 
+export const ExhibitionCurator = objectType({
+  name: "ExhibitionCurator",
+  definition(t) {
+    t.int("orderNumber");
+    t.field("user", {
+      type: "User",
+    });
+  },
+});
+
 export const Exhibition = objectType({
   name: "Exhibition",
   definition(t) {
     t.nonNull.int("id");
     t.json("title");
     t.json("slug");
+    t.string("type");
     t.string("subtitle");
     t.string("description");
     t.date("dateBegin");
     t.date("dateEnd");
     t.nonNull.int("status");
 
-    t.field("curators", {
-      type: "User",
-
-      // // resolve(root, args, ctx, info)
-      // async resolve(...[p]) {
-      //   if (p.ownerId) {
-      //     const user = await daoUserGetById(p.ownerId);
-      //     if (user)
-      //       return filteredOutputByWhitelist(user, [
-      //         "id",
-      //         "firstName",
-      //         "lastName",
-      //       ]);
-      //   }
-      //   return null;
-      // },
+    t.list.field("curators", {
+      type: "ExhibitionCurator",
     });
 
     t.list.field("artworks", {
@@ -98,11 +96,52 @@ export const EventQueries = extendType({
           title: "OpenAR.art",
           slug: "openar-art",
           subtitle: "A groupshow curated by Sakrowski and Jeremy Bailey",
+          type: "groupshow",
+          curators: [
+            {
+              orderNumber: 1,
+              user: await daoUserSelectFindFirst(
+                { id: 18 }, // Sakrowski
+                {
+                  id: true,
+                  ethAddress: true,
+                  pseudonym: true,
+                  bio: true,
+                  profileImage: {
+                    select: {
+                      status: true,
+                      id: true,
+                      meta: true,
+                    },
+                  },
+                }
+              ),
+            },
+            {
+              orderNumber: 2,
+              user: await daoUserSelectFindFirst(
+                { id: 9 }, // Jeremy Baley
+                {
+                  id: true,
+                  ethAddress: true,
+                  pseudonym: true,
+                  profileImage: {
+                    select: {
+                      status: true,
+                      id: true,
+                      meta: true,
+                    },
+                  },
+                }
+              ),
+            },
+          ],
           dateBegin: new Date("2021-08-29 12:00"),
           dateEnd: new Date("2021-10-04 12:00"),
           description:
             "On the occasion of the launch of the new platform “openar.art”, panke.gallery presents a hybrid group exhibition with experimental Augmented Reality works. The exhibition and platform have been developed in collaboration between workshop participants and digital artists Jeremy Bailey, Sarah Buser and Tamás Páll. The works examine the possibilities of AR technology in artistic applications. Visual, acoustic and performative Augmented Reality formats can be experienced in the exhibition.",
           status: ExhibitionStatusEnum.PUBLISHED,
+          // TODO: Arworks should also be listed by an order number ...
           artworks: await daoArtworkQuery(
             {
               status: {

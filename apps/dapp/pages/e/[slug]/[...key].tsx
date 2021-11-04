@@ -234,6 +234,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
         id
         slug
         title
+        type
         subtitle
         description
         dateBegin
@@ -245,9 +246,18 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           title
         }
         curators {
-          pseudonym
-          id
-          ethAddress
+          orderNumber
+          user {
+            pseudonym
+            id
+            ethAddress
+            bio
+            profileImage {
+              id
+              status
+              meta
+            }
+          }          
         }
       }
     }
