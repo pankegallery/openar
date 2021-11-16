@@ -20,6 +20,13 @@ export const ExhibitionTitleTile = ({
 }) => {
 
   const href = `/e/${exhibition?.slug}/`;
+  console.log("[Ex Title Tile] exhibition: ", exhibition)
+
+  let assembledSubtitle;
+
+  if (exhibition?.type){
+
+  }
 
   if (link){
     return (
@@ -34,6 +41,7 @@ export const ExhibitionTitleTile = ({
         </Heading>
         <chakra.p textStyle="subtitle" mb="1rem">
           {exhibition?.subtitle}
+          A {exhibition?.type} curated by
         </chakra.p>
         <chakra.p textStyle="workmeta">
           {new Date(exhibition?.dateBegin).toLocaleDateString("de")}

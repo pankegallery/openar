@@ -58,7 +58,7 @@ export const ArtworkImageViewer = ({
       <Box w="100%" direction="column">
         <Flex
           w="100%"
-          h="85vh"
+          h="75vh"
           justifyContent="center"
           alignItems="center"
           direction="column"
