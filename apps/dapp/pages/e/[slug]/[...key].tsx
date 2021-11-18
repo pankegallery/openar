@@ -154,12 +154,21 @@ export const Artwork = ({
         >
           {exhibition.artworks.length > 1 && (
             <Flex w="auto" mb="10" px="6">
-              <Link href={`/e/${exhibition.slug}/${prevArtworkKey}`}>
-                <a>
+
+              <Link
+                href={`/e/${exhibition.slug}/${prevArtworkKey}`}
+                data-toggle='tooltip'
+                title="Previous artwork"
+                passHref>
+                <chakra.a>
                   <Arrow className="arrow" />
-                </a>
+                </chakra.a>
               </Link>
-              <Link href={`/e/${exhibition.slug}/${nextArtworkKey}`} passHref>
+
+              <Link
+                href={`/e/${exhibition.slug}/${nextArtworkKey}`} passHref
+                data-toggle='tooltip'
+                title="Next artwork">
                 <chakra.a ml="6">
                   <Arrow className="arrow right" />
                 </chakra.a>
