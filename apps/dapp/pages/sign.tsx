@@ -79,7 +79,7 @@ const OpenARLogin = () => {
             minWidth="600px"
             m="auto"
             >
-            <Text mb="4" color="white" mb="4">
+            <Text mb="4" color="white">
               Hello, you&#39;re now connected with your wallet, to fully login
               please sign the login request using the button below.
             </Text>

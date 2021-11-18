@@ -22,11 +22,32 @@ export const ExhibitionTitleTile = ({
   const href = `/e/${exhibition?.slug}/`;
   console.log("[Ex Title Tile] exhibition: ", exhibition)
 
-  let assembledSubtitle;
+  let assembledSubtitle, assembledType, assembledCurators;
 
+  // Assemble type with article
   if (exhibition?.type){
-
+    var vowelRegex = '^[aieouAIEOU].*'
+    var matched = exhibition?.type.match(vowelRegex)
+    assembledType = matched ? "An " : "A "
+    assembledType += exhibition?.type
   }
+
+  // Assemble curators
+  assembledCurators = exhibition.curators.map((c, i) =>
+    <>
+      {(i>0 && i<exhibition.curators.length - 1 ) && ", "}
+      {(i == exhibition.curators.length - 1) && " and "}
+      {createCuratorLink(exhibition.curators[i])}
+    </>
+  )
+
+  // Assemble subtitle
+  assembledSubtitle = (
+    <>{assembledType} by &nbsp;
+      {assembledCurators}
+    </>
+  )
+
 
   if (link){
     return (
@@ -40,8 +61,7 @@ export const ExhibitionTitleTile = ({
           <Link href={href} passHref><LinkOverlay>{exhibition?.title}</LinkOverlay></Link>
         </Heading>
         <chakra.p textStyle="subtitle" mb="1rem">
-          {exhibition?.subtitle}
-          A {exhibition?.type} curated by
+          {assembledSubtitle}
         </chakra.p>
         <chakra.p textStyle="workmeta">
           {new Date(exhibition?.dateBegin).toLocaleDateString("de")}
@@ -62,7 +82,7 @@ export const ExhibitionTitleTile = ({
           {exhibition?.title}
         </Heading>
         <chakra.p textStyle="subtitle" mb="1rem">
-          {exhibition?.subtitle}
+          {assembledSubtitle}
         </chakra.p>
         <chakra.p textStyle="workmeta">
           {new Date(exhibition?.dateBegin).toLocaleDateString("de")}
@@ -73,3 +93,12 @@ export const ExhibitionTitleTile = ({
     )
   }
 };
+
+const createCuratorLink = (curator) => {
+  let name = curator.user.pseudonym ? curator.user.pseudonym : curator.user.ethAddress.slice(0, 8) + "…";
+  let url = `/u/${curator.user.ethAddress}`
+  console.log("Curator: ", name, url);
+  return (
+    <a href={url}>{name}</a>
+  )
+}

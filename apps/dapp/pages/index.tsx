@@ -6,6 +6,9 @@ import { Box, Grid, Flex, chakra, AspectRatio } from "@chakra-ui/react";
 import Link from "next/link";
 import Image from "next/image";
 
+import { gql } from "@apollo/client";
+import { getApolloClient } from "~/services/apolloClient";
+
 import openingBg from "~/assets/img/opening-bg.png";
 
 import { useAuthentication } from "~/hooks";
@@ -243,6 +246,64 @@ export const getStaticProps = () => {
     },
   };
 };
+
+//export const getStaticProps = async ({ params }: { params: any }) => {
+//  const client = getApolloClient();
+//
+//  const exhibitionQuery = gql`
+//    query {
+//      exhibitions {
+//        id
+//        slug
+//        title
+//        type
+//        subtitle
+//        description
+//        dateBegin
+//        dateEnd
+//        status
+//        curators {
+//          orderNumber
+//          user {
+//            pseudonym
+//            id
+//            ethAddress
+//            bio
+//            profileImage {
+//              id
+//              status
+//              meta
+//            }
+//          }
+//        }
+//      }
+//    }
+//  `;
+//
+//  const { data } = await client.query({
+//    query: exhibitionQuery
+//  });
+//
+//  if (
+//    !data?.exhibitions
+//  ) {
+//    return {
+//      notFound: true,
+//      revalidate: 240,
+//    };
+//  }
+//
+//  return {
+//    props: {
+//      exhibition: data?.exhibition,
+//      pageTitle: "OpenAR",
+//      pageSlogan: "The cooperative and crypto platform for AR artworks",
+//      pageDescription:
+//        "OpenAR makes it easy to exhibit, collect and discuss Augmented Reality (AR) works and allows artists to sell their works as NFTs. The open platform is organised as a cooperative, profits will be shared among the artists.",
+//    },
+//    revalidate: 240,
+//  };
+//};
 
 Home.getLayout = function getLayout(page: ReactElement) {
   return <LayoutBlank>{page}</LayoutBlank>;
