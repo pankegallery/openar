@@ -157,19 +157,18 @@ export const Artwork = ({
 
               <Link
                 href={`/e/${exhibition.slug}/${prevArtworkKey}`}
-                data-toggle='tooltip'
-                title="Previous artwork"
+
                 passHref>
-                <chakra.a>
+                <chakra.a data-toggle='tooltip'
+                title="Previous artwork">
                   <Arrow className="arrow" />
                 </chakra.a>
               </Link>
 
               <Link
-                href={`/e/${exhibition.slug}/${nextArtworkKey}`} passHref
-                data-toggle='tooltip'
+                href={`/e/${exhibition.slug}/${nextArtworkKey}`} passHref>
+                <chakra.a ml="6" data-toggle='tooltip'
                 title="Next artwork">
-                <chakra.a ml="6">
                   <Arrow className="arrow right" />
                 </chakra.a>
               </Link>

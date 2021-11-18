@@ -58,7 +58,14 @@ const OpenARLogin = () => {
   }, [library, walletDisconnect, stateCrypto.signatureRequired, connectedVia]);
 
   return (
-    <Box p="6">
+    <Box
+      p="6"
+      bg="var(--chakra-colors-openar-muddygreen)"
+      h="100vh"
+      w="100vw"
+      d="flex"
+      flexDirection="column"
+    >
       <Head>
         <title>Signature required · OpenAR</title>        
       </Head>
@@ -67,8 +74,12 @@ const OpenARLogin = () => {
         stateUser.justConnected &&
         !stateUser.authenticated &&
         stateCrypto.loginMessage && (
-          <Box>
-            <Text mb="4">
+          <Box
+            w="40vw"
+            minWidth="600px"
+            m="auto"
+            >
+            <Text mb="4" color="white" mb="4">
               Hello, you&#39;re now connected with your wallet, to fully login
               please sign the login request using the button below.
             </Text>
@@ -87,7 +98,7 @@ const OpenARLogin = () => {
                   );
                 } catch (err) {}
               }}
-              variant="outlineBlack"
+              variant="outline"
             >
               Sign login request
             </Button>
