@@ -1,6 +1,6 @@
 /// <reference path="../../types/nexus-typegen.ts" />
-import { parseResolveInfo } from "graphql-parse-resolve-info";
-import { Prisma } from "@prisma/client";
+// import { parseResolveInfo } from "graphql-parse-resolve-info";
+// import { Prisma } from "@prisma/client";
 // import { filteredOutputByWhitelist } from "../../utils";
 
 import dedent from "dedent";
@@ -180,7 +180,7 @@ const exhibitions: any = {
     return {
       id: 1,
       title: "OpenAR.test",
-      slug: "openar-art",
+      slug: "openar-test",
       subtitle: "A groupshow curated by Sakrowski and Jeremy Bailey",
       imgUrl: "https://openar.art/img/opening-bg.png",
       imgPosition: "center top",
@@ -307,6 +307,8 @@ export const Exhibition = objectType({
     t.json("slug");
     t.string("type");
     t.string("subtitle");
+    t.string("imgPosition");
+    t.string("imgUrl");
     t.string("description");
     t.date("dateBegin");
     t.date("dateEnd");
@@ -381,6 +383,8 @@ export const EventQueries = extendType({
         }, [] as any);
 
         const activeExhibitions = await Promise.all(activeExhibitionsFunctions);
+
+        console.log(activeExhibitions);
 
         return {
           totalCount: activeExhibitions.length,
