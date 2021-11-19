@@ -356,7 +356,13 @@ export const EventQueries = extendType({
           exhibitions
         ).reduce((acc: any, key: any) => {
           if (typeof exhibitions[key] === "function")
-            acc.push(new Promise(exhibitions[key]));
+            acc.push(
+              new Promise(async (resolve, reject) => {
+                const ex = await exhibitions[key];
+                if (ex) resolve(ex);
+                reject();
+              })
+            );
 
           return acc;
         }, [] as any);
