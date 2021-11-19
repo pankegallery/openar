@@ -274,6 +274,10 @@ export interface NexusGenObjects {
     orderNumber?: number | null; // Int
     user?: NexusGenRootTypes['User'] | null; // User
   }
+  ExhibitionQueryResult: { // root type
+    exhibitions?: Array<NexusGenRootTypes['Exhibition'] | null> | null; // [Exhibition]
+    totalCount?: number | null; // Int
+  }
   GeoPoint: { // root type
     lat?: number | null; // Float
     lng?: number | null; // Float
@@ -461,6 +465,10 @@ export interface NexusGenFieldTypes {
     orderNumber: number | null; // Int
     user: NexusGenRootTypes['User'] | null; // User
   }
+  ExhibitionQueryResult: { // field return type
+    exhibitions: Array<NexusGenRootTypes['Exhibition'] | null> | null; // [Exhibition]
+    totalCount: number | null; // Int
+  }
   GeoPoint: { // field return type
     lat: number | null; // Float
     lng: number | null; // Float
@@ -529,6 +537,7 @@ export interface NexusGenFieldTypes {
     artworksReadOwn: NexusGenRootTypes['ArtworkQueryResult'] | null; // ArtworkQueryResult
     collection: NexusGenRootTypes['ArObjectQueryResult']; // ArObjectQueryResult!
     exhibition: NexusGenRootTypes['Exhibition']; // Exhibition!
+    exhibitions: NexusGenRootTypes['ExhibitionQueryResult'] | null; // ExhibitionQueryResult
     imageStatus: NexusGenRootTypes['ImageStatus']; // ImageStatus!
     user: NexusGenRootTypes['PublicUser'] | null; // PublicUser
     userProfileRead: NexusGenRootTypes['User'] | null; // User
@@ -686,6 +695,10 @@ export interface NexusGenFieldTypeNames {
     orderNumber: 'Int'
     user: 'User'
   }
+  ExhibitionQueryResult: { // field return type name
+    exhibitions: 'Exhibition'
+    totalCount: 'Int'
+  }
   GeoPoint: { // field return type name
     lat: 'Float'
     lng: 'Float'
@@ -754,6 +767,7 @@ export interface NexusGenFieldTypeNames {
     artworksReadOwn: 'ArtworkQueryResult'
     collection: 'ArObjectQueryResult'
     exhibition: 'Exhibition'
+    exhibitions: 'ExhibitionQueryResult'
     imageStatus: 'ImageStatus'
     user: 'PublicUser'
     userProfileRead: 'User'
@@ -905,6 +919,12 @@ export interface NexusGenArgTypes {
     }
     exhibition: { // args
       slug: string; // String!
+    }
+    exhibitions: { // args
+      orderBy?: NexusGenScalars['JSON'] | null; // JSON
+      pageIndex?: number | null; // Int
+      pageSize: number | null; // Int
+      where?: NexusGenScalars['JSON'] | null; // JSON
     }
     imageStatus: { // args
       id: number; // Int!

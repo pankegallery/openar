@@ -223,6 +223,12 @@ type ExhibitionCurator {
   user: User
 }
 
+"""List all the exhibitions in the database."""
+type ExhibitionQueryResult {
+  exhibitions: [Exhibition]
+  totalCount: Int
+}
+
 type GeoPoint {
   lat: Float
   lng: Float
@@ -312,6 +318,7 @@ type Query {
   artworksReadOwn(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ArtworkQueryResult
   collection(ethAddress: String!): ArObjectQueryResult!
   exhibition(slug: String!): Exhibition!
+  exhibitions(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ExhibitionQueryResult
   imageStatus(id: Int!): ImageStatus!
   user(ethAddress: String!): PublicUser
   userProfileRead(ethAddress: String!): User
