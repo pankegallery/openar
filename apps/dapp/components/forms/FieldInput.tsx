@@ -146,11 +146,16 @@ export const FieldInput = ({
   // value and the field does not validate successfully despite being
   // (visibly) filled.
   useEffect(() => {
+    let counter = 0;
     let interval = setInterval(() => {
       if (fieldRef.current && fieldRef.current.value) {
         setValue(name, fieldRef.current.value);
         clearInterval(interval);
       }
+      if (counter > 6) {
+        clearInterval(interval);
+      }
+      counter += 1;
     }, 100);
 
     return () => {
