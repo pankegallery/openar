@@ -210,6 +210,8 @@ type Exhibition {
   dateEnd: DateTime
   description: String
   id: Int!
+  imgPosition: String
+  imgUrl: String
   slug: JSON
   status: Int!
   subtitle: String

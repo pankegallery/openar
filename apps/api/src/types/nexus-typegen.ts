@@ -263,6 +263,8 @@ export interface NexusGenObjects {
     dateEnd?: NexusGenScalars['DateTime'] | null; // DateTime
     description?: string | null; // String
     id: number; // Int!
+    imgPosition?: string | null; // String
+    imgUrl?: string | null; // String
     slug?: NexusGenScalars['JSON'] | null; // JSON
     status: number; // Int!
     subtitle?: string | null; // String
@@ -454,6 +456,8 @@ export interface NexusGenFieldTypes {
     dateEnd: NexusGenScalars['DateTime'] | null; // DateTime
     description: string | null; // String
     id: number; // Int!
+    imgPosition: string | null; // String
+    imgUrl: string | null; // String
     slug: NexusGenScalars['JSON'] | null; // JSON
     status: number; // Int!
     subtitle: string | null; // String
@@ -684,6 +688,8 @@ export interface NexusGenFieldTypeNames {
     dateEnd: 'DateTime'
     description: 'String'
     id: 'Int'
+    imgPosition: 'String'
+    imgUrl: 'String'
     slug: 'JSON'
     status: 'Int'
     subtitle: 'String'
