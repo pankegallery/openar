@@ -6,6 +6,7 @@ export * from "./CornerButton";
 export * from "./CollectionList";
 export * from "./EmbeddedVideoPlayer";
 export * from "./ExhibitionTitleTile";
+export * from "./ExhibitionSlide";
 export * from "./Menu";
 export * from "./OverlayMenu";
 export * from "./RoleBadgeControl";

@@ -146,8 +146,6 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
               d: "33.33vw",
             }}
             layerStyle="backdropDark"
-            flexDirection="column"
-            alignContent="flex-end"
           >
             <Flex
               w="100%"
