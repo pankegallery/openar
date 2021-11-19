@@ -384,8 +384,6 @@ export const EventQueries = extendType({
 
         const activeExhibitions = await Promise.all(activeExhibitionsFunctions);
 
-        console.log(activeExhibitions);
-
         return {
           totalCount: activeExhibitions.length,
           exhibitions: activeExhibitions,

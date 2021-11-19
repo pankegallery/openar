@@ -17,7 +17,8 @@ export const Home = (props) => {
   const [appUser] = useAuthentication();
   const beta = process && process.env.NODE_ENV !== "development" && !appUser;
 
-  const exhibitions = [props.exhibition, props.exhibition];
+  const { exhibitions } = props;
+
   return (
     <>
       <Head>
@@ -29,8 +30,14 @@ export const Home = (props) => {
         <link rel="shortcut icon" href="/favicon.ico" />
         <meta name="description" content={props.pageDescription} />
       </Head>
-
-      <ExhibitionSlide exhibition={props.exhibition} beta={beta} />
+      {exhibitions &&
+        exhibitions?.map((exhibition: any, index: number) => (
+          <ExhibitionSlide
+            key={`ex-${index}`}
+            exhibition={exhibition}
+            beta={beta}
+          />
+        ))}
 
       <Box
         className="betaVersion"
@@ -197,6 +204,8 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           slug
           title
           type
+          imgUrl
+          imgPosition
           subtitle
           description
           dateBegin
@@ -232,7 +241,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     };
   }
 
-  console.log(data?.exhibitions?.exhibitions);
+  console.log(data?.exhibitions);
   return {
     props: {
       exhibitions: data?.exhibitions?.exhibitions,
