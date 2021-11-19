@@ -241,7 +241,6 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     };
   }
 
-  console.log(data?.exhibitions);
   return {
     props: {
       exhibitions: data?.exhibitions?.exhibitions,
