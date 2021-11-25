@@ -41,7 +41,7 @@ export const ModuleDeleteButton = ({
       <Box p="3" borderTop="1px solid #fff" transform="translateY(-1px)">
         <Flex
           p="3"
-          border="1px solid"
+          border="2px solid"
           borderColor="openar.error"
           justifyContent="space-between"
           alignItems="center"
@@ -54,7 +54,7 @@ export const ModuleDeleteButton = ({
               : {}
           }
         >
-          <chakra.span color="openar.error">Dangerzone!</chakra.span>
+          <chakra.span color="openar.error" textStyle="label">Dangerzone</chakra.span>
           <Button onClick={onToggle}>
             {buttonLabel}
           </Button>

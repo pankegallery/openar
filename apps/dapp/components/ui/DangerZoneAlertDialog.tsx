@@ -23,7 +23,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 
-import { AiOutlineAlert } from "react-icons/ai";
+import { AiFillAlert } from "react-icons/ai";
 
 export const DangerZoneAlertDialog = ({
   title,
@@ -77,14 +77,15 @@ export const DangerZoneAlertDialog = ({
           >
             <Flex alignItems="flex-end">
               <Icon
-                as={AiOutlineAlert}
-                w="10"
-                height="10"
-                color="red.600"
+                as={AiFillAlert}
+                w="6"
+                h="6"
+                color="openar.error"
                 mr="2"
                 transform="translateX(-0.2em);"
               />
-              <Box transform="translateY(0.2em);" color="#fff">{title}</Box>
+              <Box transform="translateY(0.2em);" color="openar.error"
+              textStyle="bigLabel">{title}</Box>
             </Flex>
           </AlertDialogHeader>
 
@@ -94,8 +95,7 @@ export const DangerZoneAlertDialog = ({
             {requireTextualConfirmation && (
               <>
                 <Text mt="3" pb="1">
-                  Please enter &#34;{token}&#34; into the field below to unlock the
-                  action
+                  Type &#34;{token}&#34; to confirm.
                 </Text>
 
                 <FormControl>

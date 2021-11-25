@@ -16,7 +16,7 @@ export const Beta = (props) => {
   return (
     <>
       <Head>
-        <meta property="og:title" content="OpenAR · Coming soon"key="title" />
+        <meta property="og:title" content="openAR · Coming soon"key="title" />
         <link rel="shortcut icon" href="/favicon.ico" />
       </Head>
 

@@ -132,7 +132,7 @@ export const ModuleArtworkForm = ({
         </Box>}
       </Box>
       <Box
-        w={{ base: "50%", t: "auto" }}
+        w={{ base: "100%", t: "auto" }}
         minH="100%"
         borderLeft="1px solid #fff"
         position="relative"

@@ -32,7 +32,7 @@ export const UserDetails = ({
       slug: "user",
       title: "User",
       description:
-        "Signin to OpenAR is provided by crypto wallets. You can browse the platform incognito or create your own OpenAR alter ego. Once you start building your profile, you will earn the user badge.",
+        "Signin to openAR is provided by crypto wallets. You can browse the platform incognito or create your own openAR alter ego. Once you start building your profile, you will earn the user badge.",
       badges: [
         {
           year: 2021,
@@ -58,7 +58,7 @@ export const UserDetails = ({
       slug: "curator",
       title: "Curator",
       description:
-        "The curator badge will be assigned to users, that have successfully curated an exhibition on OpenAR.",
+        "The curator badge will be assigned to users, that have successfully curated an exhibition on openAR.",
       badges: [
         {
           year: 2021,
@@ -129,7 +129,18 @@ export const UserDetails = ({
         
         {!isPublic && !isIncomplete && (
           <Link href="/x/profile/update" passHref>
-            <Button position="absolute" top="6" right="6">
+            <Button
+              position="absolute"
+              top="6"
+              left={{
+                base: "6",
+                t: "unset"
+              }}
+              right={{
+                base: "unset",
+                t: "6"
+              }}
+              >
               Edit profile
             </Button>
           </Link>

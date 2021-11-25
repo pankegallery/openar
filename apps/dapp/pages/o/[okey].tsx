@@ -65,7 +65,7 @@ export const ArObject = ({ arObject }: { arObject: any }) => {
   return (
     <>
       <Head>
-        <title>{arObject.title} · OpenAR</title>
+        <title>{arObject.title} · openAR</title>
         <meta
           property="og:title"
           content={`${arObject.title} · OpenAR`}

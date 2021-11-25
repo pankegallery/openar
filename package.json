@@ -1,10 +1,13 @@
 {
   "name": "openar",
-  "description": "OpenAR Platform Monorepo",
+  "description": "openAR Platform Monorepo",
   "private": true,
   "contributors": [
     {
       "name": "Vincent Van Uffelen"
+    },
+    {
+      "name": "Larissa Wunderlich"
     }
   ],
   "license": "MIT",

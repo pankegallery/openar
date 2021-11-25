@@ -169,7 +169,7 @@ export const ModuleSubNav = ({
           alignItems={{ base: "flex-start", mw: "center" }}
           direction={{ base: "column", mw: "row" }}
           height="100%"
-          px="6"
+          p="6"
         >
           <Heading as="h2" fontSize={{ base: "md", t: "2xl" }}>
             {breadcrumb.map((element, index) => {

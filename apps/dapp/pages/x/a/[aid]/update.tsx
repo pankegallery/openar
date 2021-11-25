@@ -267,7 +267,7 @@ const Update = () => {
                   buttonLabel="Delete artwork"
                   dZADRequireTextualConfirmation={true}
                   dZADTitle="Delete artwork"
-                  dZADMessage="Do you really want to delete the artwork, objects, ar model, and images?"
+                  dZADMessage="Are you sure you want to delete the artwork and all objects and files associated with it? This action cannot be undone."
                   dZADOnYes={async () => {
                     setIsNavigatingAway(false);
 
