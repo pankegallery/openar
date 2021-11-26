@@ -18,7 +18,6 @@ export const Home = (props) => {
   const [appUser] = useAuthentication();
   const beta = process && process.env.NODE_ENV !== "development" && !appUser;
 
-  const exhibitions = [props.exhibition, props.exhibition];
   return (
     <>
       <Head>
@@ -117,6 +116,8 @@ export const getStaticProps = async ({ params }: { params: any }) => {
         slug
         title
         type
+        imgUrl
+        imgPosition
         subtitle
         description
         dateBegin
