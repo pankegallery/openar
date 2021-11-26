@@ -297,10 +297,11 @@ export const ArtworkDetails = ({
             {/* ======== TODO: Edition number  ======== */}
             <chakra.p mb="0 !important" textStyle="label" className="label">
               Edition of {ownedToken[0].subgraphinfo.editionOf}
-              <chakra.span fontWeight="300" pl="1rem">
-                {ownedToken.length} available. Next for sale is edition number{" "}
-                {ownedToken[0].subgraphinfo.editionNumber}
-              </chakra.span>
+            </chakra.p>
+            <chakra.p>
+                {ownedToken.length} available.
+                Next for sale is edition number{" "}
+                {ownedToken[0].subgraphinfo.editionNumber}.
             </chakra.p>
             {(subgraphQuery.loading || isAwaitingBlockConfirmation) && (
               <IncompleteOverlay

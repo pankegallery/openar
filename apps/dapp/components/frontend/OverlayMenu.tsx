@@ -160,6 +160,13 @@ export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
                 justifyContent="space-between"
                 alignItems="flex-start"
                 flexWrap="wrap"
+                onClick={() => {
+                    setIsClosing(true);
+                    onToggle();
+                    setTimeout(() => {
+                      setIsClosing(false);
+                    }, 500);
+                  }}
               >
                 <Logo viewBox="4 8 70 70" width="120px" height="120px" />
                 {!isDesktop && (

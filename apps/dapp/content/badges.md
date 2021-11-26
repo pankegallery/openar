@@ -9,6 +9,7 @@ parentPage:
 ## Roles
 
 Users of our platform can take on different roles as they browse, collect, contribute and review artworks. Each role is associated to a badges, which are designed each year by another artist.
+
 Badges are NFT's that are collected by different activities on the platform. As the platform grows in functionallity it will establish the following roles:
 
 - User

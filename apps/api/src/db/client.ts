@@ -36,7 +36,7 @@ export const setPrismaClient = (pClient: Prisma.PrismaClient) => {
 };
 
 export const getPrismaClient = (): Prisma.PrismaClient => {
-  instance = global.prisma || createPrismaClient();
+  instance = instance || global.prisma || createPrismaClient();
 
   if (process.env.NODE_ENV === "development" && !global.prisma)
     global.prisma = instance;

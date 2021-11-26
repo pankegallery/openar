@@ -6,11 +6,12 @@ import {
   filteredOutputByBlacklist,
   ArObjectStatusEnum,
   ApiError,
+  ArModelStatusEnum,
 } from "../utils";
 
 import { getPrismaClient } from "../db/client";
 import { getApiConfig } from "../config";
-import { daoImageSetToDelete, daoArModelSetToDelete } from ".";
+import { daoImageSetToDelete } from ".";
 
 const apiConfig = getApiConfig();
 const prisma = getPrismaClient();
@@ -196,7 +197,18 @@ export const daoArObjectDelete = async (id: number): Promise<ArObject> => {
 
   await prisma.$transaction(
     (currentObject as any).arModels.map(async (obj: any) => {
-      await daoArModelSetToDelete(obj.id);
+      return prisma.arModel.update({
+        data: {
+          status: ArModelStatusEnum.DELETED,
+          arObject: {
+            disconnect: true,
+          },
+        },
+
+        where: {
+          id: obj.id,
+        },
+      });
     })
   );
 

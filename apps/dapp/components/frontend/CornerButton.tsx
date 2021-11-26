@@ -16,9 +16,15 @@ const Wrapper = ({
       top={styles.top}
       bottom={styles.bottom}
       right="0"
-      width="5rem"
+      width={{
+        sm: "10rem",
+        md: "5rem"
+      }}
       height="5rem"
-      bg={styles.bg}
+      bg={{
+        sm: styles.bghover,
+        md: styles.bg
+      }}
       clipPath={styles.trianglePath}
       cursor={styles.cursor}
       display="flex"
@@ -142,11 +148,12 @@ export const CornerButton = ({
     );
   } else {
     return (
-      <button onClick={onClick} ><Wrapper styles={styles} isDisabled={isDisabled}>
-        <Text styles={styles} position={position}>
-          {label}
-        </Text>
-      </Wrapper>
+      <button onClick={onClick} >
+        <Wrapper styles={styles} isDisabled={isDisabled}>
+          <Text styles={styles} position={position}>
+            {label}
+          </Text>
+        </Wrapper>
       </button>
     );
   }

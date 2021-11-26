@@ -27,6 +27,9 @@ export const ArtworkImageViewer = ({
   const arObject = object ? object : artwork?.arObjects[0];
 
   const showARButton = isMobile && (isChrome || isMobileSafari);
+  const isExhibition = baseURL.includes("/e/")
+
+
 
   if (arObject) {
     const [urlGlb, urlUsdz] = arObject?.arModels.reduce(
@@ -58,7 +61,7 @@ export const ArtworkImageViewer = ({
       <Box w="100%" direction="column">
         <Flex
           w="100%"
-          h="85vh"
+          h={isExhibition? "75vh" : "85vh"}
           justifyContent="center"
           alignItems="center"
           direction="column"
