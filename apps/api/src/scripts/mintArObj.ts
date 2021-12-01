@@ -85,7 +85,6 @@ class GasPriceProvider extends providers.JsonRpcProvider {
       logger.error(
         `mintArObject: GasPriceProvider could not retrieve price from oracle: ${err.message}`
       );
-      throw err;
     }
 
     return utils.parseUnits(gasPrice.toString(), "gwei");
@@ -408,6 +407,9 @@ const processArObject = async (
         logger.error(err);
 
         let canRetry = false;
+
+        if (err.message.indexOf("failed to get consistent fee data") > -1)
+          canRetry = true;
 
         if (err.message.indexOf("nonce has already been used") > -1)
           canRetry = true;
