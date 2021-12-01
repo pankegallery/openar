@@ -117,6 +117,21 @@ const themeConfig = {
           left: "0.5em",
         }
       },
+      ".text ol":{
+        counterReset: "olist",
+        paddingLeft: "2em"
+      },
+      ".text ol li":{
+        position: "relative",
+        marginBottom: "0.5rem",
+        listStyle: "none",
+        _before:{
+          counterIncrement: "olist",
+          content: "counter(olist, arabic) ') '",
+          position: "absolute",
+          left: "-2em"
+        }
+      },
       ".openar.content": {
         bg: "var(--chakra-colors-openar-muddygreen)",
         color: "#fff",

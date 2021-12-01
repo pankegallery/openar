@@ -45,7 +45,7 @@ export const appConfig: AppConfig = {
     { slug: "badges", label: "Roles and Badges", url: "/p/badges", target: "_blank", rel: "noopener, noreferrer"},
     //    { slug: "funding", label: "Platform funding", url: "p/funding" },
     { slug: "privpol", label: "Privacy policy", url: "/p/privpol", target: "_blank", rel: "noopener, noreferrer"},
-    //    { slug: "tandc", label: "Terms and Conditions", url: "p/tandc" },
+    { slug: "tandc", label: "Terms and Conditions", url: "/p/tandc", target: "_blank", rel: "noopener, noreferrer"},
     { slug: "imprint", label: "Imprint", url: "/p/imprint", target: "_blank", rel: "noopener, noreferrer"},
   ]
 };

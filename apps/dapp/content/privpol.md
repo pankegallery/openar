@@ -1,5 +1,5 @@
 ---
-title: "Imprint"
+title: "Privacy Policy"
 parentPage: 
   - slug: "about"
     label: "About"
