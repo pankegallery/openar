@@ -90,14 +90,14 @@ Creators expressly agree to refund to the Collector and/or openAR the entire por
 
 ## Fees charged by openAR
 
-**Fees.** The Fees for an initial sale of Digital Artwork on openAR is as follows:
+**Fees.** The Fees for an initial sale of Digital Artwork on openAR are as follows:
 
 - Creators receive 85% of the total sale price of an Initial Sale.
 - openAR collects 15% of the total sale price of an Initial Sale.
 
 You agree and understand that all fees, commissions, and royalties are transferred, processed, or initiated directly through one or more of the smart contracts on the Ethereum blockchain network. 
 
-The Fees for a secondary sale of Digital Artwork on openAR (to be implemented) is as follows:
+The Fees for a secondary sale of Digital Artwork on openAR (to be implemented) are as follows:
 
 - Seller receives 85% of the total sale price of a Secondary Sale.
 - Original Creator receives 10% of the total sale price of a Secondary Sale.

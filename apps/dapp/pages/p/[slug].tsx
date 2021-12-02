@@ -5,6 +5,7 @@ import { ArrowLink } from "~/components/ui";
 import matter from "gray-matter";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeReact from "rehype-react";
 import { Box, Flex, chakra } from "@chakra-ui/react";
 import { Footer } from "~/components/app/site";
 
@@ -134,7 +135,7 @@ function PageTemplate({ content, data }) {
         pb={{
           base: "10",
           t: "var(--openar-header-height-desktop)",
-          d: "0",
+          d: "6",
         }}
         w={{
           base: "100%",

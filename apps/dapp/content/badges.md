@@ -14,7 +14,7 @@ Badges are NFT's that are collected by different activities on the platform. As 
 
 - User
 - Collector
-- Artist
+- Creator
 - Curator
 - Reviewer
 - Administrator
