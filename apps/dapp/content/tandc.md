@@ -7,9 +7,6 @@ parentPage:
 lastUpdated: "2021-11-30"
 ---
 
-*Last revised on 30 November 2021.*
-
-
 openAR, hosted by [panke.gallery – Verein für künstlerisch-kulturelle Bildung e.V.](https://panke.gallery), (“openAR,” “we,” “us,” “our”) provides its marketplace and services (described below) to you (“you” or “User") through its website, platform, and marketplace located at www.openAR.art (the “Platform”), subject to the following Terms of Service (as amended from time to time, the “Terms”). By creating a user profile on the Platform and interacting with the platform in the role of a Creator, Curator or Collector (see roles), you acknowledge that you have read and agree to these Terms. 
 
 **Please read these Terms carefully, as they contain important information regarding your legal rights, remedies, and obligations.**

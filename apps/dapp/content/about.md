@@ -1,6 +1,5 @@
 ---
 title: "About openAR"
-date: "2020-10-01"
 subPages: 
   - slug: "getStarted"
     label: "Get started"

@@ -85,7 +85,11 @@ function PageTemplate({ content, data }) {
             </Box>
           )}
 
-          <chakra.h1 textStyle="worktitle" mt={{ base: "auto", t: "0" }}>
+          <chakra.h1
+            textStyle="worktitle"
+            mt={{ base: "auto", t: "0" }}
+            mb={{ base: "0", t: "auto" }}
+            >
             {frontmatter.title}
           </chakra.h1>
 
@@ -114,6 +118,24 @@ function PageTemplate({ content, data }) {
               ))}
             </Box>
           )}
+          {frontmatter.lastUpdated &&
+            <chakra.p
+              as='i'
+              mt="6"
+              textAlign="right"
+            >
+              Last revised on {new Date(frontmatter.lastUpdated).toLocaleDateString("de")}
+            </chakra.p>
+          }
+          {frontmatter.date &&
+            <chakra.p
+              as='i'
+              mt="6"
+              textAlign="right"
+            >
+              Published on {new Date(frontmatter.date).toLocaleDateString("de")}
+            </chakra.p>
+          }
         </Flex>
 
         {isDesktop && <Footer />}

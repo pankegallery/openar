@@ -133,7 +133,7 @@ const themeConfig = {
           width: "40px",
           height: "40px",
           left: "-1.6em",
-          zIndex: "1000",
+          zIndex: "0",
           transform: "rotate(180deg) scale(0.8)",
           transformOrigin: "17px 13px",
         }
