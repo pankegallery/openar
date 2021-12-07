@@ -10,14 +10,14 @@ import Image from "next/image";
 
 //import openingBg from "~/assets/img/opening-bg.png";
 
-export const ExhibitionSlide = ({exhibition, beta}: {exhibition: any; beta?: any}) => {
-  return(
+export const ExhibitionSlide = ({ exhibition }: { exhibition: any }) => {
+  return (
     <>
-  {/* --------- Background image --------- */}
+      {/* --------- Background image --------- */}
       <Box position="fixed" zIndex="100" h="100vh" w="100%" overflow="hidden">
         <chakra.img
           src="/images/exhibitions/opening-bg.png"
-            objectFit="cover"
+          objectFit="cover"
           objectPosition="50% 100%"
           w="100%"
           h="100%"
@@ -64,7 +64,7 @@ export const ExhibitionSlide = ({exhibition, beta}: {exhibition: any; beta?: any
           {/* --------- TILE: Exhibition title  --------- */}
           <Flex
             className="exhibitionTile"
-             w={{
+            w={{
               base: "66.66vw",
               t: "50vw",
               d: "33.33vw",
@@ -83,7 +83,7 @@ export const ExhibitionSlide = ({exhibition, beta}: {exhibition: any; beta?: any
               borderRight="1px solid #fff"
               borderLeft={{
                 base: "none",
-                  d: "1px solid #fff",
+                d: "1px solid #fff",
               }}
               p={{
                 base: "6",
@@ -94,12 +94,7 @@ export const ExhibitionSlide = ({exhibition, beta}: {exhibition: any; beta?: any
                 t: "20",
               }}
             >
-              {!beta && (
-                <ExhibitionTitleTile exhibition={exhibition} link={true} />
-              )}
-              {beta && (
-                <ExhibitionTitleTile exhibition={exhibition} link={false} />
-              )}
+              <ExhibitionTitleTile exhibition={exhibition} link={true} />
             </Flex>
           </Flex>
           {/* --------- TILE: Arrows  --------- */}
@@ -144,5 +139,5 @@ export const ExhibitionSlide = ({exhibition, beta}: {exhibition: any; beta?: any
         ></Box>
       </Grid>
     </>
-  )
-}
+  );
+};

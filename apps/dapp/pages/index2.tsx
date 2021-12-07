@@ -4,19 +4,12 @@ import Head from "next/head";
 import { LayoutBlank } from "~/components/app";
 import { ExhibitionSlide } from "~/components/frontend";
 
-import { Box, chakra, AspectRatio } from "@chakra-ui/react";
-import Link from "next/link";
-import Image from "next/image";
+import { Box } from "@chakra-ui/react";
 
 import { gql } from "@apollo/client";
 import { getApolloClient } from "~/services/apolloClient";
 
-import { useAuthentication } from "~/hooks";
-
 export const Home = (props) => {
-  const [appUser] = useAuthentication();
-  const beta = process && process.env.NODE_ENV !== "development" && !appUser;
-
   const { exhibitions } = props;
 
   return (
@@ -35,7 +28,6 @@ export const Home = (props) => {
           <ExhibitionSlide
             key={`ex-${index}`}
             exhibition={exhibition}
-            beta={beta}
           />
         ))}
 
@@ -65,32 +57,6 @@ export const Home = (props) => {
           t: "25vw",
         }}
       >
-        {/*}
-        {!beta && (
-          <AspectRatio ratio={1}>
-            <chakra.img
-              src="images/corner.svg"
-              width="100%"
-              height="100%"
-              alt="We are in beta"
-            />
-          </AspectRatio>
-        )}
-*/}
-        {beta && (
-          <chakra.span cursor="pointer">
-            <Link href="/beta" passHref>
-              <AspectRatio ratio={1}>
-                <chakra.img
-                  src="images/corner.svg"
-                  width="100%"
-                  height="100%"
-                  alt="We are in beta"
-                />
-              </AspectRatio>
-            </Link>
-          </chakra.span>
-        )}
       </Box>
     </>
   );
