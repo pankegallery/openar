@@ -8,20 +8,19 @@ import { Box, Grid, Flex, chakra, AspectRatio } from "@chakra-ui/react";
 import Link from "next/link";
 import Image from "next/image";
 
-import openingBg from "~/assets/img/opening-bg.png";
+//import openingBg from "~/assets/img/opening-bg.png";
 
 export const ExhibitionSlide = ({exhibition, beta}: {exhibition: any; beta?: any}) => {
   return(
     <>
   {/* --------- Background image --------- */}
       <Box position="fixed" zIndex="100" h="100vh" w="100%" overflow="hidden">
-        <Image
-          src={openingBg}
-          layout="fill"
-          objectFit="cover"
+        <chakra.img
+          src="/images/exhibitions/opening-bg.png"
+            objectFit="cover"
           objectPosition="50% 100%"
-          alt=""
-          role="presentation"
+          w="100%"
+          h="100%"
         />
       </Box>
 

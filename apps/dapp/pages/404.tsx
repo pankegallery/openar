@@ -8,7 +8,7 @@ const Custom404 = () => {
   return (
     <Box p="6">
       <Head>
-        <title>Page not found - OpenAR</title>
+        <title>Page not found - openAR</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       

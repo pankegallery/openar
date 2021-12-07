@@ -106,20 +106,14 @@ export const WalletControl = ({
           bg="openar.muddygreen"
           borderRadius="0"
         >
-          <ModalHeader pb="0">Connect to your wallet</ModalHeader>
+          <ModalHeader pb="0">Connect your wallet</ModalHeader>
           <ModalCloseButton fontSize="lg" />
-          <ModalBody>
+          <ModalBody pb="6">
             <Text color="white" mb="4">
-              Instead of a login we use your wallet to give you access to
-              OpenAR. This is a two step process:
+              Instead of a username and password we use your crypto wallet to authorize access to openAR.
               <br />
               <br />
-              (1) You connect to the wallet, then
-              <br />
-              (2) If you&#39;re new, haven&#39;t been around for a while, or
-              cleared your cookies we ask you sign a transaction (which is free)
-              to give our server a chance to check if you are who you claim you
-              are.
+              If you’re new, recently cleared your cookies or haven’t connected for a while, you’ll need to sign a (free) transaction in your wallet to give our server permission to authorize your account.
             </Text>
             {walletLoginError && (
               <Text color="openar.error">{walletLoginError}</Text>
@@ -185,6 +179,7 @@ export const WalletControl = ({
             >
               WalletConnect
             </Button>
+            <Text color="white" my="4" textStyle="small">Having trouble? <a href="mailto:contact@openar.art" >Contact support</a></Text>
           </ModalBody>
         </ModalContent>
       </Modal>

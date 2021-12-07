@@ -51,10 +51,10 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
   return (
     <>
       <Head>
-        <title>{exhibition.title} · OpenAR</title>
+        <title>{exhibition.title} · openAR</title>
         <meta
           property="og:title"
-          content={`${exhibition.title} · OpenAR`}
+          content={`${exhibition.title} · openAR`}
           key="title"
         />
       </Head>

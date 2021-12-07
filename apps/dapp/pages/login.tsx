@@ -45,7 +45,7 @@ const OpenARLogin = () => {
 
   return (
     <Box p="6">
-      <Text mb="4">Hello, please click to connect your wallet to openAR.</Text>
+      <Text mb="4">Please connect your crypto wallet to login to openAR.</Text>
 
       {(((!appUser || !stateUser.authenticated) && !isNavigating) ||
         !account) && (

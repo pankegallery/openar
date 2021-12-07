@@ -67,7 +67,7 @@ const OpenARLogin = () => {
       flexDirection="column"
     >
       <Head>
-        <title>Signature required · OpenAR</title>        
+        <title>Signature required · openAR</title>
       </Head>
 
       {!appUser &&

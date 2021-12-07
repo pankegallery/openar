@@ -14,26 +14,26 @@ Badges are NFT's that are collected by different activities on the platform. As 
 
 - User
 - Collector
-- Artist
+- Creator
 - Curator
 - Reviewer
 - Administrator
 
 ### User
 
-Signin to OpenAR is provided by crypto wallets. You can browse the platform incognito or create your own OpenAR alter ego. Once you start building your profile, you will earn the user badge – the sky is the limit to your creativity.
+Signin to openAR is provided by crypto wallets. You can browse the platform incognito or create your own openAR alter ego. Once you start building your profile, you will earn the user badge – the sky is the limit to your creativity.
 
 ### Collector
 
-Each year you purchase an artwork, you will receive it's respective collector badge.
+Purchase artworks to earn unique collector badges for every year you collect.
 
-### Collector
+### Curator
 
-The curator badge will be assigned to users, that have successfully curated an exhibition on OpenAR.
+Curate an exhibition to earn a curator badge. (Coming soon)
 
 ## Badges 2021
 
-Each year, we nominate an artist to create badges for OpenAR. The badges of 2021 have been designed by [Anna-Luise Lorenz](https://annaluiselorenz.com/).
+Each year, we nominate an artist to create badges for openAR. The badges of 2021 have been designed by artist [Anna-Luise Lorenz](https://annaluiselorenz.com/).
 
 ![User Badge](/images/badges2021/user@14x-100.jpg)
 

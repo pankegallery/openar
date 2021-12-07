@@ -102,10 +102,10 @@ export const Home = (props) => {
 //export const getStaticProps = () => {
 //  return {
 //    props: {
-//      pageTitle: "OpenAR",
+//      pageTitle: "openAR",
 //      pageSlogan: "The cooperative and crypto platform for AR artworks",
 //      pageDescription:
-//        "OpenAR makes it easy to exhibit, collect and discuss Augmented Reality (AR) works and allows artists to sell their works as NFTs. The open platform is organised as a cooperative, profits will be shared among the artists.",
+//        "openAR makes it easy to exhibit, collect and discuss Augmented Reality (AR) works and allows artists to sell their works as NFTs. The open platform is organised as a cooperative, profits will be shared among the artists.",
 //    },
 //  };
 //};
@@ -179,10 +179,10 @@ export const Home = (props) => {
 
 //   return {
 //     props: {
-//       pageTitle: "OpenAR",
+//       pageTitle: "openAR",
 //       pageSlogan: "The cooperative and crypto platform for AR artworks",
 //       pageDescription:
-//         "OpenAR makes it easy to exhibit, collect and discuss Augmented Reality (AR) works and allows artists to sell their works as NFTs. The open platform is organised as a cooperative, profits will be shared among the artists.",
+//         "openAR makes it easy to exhibit, collect and discuss Augmented Reality (AR) works and allows artists to sell their works as NFTs. The open platform is organised as a cooperative, profits will be shared among the artists.",
 //       exhibition: data?.exhibition,
 //     },
 //     revalidate: 240,
@@ -244,10 +244,10 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   return {
     props: {
       exhibitions: data?.exhibitions?.exhibitions,
-      pageTitle: "OpenAR",
+      pageTitle: "openAR",
       pageSlogan: "The cooperative and crypto platform for AR artworks",
       pageDescription:
-        "OpenAR makes it easy to exhibit, collect and discuss Augmented Reality (AR) works and allows artists to sell their works as NFTs. The open platform is organised as a cooperative, profits will be shared among the artists.",
+        "openAR makes it easy to exhibit, collect and discuss Augmented Reality (AR) works and allows artists to sell their works as NFTs. The open platform is organised as a cooperative, profits will be shared among the artists.",
     },
     revalidate: 240,
   };

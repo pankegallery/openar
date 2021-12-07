@@ -76,7 +76,7 @@ export const PublicUserProfile = ({
   return (
     <>
       <Head>
-        <title>{name} · OpenAR</title>
+        <title>{name} · openAR</title>
         <meta property="og:title" content={`${name} · OpenAR`} key="title" />
       </Head>
       {/* --------- Column Layout --------- */}

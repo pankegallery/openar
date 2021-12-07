@@ -39,7 +39,7 @@ export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
 
   const aboutText = (
     <Box textStyle="subtitle">
-      OpenAR is the world’s first cooperative platform for digital artists explicitly designed to help all artists prosper.
+      openAR is the world’s first cooperative platform for digital artists explicitly designed to help all artists prosper.
     </Box>
   );
 

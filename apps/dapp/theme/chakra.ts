@@ -71,9 +71,14 @@ const themeConfig = {
       },
       p: {
         mb: "0.6em",
-        _last: {
+        _lastChild: {
           mb: "0",
         },
+      },
+      "pre": {
+        fontSize: "0.85em",
+        paddingLeft: "1em",
+        borderLeft: "2px solid #eee"
       },
       "p + p > button": {
         mt: 2,
@@ -115,6 +120,38 @@ const themeConfig = {
           content: "'—'",
           position: "absolute",
           left: "0.5em",
+        }
+      },
+      ".text li > a": {
+        paddingLeft: "1em",
+        display: "inline-block",
+        position: "relative",
+        _before:{
+          content: "url('data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2235.653%22%20height%3D%2217.138%22%20class%3D%22arrow%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23000%22%20stroke-linecap%3D%22round%22%20stroke-width%3D%224%22%3E%3Cpath%20data-name%3D%22Path%2036%22%20d%3D%22M33.65%208.48c-1.554.047-29.366%200-29.366%200%22%3E%3C%2Fpath%3E%3Cpath%20data-name%3D%22Path%2037%22%20d%3D%22M9.168%2014.311l-6.22-5.83%206.22-5.656%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3C%2Fsvg%3E')",
+          position: "absolute",
+          display: "block !important",
+          width: "40px",
+          height: "40px",
+          left: "-1.6em",
+          zIndex: "0",
+          transform: "rotate(180deg) scale(0.8)",
+          transformOrigin: "17px 13px",
+        }
+      },
+
+      ".text ol":{
+        counterReset: "olist",
+        paddingLeft: "2em"
+      },
+      ".text ol li":{
+        position: "relative",
+        marginBottom: "0.5rem",
+        listStyle: "none",
+        _before:{
+          counterIncrement: "olist",
+          content: "counter(olist, arabic) ') '",
+          position: "absolute",
+          left: "-2em"
         }
       },
       ".openar.content": {

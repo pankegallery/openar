@@ -61,7 +61,7 @@ export const Artwork = ({
         <title>{artwork.title} · Ope nAR</title>
         <meta
           property="og:title"
-          content={`${artwork.title} · OpenAR`}
+          content={`${artwork.title} · openAR`}
           key="title"
         />
       </Head>

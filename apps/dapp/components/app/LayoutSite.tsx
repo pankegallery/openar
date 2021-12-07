@@ -15,7 +15,10 @@ export const LayoutSite = ({ children }: { children?: ReactNode }) => {
       <Box
         className="site content text light"
         w="100vw"
-        h="100%"
+        height={{
+          base: "auto",
+          d: "100vh",
+        }}
         layerStyle="backdropLight"
         overflow={{
           d: "hidden"

@@ -17,13 +17,13 @@ const Wrapper = ({
       bottom={styles.bottom}
       right="0"
       width={{
-        sm: "10rem",
-        md: "5rem"
+        base: "10rem",
+        t: "5rem"
       }}
       height="5rem"
       bg={{
-        sm: styles.bghover,
-        md: styles.bg
+        base: styles.bghover,
+        t: styles.bg
       }}
       clipPath={styles.trianglePath}
       cursor={styles.cursor}

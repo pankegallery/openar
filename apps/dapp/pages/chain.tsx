@@ -68,7 +68,7 @@ const Chain = () => {
   return (
     <Box p="6">
       <Head>
-        <title>Change of chain needed · OpenAR</title>        
+        <title>Change of chain needed · openAR</title>
       </Head>
       <Text mb="4" maxW="950" pr="150px">
         Your wallet is currently not set to handle the xDai chain. Have you
