@@ -43,7 +43,7 @@ export const ExhibitionTitleTile = ({
 
   // Assemble subtitle
   assembledSubtitle = (
-    <>{assembledType} by &nbsp;
+    <>{assembledType} curated by &nbsp;
       {assembledCurators}
     </>
   )
