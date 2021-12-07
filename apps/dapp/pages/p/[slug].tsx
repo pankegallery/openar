@@ -110,7 +110,7 @@ function PageTemplate({ content, data }) {
               {frontmatter.subPages.map((pageItem) => (
                 <ArrowLink
                   type="to"
-                  href={`/${pageItem.url}`}
+                  href={`${pageItem.url}`}
                   key={pageItem.slug}
                 >
                   {pageItem.label}
