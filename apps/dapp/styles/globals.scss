@@ -92,6 +92,15 @@ a {
         }
     }
 
+    &.up{
+        transform: rotate(90deg);
+        transform-origin: center right;
+
+        &:hover{
+            transform: rotate(90deg) translateX(-5px);
+        }
+    }
+
     .arrowLink.to &, &.right{
         transform: rotate(-180deg) translate(5px, 2.7px);
         transform-origin: center center;
