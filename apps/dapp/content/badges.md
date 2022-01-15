@@ -43,9 +43,9 @@ User Badge
 
 Collector badge
 
-![Artist badge](/images/badges2021/artist@14x-100.jpg)
+![Creator badge](/images/badges2021/artist@14x-100.jpg)
 
-Artist badge
+Creator badge
 
 ![Curator badge](/images/badges2021/curator@14x-100.jpg)
 
