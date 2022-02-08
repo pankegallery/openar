@@ -13,17 +13,21 @@ import Image from "next/image";
 
 //import openingBg from "~/assets/img/opening-bg.png";
 
-export const ExhibitionSlide = ({exhibition, beta}: {exhibition: any; beta?: any}) => {
+export const ExhibitionSlide = ({
+  exhibition,
+  single,
+}: {
+  exhibition: any;
+  single?: boolean;
+}) => {
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
 
   const scrollToSlide = (direction) => {
-
-    console.log("to", direction)
     if (typeof window === "undefined") return;
 
     let topValue;
 
-    switch(direction){
+    switch (direction) {
       case "prev":
         topValue = 0 - Math.min(window.innerHeight);
         break;
@@ -32,31 +36,31 @@ export const ExhibitionSlide = ({exhibition, beta}: {exhibition: any; beta?: any
         break;
     }
 
-//    if (isDesktop) {
-//
-//    } else {
-//      // smooth scoll the page to artwork listing
-//      window.scrollIntoView({
-//        behavior: "smooth",
-//        block: "start",
-//        inline: "nearest",
-//      });
-//    }
+    //    if (isDesktop) {
+    //
+    //    } else {
+    //      // smooth scoll the page to artwork listing
+    //      window.scrollIntoView({
+    //        behavior: "smooth",
+    //        block: "start",
+    //        inline: "nearest",
+    //      });
+    //    }
 
     // smooth scoll the arwork listing
-      window.scrollTo({
-        top: topValue,
-        behavior: "smooth",
-      });
+    window.scrollTo({
+      top: topValue,
+      behavior: "smooth",
+    });
   };
 
-//  console.log(exhibition);
-  let imgUrl = exhibition.imgUrl
-  imgUrl = "https://openar.art/images/exhibitions/opening-bg.png"
+  //  console.log(exhibition);
+  let imgUrl = exhibition.imgUrl;
+  imgUrl = "https://openar.art/images/exhibitions/opening-bg.png";
 
-  return(
+  return (
     <>
-  {/* --------- Background image ---------
+      {/* --------- Background image ---------
       <Box position="fixed" zIndex="100" h="100vh" w="100%" overflow="hidden">
         <chakra.img
           src={imgUrl}
@@ -150,8 +154,7 @@ export const ExhibitionSlide = ({exhibition, beta}: {exhibition: any; beta?: any
               t: "calc(50vw - 2px)",
               d: "calc(33.33vw - 2px)",
             }}
-            py="20"
-            px="10"
+           
             h={{
               base: "66.66vw",
               t: "50vw",
@@ -161,23 +164,40 @@ export const ExhibitionSlide = ({exhibition, beta}: {exhibition: any; beta?: any
             borderBottom="1px solid #fff"
             layerStyle="backdropBlurred"
             flexDirection="column"
+            justifyContent="space-between"
+            position="relative"
           >
-            <Box
-              onClick={() => scrollToSlide("prev")}
-              width="min-content"
-              ml="auto"
-
-            >
-              <Arrow className="arrow up" />
-            </Box>
-            <Box
-              onClick={() => scrollToSlide("next")}
-              width="min-content"
-              ml="auto"
-              mt="auto"
-            >
-              <Arrow className="arrow down" />
-            </Box>
+            {!single && (
+              <Box
+                onClick={() => scrollToSlide("prev")}
+                mt="5"
+                pt="10"
+                px="10"
+                position="absolute"
+                top="0"
+                right="0"
+              >
+                <Arrow cursor="pointer" className="arrow up" />
+              </Box>
+            )}
+            <Flex h="100%"
+             py="20"
+             px="10"
+            flexDirection="column"
+            justifyContent="center"><b>{exhibition.description}</b></Flex>
+            {!single && (
+              <Box
+                onClick={() => scrollToSlide("next")}
+                pb="10"
+                px="10"
+                mb="5"
+                position="absolute"
+                bottom="0"
+                right="0"
+              >
+                <Arrow cursor="pointer" className="arrow down" />
+              </Box>
+            )}
           </Flex>
         </Flex>
         {/* --------- TILE: Footer  --------- */}
@@ -189,6 +209,9 @@ export const ExhibitionSlide = ({exhibition, beta}: {exhibition: any; beta?: any
             base: "66.66vw",
             t: "50vw",
             d: "33.33vw",
+          }}
+          ml={{
+            d: "calc((100vw - 100%))"
           }}
           borderRight="1px solid #fff"
           borderLeft={{

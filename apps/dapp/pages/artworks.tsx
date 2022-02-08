@@ -13,22 +13,7 @@ import Arrow from "~/assets/img/arrow.svg";
 
 export const Artworks = ({ artworks }: { artworks: any }) => {
   //console.log("[Artworks stream] Artworks: ", artworks)
-  let sortedArtworks=[...artworks].sort((a,b) => {
-    try {
-      const dateA = new Date(b.createdAt);
-      const dateB = new Date(a.createdAt);
-
-      if (dateA && dateB) {
-        if (dateB < dateA) return 1;
-        if (dateB > dateA) return -1;
-        return 0;
-      }
-    } catch(err: any) {
-
-    }
-    return 0;
-  
-  })
+  let sortedArtworks=[...artworks];
     //console.log("[Artworks stream] Sorted artworks: ", sortedArtworks)
 
   return (
@@ -63,9 +48,9 @@ export const Artworks = ({ artworks }: { artworks: any }) => {
 
         {/* --------- ROW: Artworks --------- */}
         <Box height="100%" width="100%" overflow="scroll">
-          {sortedArtworks.length > 0 && (
+          {artworks?.length > 0 && (
             <Flex width="100%" flexWrap="wrap">
-              {sortedArtworks.map((artwork) => {
+              {artworks.map((artwork) => {
                 let image = artwork?.heroImage;
                 if (!image) {
                   if (
@@ -112,7 +97,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 
   const artworkStreamQuery = gql`
     query {
-      artworks(orderBy: {createdAt: desc}) {
+      artworks(orderBy: {createdAt: "desc"}) {
         totalCount
         artworks {
           id

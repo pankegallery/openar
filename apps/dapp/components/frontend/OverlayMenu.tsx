@@ -67,7 +67,7 @@ export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
         position="fixed"
         top="0"
         right="0"
-        zIndex="300"
+        zIndex="2000"
         p="0"
         border="0"
         variant="functional"
@@ -136,7 +136,7 @@ export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
               w="100vw"
               h="100%"
               layerStyle="backdropSuperDark"
-              zIndex="301"
+              zIndex="2001"
               templateRows={{
                 base: "66.66vw 66.66vw auto",
                 t: "var(--openar-header-height-desktop) 50vw auto",
