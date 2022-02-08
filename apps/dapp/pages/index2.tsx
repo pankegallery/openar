@@ -23,40 +23,20 @@ export const Home = (props) => {
         <link rel="shortcut icon" href="/favicon.ico" />
         <meta name="description" content={props.pageDescription} />
       </Head>
-      {exhibitions &&
-        exhibitions?.map((exhibition: any, index: number) => (
-          <ExhibitionSlide
-            key={`ex-${index}`}
-            exhibition={exhibition}
-          />
-        ))}
-
-      <Box
-        className="betaVersion"
-        position="fixed"
-        left={{
-          base: "auto",
-          d: 0,
-        }}
-        right={{
-          base: 0,
-          d: "auto",
-        }}
-        transform={{
-          base: "rotate(-90deg)",
-          d: "none",
-        }}
-        bottom="0"
-        zIndex="220"
-        width={{
-          base: "50vw",
-          t: "25vw",
-        }}
-        height={{
-          base: "50vw",
-          t: "25vw",
-        }}
+       <Box
+        width="calc(100vw-(100vw-100%))"
+        height="100vh"
+        scrollSnapType="y mandatory"
       >
+        {exhibitions &&
+          exhibitions?.map((exhibition: any, index: number) => (
+            <ExhibitionSlide
+              key={`ex-${index}`}
+              exhibition={exhibition}
+              beta={beta}
+            />
+          ))
+        }
       </Box>
     </>
   );

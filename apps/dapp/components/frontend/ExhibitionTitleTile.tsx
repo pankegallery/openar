@@ -20,7 +20,7 @@ export const ExhibitionTitleTile = ({
 }) => {
 
   const href = `/e/${exhibition?.slug}/`;
-  console.log("[Ex Title Tile] exhibition: ", exhibition)
+  // console.log("[Ex Title Tile] exhibition: ", exhibition)
 
   let assembledSubtitle, assembledType, assembledCurators;
 
@@ -43,7 +43,7 @@ export const ExhibitionTitleTile = ({
 
   // Assemble subtitle
   assembledSubtitle = (
-    <>{assembledType} by &nbsp;
+    <>{assembledType} curated by &nbsp;
       {assembledCurators}
     </>
   )
@@ -97,7 +97,7 @@ export const ExhibitionTitleTile = ({
 const createCuratorLink = (curator) => {
   let name = curator.user.pseudonym ? curator.user.pseudonym : curator.user.ethAddress.slice(0, 8) + "…";
   let url = `/u/${curator.user.ethAddress}`
-  console.log("Curator: ", name, url);
+  // console.log("Curator: ", name, url);
   return (
     <a href={url}>{name}</a>
   )

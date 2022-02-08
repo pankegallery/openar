@@ -215,7 +215,7 @@ async function main() {
   const clearDb = true;
 
 
-  console.log("MAIN");
+  // console.log("MAIN");
   // if (clearDb) {
   //   await prisma.module.deleteMany();
   //   await prisma.token.deleteMany();
