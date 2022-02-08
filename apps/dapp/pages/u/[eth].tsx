@@ -244,7 +244,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     };
   }
 
-  console.log(data);
+  // console.log(data);
 
   return {
     props: {

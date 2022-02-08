@@ -12,9 +12,24 @@ import { ArtworkListItem } from "~/components/frontend";
 import Arrow from "~/assets/img/arrow.svg";
 
 export const Artworks = ({ artworks }: { artworks: any }) => {
-  console.log("[Artworks stream] Artworks: ", artworks)
-  let sortedArtworks=[...artworks].sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt))
-    console.log("[Artworks stream] Sorted artworks: ", sortedArtworks)
+  //console.log("[Artworks stream] Artworks: ", artworks)
+  let sortedArtworks=[...artworks].sort((a,b) => {
+    try {
+      const dateA = new Date(b.createdAt);
+      const dateB = new Date(a.createdAt);
+
+      if (dateA && dateB) {
+        if (dateB > dateA) return 1;
+        if (dateB < dateA) return -1;
+        return 0;
+      }
+    } catch(err: any) {
+
+    }
+    return 0;
+  
+  })
+    //console.log("[Artworks stream] Sorted artworks: ", sortedArtworks)
 
   return (
     <>
