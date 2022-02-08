@@ -19,8 +19,8 @@ export const Artworks = ({ artworks }: { artworks: any }) => {
       const dateB = new Date(a.createdAt);
 
       if (dateA && dateB) {
-        if (dateB > dateA) return 1;
-        if (dateB < dateA) return -1;
+        if (dateB < dateA) return 1;
+        if (dateB > dateA) return -1;
         return 0;
       }
     } catch(err: any) {
