@@ -185,19 +185,7 @@ export const ExhibitionSlide = ({
                 <Arrow cursor="pointer" className="arrow up" />
               </Box>
             )}
-            <Box
-              h="100%"
-              py="20"
-              px="10"
-              flexDirection="column"
-              justifyContent="center"
-              display={{
-                base: "none",
-                t: "flex"
-              }}
-            >
-              <b>{exhibition.description}</b>
-            </Box>
+            
             {!single && (
               <Box
                 onClick={() => scrollToSlide("next")}
