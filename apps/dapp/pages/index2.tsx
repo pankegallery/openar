@@ -33,7 +33,6 @@ export const Home = (props) => {
             <ExhibitionSlide
               key={`ex-${index}`}
               exhibition={exhibition}
-              beta={beta}
             />
           ))
         }
