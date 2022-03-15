@@ -20,7 +20,6 @@ export const LayoutBlank = ({
   children: ReactNode;
 }) => {
   const [appUser] = useAuthentication();
-  const beta = process && process.env.NODE_ENV !== "development" && !appUser;
 
   const isMobile = useSSRSaveMediaQuery("(max-width: 45rem)");
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
@@ -37,12 +36,10 @@ export const LayoutBlank = ({
         <meta property="og:title" content="openAR · A cooperative and crypto platform for AR artworks" key="title" />
       </Head>
       <LoadingBar color="#000"/>
-      <Box className={`site content corner-${mode}`}>
+      <Box className={`site content corner-${mode}`} h="100%">
         {children}
       </Box>
-      {!beta&&
-        <OverlayMenu mode={finalMode} />
-      }
+      <OverlayMenu mode={finalMode} />
     </WalletConnectGate>
   );
 };

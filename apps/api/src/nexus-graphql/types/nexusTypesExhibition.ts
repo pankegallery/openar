@@ -178,7 +178,7 @@ const exhibitions: any = {
   },
   ["openar-test"]: async () => {
     return {
-      id: 1,
+      id: 2,
       title: "OpenAR.test",
       slug: "openar-test",
       subtitle: "A groupshow curated by Sakrowski and Jeremy Bailey",

@@ -12,9 +12,9 @@ import { ArtworkListItem } from "~/components/frontend";
 import Arrow from "~/assets/img/arrow.svg";
 
 export const Artworks = ({ artworks }: { artworks: any }) => {
-  console.log("[Artworks stream] Artworks: ", artworks)
-  let sortedArtworks=[...artworks].sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt))
-    console.log("[Artworks stream] Sorted artworks: ", sortedArtworks)
+  //console.log("[Artworks stream] Artworks: ", artworks)
+  let sortedArtworks=[...artworks];
+    //console.log("[Artworks stream] Sorted artworks: ", sortedArtworks)
 
   return (
     <>
@@ -48,9 +48,9 @@ export const Artworks = ({ artworks }: { artworks: any }) => {
 
         {/* --------- ROW: Artworks --------- */}
         <Box height="100%" width="100%" overflow="scroll">
-          {sortedArtworks.length > 0 && (
+          {artworks?.length > 0 && (
             <Flex width="100%" flexWrap="wrap">
-              {sortedArtworks.map((artwork) => {
+              {artworks.map((artwork) => {
                 let image = artwork?.heroImage;
                 if (!image) {
                   if (
@@ -97,7 +97,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 
   const artworkStreamQuery = gql`
     query {
-      artworks(orderBy: {createdAt: desc}) {
+      artworks(orderBy: {createdAt: "desc"}) {
         totalCount
         artworks {
           id

@@ -49,8 +49,6 @@ export const FieldSelect = ({
     name: name,
   };
 
-  if (settings?.defaultValue) fieldProps.defaultValue = settings?.defaultValue;
-
   fieldProps.className = settings?.className ?? undefined;
 
   fieldProps.placeholder = settings?.placeholder ?? undefined;

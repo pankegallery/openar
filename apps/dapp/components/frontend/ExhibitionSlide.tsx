@@ -21,9 +21,9 @@ export const ExhibitionSlide = ({exhibition, beta, scrollToSlide, active, prev, 
   let imgUrl = exhibition.imgUrl
   imgUrl = "https://openar.art/images/exhibitions/opening-bg.png"
 
-  return(
+  return (
     <>
-  {/* --------- Background image ---------
+      {/* --------- Background image ---------
       <Box position="fixed" zIndex="100" h="100vh" w="100%" overflow="hidden">
         <chakra.img
           src={imgUrl}
@@ -46,7 +46,7 @@ export const ExhibitionSlide = ({exhibition, beta, scrollToSlide, active, prev, 
         left="0"
         w="100%"
         h="100%"
-        zIndex="200"
+        zIndex="100"
         templateRows={{
           base: "calc(66.66vw * 2) auto",
           t: "calc(50vw + var(--openar-header-height-desktop)) auto",
@@ -82,7 +82,7 @@ export const ExhibitionSlide = ({exhibition, beta, scrollToSlide, active, prev, 
           {/* --------- TILE: Exhibition title  --------- */}
           <Flex
             className="exhibitionTile"
-             w={{
+            w={{
               base: "66.66vw",
               t: "50vw",
               d: "33.33vw",
@@ -101,7 +101,7 @@ export const ExhibitionSlide = ({exhibition, beta, scrollToSlide, active, prev, 
               borderRight="1px solid #fff"
               borderLeft={{
                 base: "none",
-                  d: "1px solid #fff",
+                d: "1px solid #fff",
               }}
               p={{
                 base: "6",
@@ -112,23 +112,16 @@ export const ExhibitionSlide = ({exhibition, beta, scrollToSlide, active, prev, 
                 t: "20",
               }}
             >
-              {!beta && (
-                <ExhibitionTitleTile exhibition={exhibition} link={true} />
-              )}
-              {beta && (
-                <ExhibitionTitleTile exhibition={exhibition} link={false} />
-              )}
+              <ExhibitionTitleTile exhibition={exhibition} link={true} />
             </Flex>
           </Flex>
           {/* --------- TILE: Arrows  --------- */}
           <Flex
             w={{
-              base: "calc(33.33vw - 2px)",
-              t: "calc(50vw - 2px)",
-              d: "calc(33.33vw - 2px)",
+              base: "calc(33.33vw - 3px)",
+              t: "calc(50vw - 3px)",
+              d: "calc(33.33vw - 3px)",
             }}
-            py="20"
-            px="10"
             h={{
               base: "66.66vw",
               t: "50vw",
@@ -138,6 +131,8 @@ export const ExhibitionSlide = ({exhibition, beta, scrollToSlide, active, prev, 
             borderBottom="1px solid #fff"
             layerStyle="backdropBlurred"
             flexDirection="column"
+            justifyContent="space-between"
+            position="relative"
           >
             {!single&&
               <>
@@ -171,6 +166,9 @@ export const ExhibitionSlide = ({exhibition, beta, scrollToSlide, active, prev, 
             t: "50vw",
             d: "33.33vw",
           }}
+          ml={{
+            d: "calc((100vw - 100%))",
+          }}
           borderRight="1px solid #fff"
           borderLeft={{
             t: "1px solid #fff",
@@ -183,5 +181,5 @@ export const ExhibitionSlide = ({exhibition, beta, scrollToSlide, active, prev, 
         ></Box>
       </Grid>
     </>
-  )
-}
+  );
+};

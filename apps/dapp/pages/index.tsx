@@ -4,20 +4,12 @@ import Head from "next/head";
 import { LayoutBlank } from "~/components/app";
 import { ExhibitionSlide } from "~/components/frontend";
 
-
-import { Box, chakra, AspectRatio } from "@chakra-ui/react";
-import Link from "next/link";
-import Image from "next/image";
+import { Box } from "@chakra-ui/react";
 
 import { gql } from "@apollo/client";
 import { getApolloClient } from "~/services/apolloClient";
 
-import { useAuthentication } from "~/hooks";
-
 export const Home = (props) => {
-  const [appUser] = useAuthentication();
-  const beta = process && process.env.NODE_ENV !== "development" && !appUser;
-
   return (
     <>
       <Head>
@@ -30,7 +22,7 @@ export const Home = (props) => {
         <meta name="description" content={props.pageDescription} />
       </Head>
 
-      <ExhibitionSlide exhibition={props.exhibition} beta={beta} active="true" single="true"/>
+      <ExhibitionSlide exhibition={props.exhibition} active="true" single="true"/>
 
       <Box
         className="betaVersion"
@@ -57,34 +49,7 @@ export const Home = (props) => {
           base: "50vw",
           t: "25vw",
         }}
-      >
-{/*}
-        {!beta && (
-          <AspectRatio ratio={1}>
-            <chakra.img
-              src="images/corner.svg"
-              width="100%"
-              height="100%"
-              alt="We are in beta"
-            />
-          </AspectRatio>
-        )}
-*/}
-        {beta && (
-          <chakra.span cursor="pointer">
-            <Link href="/beta" passHref>
-              <AspectRatio ratio={1}>
-                <chakra.img
-                  src="images/corner.svg"
-                  width="100%"
-                  height="100%"
-                  alt="We are in beta"
-                />
-              </AspectRatio>
-            </Link>
-          </chakra.span>
-        )}
-      </Box>
+      ></Box>
     </>
   );
 };
@@ -168,7 +133,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   const { data } = await client.query({
     query: exhibitionQuery,
     variables: {
-      slug: 'openar-art',
+      slug: "openar-art",
     },
   });
 
@@ -183,7 +148,6 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     revalidate: 240,
   };
 };
-
 
 // TODO: Exhibitions (all current and upcoming?) query
 //====================================================
