@@ -64,7 +64,6 @@ export const Home = (props) => {
             <ExhibitionSlide
               key={`ex-${index}`}
               exhibition={exhibition}
-              beta={beta}
               scrollToSlide={scrollToSlide}
               active={currentSlide==index ? true : false}
               prev={currentSlide>index ? true : false}

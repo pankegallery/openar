@@ -127,6 +127,8 @@ export const ExhibitionSlide = ({exhibition, beta, scrollToSlide, active, prev, 
               t: "50vw",
               d: "33.33vw",
             }}
+            py="20"
+            px="10"
             borderTop="1px solid #fff"
             borderBottom="1px solid #fff"
             layerStyle="backdropBlurred"
