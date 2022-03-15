@@ -13,7 +13,22 @@ import Image from "next/image";
 
 //import openingBg from "~/assets/img/opening-bg.png";
 
-export const ExhibitionSlide = ({exhibition, beta, scrollToSlide, active, prev, next, single} : {exhibition: any; beta?: Boolean; scrollToSlide: any, active?:Boolean, prev?:Boolean, next?:Boolean, single?:Boolean}) => {
+export const ExhibitionSlide = ({
+  exhibition,
+  beta,
+  scrollToSlide,
+  active,
+  prev,
+  next,
+  single
+} : {
+  exhibition: any;
+  beta?: Boolean;
+  scrollToSlide: any, active?:Boolean,
+  prev?:Boolean,
+  next?:Boolean,
+  single?:Boolean
+}) => {
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
 
   console.log(active);
