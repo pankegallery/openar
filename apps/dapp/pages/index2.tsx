@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import { ReactElement, useState, useEffect } from "react";
 import Head from "next/head";
 
 import { LayoutBlank } from "~/components/app";
@@ -18,6 +18,38 @@ export const Home = (props) => {
   const beta = process && process.env.NODE_ENV !== "development" && !appUser;
 
   const { exhibitions } = props;
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const scrollToSlide = (direction) => {
+
+    console.log("to", direction)
+    if (typeof window === "undefined") return;
+
+    switch(direction){
+      case "prev":
+        currentSlide!=0 ? setCurrentSlide(currentSlide - 1) : setCurrentSlide(exhibitions.length - 1)
+        break;
+      case "next":
+        currentSlide!=exhibitions.length - 1 ? setCurrentSlide(currentSlide + 1) : setCurrentSlide(0)
+        break;
+    }
+  };
+
+
+  useEffect(() => {
+    const handleWheel = e => {
+      console.log("up or down", e.wheelDelta)
+      e.wheelDelta > 0 ? scrollToSlide("prev") : scrollToSlide("next")
+    };
+    window.addEventListener("wheel", handleWheel);
+    window.addEventListener("keydown", handleWheel);
+
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("keydown", handleWheel);
+
+    };
+  }, []);
 
   return (
     <>
@@ -33,7 +65,6 @@ export const Home = (props) => {
       <Box
         width="calc(100vw-(100vw-100%))"
         height="100vh"
-        scrollSnapType="y mandatory"
       >
         {exhibitions &&
           exhibitions?.map((exhibition: any, index: number) => (
@@ -41,6 +72,10 @@ export const Home = (props) => {
               key={`ex-${index}`}
               exhibition={exhibition}
               beta={beta}
+              scrollToSlide={scrollToSlide}
+              active={currentSlide==index ? true : false}
+              prev={currentSlide>index ? true : false}
+              next={currentSlide<index ? true : false}
             />
           ))
         }

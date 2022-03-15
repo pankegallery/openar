@@ -13,44 +13,11 @@ import Image from "next/image";
 
 //import openingBg from "~/assets/img/opening-bg.png";
 
-export const ExhibitionSlide = ({exhibition, beta}: {exhibition: any; beta?: any}) => {
+export const ExhibitionSlide = ({exhibition, beta, scrollToSlide, active, prev, next, single} : {exhibition: any; beta?: Boolean; scrollToSlide: any, active?:Boolean, prev?:Boolean, next?:Boolean, single?:Boolean}) => {
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
 
-  const scrollToSlide = (direction) => {
+  console.log(active);
 
-    console.log("to", direction)
-    if (typeof window === "undefined") return;
-
-    let topValue;
-
-    switch(direction){
-      case "prev":
-        topValue = 0 - Math.min(window.innerHeight);
-        break;
-      case "next":
-        topValue = Math.min(window.innerHeight);
-        break;
-    }
-
-//    if (isDesktop) {
-//
-//    } else {
-//      // smooth scoll the page to artwork listing
-//      window.scrollIntoView({
-//        behavior: "smooth",
-//        block: "start",
-//        inline: "nearest",
-//      });
-//    }
-
-    // smooth scoll the arwork listing
-      window.scrollTo({
-        top: topValue,
-        behavior: "smooth",
-      });
-  };
-
-//  console.log(exhibition);
   let imgUrl = exhibition.imgUrl
   imgUrl = "https://openar.art/images/exhibitions/opening-bg.png"
 
@@ -71,7 +38,9 @@ export const ExhibitionSlide = ({exhibition, beta}: {exhibition: any; beta?: any
       <Grid
         backgroundImage={`url(${imgUrl})`}
         backgroundPosition={exhibition.imgPosition}
+        backgroundPosition={active ? exhibition.imgPosition : prev ? "center -100vh" : "center 100vh"}
         backgroundSize="cover"
+        backgroundRepeat="no-repeat"
         className="exhibition"
         top="0"
         left="0"
@@ -86,7 +55,8 @@ export const ExhibitionSlide = ({exhibition, beta}: {exhibition: any; beta?: any
         templateColumns="1fr"
         color="white"
         overflow="hidden"
-        scrollSnapAlign="center"
+        position="fixed"
+        transition="background-position 0.5s ease-out"
       >
         {/* --------- ROW: Exhibition title and arrows --------- */}
         <Flex
@@ -106,6 +76,8 @@ export const ExhibitionSlide = ({exhibition, beta}: {exhibition: any; beta?: any
           flexWrap="wrap"
           direction="row"
           zIndex="302"
+          opacity={active ? "1" : "0"}
+          transition="opacity 1s ease-in-out"
         >
           {/* --------- TILE: Exhibition title  --------- */}
           <Flex
@@ -167,22 +139,26 @@ export const ExhibitionSlide = ({exhibition, beta}: {exhibition: any; beta?: any
             layerStyle="backdropBlurred"
             flexDirection="column"
           >
-            <Box
-              onClick={() => scrollToSlide("prev")}
-              width="min-content"
-              ml="auto"
+            {!single&&
+              <>
+                <Box
+                  onClick={() => scrollToSlide("prev")}
+                  width="min-content"
+                  ml="auto"
 
-            >
-              <Arrow className="arrow up" />
-            </Box>
-            <Box
-              onClick={() => scrollToSlide("next")}
-              width="min-content"
-              ml="auto"
-              mt="auto"
-            >
-              <Arrow className="arrow down" />
-            </Box>
+                >
+                  <Arrow className="arrow up" />
+                </Box>
+                <Box
+                  onClick={() => scrollToSlide("next")}
+                  width="min-content"
+                  ml="auto"
+                  mt="auto"
+                >
+                  <Arrow className="arrow down" />
+                </Box>
+              </>
+            }
           </Flex>
         </Flex>
         {/* --------- TILE: Footer  --------- */}

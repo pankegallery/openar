@@ -3,10 +3,10 @@ title: "About openAR"
 subPages: 
   - slug: "getStarted"
     label: "Get started"
-    url: "p/getStarted"
+    url: "/p/getStarted"
   - slug: "roles"
     label: "Roles and Badges"
-    url: "p/badges"
+    url: "/p/badges"
 ---
 
 ## About openAR

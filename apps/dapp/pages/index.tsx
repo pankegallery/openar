@@ -30,7 +30,7 @@ export const Home = (props) => {
         <meta name="description" content={props.pageDescription} />
       </Head>
 
-      <ExhibitionSlide exhibition={props.exhibition} beta={beta}/>
+      <ExhibitionSlide exhibition={props.exhibition} beta={beta} active="true" single="true"/>
 
       <Box
         className="betaVersion"

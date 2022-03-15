@@ -337,7 +337,7 @@ export const ArtworkDetails = ({
         )}
 
         {/* ======== BOX: Artist profile  ======== */}
-        {artwork.creator.bio && (
+        {profileUrl && (
           <Box
             className="artistInfo"
             borderBottom="1px solid white"
