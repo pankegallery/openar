@@ -25,7 +25,7 @@ export const Home = (props) => {
 
       timeoutRef.current = setTimeout(() => {
         animatingRef.current = false;
-      }, 1200);
+      }, 1000);
 
       switch (direction) {
         case "prev":
@@ -58,8 +58,10 @@ export const Home = (props) => {
         width="calc(100vw-(100vw-100%))"
         height="100vh"
         onWheel={(e: WheelEvent) => {
-          e.deltaY > 0 ? scrollToSlide("prev") : scrollToSlide("next");
-          console.log(123, e.deltaY);
+          if (Math.abs(e.deltaY) > 10) {
+            e.deltaY > 0 ? scrollToSlide("prev") : scrollToSlide("next");
+            console.log(123, e.deltaY);
+          }
         }}
       >
         {exhibitions &&
