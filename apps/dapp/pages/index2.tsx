@@ -1,4 +1,4 @@
-import { ReactElement, useState, useEffect, useCallback } from "react";
+import { ReactElement, useState, useCallback, useRef, WheelEvent } from "react";
 import Head from "next/head";
 
 import { LayoutBlank } from "~/components/app";
@@ -10,12 +10,22 @@ import { gql } from "@apollo/client";
 import { getApolloClient } from "~/services/apolloClient";
 
 export const Home = (props) => {
+  const animatingRef = useRef(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
   const { exhibitions } = props;
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const scrollToSlide = useCallback(
     (direction) => {
       if (typeof window === "undefined") return;
+
+      if (animatingRef.current) return;
+
+      animatingRef.current = true;
+
+      timeoutRef.current = setTimeout(() => {
+        animatingRef.current = false;
+      }, 1200);
 
       switch (direction) {
         case "prev":
@@ -33,19 +43,6 @@ export const Home = (props) => {
     [currentSlide, exhibitions.length]
   );
 
-  useEffect(() => {
-    const handleWheel = (e) => {
-      e.wheelDelta > 0 ? scrollToSlide("prev") : scrollToSlide("next");
-    };
-    window.addEventListener("wheel", handleWheel);
-    window.addEventListener("keydown", handleWheel);
-
-    return () => {
-      window.removeEventListener("wheel", handleWheel);
-      window.removeEventListener("keydown", handleWheel);
-    };
-  }, [scrollToSlide]);
-
   return (
     <>
       <Head>
@@ -57,7 +54,14 @@ export const Home = (props) => {
         <link rel="shortcut icon" href="/favicon.ico" />
         <meta name="description" content={props.pageDescription} />
       </Head>
-      <Box width="calc(100vw-(100vw-100%))" height="100vh">
+      <Box
+        width="calc(100vw-(100vw-100%))"
+        height="100vh"
+        onWheel={(e: WheelEvent) => {
+          e.deltaY > 0 ? scrollToSlide("prev") : scrollToSlide("next");
+          console.log(123, e.deltaY);
+        }}
+      >
         {exhibitions &&
           exhibitions?.map((exhibition: any, index: number) => (
             <ExhibitionSlide
