@@ -30,8 +30,7 @@ export const Home = (props) => {
           break;
       }
     },
-    [currentSlide, 
-      exhibitions.length]
+    [currentSlide, exhibitions.length]
   );
 
   useEffect(() => {
