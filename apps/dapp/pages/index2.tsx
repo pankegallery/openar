@@ -1,4 +1,4 @@
-import { ReactElement, useState, useEffect } from "react";
+import { ReactElement, useState, useEffect, useCallback } from "react";
 import Head from "next/head";
 
 import { LayoutBlank } from "~/components/app";
@@ -13,26 +13,30 @@ export const Home = (props) => {
   const { exhibitions } = props;
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const scrollToSlide = (direction) => {
+  const scrollToSlide = useCallback(
+    (direction) => {
+      if (typeof window === "undefined") return;
 
-    console.log("to", direction)
-    if (typeof window === "undefined") return;
-
-    switch(direction){
-      case "prev":
-        currentSlide!=0 ? setCurrentSlide(currentSlide - 1) : setCurrentSlide(exhibitions.length - 1)
-        break;
-      case "next":
-        currentSlide!=exhibitions.length - 1 ? setCurrentSlide(currentSlide + 1) : setCurrentSlide(0)
-        break;
-    }
-  };
-
+      switch (direction) {
+        case "prev":
+          currentSlide != 0
+            ? setCurrentSlide(currentSlide - 1)
+            : setCurrentSlide(exhibitions.length - 1);
+          break;
+        case "next":
+          currentSlide != exhibitions.length - 1
+            ? setCurrentSlide(currentSlide + 1)
+            : setCurrentSlide(0);
+          break;
+      }
+    },
+    [currentSlide, 
+      exhibitions.length]
+  );
 
   useEffect(() => {
-    const handleWheel = e => {
-      console.log("up or down", e.wheelDelta)
-      e.wheelDelta > 0 ? scrollToSlide("prev") : scrollToSlide("next")
+    const handleWheel = (e) => {
+      e.wheelDelta > 0 ? scrollToSlide("prev") : scrollToSlide("next");
     };
     window.addEventListener("wheel", handleWheel);
     window.addEventListener("keydown", handleWheel);
@@ -40,9 +44,8 @@ export const Home = (props) => {
     return () => {
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("keydown", handleWheel);
-
     };
-  }, []);
+  }, [scrollToSlide]);
 
   return (
     <>
@@ -55,22 +58,18 @@ export const Home = (props) => {
         <link rel="shortcut icon" href="/favicon.ico" />
         <meta name="description" content={props.pageDescription} />
       </Head>
-       <Box
-        width="calc(100vw-(100vw-100%))"
-        height="100vh"
-      >
+      <Box width="calc(100vw-(100vw-100%))" height="100vh">
         {exhibitions &&
           exhibitions?.map((exhibition: any, index: number) => (
             <ExhibitionSlide
               key={`ex-${index}`}
               exhibition={exhibition}
               scrollToSlide={scrollToSlide}
-              active={currentSlide==index ? true : false}
-              prev={currentSlide>index ? true : false}
-              next={currentSlide<index ? true : false}
+              active={currentSlide == index ? true : false}
+              prev={currentSlide > index ? true : false}
+              next={currentSlide < index ? true : false}
             />
-          ))
-        }
+          ))}
       </Box>
     </>
   );

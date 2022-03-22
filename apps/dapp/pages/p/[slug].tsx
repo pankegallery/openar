@@ -1,11 +1,11 @@
 import React, { ReactElement } from "react";
 import { LayoutSite } from "~/components/app";
-import { Menu } from "~/components/frontend";
+// import { Menu } from "~/components/frontend";
 import { ArrowLink } from "~/components/ui";
 import matter from "gray-matter";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import rehypeReact from "rehype-react";
+// import rehypeReact from "rehype-react";
 import { Box, Flex, chakra } from "@chakra-ui/react";
 import { Footer } from "~/components/app/site";
 
@@ -16,9 +16,9 @@ function PageTemplate({ content, data }) {
   const frontmatter = data;
 
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
-  const isTablet = useSSRSaveMediaQuery(
-    "(min-width: 45rem) and (max-width: 75rem)"
-  );
+  // const isTablet = useSSRSaveMediaQuery(
+  //   "(min-width: 45rem) and (max-width: 75rem)"
+  // );
 
   return (
     <Flex
