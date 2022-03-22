@@ -24,7 +24,8 @@ export const ExhibitionSlide = ({
 } : {
   exhibition: any;
   beta?: Boolean;
-  scrollToSlide: any, active?:Boolean,
+  scrollToSlide?: any,
+  active?:Boolean,
   prev?:Boolean,
   next?:Boolean,
   single?:Boolean
@@ -52,7 +53,6 @@ export const ExhibitionSlide = ({
       {/* --------- GRID --------- */}
       <Grid
         backgroundImage={`url(${imgUrl})`}
-        backgroundPosition={exhibition.imgPosition}
         backgroundPosition={active ? exhibition.imgPosition : prev ? "center -100vh" : "center 100vh"}
         backgroundSize="cover"
         backgroundRepeat="no-repeat"
