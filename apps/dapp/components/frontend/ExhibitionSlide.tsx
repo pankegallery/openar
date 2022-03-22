@@ -1,41 +1,41 @@
-import type { ReactElement } from "react";
-import Head from "next/head";
+// import type { ReactElement } from "react";
+// import Head from "next/head";
 
-import { LayoutBlank } from "~/components/app";
+// import { LayoutBlank } from "~/components/app";
 import { ExhibitionTitleTile } from "~/components/frontend";
 import Arrow from "~/assets/img/arrow.svg";
 
-import { useSSRSaveMediaQuery } from "~/hooks";
+// import { useSSRSaveMediaQuery } from "~/hooks";
 
-import { Box, Grid, Flex, chakra, AspectRatio } from "@chakra-ui/react";
-import Link from "next/link";
-import Image from "next/image";
+import { Box, Grid, Flex } from "@chakra-ui/react";
+// import Link from "next/link";
+// import Image from "next/image";
 
 //import openingBg from "~/assets/img/opening-bg.png";
 
 export const ExhibitionSlide = ({
   exhibition,
   beta,
-  scrollToSlide,
+  scrollUp,
+  scrollDown,
   active,
   prev,
   next,
-  single
-} : {
+  single,
+}: {
   exhibition: any;
   beta?: Boolean;
-  scrollToSlide?: any,
-  active?:Boolean,
-  prev?:Boolean,
-  next?:Boolean,
-  single?:Boolean
+  scrollUp?: Function;
+  scrollDown?: Function;
+  active?: Boolean;
+  prev?: Boolean;
+  next?: Boolean;
+  single?: Boolean;
 }) => {
-  const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
+  // const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
 
-  console.log(active);
-
-  let imgUrl = exhibition.imgUrl
-  imgUrl = "https://openar.art/images/exhibitions/opening-bg.png"
+  let imgUrl = exhibition.imgUrl;
+  imgUrl = "https://openar.art/images/exhibitions/opening-bg.png";
 
   return (
     <>
@@ -53,7 +53,13 @@ export const ExhibitionSlide = ({
       {/* --------- GRID --------- */}
       <Grid
         backgroundImage={`url(${imgUrl})`}
-        backgroundPosition={active ? exhibition.imgPosition : prev ? "center -100vh" : "center 100vh"}
+        backgroundPosition={
+          active
+            ? exhibition.imgPosition
+            : prev
+            ? "center -100vh"
+            : "center 100vh"
+        }
         backgroundSize="cover"
         backgroundRepeat="no-repeat"
         className="exhibition"
@@ -151,18 +157,21 @@ export const ExhibitionSlide = ({
             justifyContent="space-between"
             position="relative"
           >
-            {!single&&
+            {!single && (
               <>
                 <Box
-                  onClick={() => scrollToSlide("prev")}
+                  onClick={() => {
+                    if (typeof scrollUp === "function") scrollUp.call(null);
+                  }}
                   width="min-content"
                   ml="auto"
-
                 >
                   <Arrow className="arrow up" />
                 </Box>
                 <Box
-                  onClick={() => scrollToSlide("next")}
+                  onClick={() => {
+                    if (typeof scrollDown === "function") scrollDown.call(null);
+                  }}
                   width="min-content"
                   ml="auto"
                   mt="auto"
@@ -170,7 +179,7 @@ export const ExhibitionSlide = ({
                   <Arrow className="arrow down" />
                 </Box>
               </>
-            }
+            )}
           </Flex>
         </Flex>
         {/* --------- TILE: Footer  --------- */}

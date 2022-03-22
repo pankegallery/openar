@@ -60,7 +60,6 @@ export const Home = (props) => {
         onWheel={(e: WheelEvent) => {
           if (Math.abs(e.deltaY) > 10) {
             e.deltaY > 0 ? scrollToSlide("prev") : scrollToSlide("next");
-            console.log(123, e.deltaY);
           }
         }}
       >
@@ -69,7 +68,22 @@ export const Home = (props) => {
             <ExhibitionSlide
               key={`ex-${index}`}
               exhibition={exhibition}
-              scrollToSlide={scrollToSlide}
+              scrollUp={() => {
+                if (timeoutRef.current) {
+                  clearTimeout(timeoutRef.current)
+                  timeoutRef.current = null;
+                };
+                animatingRef.current = false;
+                scrollToSlide("prev")
+              }}
+              scrollDown={() => {
+                if (timeoutRef.current) {
+                  clearTimeout(timeoutRef.current)
+                  timeoutRef.current = null;
+                };
+                animatingRef.current = false;
+                scrollToSlide("next")
+              }}
               active={currentSlide == index ? true : false}
               prev={currentSlide > index ? true : false}
               next={currentSlide < index ? true : false}
