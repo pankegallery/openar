@@ -3,7 +3,7 @@ title: "Roles and Badges"
 parentPage: 
   - slug: "about"
     label: "About"
-    url: "p/about"
+    url: "/p/about"
 ---
 
 ## Roles
@@ -58,9 +58,3 @@ Reviewer badge
 ![Administrator badge](/images/badges2021/admin@14x-100.jpg)
 
 Administrator badge
-
-
-
-
-
-
