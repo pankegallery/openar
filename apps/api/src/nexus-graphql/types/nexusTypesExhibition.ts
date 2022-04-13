@@ -69,6 +69,8 @@ const exhibitions: any = {
           orderNumber: 1,
           user: await daoUserSelectFindFirst(
             { id: 18 }, // Sakrowski
+            // Wusste nicht ob in "" oder ohne. Ist ja wahrscheinlich ein String und kein Int
+            // { ethAddress: "0xa358ba0c9777fa51340005c90511db0f193122e6" }, // Sakrowski
             {
               id: true,
               ethAddress: true,
@@ -88,6 +90,8 @@ const exhibitions: any = {
           orderNumber: 2,
           user: await daoUserSelectFindFirst(
             { id: 9 }, // Jeremy Baley
+            // Wusste nicht ob in "" oder ohne. Ist ja wahrscheinlich ein String und kein Int
+            // { ethAddress: "0xa64b8a46236e7e14d0f33031ad21a88d0b93850c" }, // Jeremy Baley
             {
               id: true,
               ethAddress: true,
@@ -121,6 +125,10 @@ const exhibitions: any = {
           id: {
             in: [3, 4, 5, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 21, 22],
           },
+          // Wusste nicht ob in "" oder ohne. Ist ja wahrscheinlich ein String und kein Int
+          // key: {
+          //   in: ["mjHQTN4VoyPRwBSk", "zqKV7VfoPXzFeZnN", "Yq2kXKW4YuwVSkrn", "jyKxfKBIt3tEkOyZ", "RVRHLyKFhk8jmeUN", "5IhBsxhzTw5aO8xJ", "yj9LVvzSilavLy3f", "649ddyQ3SF3Kz8SS", "HSMSPAQ20ljzbQlt", "8lNCQ7QZ00sNrO6c", "h0JnLBknAIMXFDYq"],
+          // },
         },
         {
           heroImage: {
