@@ -3,7 +3,7 @@ title: "Imprint"
 parentPage: 
   - slug: "about"
     label: "About"
-    url: "p/about"
+    url: "/p/about"
 ---
 
 ## openAR is hosted by panke.gallery

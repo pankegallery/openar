@@ -3,7 +3,7 @@ title: "Terms and Conditions"
 parentPage: 
   - slug: "about"
     label: "About"
-    url: "p/about"
+    url: "/p/about"
 lastUpdated: "2021-11-30"
 ---
 

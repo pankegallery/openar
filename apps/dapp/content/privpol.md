@@ -3,7 +3,7 @@ title: "Privacy Policy"
 parentPage: 
   - slug: "about"
     label: "About"
-    url: "p/about"
+    url: "/p/about"
 ---
 
 ## Privacy Policy

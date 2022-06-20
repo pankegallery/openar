@@ -79,7 +79,7 @@ function PageTemplate({ content, data }) {
         >
           {frontmatter.parentPage && (
             <Box className="parentPage" mb="4">
-              <ArrowLink type="back" href={`/${frontmatter.parentPage[0].url}`}>
+              <ArrowLink type="back" href={frontmatter.parentPage[0].url}>
                 {frontmatter.parentPage[0].label}
               </ArrowLink>
             </Box>
