@@ -53,7 +53,7 @@ export const appConfig: AppConfig = {
 export const chainInfo = {
   100: {
     chainName: "xDai",
-    rpcUrls: ["https://rpc.xdaichain.com/"],
+    rpcUrls: ["https://rpc.gnosischain.com/"],
     chainId: `0x${decimalToHex(100)}`,
     nativeCurrency: {
       name: "xDai",

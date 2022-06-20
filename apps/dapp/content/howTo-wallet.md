@@ -34,7 +34,7 @@ Note: Make sure that you have set the xDai chain as your default network on your
 
 ``` json
 Network Name: xDai
-New RPC URL: https://rpc.xdaichain.com/
+New RPC URL: https://rpc.gnosischain.com/
 Chain ID: 0x64
 Symbol: xDai
 Block Explorer URL: https://blockscout.com/xdai/mainnet
