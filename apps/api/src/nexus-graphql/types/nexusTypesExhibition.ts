@@ -247,71 +247,72 @@ const exhibitions: any = {
         '"Outside In" explores the augmented possibilities of reality. Spatial software introduced new materialities and perspectives to people’s perceptions. Humans are spatial creatures. We experience most of our lives in relation to space. Manuel Rossner’s work "Spatial Painting (Rosa-Luxemburg-Platz)" no longer distinguishes between the real world and the alternative world, but experiences space simultaneously as a physical dimension, virtual image and hyperreal medium. His drawings, created in VR, interfere with the location. Damjanski’s piece "Inside: Spatial Painting (Rosa-Luxemburg-Platz)" stands in dialogue to Manuel’s piece and gives visitors access to experience the work from the inside. A perspective that wouldn’t have been possible with AR technology. Both pieces complement each other by giving visitors a new spatial experience.',
       status: ExhibitionStatusEnum.PUBLISHED,
       // TODO: Arworks should also be listed by an order number ...
-      artworks: await daoArtworkQuery(
-        {
-          status: {
-            in: [
-              ArtworkStatusEnum.PUBLISHED,
-              ArtworkStatusEnum.HASMINTEDOBJECTS,
-            ],
-          },
-          isPublic: true,
-          key: {
-            in: ["xKDVchzeldH8PXnE", "yD9OC0VzNcOA12jW"],
-          },
-        },
-        {
-          heroImage: {
-            select: {
-              status: true,
-              id: true,
-              meta: true,
-            },
-          },
-          creator: {
-            select: {
-              id: true,
-              bio: true,
-              pseudonym: true,
-              ethAddress: true,
-            },
-          },
-          arObjects: {
-            select: {
-              id: true,
-              status: true,
-              key: true,
-              orderNumber: true,
-              title: true,
-              askPrice: true,
-              editionOf: true,
-              heroImage: {
-                select: {
-                  meta: true,
-                  status: true,
-                  id: true,
-                },
-              },
-            },
-            where: {
-              status: {
-                in: [
-                  ArObjectStatusEnum.PUBLISHED,
-                  ArObjectStatusEnum.MINTING,
-                  ArObjectStatusEnum.MINTCONFIRM,
-                  ArObjectStatusEnum.MINTED,
-                ],
-              },
-            },
-            orderBy: {
-              orderNumber: "asc",
-            },
-          },
-        },
-        {},
-        0,
-        1000
-      ),
+      artworks: [],
+      // artworks: await daoArtworkQuery(
+      //   {
+      //     status: {
+      //       in: [
+      //         ArtworkStatusEnum.PUBLISHED,
+      //         ArtworkStatusEnum.HASMINTEDOBJECTS,
+      //       ],
+      //     },
+      //     isPublic: true,
+      //     key: {
+      //       in: ["xKDVchzeldH8PXnE", "yD9OC0VzNcOA12jW"],
+      //     },
+      //   },
+      //   {
+      //     heroImage: {
+      //       select: {
+      //         status: true,
+      //         id: true,
+      //         meta: true,
+      //       },
+      //     },
+      //     creator: {
+      //       select: {
+      //         id: true,
+      //         bio: true,
+      //         pseudonym: true,
+      //         ethAddress: true,
+      //       },
+      //     },
+      //     arObjects: {
+      //       select: {
+      //         id: true,
+      //         status: true,
+      //         key: true,
+      //         orderNumber: true,
+      //         title: true,
+      //         askPrice: true,
+      //         editionOf: true,
+      //         heroImage: {
+      //           select: {
+      //             meta: true,
+      //             status: true,
+      //             id: true,
+      //           },
+      //         },
+      //       },
+      //       where: {
+      //         status: {
+      //           in: [
+      //             ArObjectStatusEnum.PUBLISHED,
+      //             ArObjectStatusEnum.MINTING,
+      //             ArObjectStatusEnum.MINTCONFIRM,
+      //             ArObjectStatusEnum.MINTED,
+      //           ],
+      //         },
+      //       },
+      //       orderBy: {
+      //         orderNumber: "asc",
+      //       },
+      //     },
+      //   },
+      //   {},
+      //   0,
+      //   1000
+      // ),
     };
   },
 };
