@@ -196,7 +196,7 @@ const exhibitions: any = {
   "outside-in": async () => {
     return {
       id: 2,
-      title: "OpenAR.test",
+      title: "Outside In",
       slug: "outside-in",
       imgUrl:
         "https://baserow.panke.gallery/media/user_files/p4Pyi5XD5DbUv6fBLE5td7sNesLd6VAL_e3689dfa15db995316664f7e80620857cc4dcbef8a57f3b9cafb9b35ab99985a.png",
