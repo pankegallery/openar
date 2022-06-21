@@ -49,6 +49,7 @@ export const ExhibitionSlide = ({
 
       {/* --------- GRID --------- */}
       <Grid
+        pointerEvents={active ? "all" : "none"}
         backgroundImage={`url(${exhibition?.imgUrl})`}
         backgroundPosition={
           active
