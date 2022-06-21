@@ -22,7 +22,11 @@ export const Home = (props) => {
         <meta name="description" content={props.pageDescription} />
       </Head>
 
-      <ExhibitionSlide exhibition={props.exhibition} active={true} single={true} />
+      <ExhibitionSlide
+        exhibition={props.exhibition}
+        active={true}
+        single={true}
+      />
 
       <Box
         className="betaVersion"
@@ -169,7 +173,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 //        title
 //        type
 //        imgUrl
-//        imgPosition          
+//        imgPosition
 //        description
 //        dateBegin
 //        dateEnd
