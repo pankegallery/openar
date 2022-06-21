@@ -5,10 +5,11 @@ import { chakra, Button } from '@chakra-ui/react'
 
 import Arrow from "~/assets/img/arrow.svg";
 
-export const ArrowLink = ({ children, type = "to", href, onClick } : {
+export const ArrowLink = ({ children, type = "to", href, onClick, target } : {
   children: React.ReactNode;
   type?: string;
   href?: string;
+  target?: string;
   onClick?: any;
 }) => {
   if (type === "to" && href){
@@ -18,6 +19,7 @@ export const ArrowLink = ({ children, type = "to", href, onClick } : {
           _hover={{
             opacity: 0.6
           }}
+          target={target}
           transition="all 0.1s"
           className="arrowLink to"
         >

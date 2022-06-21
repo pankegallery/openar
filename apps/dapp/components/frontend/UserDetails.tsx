@@ -220,7 +220,7 @@ export const UserDetails = ({
                 <chakra.p textStyle="label" className="label" mt="6">
                   More information
                 </chakra.p>
-                <ArrowLink href={user.url}>{user.url}</ArrowLink>
+                <ArrowLink href={user.url} target="_blank">{user.url}</ArrowLink>
               </>
             )}
           </Box>
