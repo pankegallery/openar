@@ -225,7 +225,7 @@ const exhibitions: any = {
         {
           orderNumber: 2,
           user: await daoUserSelectFindFirst(
-            { ethAddress: "n0xef8d44e54d8be26a55a2b13e1e055019182b3824" },
+            { ethAddress: "0xef8d44e54d8be26a55a2b13e1e055019182b3824" },
             {
               id: true,
               ethAddress: true,
