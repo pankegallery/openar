@@ -34,7 +34,6 @@ export const ExhibitionSlide = ({
 }) => {
   // const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
 
-  console.log(exhibition)
   return (
     <>
       {/* --------- Background image ---------
