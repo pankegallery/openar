@@ -83,7 +83,6 @@ export const getStaticProps = async ({ params }: { params: any }) => {
         type
         imgUrl
         imgPosition
-        subtitle
         description
         dateBegin
         dateEnd
@@ -137,13 +136,20 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     },
   });
 
+  if (!data?.exhibition) {
+    return {
+      notFound: true,
+      revalidate: 240,
+    };
+  }
+
   return {
     props: {
       pageTitle: "openAR",
       pageSlogan: "The cooperative and crypto platform for AR artworks",
       pageDescription:
         "OpenAR makes it easy to exhibit, collect and discuss Augmented Reality (AR) works and allows artists to sell their works as NFTs. The open platform is organised as a cooperative, profits will be shared among the artists.",
-      exhibition: data?.exhibition,
+      exhibition: data?.exhibition ?? null,
     },
     revalidate: 240,
   };
@@ -162,7 +168,8 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 //        slug
 //        title
 //        type
-//        subtitle
+//        imgUrl
+//        imgPosition          
 //        description
 //        dateBegin
 //        dateEnd

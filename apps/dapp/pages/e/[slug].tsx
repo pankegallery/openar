@@ -354,7 +354,8 @@ export const getStaticProps = async ({ params }: { params: any }) => {
         slug
         title
         type
-        subtitle
+        imgUrl
+        imgPosition
         description
         dateBegin
         dateEnd

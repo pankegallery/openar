@@ -204,7 +204,6 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           type
           imgUrl
           imgPosition
-          subtitle
           description
           dateBegin
           dateEnd

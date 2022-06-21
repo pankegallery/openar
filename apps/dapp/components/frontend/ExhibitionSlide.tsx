@@ -34,9 +34,7 @@ export const ExhibitionSlide = ({
 }) => {
   // const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
 
-  let imgUrl = exhibition.imgUrl;
-  imgUrl = "https://openar.art/images/exhibitions/opening-bg.png";
-
+  console.log(exhibition)
   return (
     <>
       {/* --------- Background image ---------
@@ -52,10 +50,10 @@ export const ExhibitionSlide = ({
 
       {/* --------- GRID --------- */}
       <Grid
-        backgroundImage={`url(${imgUrl})`}
+        backgroundImage={`url(${exhibition?.imgUrl})`}
         backgroundPosition={
           active
-            ? exhibition.imgPosition
+            ? exhibition?.imgPosition
             : prev
             ? "center -100vh"
             : "center 100vh"

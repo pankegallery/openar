@@ -95,6 +95,8 @@ export const ExhibitionTitleTile = ({
 };
 
 const createCuratorLink = (curator) => {
+  if (!curator?.user?.ethAddress) return <></>;
+
   let name = curator.user.pseudonym ? curator.user.pseudonym : curator.user.ethAddress.slice(0, 8) + "…";
   let url = `/u/${curator.user.ethAddress}`
   // console.log("Curator: ", name, url);
