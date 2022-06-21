@@ -19,7 +19,6 @@ import { useSSRSaveMediaQuery } from "~/hooks";
 
 import { getApolloClient } from "~/services/apolloClient";
 
-import openingBg from "~/assets/img/opening-bg.png";
 import Arrow from "~/assets/img/arrow.svg";
 import { ArtworkListItem } from "~/components/frontend";
 import { ExhibitionTitleTile } from "~/components/frontend";
@@ -67,14 +66,16 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
         overflow="hidden"
         mb="-100vh"
       >
-        <Image
-          src={openingBg}
-          layout="fill"
-          objectFit="cover"
-          objectPosition="50% 100%"
-          alt=""
-          role="presentation"
-        />
+        {exhibition?.imgUrl && (
+          <Image
+            src={exhibition.imgUrl}
+            layout="fill"
+            objectFit="cover"
+            objectPosition="50% 100%"
+            alt=""
+            role="presentation"
+          />
+        )}
       </Box>
 
       {/* --------- Grid --------- */}
@@ -303,10 +304,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
               {exhibition.artworks.map((artwork) => {
                 let image = artwork?.heroImage;
                 if (!image) {
-                  if (
-                    artwork?.arObjects &&
-                    Array.isArray(artwork?.arObjects)
-                  ) {
+                  if (artwork?.arObjects && Array.isArray(artwork?.arObjects)) {
                     const firstWithHero = artwork?.arObjects.find(
                       (o) => !!o?.heroImage?.id
                     );
@@ -322,12 +320,7 @@ export const Exhibition = ({ exhibition }: { exhibition: any }) => {
                     urlKey={artwork.key}
                     key={artwork.key}
                     heroImage={image}
-                    {...pick(artwork, [
-                      "id",
-                      "status",
-                      "title",
-                      "creator",
-                    ])}
+                    {...pick(artwork, ["id", "status", "title", "creator"])}
                   />
                 );
               })}
@@ -372,7 +365,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
               status
               meta
             }
-          }          
+          }
         }
         artworks {
           id

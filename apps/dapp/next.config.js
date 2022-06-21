@@ -4,7 +4,7 @@ module.exports = {
   optimizeFonts: false,
   reactStrictMode: true,
   images: {
-    domains: ['localhost','api.openar.art','openar.art'], 
+    domains: ['localhost','api.openar.art','openar.art','baserow.panke.gallery'], 
   },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     config.module.rules.push(
