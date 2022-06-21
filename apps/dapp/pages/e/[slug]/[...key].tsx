@@ -9,7 +9,6 @@ import Image from "next/image";
 
 import { getApolloClient } from "~/services/apolloClient";
 
-import openingBg from "~/assets/img/opening-bg.png";
 import Arrow from "~/assets/img/arrow.svg";
 import {
   ArtworkDetails,
@@ -36,14 +35,20 @@ export const Artwork = ({
     (a: any) => a.key === artwork.key
   );
 
-  const prevArtworkKey = exhibition?.artworks?.[
-    thisArtworkIndex === 0 ? exhibition.artworks.length - 1 : thisArtworkIndex - 1
-  ]?.key;
+  const prevArtworkKey =
+    exhibition?.artworks?.[
+      thisArtworkIndex === 0
+        ? exhibition.artworks.length - 1
+        : thisArtworkIndex - 1
+    ]?.key;
 
-  const nextArtworkKey = exhibition?.artworks?.[
-    thisArtworkIndex === exhibition.artworks.length - 1 ? 0 : thisArtworkIndex + 1
-  ]?.key;
-  
+  const nextArtworkKey =
+    exhibition?.artworks?.[
+      thisArtworkIndex === exhibition.artworks.length - 1
+        ? 0
+        : thisArtworkIndex + 1
+    ]?.key;
+
   // _____________ Get initial or selected object _____________
 
   let selectedObject = {};
@@ -75,14 +80,16 @@ export const Artwork = ({
           overflow="hidden"
           mb="-100vh"
         >
-          <Image
-            src={openingBg}
-            layout="fill"
-            objectFit="cover"
-            objectPosition="50% 100%"
-            alt=""
-            role="presentation"
-          />
+          {exhibition?.imgUrl && (
+            <Image
+              src={exhibition?.imgUrl}
+              layout="fill"
+              objectFit="cover"
+              objectPosition="50% 100%"
+              alt=""
+              role="presentation"
+            />
+          )}
         </Box>
       )}
       {/* --------- Column Layout --------- */}
@@ -154,21 +161,14 @@ export const Artwork = ({
         >
           {exhibition.artworks.length > 1 && (
             <Flex w="auto" mb="10" px="6">
-
-              <Link
-                href={`/e/${exhibition.slug}/${prevArtworkKey}`}
-
-                passHref>
-                <chakra.a data-toggle='tooltip'
-                title="Previous artwork">
+              <Link href={`/e/${exhibition.slug}/${prevArtworkKey}`} passHref>
+                <chakra.a data-toggle="tooltip" title="Previous artwork">
                   <Arrow className="arrow" />
                 </chakra.a>
               </Link>
 
-              <Link
-                href={`/e/${exhibition.slug}/${nextArtworkKey}`} passHref>
-                <chakra.a ml="6" data-toggle='tooltip'
-                title="Next artwork">
+              <Link href={`/e/${exhibition.slug}/${nextArtworkKey}`} passHref>
+                <chakra.a ml="6" data-toggle="tooltip" title="Next artwork">
                   <Arrow className="arrow right" />
                 </chakra.a>
               </Link>
@@ -188,7 +188,7 @@ export const Artwork = ({
 
 // This function gets called at build time
 export async function getStaticPaths() {
-  return { paths: [], fallback: "blocking" }; 
+  return { paths: [], fallback: "blocking" };
 }
 
 export const getStaticProps = async ({ params }: { params: any }) => {
@@ -266,7 +266,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
               status
               meta
             }
-          }          
+          }
         }
       }
     }
@@ -301,7 +301,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
       exhibition: data?.exhibition,
       okey: okey,
     },
-    revalidate: 240, 
+    revalidate: 240,
   };
 };
 
