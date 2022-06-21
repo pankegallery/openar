@@ -139,13 +139,19 @@ export const daoUserFindFirst = async (
 
 export const daoUserSelectFindFirst = async (
   where: Prisma.UserWhereInput,
-  select: Prisma.UserSelect
+  select: Prisma.UserSelect,
+  allowNull?: boolean
 ): Promise<User> => {
   const user = await prisma.user.findFirst({
     where,
     select,
   });
 
+  if (allowNull)
+    return filteredOutputByBlacklist(
+      user,
+      apiConfig.db.privateJSONDataKeys.user
+    );
   return filteredOutputByBlacklistOrNotFound(
     user,
     apiConfig.db.privateJSONDataKeys.user
