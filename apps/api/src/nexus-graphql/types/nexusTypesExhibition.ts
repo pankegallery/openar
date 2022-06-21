@@ -205,42 +205,40 @@ const exhibitions: any = {
       curators: [
         {
           orderNumber: 1,
-          user: null,
-          // user: await daoUserSelectFindFirst(
-          //   { ethAddress: "0xda61e47e66f5f208594fda6a0c2ef6994a93cf59" },
-          //   {
-          //     id: true,
-          //     ethAddress: true,
-          //     pseudonym: true,
-          //     bio: true,
-          //     profileImage: {
-          //       select: {
-          //         status: true,
-          //         id: true,
-          //         meta: true,
-          //       },
-          //     },
-          //   }
-          // ),
+          user: await daoUserSelectFindFirst(
+            { ethAddress: "0xda61e47e66f5f208594fda6a0c2ef6994a93cf59" },
+            {
+              id: true,
+              ethAddress: true,
+              pseudonym: true,
+              bio: true,
+              profileImage: {
+                select: {
+                  status: true,
+                  id: true,
+                  meta: true,
+                },
+              },
+            }
+          ),
         },
         {
           orderNumber: 2,
-          user: null,
-          // user: await daoUserSelectFindFirst(
-          //   { ethAddress: "n0xef8d44e54d8be26a55a2b13e1e055019182b3824" },
-          //   {
-          //     id: true,
-          //     ethAddress: true,
-          //     pseudonym: true,
-          //     profileImage: {
-          //       select: {
-          //         status: true,
-          //         id: true,
-          //         meta: true,
-          //       },
-          //     },
-          //   }
-          // ),
+          user: await daoUserSelectFindFirst(
+            { ethAddress: "n0xef8d44e54d8be26a55a2b13e1e055019182b3824" },
+            {
+              id: true,
+              ethAddress: true,
+              pseudonym: true,
+              profileImage: {
+                select: {
+                  status: true,
+                  id: true,
+                  meta: true,
+                },
+              },
+            }
+          ),
         },
       ],
       dateBegin: new Date("2022-06-22 12:00"),
