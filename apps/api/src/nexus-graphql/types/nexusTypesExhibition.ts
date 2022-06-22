@@ -54,6 +54,95 @@ export const ExhibitionCurator = objectType({
   },
 });
 
+// TODO: Arworks should also be listed by an order number ...
+const getExhibitionArtworks = async (keys: string[]) => {
+  const artworks = await daoArtworkQuery(
+    {
+      status: {
+        in: [ArtworkStatusEnum.PUBLISHED, ArtworkStatusEnum.HASMINTEDOBJECTS],
+      },
+      isPublic: true,
+      key: {
+        in: keys,
+      },
+    },
+    {
+      heroImage: {
+        select: {
+          status: true,
+          id: true,
+          meta: true,
+        },
+      },
+      creator: {
+        select: {
+          id: true,
+          bio: true,
+          pseudonym: true,
+          ethAddress: true,
+        },
+      },
+      arObjects: {
+        select: {
+          id: true,
+          status: true,
+          key: true,
+          orderNumber: true,
+          title: true,
+          askPrice: true,
+          editionOf: true,
+          heroImage: {
+            select: {
+              meta: true,
+              status: true,
+              id: true,
+            },
+          },
+        },
+        where: {
+          status: {
+            in: [
+              ArObjectStatusEnum.PUBLISHED,
+              ArObjectStatusEnum.MINTING,
+              ArObjectStatusEnum.MINTCONFIRM,
+              ArObjectStatusEnum.MINTED,
+            ],
+          },
+        },
+        orderBy: {
+          orderNumber: "asc",
+        },
+      },
+    },
+    {},
+    0,
+    1000
+  );
+
+  return artworks;
+};
+
+const getExhibitionUser = async (ethAddress: string) => {
+  const user = await daoUserSelectFindFirst(
+    { ethAddress },
+    {
+      id: true,
+      ethAddress: true,
+      pseudonym: true,
+      bio: true,
+      profileImage: {
+        select: {
+          status: true,
+          id: true,
+          meta: true,
+        },
+      },
+    },
+    true
+  );
+  return user;
+};
+
 const exhibitions: any = {
   "outside-in": async () => {
     return {
@@ -64,44 +153,19 @@ const exhibitions: any = {
         "https://baserow.panke.gallery/media/user_files/p4Pyi5XD5DbUv6fBLE5td7sNesLd6VAL_e3689dfa15db995316664f7e80620857cc4dcbef8a57f3b9cafb9b35ab99985a.png",
       imgPosition: "center top",
       type: "groupshow",
+      // A group show curated by ABC and BBB
+      subtitlePrefix: "A group show",
       curators: [
         {
           orderNumber: 1,
-          user: await daoUserSelectFindFirst(
-            { ethAddress: "0xda61e47e66f5f208594fda6a0c2ef6994a93cf59" },
-            {
-              id: true,
-              ethAddress: true,
-              pseudonym: true,
-              bio: true,
-              profileImage: {
-                select: {
-                  status: true,
-                  id: true,
-                  meta: true,
-                },
-              },
-            },
-            true
+          user: await getExhibitionUser(
+            "0xda61e47e66f5f208594fda6a0c2ef6994a93cf59"
           ),
         },
         {
           orderNumber: 2,
-          user: await daoUserSelectFindFirst(
-            { ethAddress: "0xef8d44e54d8be26a55a2b13e1e055019182b3824" },
-            {
-              id: true,
-              ethAddress: true,
-              pseudonym: true,
-              profileImage: {
-                select: {
-                  status: true,
-                  id: true,
-                  meta: true,
-                },
-              },
-            },
-            true
+          user: await getExhibitionUser(
+            "0xef8d44e54d8be26a55a2b13e1e055019182b3824"
           ),
         },
       ],
@@ -110,72 +174,10 @@ const exhibitions: any = {
       description:
         '"Outside In" explores the augmented possibilities of reality. Spatial software introduced new materialities and perspectives to people’s perceptions. Humans are spatial creatures. We experience most of our lives in relation to space. Manuel Rossner’s work "Spatial Painting (Rosa-Luxemburg-Platz)" no longer distinguishes between the real world and the alternative world, but experiences space simultaneously as a physical dimension, virtual image and hyperreal medium. His drawings, created in VR, interfere with the location. Damjanski’s piece "Inside: Spatial Painting (Rosa-Luxemburg-Platz)" stands in dialogue to Manuel’s piece and gives visitors access to experience the work from the inside. A perspective that wouldn’t have been possible with AR technology. Both pieces complement each other by giving visitors a new spatial experience.',
       status: ExhibitionStatusEnum.PUBLISHED,
-      // TODO: Arworks should also be listed by an order number ...
-      artworks: await daoArtworkQuery(
-        {
-          status: {
-            in: [
-              ArtworkStatusEnum.PUBLISHED,
-              ArtworkStatusEnum.HASMINTEDOBJECTS,
-            ],
-          },
-          isPublic: true,
-          key: {
-            in: ["xKDVchzeldH8PXnE", "yD9OC0VzNcOA12jW"],
-          },
-        },
-        {
-          heroImage: {
-            select: {
-              status: true,
-              id: true,
-              meta: true,
-            },
-          },
-          creator: {
-            select: {
-              id: true,
-              bio: true,
-              pseudonym: true,
-              ethAddress: true,
-            },
-          },
-          arObjects: {
-            select: {
-              id: true,
-              status: true,
-              key: true,
-              orderNumber: true,
-              title: true,
-              askPrice: true,
-              editionOf: true,
-              heroImage: {
-                select: {
-                  meta: true,
-                  status: true,
-                  id: true,
-                },
-              },
-            },
-            where: {
-              status: {
-                in: [
-                  ArObjectStatusEnum.PUBLISHED,
-                  ArObjectStatusEnum.MINTING,
-                  ArObjectStatusEnum.MINTCONFIRM,
-                  ArObjectStatusEnum.MINTED,
-                ],
-              },
-            },
-            orderBy: {
-              orderNumber: "asc",
-            },
-          },
-        },
-        {},
-        0,
-        1000
-      ),
+      artworks: await getExhibitionArtworks([
+        "xKDVchzeldH8PXnE",
+        "yD9OC0VzNcOA12jW",
+      ]),
     };
   },
   "openar-art": async () => {
@@ -188,44 +190,18 @@ const exhibitions: any = {
         "https://baserow.panke.gallery/media/user_files/kdMDZeqrEhGUOXeeaH9ymxJhKyK928R4_c64bd567451c1a69d4bb5b2bfae136df9661680694d32d8917921d5cbfd58d74.png",
       imgPosition: "center bottom",
       type: "groupshow",
+      subtitlePrefix: "A group show curated",
       curators: [
         {
           orderNumber: 1,
-          user: await daoUserSelectFindFirst(
-            { ethAddress: "0xa358ba0c9777fa51340005c90511db0f193122e6" }, // Sakrowski
-            {
-              id: true,
-              ethAddress: true,
-              pseudonym: true,
-              bio: true,
-              profileImage: {
-                select: {
-                  status: true,
-                  id: true,
-                  meta: true,
-                },
-              },
-            },
-            true
+          user: await getExhibitionUser(
+            "0xa358ba0c9777fa51340005c90511db0f193122e6"
           ),
         },
         {
           orderNumber: 2,
-          user: await daoUserSelectFindFirst(
-            { ethAddress: "0xa64b8a46236e7e14d0f33031ad21a88d0b93850c" }, // Jeremy Baley
-            {
-              id: true,
-              ethAddress: true,
-              pseudonym: true,
-              profileImage: {
-                select: {
-                  status: true,
-                  id: true,
-                  meta: true,
-                },
-              },
-            },
-            true
+          user: await getExhibitionUser(
+            "0xa64b8a46236e7e14d0f33031ad21a88d0b93850c"
           ),
         },
       ],
@@ -235,83 +211,19 @@ const exhibitions: any = {
         "On the occasion of the launch of the new platform “openar.art”, panke.gallery presents a hybrid group exhibition with experimental Augmented Reality works. The exhibition and platform have been developed in collaboration between workshop participants and digital artists Jeremy Bailey, Sarah Buser and Tamás Páll. The works examine the possibilities of AR technology in artistic applications. Visual, acoustic and performative Augmented Reality formats can be experienced in the exhibition.",
       status: ExhibitionStatusEnum.PUBLISHED,
       // TODO: Arworks should also be listed by an order number ...
-      artworks: await daoArtworkQuery(
-        {
-          status: {
-            in: [
-              ArtworkStatusEnum.PUBLISHED,
-              ArtworkStatusEnum.HASMINTEDOBJECTS,
-            ],
-          },
-          isPublic: true,
-          key: {
-            in: [
-              "mjHQTN4VoyPRwBSk",
-              "zqKV7VfoPXzFeZnN",
-              "Yq2kXKW4YuwVSkrn",
-              "jyKxfKBIt3tEkOyZ",
-              "RVRHLyKFhk8jmeUN",
-              "5IhBsxhzTw5aO8xJ",
-              "yj9LVvzSilavLy3f",
-              "649ddyQ3SF3Kz8SS",
-              "HSMSPAQ20ljzbQlt",
-              "8lNCQ7QZ00sNrO6c",
-              "h0JnLBknAIMXFDYq",
-            ],
-          },
-        },
-        {
-          heroImage: {
-            select: {
-              status: true,
-              id: true,
-              meta: true,
-            },
-          },
-          creator: {
-            select: {
-              id: true,
-              bio: true,
-              pseudonym: true,
-              ethAddress: true,
-            },
-          },
-          arObjects: {
-            select: {
-              id: true,
-              status: true,
-              key: true,
-              orderNumber: true,
-              title: true,
-              askPrice: true,
-              editionOf: true,
-              heroImage: {
-                select: {
-                  meta: true,
-                  status: true,
-                  id: true,
-                },
-              },
-            },
-            where: {
-              status: {
-                in: [
-                  ArObjectStatusEnum.PUBLISHED,
-                  ArObjectStatusEnum.MINTING,
-                  ArObjectStatusEnum.MINTCONFIRM,
-                  ArObjectStatusEnum.MINTED,
-                ],
-              },
-            },
-            orderBy: {
-              orderNumber: "asc",
-            },
-          },
-        },
-        {},
-        0,
-        1000
-      ),
+      artworks: await getExhibitionArtworks([
+        "mjHQTN4VoyPRwBSk",
+        "zqKV7VfoPXzFeZnN",
+        "Yq2kXKW4YuwVSkrn",
+        "jyKxfKBIt3tEkOyZ",
+        "RVRHLyKFhk8jmeUN",
+        "5IhBsxhzTw5aO8xJ",
+        "yj9LVvzSilavLy3f",
+        "649ddyQ3SF3Kz8SS",
+        "HSMSPAQ20ljzbQlt",
+        "8lNCQ7QZ00sNrO6c",
+        "h0JnLBknAIMXFDYq",
+      ]),
     };
   },
 };
@@ -323,6 +235,7 @@ export const Exhibition = objectType({
     t.json("title");
     t.json("slug");
     t.string("type");
+    t.string("subtitlePrefix");
     t.string("imgPosition");
     t.string("imgUrl");
     t.string("description");
