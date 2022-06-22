@@ -154,7 +154,7 @@ const exhibitions: any = {
       imgPosition: "center top",
       type: "groupshow",
       // A group show curated by ABC and BBB
-      subtitlePrefix: "A group show",
+      subtitlePrefix: "A group show by",
       curators: [
         {
           orderNumber: 1,
@@ -190,7 +190,7 @@ const exhibitions: any = {
         "https://baserow.panke.gallery/media/user_files/kdMDZeqrEhGUOXeeaH9ymxJhKyK928R4_c64bd567451c1a69d4bb5b2bfae136df9661680694d32d8917921d5cbfd58d74.png",
       imgPosition: "center bottom",
       type: "groupshow",
-      subtitlePrefix: "A group show curated",
+      subtitlePrefix: "A group show curated by",
       curators: [
         {
           orderNumber: 1,
