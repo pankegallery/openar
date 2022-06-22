@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import { ReactElement, useState, useCallback, useRef, WheelEvent } from "react";
 import Head from "next/head";
 
 import { LayoutBlank } from "~/components/app";
@@ -10,6 +10,39 @@ import { gql } from "@apollo/client";
 import { getApolloClient } from "~/services/apolloClient";
 
 export const Home = (props) => {
+  const animatingRef = useRef(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
+  const { exhibitions } = props;
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const scrollToSlide = useCallback(
+    (direction) => {
+      if (typeof window === "undefined") return;
+
+      if (animatingRef.current) return;
+
+      animatingRef.current = true;
+
+      timeoutRef.current = setTimeout(() => {
+        animatingRef.current = false;
+      }, 1000);
+
+      switch (direction) {
+        case "prev":
+          currentSlide != 0
+            ? setCurrentSlide(currentSlide - 1)
+            : setCurrentSlide(exhibitions.length - 1);
+          break;
+        case "next":
+          currentSlide != exhibitions.length - 1
+            ? setCurrentSlide(currentSlide + 1)
+            : setCurrentSlide(0);
+          break;
+      }
+    },
+    [currentSlide, exhibitions.length]
+  );
+
   return (
     <>
       <Head>
@@ -21,39 +54,42 @@ export const Home = (props) => {
         <link rel="shortcut icon" href="/favicon.ico" />
         <meta name="description" content={props.pageDescription} />
       </Head>
-
-      <ExhibitionSlide
-        exhibition={props.exhibition}
-        active={true}
-        single={true}
-      />
-
       <Box
-        className="betaVersion"
-        position="fixed"
-        left={{
-          base: "auto",
-          d: 0,
+        width="calc(100vw-(100vw-100%))"
+        height="100vh"
+        onWheel={(e: WheelEvent) => {
+          if (Math.abs(e.deltaY) > 10) {
+            e.deltaY > 0 ? scrollToSlide("prev") : scrollToSlide("next");
+          }
         }}
-        right={{
-          base: 0,
-          d: "auto",
-        }}
-        transform={{
-          base: "rotate(-90deg)",
-          d: "none",
-        }}
-        bottom="0"
-        zIndex="220"
-        width={{
-          base: "50vw",
-          t: "25vw",
-        }}
-        height={{
-          base: "50vw",
-          t: "25vw",
-        }}
-      ></Box>
+      >
+        {exhibitions &&
+          exhibitions?.map((exhibition: any, index: number) => (
+            <ExhibitionSlide
+              key={`ex-${index}`}
+              exhibition={exhibition}
+              scrollUp={() => {
+                if (timeoutRef.current) {
+                  clearTimeout(timeoutRef.current)
+                  timeoutRef.current = null;
+                };
+                animatingRef.current = false;
+                scrollToSlide("prev")
+              }}
+              scrollDown={() => {
+                if (timeoutRef.current) {
+                  clearTimeout(timeoutRef.current)
+                  timeoutRef.current = null;
+                };
+                animatingRef.current = false;
+                scrollToSlide("next")
+              }}
+              active={currentSlide == index ? true : false}
+              prev={currentSlide > index ? true : false}
+              next={currentSlide < index ? true : false}
+            />
+          ))}
+      </Box>
     </>
   );
 };
@@ -75,58 +111,116 @@ export const Home = (props) => {
 // WORKAROUND: Selective Exhibition query as workaround
 //====================================================
 
+// export const getStaticProps = async ({ params }: { params: any }) => {
+//   const client = getApolloClient();
+
+//   const exhibitionQuery = gql`
+//     query ($slug: String!) {
+//       exhibition(slug: $slug) {
+//         id
+//         slug
+//         title
+//         type
+//         subtitle
+//         description
+//         dateBegin
+//         dateEnd
+//         status
+//         curators {
+//           orderNumber
+//           user {
+//             pseudonym
+//             id
+//             ethAddress
+//             bio
+//             profileImage {
+//               id
+//               status
+//               meta
+//             }
+//           }
+//         }
+//         artworks {
+//           id
+//           key
+//           title
+//           description
+//           creator {
+//             pseudonym
+//             ethAddress
+//           }
+//           heroImage {
+//             id
+//             meta
+//             status
+//           }
+//           arObjects {
+//             id
+//             status
+//             heroImage {
+//               id
+//               meta
+//               status
+//             }
+//           }
+//         }
+//       }
+//     }
+//   `;
+
+//   const { data } = await client.query({
+//     query: exhibitionQuery,
+//     variables: {
+//       slug: 'openar-test',
+//     },
+//   });
+
+//   return {
+//     props: {
+//       pageTitle: "openAR",
+//       pageSlogan: "The cooperative and crypto platform for AR artworks",
+//       pageDescription:
+//         "openAR makes it easy to exhibit, collect and discuss Augmented Reality (AR) works and allows artists to sell their works as NFTs. The open platform is organised as a cooperative, profits will be shared among the artists.",
+//       exhibition: data?.exhibition,
+//     },
+//     revalidate: 240,
+//   };
+// };
+
+// TODO: Exhibitions (all current and upcoming?) query
+//====================================================
+
 export const getStaticProps = async ({ params }: { params: any }) => {
   const client = getApolloClient();
 
   const exhibitionQuery = gql`
-    query ($slug: String!) {
-      exhibition(slug: $slug) {
-        id
-        slug
-        title
-        subtitlePrefix
-        type
-        imgUrl
-        imgPosition
-        description
-        dateBegin
-        dateEnd
-        status
-        curators {
-          orderNumber
-          user {
-            pseudonym
-            id
-            ethAddress
-            bio
-            profileImage {
-              id
-              status
-              meta
-            }
-          }
-        }
-        artworks {
+    query {
+      exhibitions {
+        totalCount
+        exhibitions {
           id
-          key
+          slug
           title
+          subtitlePrefix
+          type
+          imgUrl
+          imgPosition
           description
-          creator {
-            pseudonym
-            ethAddress
-          }
-          heroImage {
-            id
-            meta
-            status
-          }
-          arObjects {
-            id
-            status
-            heroImage {
+          dateBegin
+          dateEnd
+          status
+          curators {
+            orderNumber
+            user {
+              pseudonym
               id
-              meta
-              status
+              ethAddress
+              bio
+              profileImage {
+                id
+                status
+                meta
+              }
             }
           }
         }
@@ -136,12 +230,9 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 
   const { data } = await client.query({
     query: exhibitionQuery,
-    variables: {
-      slug: "openar-art",
-    },
   });
 
-  if (!data?.exhibition) {
+  if (!data?.exhibitions?.totalCount) {
     return {
       notFound: true,
       revalidate: 240,
@@ -150,77 +241,15 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 
   return {
     props: {
+      exhibitions: data?.exhibitions?.exhibitions,
       pageTitle: "openAR",
       pageSlogan: "The cooperative and crypto platform for AR artworks",
       pageDescription:
-        "OpenAR makes it easy to exhibit, collect and discuss Augmented Reality (AR) works and allows artists to sell their works as NFTs. The open platform is organised as a cooperative, profits will be shared among the artists.",
-      exhibition: data?.exhibition ?? null,
+        "openAR makes it easy to exhibit, collect and discuss Augmented Reality (AR) works and allows artists to sell their works as NFTs. The open platform is organised as a cooperative, profits will be shared among the artists.",
     },
     revalidate: 240,
   };
 };
-
-// TODO: Exhibitions (all current and upcoming?) query
-//====================================================
-
-//export const getStaticProps = async ({ params }: { params: any }) => {
-//  const client = getApolloClient();
-//
-//  const exhibitionQuery = gql`
-//    query {
-//      exhibitions {
-//        id
-//        slug
-//        title
-//        type
-//        imgUrl
-//        imgPosition
-//        description
-//        dateBegin
-//        dateEnd
-//        status
-//        curators {
-//          orderNumber
-//          user {
-//            pseudonym
-//            id
-//            ethAddress
-//            bio
-//            profileImage {
-//              id
-//              status
-//              meta
-//            }
-//          }
-//        }
-//      }
-//    }
-//  `;
-//
-//  const { data } = await client.query({
-//    query: exhibitionQuery
-//  });
-//
-//  if (
-//    !data?.exhibitions
-//  ) {
-//    return {
-//      notFound: true,
-//      revalidate: 240,
-//    };
-//  }
-//
-//  return {
-//    props: {
-//      exhibition: data?.exhibition,
-//      pageTitle: "openAR",
-//      pageSlogan: "The cooperative and crypto platform for AR artworks",
-//      pageDescription:
-//        "openAR makes it easy to exhibit, collect and discuss Augmented Reality (AR) works and allows artists to sell their works as NFTs. The open platform is organised as a cooperative, profits will be shared among the artists.",
-//    },
-//    revalidate: 240,
-//  };
-//};
 
 Home.getLayout = function getLayout(page: ReactElement) {
   return <LayoutBlank>{page}</LayoutBlank>;
