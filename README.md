@@ -1,8 +1,4 @@
-- Meta tags
-- AR Button
-- Listings are fully clickable "everywhere"
-- New corner 
-
+# openAR
 
 This repository contains the code for the openAR api/backend, the dApp/frontent, and shared code provided as packages. We make use of package.json "packages" to allow you the convenience of importing shared code in the following way. 
 
