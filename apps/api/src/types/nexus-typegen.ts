@@ -267,6 +267,7 @@ export interface NexusGenObjects {
     imgUrl?: string | null; // String
     slug?: NexusGenScalars['JSON'] | null; // JSON
     status: number; // Int!
+    subtitlePrefix?: string | null; // String
     title?: NexusGenScalars['JSON'] | null; // JSON
     type?: string | null; // String
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -459,6 +460,7 @@ export interface NexusGenFieldTypes {
     imgUrl: string | null; // String
     slug: NexusGenScalars['JSON'] | null; // JSON
     status: number; // Int!
+    subtitlePrefix: string | null; // String
     title: NexusGenScalars['JSON'] | null; // JSON
     type: string | null; // String
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -690,6 +692,7 @@ export interface NexusGenFieldTypeNames {
     imgUrl: 'String'
     slug: 'JSON'
     status: 'Int'
+    subtitlePrefix: 'String'
     title: 'JSON'
     type: 'String'
     updatedAt: 'DateTime'

@@ -214,6 +214,7 @@ type Exhibition {
   imgUrl: String
   slug: JSON
   status: Int!
+  subtitlePrefix: String
   title: JSON
   type: String
   updatedAt: DateTime
