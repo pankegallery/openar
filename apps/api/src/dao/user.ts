@@ -177,30 +177,44 @@ export const daoUserGetById = async (id: number): Promise<User> => {
 
 export const daoUserGetByEthAddress = async (
   ethAddress: string
-): Promise<User> => {
-  const user: User | null = await prisma.user.findUnique({
-    where: {
-      ethAddress: ethAddress.toLowerCase(),
-    },
-  });
+): Promise<User | null> => {
+  let user: User | null
+  
+  if (ethAddress) {
+    user = await prisma.user.findFirst({
+      where: {
+        ethAddress: ethAddress.toLowerCase(),
+      },
+    });  
+  } else {
+    user = null
+  }
 
-  return filteredOutputByBlacklistOrNotFound(
-    user,
-    apiConfig.db.privateJSONDataKeys.user
-  );
+  if (user) {
+    return filteredOutputByBlacklistOrNotFound(
+      user,
+      apiConfig.db.privateJSONDataKeys.user
+    );  
+  } else {
+    return null
+  }
 };
 
 export const daoUserFindByEthAddress = async (
   ethAddress: string
-): Promise<User> => {
-  const user: User | null = await prisma.user.findUnique({
+): Promise<User | null> => {
+  return await daoUserGetByEthAddress(ethAddress)
+};
+
+export const daoUserFindByEmail = async (email: string) : Promise<User> => {
+  const user: User | null = await prisma.user.findFirst({
     where: {
-      ethAddress: ethAddress.toLowerCase(),
+      email: email.toLowerCase(),
     },
   });
 
   return filteredOutputByBlacklist(user, apiConfig.db.privateJSONDataKeys.user);
-};
+}
 
 export const daoUserUpdate = async (
   id: number,

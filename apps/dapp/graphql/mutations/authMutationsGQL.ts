@@ -24,6 +24,25 @@ export const authLogoutMutationGQL = gql`
   }
 `;
 
+export const authRegisterByEmailMutationGQL = gql`
+  mutation authRegisterByEmail(
+    $email: String!,
+    $password: String!
+  ) {
+    authRegisterByEmail(email: $email, password: $password) {
+      tokens {
+        access {
+          token
+          expires
+        }
+        refresh {
+          expires
+        }
+      }
+    }
+  }
+`;
+
 export const authPreLoginMutationGQL = gql`
   mutation authPreLogin(
     $ethAddress: String!

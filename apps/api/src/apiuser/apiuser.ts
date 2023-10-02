@@ -11,6 +11,7 @@ export interface AuthenticatedAppUserData {
   permissions: PermissionName[];
   pseudonym: string;
   ethAddress: string;
+  email: string;
   ens?: string;
 }
 

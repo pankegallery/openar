@@ -17,6 +17,7 @@ import {
   daoUserGetByEthAddress,
   daoUserFindByEthAddress,
   daoUserCreate,
+  daoUserFindByEmail,
 } from "../dao/user";
 import { ApiError, TokenTypesEnum } from "../utils";
 import {
@@ -123,6 +124,36 @@ export const authLoginUserWithSignature = async (
   return authPayload;
 };
 
+export const authRegisterByEmail = async (email: string, password: string) : Promise<AuthPayload> => {
+  let authPayload : AuthPayload;
+  
+  logger.warn(`authRegisterByEmail: ${email} ${password}`)
+
+  let user = await daoUserFindByEmail(email);
+  if (!user) {
+    user = await daoUserCreate({
+      email: email,
+      password: password,
+      roles: ["newuser"]
+    })
+    logger.warn(`authRegisterByEmail user: ${JSON.stringify(user, null, 4)}`)
+    authPayload = await tokenGenerateAuthTokens(
+      {
+        id: user.id,
+        pseudonym: user.pseudonym,
+        email: user.email,
+        ethAddress: user.ethAddress || ""        
+      },
+      user.roles as RoleName[]
+    );
+
+    logger.warn(`authRegisterByEmail payload: ${JSON.stringify(authPayload, null, 4)}`)
+    return authPayload
+  } else {
+    throw new ApiError(httpStatus.FORBIDDEN, "User with email already exists...");
+  } 
+}
+
 export const authPreLoginUserWithEthAddress = async (
   ethAddress: string,
   ctx: NexusResolverContext
@@ -130,11 +161,14 @@ export const authPreLoginUserWithEthAddress = async (
   let authPayload: AuthPayload;
   let user = await daoUserFindByEthAddress(ethAddress);
 
+  logger.debug("User is: ", user)
+
   if (!user) {
     user = await daoUserCreate({
       ethAddress: ethAddress.toLowerCase(),
       roles: ["newuser"],
     });
+    logger.debug("Created user: ", user)
     authPayload = await tokenGenerateAuthTokens(
       {
         id: user.id,
@@ -163,6 +197,7 @@ export const authPreLoginUserWithEthAddress = async (
         "[auth.authRefresh] Please authenticate (1)"
       );
 
+    logger.debug("Generating auth token")
     authPayload = await tokenGenerateAuthTokens(
       {
         id: user.id,
@@ -183,6 +218,7 @@ export const authPreLoginUserWithEthAddress = async (
         ],
       },
     });
+    logger.debug("Generating signature token")
     authPayload = await tokenGenerateSignatureToken({
       id: user.id,
       ethAddress: ethAddress.toLowerCase(),
@@ -315,6 +351,7 @@ export const authVerifyEmail = async (token: string) => {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Email verification failed");
   }
 };
+
 
 export default {
   authAuthenticateUserByToken,

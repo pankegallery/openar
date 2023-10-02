@@ -9,11 +9,13 @@ import { user, authentication } from "~/services";
 export const useAuthentication = () => {
   const { authenticated, appUserData } = useTypedSelector(({ user }) => user);
 
+  console.log("Use authentication: ", authentication.getRefreshCookie(), appUserData)
+
   const appUser =
     authentication.getRefreshCookie() &&
     appUserData &&
     appUserData?.id &&
-    appUserData.ethAddress
+    (appUserData.ethAddress || appUserData.email)
       ? createAuthenticatedAppUser(appUserData)
       : null;
 

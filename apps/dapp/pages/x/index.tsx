@@ -19,8 +19,8 @@ import { useSSRSaveMediaQuery, useAuthentication } from "~/hooks";
 import { getStatic } from "@ethersproject/properties";
 
 const userProfileQuery = gql`
-  query ($ethAddress: String!) {
-    userProfileRead(ethAddress: $ethAddress) {
+  query ($id: Int!, $ethAddress: String!) {
+    userProfileReadById(id: $id) {
       ethAddress
       bio
       url
@@ -91,9 +91,14 @@ export const User = () => {
 
   const [appUser] = useAuthentication();
 
+  console.log("App user is: ", appUser)
+
+  
+
   const { data, loading, error } = useQuery(userProfileQuery, {
     skip: !appUser, // if user is not logged in skip the query
     variables: {
+      id: (appUser?.id ?? -1),
       ethAddress: (appUser?.ethAddress ?? "").toLowerCase(),
     },
   });

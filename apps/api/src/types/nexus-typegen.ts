@@ -509,6 +509,7 @@ export interface NexusGenFieldTypes {
     authLogout: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     authPreLogin: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     authRefresh: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    authRegisterByEmail: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     authRequestEmailVerificationEmail: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     authVerifyEmail: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     imageDelete: NexusGenRootTypes['BooleanResult']; // BooleanResult!
@@ -545,6 +546,7 @@ export interface NexusGenFieldTypes {
     imageStatus: NexusGenRootTypes['ImageStatus']; // ImageStatus!
     user: NexusGenRootTypes['PublicUser'] | null; // PublicUser
     userProfileRead: NexusGenRootTypes['User'] | null; // User
+    userProfileReadById: NexusGenRootTypes['User'] | null; // User
     userRead: NexusGenRootTypes['User'] | null; // User
   }
   User: { // field return type
@@ -741,6 +743,7 @@ export interface NexusGenFieldTypeNames {
     authLogout: 'BooleanResult'
     authPreLogin: 'AuthPayload'
     authRefresh: 'AuthPayload'
+    authRegisterByEmail: 'AuthPayload'
     authRequestEmailVerificationEmail: 'BooleanResult'
     authVerifyEmail: 'BooleanResult'
     imageDelete: 'BooleanResult'
@@ -777,6 +780,7 @@ export interface NexusGenFieldTypeNames {
     imageStatus: 'ImageStatus'
     user: 'PublicUser'
     userProfileRead: 'User'
+    userProfileReadById: 'User'
     userRead: 'User'
   }
   User: { // field return type name
@@ -849,6 +853,10 @@ export interface NexusGenArgTypes {
     }
     authPreLogin: { // args
       ethAddress: string; // String!
+    }
+    authRegisterByEmail: { // args
+      email: string; // String!
+      password: string; // String!
     }
     authRequestEmailVerificationEmail: { // args
       userId: number; // Int!
@@ -940,6 +948,9 @@ export interface NexusGenArgTypes {
     }
     userProfileRead: { // args
       ethAddress: string; // String!
+    }
+    userProfileReadById: { // args
+      id: number; // Int!
     }
     userRead: { // args
       id: number; // Int!

@@ -286,6 +286,7 @@ type Mutation {
   authLogout(userId: Int!): BooleanResult!
   authPreLogin(ethAddress: String!): AuthPayload!
   authRefresh: AuthPayload!
+  authRegisterByEmail(email: String!, password: String!): AuthPayload!
   authRequestEmailVerificationEmail(userId: Int!): BooleanResult!
   authVerifyEmail(token: String!): BooleanResult!
   imageDelete(id: Int!): BooleanResult!
@@ -324,6 +325,7 @@ type Query {
   imageStatus(id: Int!): ImageStatus!
   user(ethAddress: String!): PublicUser
   userProfileRead(ethAddress: String!): User
+  userProfileReadById(id: Int!): User
   userRead(id: Int!): User
 }
 

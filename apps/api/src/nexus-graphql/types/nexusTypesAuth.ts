@@ -10,6 +10,7 @@ import {
   authRefresh,
   authRequestEmailVerificationEmail,
   authVerifyEmail,
+  authRegisterByEmail,
 } from "../../services/serviceAuth";
 import {
   tokenProcessRefreshToken,
@@ -80,6 +81,31 @@ export const AuthMutations = extendType({
   type: "Mutation",
 
   definition(t) {
+    t.nonNull.field("authRegisterByEmail", {
+      type: "AuthPayload",
+      args: {
+        email: nonNull(stringArg()),
+        password: nonNull(stringArg())
+      },
+      async resolve(...[, args, ctx]) {
+        try {
+          const authPayload = await authRegisterByEmail(
+            args.email,
+            args.password
+          );
+
+          logger.debug(
+            `authRegisterByEmail ${authPayload?.tokens?.sign?.token}`
+          );
+
+          return tokenProcessRefreshToken(ctx.res, authPayload);
+        } catch (Err) {
+          logger.debug(Err);
+          throw new AuthenticationError("Pre login Failed");
+        }
+      },
+    });
+
     t.nonNull.field("authPreLogin", {
       type: "AuthPayload",
       args: {

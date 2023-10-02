@@ -36,11 +36,19 @@ export const generateToken = (
     ethAddress: payloadUser.ethAddress,
   };
 
-  if (payloadUser.pseudonym)
+  if (payloadUser.pseudonym) {
     user = {
       ...user,
       pseudonym: payloadUser.pseudonym,
     };
+  }
+
+  if (payloadUser.email) {
+    user = {
+      ...user,
+      email: payloadUser.email
+    }
+  }
 
   if (roles) {
     if (type === TokenTypesEnum.ACCESS)
