@@ -20,8 +20,10 @@ import { appConfig } from "~/config";
 export let client: ApolloClient<any> | null = null;
 
 const authLink = new ApolloLink((operation, forward) => {
-  // retrieve access token from memory
+  // retrieve access token from memory  
   const accessToken = authentication.getAuthToken();
+
+  console.log("[apolloClient authLink]: ", accessToken)
   
   if (accessToken) {
     operation.setContext(({ headers = {} }) => ({
@@ -53,7 +55,7 @@ const retryWithRefreshTokenLink = onError(
             });
             observables.push(observableForbidden);
           } else if (
-            message === "Authentication failed (maybe refresh)" &&
+            message.includes("Authentication failed (maybe refresh)") &&
             extensions?.code === "UNAUTHENTICATED"
           ) {
             const observable = new Observable((observer) => {

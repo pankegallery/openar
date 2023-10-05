@@ -278,9 +278,11 @@ export const ArtworkDetails = ({
                     `${artwork?.creator?.ethAddress}`.toLowerCase() ===
                     `${appUser?.ethAddress}`.toLowerCase()
                   ) {
-                    buyErrorToast("Oops", "You can't buy your own token");
+                    buyErrorToast("Oops", "You can't purchase your own token.");
+                  } else if (appUser && appUser.email) {
+                    buyErrorToast("Oops", "Please connect your xDai wallet to your account in order to purchase this work.");
                   } else {
-                    buyErrorToast("Oops", "Please login to buy");
+                    buyErrorToast("Oops", "Please login to purchase this artwork.");
                   }
                 }
               }}

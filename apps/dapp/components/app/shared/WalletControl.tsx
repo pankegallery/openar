@@ -58,6 +58,8 @@ export const WalletControl = ({
   const walletDisclosure = useDisclosure();
   const emailRegisterDisclosure = useDisclosure();
 
+  console.log("[WalletControl]: ", stateUser, account)
+
   useEffect(() => {
     if (
       (stateUser.authenticated || stateCrypto.signatureRequired) &&
@@ -79,11 +81,14 @@ export const WalletControl = ({
     onCloseMenu,
   ]);
 
+  const isAuthenticated = stateUser.authenticated
+  const isEmailOnlyUser = isAuthenticated && (!account)
+
   return (
     <Box>
       {/* ------- Buttons ------- */}
       <Box>
-        {(!account || !stateUser.authenticated) && (
+        {!isAuthenticated && (
           <Button
             variant={location === "page" ? "outlineBlack" : "menuLink"}
             onClick={() => {
@@ -95,11 +100,15 @@ export const WalletControl = ({
           </Button>
         )}
 
-        {account && stateUser.authenticated && (
+        {isAuthenticated && (
           <Button
             variant="menuLink"
             onClick={async () => {
-              await walletDisconnect();
+              if (isEmailOnlyUser) {
+                await walletDisconnect();
+              } else {
+                await walletDisconnect();
+              }              
             }}
             color={color}
           >

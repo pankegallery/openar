@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
 export const userProfileReadQueryGQL = gql`
-  query userProfileRead($ethAddress: String!) {
-    userProfileRead(ethAddress: $ethAddress) {
+  query userProfileReadById($id: Int!) {
+    userProfileReadById(id: $id) {
       id
       ethAddress
       pseudonym

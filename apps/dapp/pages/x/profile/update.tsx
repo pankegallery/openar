@@ -42,7 +42,7 @@ const Update = () => {
 
   const { data, loading, error } = useQuery(userProfileReadQueryGQL, {
     variables: {
-      ethAddress: (appUser?.ethAddress ?? "").toLowerCase(),
+      id: (appUser?.id ?? -1),
     },
   });
 
@@ -66,7 +66,7 @@ const Update = () => {
 
   useEffect(() => {
     reset(
-      filteredOutputByWhitelistNullToUndefined(data?.userProfileRead, [
+      filteredOutputByWhitelistNullToUndefined(data?.userProfileReadById, [
         "pseudonym",
         "email",
         "bio",
@@ -96,9 +96,9 @@ const Update = () => {
               pseudonym: newData.pseudonym ?? "",
               email: newData.email,
               emailVerified:
-                data?.userProfileRead?.email &&
+                data?.userProfileReadById?.email &&
                 newData?.email &&
-                data?.userProfileRead?.email !== newData?.email
+                data?.userProfileReadById?.email !== newData?.email
                   ? "no"
                   : undefined,
             })
@@ -173,7 +173,7 @@ const Update = () => {
                 </Text>
               )}
               <ModuleProfileUpdateForm
-                data={data?.userProfileRead}
+                data={data?.userProfileReadById}
                 setActiveUploadCounter={setActiveUploadCounter}
                 disableNavigation={setDisableNavigation}
               />
