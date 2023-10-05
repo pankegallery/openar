@@ -22,6 +22,7 @@ const userProfileQuery = gql`
   query ($id: Int!, $ethAddress: String!) {
     userProfileReadById(id: $id) {
       ethAddress
+      email
       bio
       url
       pseudonym

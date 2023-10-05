@@ -11,6 +11,7 @@ import {
   authRequestEmailVerificationEmail,
   authVerifyEmail,
   authRegisterByEmail,
+  authLoginByEmail,
 } from "../../services/serviceAuth";
 import {
   tokenProcessRefreshToken,
@@ -101,7 +102,32 @@ export const AuthMutations = extendType({
           return tokenProcessRefreshToken(ctx.res, authPayload);
         } catch (Err) {
           logger.debug(Err);
-          throw new AuthenticationError("Pre login Failed");
+          throw new AuthenticationError("Email Registration Failed");
+        }
+      },
+    });
+
+    t.nonNull.field("authLoginByEmail", {
+      type: "AuthPayload",
+      args: {
+        email: nonNull(stringArg()),
+        password: nonNull(stringArg())
+      },
+      async resolve(...[, args, ctx]) {
+        try {          
+          const authPayload = await authLoginByEmail(
+            args.email,
+            args.password
+          );
+
+          logger.debug(
+            `authLoginByEmail ${authPayload?.tokens?.sign?.token}`
+          );
+
+          return tokenProcessRefreshToken(ctx.res, authPayload);
+        } catch (Err) {
+          logger.debug(Err);
+          throw new AuthenticationError("Email Login Failed");
         }
       },
     });

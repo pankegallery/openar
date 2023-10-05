@@ -10,6 +10,7 @@ import {
 import { getApiConfig } from "../config";
 import { getPrismaClient } from "../db/client";
 import { daoImageSetToDelete } from "./image";
+import { logger } from "../services/serviceLogging";
 
 const apiConfig = getApiConfig();
 const prisma = getPrismaClient();
@@ -213,7 +214,23 @@ export const daoUserFindByEmail = async (email: string) : Promise<User> => {
     },
   });
 
+  logger.warn(user)
+
   return filteredOutputByBlacklist(user, apiConfig.db.privateJSONDataKeys.user);
+}
+
+export const daoUserByEmailCheckPassword = async (email: string, password : string) : Promise<User | null> => {
+  const user: User | null = await prisma.user.findFirst({
+    where: {
+      email: email.toLowerCase(),
+    },
+  });
+
+  if (user?.password == password) {
+    return filteredOutputByBlacklist(user, apiConfig.db.privateJSONDataKeys.user);
+  } else {
+    return null
+  }
 }
 
 export const daoUserUpdate = async (

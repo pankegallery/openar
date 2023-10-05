@@ -283,6 +283,7 @@ type Mutation {
   artworkReorderArObjects(data: [ArtworkArObjectOrderInput]!, id: Int!): Artwork!
   artworkUpdate(data: ArtworkUpsertInput!, id: Int!): Artwork!
   authLogin(ethAddress: String!, signedMessage: String!): AuthPayload!
+  authLoginByEmail(email: String!, password: String!): AuthPayload!
   authLogout(userId: Int!): BooleanResult!
   authPreLogin(ethAddress: String!): AuthPayload!
   authRefresh: AuthPayload!

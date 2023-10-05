@@ -6,6 +6,7 @@ import {
   Link as ChakraLink,
   HStack,
   Button,
+  Tooltip,
   chakra,
 } from "@chakra-ui/react";
 import Link from "next/link";
@@ -43,6 +44,8 @@ export interface ButtonListElementButton extends ModuleAccessRules {
   onClick: MouseEventHandler;
   skip?: boolean;
   type: "button";
+  hasTooltip?: boolean;
+  tooltipText?: string;
 }
 
 export interface ButtonListRenderElement extends ModuleAccessRules {
@@ -144,7 +147,12 @@ export const ModuleSubNav = ({
             isLoading: button.isLoading,
             isDisabled: button.isDisabled,
           };
-          b = <Button {...buttonProps}>{button?.label}</Button>;
+          console.log(buttonProps, button)
+          if (button.hasTooltip) {
+            b = <Tooltip hasArrow label={button.tooltipText} shouldWrapChildren><Button {...buttonProps}>{button?.label}</Button></Tooltip>
+          } else {
+            b = <Button {...buttonProps}>{button?.label}</Button> 
+          }          
           break;
       }
 

@@ -21,7 +21,7 @@ import Router from "next/router";
 import { useOpenARDappWeb3InjectedContext } from "~/providers";
 import { useTypedSelector, useWalletLogin } from "~/hooks";
 import { delay } from "lodash";
-import { useEmailRegistration } from "~/hooks/useEmailRegistration";
+import { useEmailRegistration, useEmailLogin } from "~/hooks/useEmailAuthentication";
 
 export const WalletControl = ({
   color = "white",
@@ -47,13 +47,20 @@ export const WalletControl = ({
     library,
   } = useWalletLogin();
 
-  const [registrationEmail, setRegistrationEmail] = useState("")
-  const [registrationPassword, setRegistrationPassword] = useState("")
+  const [userEmail, setUserEmail] = useState("")
+  const [userPassword, setUserPassword] = useState("")
 
   const {
     registerByEmail,
     registrationError
   } = useEmailRegistration();
+
+  const { 
+    loginByEmail,
+    loginError,
+    loginByEmailLoading,
+    loginByEmailSuccess
+  } = useEmailLogin()
 
   const walletDisclosure = useDisclosure();
   const emailRegisterDisclosure = useDisclosure();
@@ -73,9 +80,14 @@ export const WalletControl = ({
       if (Router.asPath.indexOf("/sign") !== 0)
         Router.push("/sign")
     }
+
+    if (stateUser.authenticated && loginByEmailSuccess && walletDisclosure.isOpen) {
+      Router.push("/x")
+    }
   }, [
     stateUser.authenticated,
     stateCrypto.signatureRequired,
+    loginByEmailSuccess,
     walletDisclosure,
     library,
     onCloseMenu,
@@ -205,8 +217,20 @@ export const WalletControl = ({
             <ModalHeader pb="0" pt="2" ml="0" mr="0" pl="0" pr="0">Or authenticate using email</ModalHeader>
 
             <Stack spacing={1}>
-              <Input placeholder='Email' size='md' />
-              <Input placeholder='Password' type="password" size='md' />              
+            <Input 
+                placeholder='Email' 
+                size='md' 
+                value={userEmail} 
+                onChange={(e) => setUserEmail(e.target.value)} 
+              />
+
+              <Input 
+                placeholder='Password' 
+                type="password" 
+                size='md' 
+                value={userPassword} 
+                onChange={(e) => setUserPassword(e.target.value)} 
+              />
             </Stack>            
 
             <Button
@@ -218,18 +242,23 @@ export const WalletControl = ({
                 size="lg"
                 variant="outline"
                 isLoading={
-                  isLoggingIn &&
-                  awaitingUserInteraction &&
-                  awaitingUserInteraction === "walletconnect"
+                  loginByEmailLoading
                 }
                 onClick={async () => {
-                  // await walletDisclosure.onClose()
-                  // await delay(500)
-                  // await emailRegisterDisclosure.onOpen()
+                  const result = await loginByEmail(userEmail, userPassword)
+                  // console.log("Finalized loginByEmail")
+                  // console.log(result)
+                  // console.log(loginError)
+                  // Router.push("/x/");                                    
                 }}
               >
                 Sign In
-              </Button>            
+            </Button>         
+
+            {loginError && (
+              <Text mt="2" color="openar.error">{loginError}</Text>
+            )}
+   
 
             <Text color="white" my="4" mb="4" textStyle="small">Don't have an account? <a href="#" onClick={async () => {
               walletDisclosure.onClose()              
@@ -258,24 +287,20 @@ export const WalletControl = ({
             <Text color="white" mb="4">
               Register below by typing your email address and password.
             </Text>
-            {walletLoginError && (
-              <Text color="openar.error">{walletLoginError}</Text>
-            )}
-
             <Stack spacing={1}>
               <Input 
                 placeholder='Email' 
                 size='md' 
-                value={registrationEmail} 
-                onChange={(e) => setRegistrationEmail(e.target.value)} 
+                value={userEmail} 
+                onChange={(e) => setUserEmail(e.target.value)} 
               />
 
               <Input 
                 placeholder='Password' 
                 type="password" 
                 size='md' 
-                value={registrationPassword} 
-                onChange={(e) => setRegistrationPassword(e.target.value)} 
+                value={userPassword} 
+                onChange={(e) => setUserPassword(e.target.value)} 
               />
 
               <Input placeholder='Re-type your password' type="password" size='md' />              
@@ -295,7 +320,7 @@ export const WalletControl = ({
                   awaitingUserInteraction === "walletconnect"
                 }
                 onClick={async () => {
-                  await registerByEmail(registrationEmail, registrationPassword)
+                  await registerByEmail(userEmail, userPassword)
                   Router.push("/x/");                                    
                   // await walletDisclosure.onClose()
                   // await delay(500)

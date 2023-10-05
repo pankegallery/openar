@@ -18,6 +18,7 @@ import {
   daoUserFindByEthAddress,
   daoUserCreate,
   daoUserFindByEmail,
+  daoUserByEmailCheckPassword,
 } from "../dao/user";
 import { ApiError, TokenTypesEnum } from "../utils";
 import {
@@ -152,6 +153,31 @@ export const authRegisterByEmail = async (email: string, password: string) : Pro
   } else {
     throw new ApiError(httpStatus.FORBIDDEN, "User with email already exists...");
   } 
+}
+
+export const authLoginByEmail = async (email: string, password: string) : Promise<AuthPayload> => {
+  let authPayload : AuthPayload;
+  
+  logger.warn(`authLoginByEmail: ${email} ${password}`)
+
+  let user : User | null = await daoUserByEmailCheckPassword(email, password);
+
+  if (!user) {
+    throw new ApiError(httpStatus.FORBIDDEN, "Authentication failed...");
+  } else {
+    authPayload = await tokenGenerateAuthTokens(
+      {
+        id: user.id,
+        pseudonym: user.pseudonym,
+        email: user.email,
+        ethAddress: user.ethAddress || ""        
+      },
+      user.roles as RoleName[]
+    );
+
+    logger.warn(`authRegisterByEmail payload: ${JSON.stringify(authPayload, null, 4)}`)
+    return authPayload  
+  }
 }
 
 export const authPreLoginUserWithEthAddress = async (

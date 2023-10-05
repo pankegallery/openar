@@ -95,6 +95,8 @@ export const UserDetails = ({
     }, []);
   }
 
+  console.log("Profile user: ", user)
+
   return (
     <Flex
       direction="column"
@@ -154,6 +156,9 @@ export const UserDetails = ({
 
         <chakra.h2 fontSize="xs" maxWidth="80%">
           {user?.ethAddress}
+        </chakra.h2>
+        <chakra.h2 fontSize="xs" maxWidth="80%">
+          {user?.email}
         </chakra.h2>
       </Box>
 

@@ -1,14 +1,14 @@
-import { authRegisterByEmailMutationGQL } from "~/graphql/mutations";
+import { authLoginByEmailMutationGQL } from "~/graphql/mutations";
 import { useMutation } from "@apollo/client";
 import { useAuthentication } from "~/hooks";
 import { authentication } from "~/services";
 
-export const useAuthRegisterByEmailMutation = () => {
+export const useAuthLoginByEmailMutation = () => {
   const [, { login, preLoginLogout }] = useAuthentication();
 
-  const [mutation, mutationResults] = useMutation(authRegisterByEmailMutationGQL, {
+  const [mutation, mutationResults] = useMutation(authLoginByEmailMutationGQL, {
     onCompleted: (data) => {
-      const tokens = data?.authRegisterByEmail?.tokens;
+      const tokens = data?.authLoginByEmail?.tokens;
 
       if (tokens && tokens?.access && tokens?.refresh) {
         const payload = authentication.getTokenPayload(tokens.access);        

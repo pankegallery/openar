@@ -506,6 +506,7 @@ export interface NexusGenFieldTypes {
     artworkReorderArObjects: NexusGenRootTypes['Artwork']; // Artwork!
     artworkUpdate: NexusGenRootTypes['Artwork']; // Artwork!
     authLogin: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    authLoginByEmail: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     authLogout: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     authPreLogin: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     authRefresh: NexusGenRootTypes['AuthPayload']; // AuthPayload!
@@ -740,6 +741,7 @@ export interface NexusGenFieldTypeNames {
     artworkReorderArObjects: 'Artwork'
     artworkUpdate: 'Artwork'
     authLogin: 'AuthPayload'
+    authLoginByEmail: 'AuthPayload'
     authLogout: 'BooleanResult'
     authPreLogin: 'AuthPayload'
     authRefresh: 'AuthPayload'
@@ -847,6 +849,10 @@ export interface NexusGenArgTypes {
     authLogin: { // args
       ethAddress: string; // String!
       signedMessage: string; // String!
+    }
+    authLoginByEmail: { // args
+      email: string; // String!
+      password: string; // String!
     }
     authLogout: { // args
       userId: number; // Int!

@@ -13,7 +13,7 @@ export * from "./useAuthTabWideLogInOutReload";
 export * from "./useStableCallback";
 export * from "./useWeb3Hooks";
 export * from "./useWalletLogin";
-export * from "./useEmailRegistration"
+export * from "./useEmailAuthentication"
 
 // TODO: this awkward import should help ESLINt to work with the layout effect properly
 // don't think it does. How to fix?
