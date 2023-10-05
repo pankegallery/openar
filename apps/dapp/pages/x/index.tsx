@@ -103,9 +103,11 @@ export const User = () => {
     },
   });
 
-  const { userProfileRead, collection } = data ?? {};
+  console.log("X: ", data, loading, error)
+
+  const { userProfileReadById, collection } = data ?? {};
   
-  const name = userProfileRead?.pseudonym ?? userProfileRead?.ethAddress;
+  const name = userProfileReadById?.pseudonym ?? userProfileReadById?.ethAddress;
 
   // ___________________ Set MediaQuery const __________________
 
@@ -117,7 +119,7 @@ export const User = () => {
 
   // ___________________ Build page module logic __________________
 
-  const hasArtworks = Array.isArray(userProfileRead?.artworks) && userProfileRead?.artworks.length > 0;
+  const hasArtworks = Array.isArray(userProfileReadById?.artworks) && userProfileReadById?.artworks.length > 0;
   const hasCollection = collection && collection.totalCount > 0;
 
   const showCollectionColumn = hasCollection;
@@ -149,7 +151,7 @@ export const User = () => {
         isError={!!error}
         isAccessDenied={!appUser}
       >
-        {userProfileRead && (
+        {userProfileReadById && (
           <Flex
             flexWrap={{
               base: "nowrap",
@@ -203,7 +205,7 @@ export const User = () => {
 
             <UserDetails
               isPublic={false}
-              user={userProfileRead}
+              user={userProfileReadById}
               showArtworks={true}
             />
           </Flex>

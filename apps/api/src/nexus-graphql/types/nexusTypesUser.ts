@@ -436,6 +436,8 @@ export const UserQueries = extendType({
       authorize: (...[, args, ctx]) =>
         authorizeApiUser(ctx, "profileRead") &&
         isCurrentApiUser(ctx, args.id),
+      // authorize: (...[, args, ctx]) => true,
+
 
       // resolve(root, args, ctx, info)
       async resolve(...[, args, , info]) {
