@@ -322,10 +322,12 @@ type Query {
   artworks(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ArtworkQueryResult
   artworksReadOwn(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ArtworkQueryResult
   collection(ethAddress: String!): ArObjectQueryResult!
+  collectionById(id: Int!): ArObjectQueryResult!
   exhibition(slug: String!): Exhibition!
   exhibitions(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ExhibitionQueryResult
   imageStatus(id: Int!): ImageStatus!
   user(ethAddress: String!): PublicUser
+  userById(id: Int!): PublicUser
   userProfileRead(ethAddress: String!): User
   userProfileReadById(id: Int!): User
   userRead(id: Int!): User

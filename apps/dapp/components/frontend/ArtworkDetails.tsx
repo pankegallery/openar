@@ -36,8 +36,9 @@ export const ArtworkDetails = ({
   artwork: any;
   object: any;
 }) => {
+  console.log("ARTWORK CREATOR: ", artwork.creator)
   const [profileUrl, setProfileUrl] = useState(
-    `/u/${artwork.creator.ethAddress}`
+    `/u/${artwork.creator.id}`
   );
   const [claimCollectorRoleMutation] =
     useUserMaybeClaimCollectorsRoleUpdateMutation();
@@ -70,16 +71,16 @@ export const ArtworkDetails = ({
   );
 
   useEffect(() => {
-    if (appUser && appUser.ethAddress === artwork?.creator?.ethAddress) {
+    if (appUser && appUser.id === artwork?.creator?.id) {
       setProfileUrl("/x/");
     }
-  }, [appUser, artwork?.creator?.ethAddress]);
+  }, [appUser, artwork?.creator?.id]);
 
   const ownedToken =
     subgraphQuery?.data?.arObjectTokens?.totalCount > 0
       ? subgraphQuery?.data?.arObjectTokens?.tokens.filter(
           (token) =>
-            token.subgraphinfo.creator === token.subgraphinfo.owner &&
+            token.subgraphinfo.creator === token.subgraphinfo.owner &&            
             token.subgraphinfo.creator.toLowerCase() ===
               artwork.creator?.ethAddress.toLowerCase()
         )

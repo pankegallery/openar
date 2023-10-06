@@ -543,10 +543,12 @@ export interface NexusGenFieldTypes {
     artworks: NexusGenRootTypes['ArtworkQueryResult'] | null; // ArtworkQueryResult
     artworksReadOwn: NexusGenRootTypes['ArtworkQueryResult'] | null; // ArtworkQueryResult
     collection: NexusGenRootTypes['ArObjectQueryResult']; // ArObjectQueryResult!
+    collectionById: NexusGenRootTypes['ArObjectQueryResult']; // ArObjectQueryResult!
     exhibition: NexusGenRootTypes['Exhibition']; // Exhibition!
     exhibitions: NexusGenRootTypes['ExhibitionQueryResult'] | null; // ExhibitionQueryResult
     imageStatus: NexusGenRootTypes['ImageStatus']; // ImageStatus!
     user: NexusGenRootTypes['PublicUser'] | null; // PublicUser
+    userById: NexusGenRootTypes['PublicUser'] | null; // PublicUser
     userProfileRead: NexusGenRootTypes['User'] | null; // User
     userProfileReadById: NexusGenRootTypes['User'] | null; // User
     userRead: NexusGenRootTypes['User'] | null; // User
@@ -779,10 +781,12 @@ export interface NexusGenFieldTypeNames {
     artworks: 'ArtworkQueryResult'
     artworksReadOwn: 'ArtworkQueryResult'
     collection: 'ArObjectQueryResult'
+    collectionById: 'ArObjectQueryResult'
     exhibition: 'Exhibition'
     exhibitions: 'ExhibitionQueryResult'
     imageStatus: 'ImageStatus'
     user: 'PublicUser'
+    userById: 'PublicUser'
     userProfileRead: 'User'
     userProfileReadById: 'User'
     userRead: 'User'
@@ -944,6 +948,9 @@ export interface NexusGenArgTypes {
     collection: { // args
       ethAddress: string; // String!
     }
+    collectionById: { // args
+      id: number; // Int!
+    }
     exhibition: { // args
       slug: string; // String!
     }
@@ -958,6 +965,9 @@ export interface NexusGenArgTypes {
     }
     user: { // args
       ethAddress: string; // String!
+    }
+    userById: { // args
+      id: number; // Int!
     }
     userProfileRead: { // args
       ethAddress: string; // String!
