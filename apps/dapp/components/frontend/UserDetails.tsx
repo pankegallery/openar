@@ -125,7 +125,7 @@ export const UserDetails = ({
         position="relative"
         borderBottom="1px solid white"
         p="6"
-        pt="20"
+        pt="7"
         minHeight={isIncomplete ? "400px" : "unset"}
       >
         
@@ -160,10 +160,24 @@ export const UserDetails = ({
         <chakra.h2 fontSize="xs" maxWidth="80%">
           {user?.email}
         </chakra.h2>
+
+        { isIncomplete &&
+          <Box mx="0" mb="5" mt="10">
+            <chakra.p textStyle="subtitle">
+              Looks like you haven’t completed your profile yet.
+            </chakra.p>
+            <chakra.p pb="6">
+              Add some details about yourself to receive your first badge.
+            </chakra.p>
+            <Link href="/x/profile/update" passHref>
+              <Button>Complete Profile</Button>
+            </Link>
+          </Box>
+        }
       </Box>
 
       {/* ======== OVERLAY: Incomplete profile  ======== */}
-      {isIncomplete && (
+      {/* {isIncomplete && (
         <Flex
           layerStyle="backdropBlurred"
           w="100%"
@@ -200,7 +214,7 @@ export const UserDetails = ({
             </Link>
           </Box>
         </Flex>
-      )}
+      )} */}
 
       {/* ======== BOX: Scrollable content  ======== */}
 

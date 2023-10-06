@@ -44,7 +44,7 @@ export const authRegisterByEmailMutationGQL = gql`
 `;
 
 export const authLoginByEmailMutationGQL = gql`
-  mutation authLoginByEmail(
+  mutation authLoginByEmail(    
     $email: String!,
     $password: String!
   ) {
@@ -58,6 +58,18 @@ export const authLoginByEmailMutationGQL = gql`
           expires
         }
       }
+    }
+  }
+`;
+
+export const authChangePasswordMutationGQL = gql`
+  mutation authChangePassword(
+    $userId: Int!,
+    $currentPassword: String!,
+    $newPassword: String!
+  ) {
+    authChangePassword(userId: $userId, currentPassword: $currentPassword, newPassword: $newPassword) {
+      result    
     }
   }
 `;

@@ -233,6 +233,24 @@ export const daoUserByEmailCheckPassword = async (email: string, password : stri
   }
 }
 
+export const daoUserUpdatePassword = async (userId: number, newPassword : string) : Promise<boolean> => {
+  try {
+    await prisma.user.update({
+      where: {
+        id: userId
+      },
+      data: {
+        password: newPassword
+      }
+    })  
+  } catch (e) {
+    logger.error("Caught exception in updating password: ", e)
+    return false
+  }
+
+  return true
+}
+
 export const daoUserUpdate = async (
   id: number,
   data: Prisma.UserUpdateInput

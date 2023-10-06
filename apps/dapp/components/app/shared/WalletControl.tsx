@@ -23,6 +23,10 @@ import { useTypedSelector, useWalletLogin } from "~/hooks";
 import { delay } from "lodash";
 import { useEmailRegistration, useEmailLogin } from "~/hooks/useEmailAuthentication";
 
+const validateEmail = (email) => {
+  return email.includes("@") && email.length > 4
+};
+
 export const WalletControl = ({
   color = "white",
   location = "menu",
@@ -49,6 +53,8 @@ export const WalletControl = ({
 
   const [userEmail, setUserEmail] = useState("")
   const [userPassword, setUserPassword] = useState("")
+  const [userPasswordConfirm, setUserPasswordConfirm] = useState("")
+  const [registerButtonEnabled, setRegisterButtonEnabled] = useState(false)
 
   const {
     registerByEmail,
@@ -84,6 +90,14 @@ export const WalletControl = ({
     if (stateUser.authenticated && loginByEmailSuccess && walletDisclosure.isOpen) {
       Router.push("/x")
     }
+
+    if (emailRegisterDisclosure.isOpen) {
+      let registerButtonStateEnabled = (userPassword.length > 0) && (userPassword == userPasswordConfirm) && validateEmail(userEmail)
+      if (registerButtonStateEnabled != registerButtonEnabled) {
+        setRegisterButtonEnabled(registerButtonStateEnabled)
+      }
+    }
+    
   }, [
     stateUser.authenticated,
     stateCrypto.signatureRequired,
@@ -303,7 +317,14 @@ export const WalletControl = ({
                 onChange={(e) => setUserPassword(e.target.value)} 
               />
 
-              <Input placeholder='Re-type your password' type="password" size='md' />              
+              <Input 
+                placeholder='Re-type your password' 
+                type="password" 
+                size='md' 
+                value={userPasswordConfirm} 
+                onChange={(e) => setUserPasswordConfirm(e.target.value)} 
+              />
+              
             </Stack>            
 
             <Button
@@ -319,6 +340,7 @@ export const WalletControl = ({
                   awaitingUserInteraction &&
                   awaitingUserInteraction === "walletconnect"
                 }
+                disabled={!registerButtonEnabled}
                 onClick={async () => {
                   await registerByEmail(userEmail, userPassword)
                   Router.push("/x/");                                    

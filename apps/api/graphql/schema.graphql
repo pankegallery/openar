@@ -282,6 +282,7 @@ type Mutation {
   artworkDelete(id: Int!): BooleanResult!
   artworkReorderArObjects(data: [ArtworkArObjectOrderInput]!, id: Int!): Artwork!
   artworkUpdate(data: ArtworkUpsertInput!, id: Int!): Artwork!
+  authChangePassword(currentPassword: String!, newPassword: String!, userId: Int!): BooleanResult!
   authLogin(ethAddress: String!, signedMessage: String!): AuthPayload!
   authLoginByEmail(email: String!, password: String!): AuthPayload!
   authLogout(userId: Int!): BooleanResult!

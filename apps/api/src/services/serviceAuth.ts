@@ -19,6 +19,7 @@ import {
   daoUserCreate,
   daoUserFindByEmail,
   daoUserByEmailCheckPassword,
+  daoUserUpdatePassword,
 } from "../dao/user";
 import { ApiError, TokenTypesEnum } from "../utils";
 import {
@@ -125,7 +126,7 @@ export const authLoginUserWithSignature = async (
   return authPayload;
 };
 
-export const authRegisterByEmail = async (email: string, password: string) : Promise<AuthPayload> => {
+export const authRegisterByEmail = async (email: string, password: string) : Promise<any> => {
   let authPayload : AuthPayload;
   
   logger.warn(`authRegisterByEmail: ${email} ${password}`)
@@ -149,7 +150,7 @@ export const authRegisterByEmail = async (email: string, password: string) : Pro
     );
 
     logger.warn(`authRegisterByEmail payload: ${JSON.stringify(authPayload, null, 4)}`)
-    return authPayload
+    return { authPayload, user }
   } else {
     throw new ApiError(httpStatus.FORBIDDEN, "User with email already exists...");
   } 
@@ -271,6 +272,33 @@ export const authLogout = async (ownerId: number): Promise<boolean> => {
 
   return true;
 };
+
+export const authChangePassword = async (userId: number, currentPassword: string, newPassword: string) : Promise<boolean> => {
+  let currentPasswordH = hashPassword(currentPassword)
+  let newPasswordH = hashPassword(newPassword)
+
+  let user = await daoUserGetById(userId)
+
+  if (!user.email || user.email.length < 1) {
+    throw new AuthenticationError("[auth] Current user doesn't have an email assigned");
+  }
+
+  let userWithPassword : User | null = await daoUserByEmailCheckPassword(user.email, currentPasswordH);
+
+  let success : boolean
+
+  if (!userWithPassword) {
+    throw new AuthenticationError("[auth] Current password is incorrect");
+  } else {
+    success = await daoUserUpdatePassword(user.id, newPasswordH)
+  }
+
+  return success
+}
+
+export const hashPassword = (password : string) : string => {
+  return password
+}
 
 export const authRefresh = async (refreshToken: string) => {
   try {

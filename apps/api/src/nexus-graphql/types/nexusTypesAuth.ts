@@ -12,6 +12,7 @@ import {
   authVerifyEmail,
   authRegisterByEmail,
   authLoginByEmail,
+  authChangePassword,
 } from "../../services/serviceAuth";
 import {
   tokenProcessRefreshToken,
@@ -90,10 +91,13 @@ export const AuthMutations = extendType({
       },
       async resolve(...[, args, ctx]) {
         try {
-          const authPayload = await authRegisterByEmail(
+          const { authPayload, user } = await authRegisterByEmail(
             args.email,
             args.password
           );
+          
+          if (user)
+            await authRequestEmailVerificationEmail(user.id)
 
           logger.debug(
             `authRegisterByEmail ${authPayload?.tokens?.sign?.token}`
@@ -221,6 +225,26 @@ export const AuthMutations = extendType({
         const result = await authLogout(args.userId);
 
         if (!result) throw new AuthenticationError("Logout Failed (2)");
+
+        return { result };
+      },
+    });
+
+    t.nonNull.field("authChangePassword", {
+      type: BooleanResult,
+      args: {
+        userId: nonNull(intArg()),
+        currentPassword: nonNull(stringArg()),
+        newPassword: nonNull(stringArg())
+      },
+
+      authorize: (...[, args, ctx]) =>
+        authorizeApiUser(ctx, "profileUpdate") &&
+        isCurrentApiUser(ctx, args.userId),
+
+      async resolve(...[, args]) {
+        const result = await authChangePassword(args.userId, args.currentPassword, args.newPassword);
+        if (!result) throw new AuthenticationError("Failed to update password");
 
         return { result };
       },

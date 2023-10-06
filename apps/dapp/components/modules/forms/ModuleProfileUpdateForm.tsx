@@ -1,7 +1,28 @@
+import React, { useEffect, useState } from "react"
+
 import { userProfileImageDeleteMutationGQL } from "~/graphql/mutations";
 
-import { Box, Grid } from "@chakra-ui/react";
+import { 
+  Box, 
+  Grid, 
+  Flex, 
+  chakra, 
+  Button, 
+  useDisclosure, 
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Stack,
+  Input,
+  Text
+ } from "@chakra-ui/react";
 import Link from "next/link";
+
+import { useAuthentication } from "~/hooks";
+import { useChangePassword } from "~/hooks/useEmailAuthentication"
 
 import {
   FieldInput,
@@ -31,6 +52,32 @@ export const ModuleProfileUpdateForm = ({
 
   const columns = { base: "100%", t: "1fr max(33.33%, 350px) " };
   const rows = { base: "auto 1fr", t: "1fr" };
+
+  const [appUser] = useAuthentication();
+  const isEmailOnlyAccount = ((!appUser.ethAddress) || (appUser.ethAddress.length < 1))
+
+  const passwordChangeDisclosure = useDisclosure();
+  const [currentPassword, setCurrentPassword] = useState("")
+  const [newPassword, setNewPassword] = useState("")
+  const [newPasswordConfirm, setNewPasswordConfirm] = useState("")
+  const [updatePasswordButtonEnabled, setUpdatePasswordButtonEnabled] = useState(false)
+
+  const { 
+    changePassword,
+    updatePasswordError,
+    updatePasswordLoading,
+    updatePasswordSuccess,
+    setUpdatePasswordSuccess
+  } = useChangePassword()
+
+  useEffect(() => {
+    let shouldUpdatePasswordEnable = (currentPassword.length > 0) && (newPassword.length > 0) && (newPassword == newPasswordConfirm)
+    if (shouldUpdatePasswordEnable != updatePasswordButtonEnabled) {
+      setUpdatePasswordButtonEnabled(shouldUpdatePasswordEnable)
+    }
+
+
+  })
 
   return (
     <Grid
@@ -111,7 +158,7 @@ export const ModuleProfileUpdateForm = ({
               label="I accept the terms and conditions"
               hint={
                 <>
-                  I&#39;ve aggree with the platform&#39;s{" "}
+                  I&#39;ve agreed with the platform&#39;s{" "}
                   <Link href="/p/tandc">terms and conditions</Link>
                 </>
               }
@@ -122,6 +169,22 @@ export const ModuleProfileUpdateForm = ({
           </FieldRow>
         </Box>
 
+        { isEmailOnlyAccount &&
+          <Box p="3" borderTop="1px solid #fff" transform="translateY(-1px)">
+            <Flex
+              p="3"
+              border="2px solid"
+              borderColor="openar.error"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <chakra.span color="openar.error" textStyle="label">Dangerzone</chakra.span>
+              <Button onClick={() => {passwordChangeDisclosure.onOpen()}}>
+                Change Your Password
+              </Button>
+            </Flex>
+          </Box>
+        }        
       </Box>
       <Box
         w={{ base: "50%", t: "auto" }}
@@ -157,6 +220,89 @@ export const ModuleProfileUpdateForm = ({
           }}
         />
       </Box>
+
+      <Modal
+        isOpen={passwordChangeDisclosure.isOpen}
+        onClose={() => {
+          passwordChangeDisclosure.onClose()
+          setCurrentPassword("")
+          setNewPassword("")
+          setNewPasswordConfirm("")
+          setUpdatePasswordSuccess(false)
+        }}
+      >
+        <ModalOverlay bg="blackAlpha.800" />
+        <ModalContent
+          color="white"
+          pt="0"
+          bg="openar.muddygreen"
+          borderRadius="0"
+        >
+          <ModalHeader pb="0">Change your password</ModalHeader>
+          <ModalCloseButton fontSize="lg" />
+          <ModalBody pb="6">
+            <Text color="white" mb="4">
+              Type in your current password and your new one below.
+            </Text>
+            <Stack spacing={1}>
+              <Input 
+                placeholder='Current password' 
+                type="password" 
+                size='md' 
+                value={currentPassword} 
+                onChange={(e) => setCurrentPassword(e.target.value)} 
+              />
+
+              <Input 
+                placeholder='New password' 
+                type="password" 
+                size='md' 
+                value={newPassword} 
+                onChange={(e) => setNewPassword(e.target.value)} 
+              />
+
+              <Input 
+                placeholder='Repeat the new password' 
+                type="password" 
+                size='md' 
+                value={newPasswordConfirm} 
+                onChange={(e) => setNewPasswordConfirm(e.target.value)} 
+              />
+
+            </Stack>            
+
+            <Button
+                colorScheme="openarWhite"
+                justifyContent="space-between"
+                width="100%"
+                mb="0"
+                mt="4"
+                size="lg"
+                variant="outline"
+                isLoading={updatePasswordLoading}
+                disabled={!updatePasswordButtonEnabled}
+                onClick={async () => {
+                  await changePassword(appUser.id, currentPassword, newPassword)
+                  setCurrentPassword("")
+                  setNewPassword("")
+                  setNewPasswordConfirm("")        
+                }}
+              >
+                Change Password
+              </Button>
+
+            {updatePasswordError && (
+              <Text mt="2" color="openar.error">{updatePasswordError}</Text>
+            )}
+
+            {updatePasswordSuccess && (
+              <Text mt="2" color="openar.dark">Successfully updated your password, you can now close this pop-up.</Text>
+            )}
+
+   
+          </ModalBody>
+        </ModalContent>
+      </Modal>            
     </Grid>
   );
 };

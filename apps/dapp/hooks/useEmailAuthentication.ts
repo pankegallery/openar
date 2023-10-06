@@ -8,6 +8,7 @@ import { store } from "~/redux";
 import { appConfig } from "~/config";
 import { useAuthRegisterByEmailMutation } from "./mutations/useAuthRegisterByEmailMutation";
 import { useAuthLoginByEmailMutation } from "./mutations/useAuthLoginByEmailMutation"
+import { useAuthChangePasswordMutation } from "./mutations/useAuthChangePasswordMutation"
 
 export function useEmailRegistration() {
 
@@ -101,5 +102,47 @@ export function useEmailLogin() {
     loginError,
     loginByEmailLoading,
     loginByEmailSuccess
+  } as const
+}
+
+export function useChangePassword() {
+  const [updatePasswordError, setUpdatePasswordError] = useState<string | null>(null)
+  const [updatePasswordLoading, setUpdatePasswordLoading] = useState<Boolean>(false)
+  const [updatePasswordSuccess, setUpdatePasswordSuccess] = useState<Boolean>(false)
+  const [changePasswordMutation] = useAuthChangePasswordMutation()
+
+  const changePassword = useCallback(
+    async (userId: number, password: string, newPassword: string) => {
+      setUpdatePasswordLoading(true)
+      console.log("Updating password: ", password, newPassword)
+      setUpdatePasswordError(null)
+      setUpdatePasswordSuccess(false)
+
+      const { data, errors } = await changePasswordMutation(userId, password, newPassword)
+      console.log("Mutation complete: ", data, errors)
+
+      setUpdatePasswordLoading(false)
+
+      if (!errors) {
+        setUpdatePasswordSuccess(true)        
+      } else {
+        setUpdatePasswordSuccess(false)
+        setUpdatePasswordError("Unable to update password, please try again.")
+      }
+    },
+    [
+      changePasswordMutation,
+      setUpdatePasswordError,
+      setUpdatePasswordLoading,
+      setUpdatePasswordSuccess
+    ]
+  )
+
+  return {
+    changePassword,
+    updatePasswordError,
+    updatePasswordLoading,
+    updatePasswordSuccess,
+    setUpdatePasswordSuccess
   } as const
 }
