@@ -231,8 +231,6 @@ export const getStaticProps = async ({ params }: { params: any }) => {
       }
     }
   `;
-
-  console.log("USER PROFILE PARAMS: ", params)
   
   const { data } = await client.query({
     query: userQuery,

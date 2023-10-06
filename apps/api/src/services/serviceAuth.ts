@@ -1,5 +1,6 @@
 import httpStatus from "http-status";
 import { User } from "@prisma/client";
+import bcrypt from 'bcryptjs'
 import { AuthenticationError } from "apollo-server-express";
 import { JwtPayload } from "jsonwebtoken";
 
@@ -126,16 +127,18 @@ export const authLoginUserWithSignature = async (
   return authPayload;
 };
 
-export const authRegisterByEmail = async (email: string, password: string) : Promise<any> => {
+export const authRegisterByEmail = async (email: string, passwordPlain: string) : Promise<any> => {
   let authPayload : AuthPayload;
   
-  logger.warn(`authRegisterByEmail: ${email} ${password}`)
+  const passwordH = hashPassword(passwordPlain)
+
+  logger.warn(`authRegisterByEmail: ${email} ${passwordH}`)
 
   let user = await daoUserFindByEmail(email);
   if (!user) {
     user = await daoUserCreate({
       email: email,
-      password: password,
+      password: passwordH,
       roles: ["newuser"]
     })
     logger.warn(`authRegisterByEmail user: ${JSON.stringify(user, null, 4)}`)
@@ -156,12 +159,10 @@ export const authRegisterByEmail = async (email: string, password: string) : Pro
   } 
 }
 
-export const authLoginByEmail = async (email: string, password: string) : Promise<AuthPayload> => {
+export const authLoginByEmail = async (email: string, passwordPlain: string) : Promise<AuthPayload> => {
   let authPayload : AuthPayload;
   
-  logger.warn(`authLoginByEmail: ${email} ${password}`)
-
-  let user : User | null = await daoUserByEmailCheckPassword(email, password);
+  let user : User | null = await daoUserByEmailCheckPassword(email, passwordPlain);
 
   if (!user) {
     throw new ApiError(httpStatus.FORBIDDEN, "Authentication failed...");
@@ -273,9 +274,8 @@ export const authLogout = async (ownerId: number): Promise<boolean> => {
   return true;
 };
 
-export const authChangePassword = async (userId: number, currentPassword: string, newPassword: string) : Promise<boolean> => {
-  let currentPasswordH = hashPassword(currentPassword)
-  let newPasswordH = hashPassword(newPassword)
+export const authChangePassword = async (userId: number, currentPasswordPlain: string, newPasswordPlain: string) : Promise<boolean> => {  
+  let newPasswordHash = hashPassword(newPasswordPlain)
 
   let user = await daoUserGetById(userId)
 
@@ -283,21 +283,21 @@ export const authChangePassword = async (userId: number, currentPassword: string
     throw new AuthenticationError("[auth] Current user doesn't have an email assigned");
   }
 
-  let userWithPassword : User | null = await daoUserByEmailCheckPassword(user.email, currentPasswordH);
+  let userWithPassword : User | null = await daoUserByEmailCheckPassword(user.email, currentPasswordPlain);
 
   let success : boolean
 
   if (!userWithPassword) {
     throw new AuthenticationError("[auth] Current password is incorrect");
   } else {
-    success = await daoUserUpdatePassword(user.id, newPasswordH)
+    success = await daoUserUpdatePassword(user.id, newPasswordHash)
   }
 
   return success
 }
 
 export const hashPassword = (password : string) : string => {
-  return password
+  return bcrypt.hashSync(password, 8)
 }
 
 export const authRefresh = async (refreshToken: string) => {
