@@ -13,6 +13,8 @@ import {
   authRegisterByEmail,
   authLoginByEmail,
   authChangePassword,
+  authResetPassword,
+  authResetPasswordRequest
 } from "../../services/serviceAuth";
 import {
   tokenProcessRefreshToken,
@@ -245,6 +247,35 @@ export const AuthMutations = extendType({
       async resolve(...[, args]) {
         const result = await authChangePassword(args.userId, args.currentPassword, args.newPassword);
         if (!result) throw new AuthenticationError("Failed to update password");
+
+        return { result };
+      },
+    });
+
+    t.nonNull.field("authResetPasswordRequest", {
+      type: BooleanResult,
+      args: {
+        email: nonNull(stringArg()),
+      },
+
+      async resolve(...[, args]) {
+        const result = await authResetPasswordRequest(args.email);
+        if (!result) throw new AuthenticationError("Failed request to reset password");
+
+        return { result };
+      },
+    });
+
+    t.nonNull.field("authResetPassword", {
+      type: BooleanResult,
+      args: {
+        password: nonNull(stringArg()),
+        token: nonNull(stringArg()),
+      },
+
+      async resolve(...[, args]) {
+        const result = await authResetPassword(args.password, args.token);
+        if (!result) throw new AuthenticationError("Failed to reset password");
 
         return { result };
       },

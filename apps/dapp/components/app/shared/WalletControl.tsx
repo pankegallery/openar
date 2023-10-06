@@ -21,7 +21,7 @@ import Router from "next/router";
 import { useOpenARDappWeb3InjectedContext } from "~/providers";
 import { useTypedSelector, useWalletLogin } from "~/hooks";
 import { delay } from "lodash";
-import { useEmailRegistration, useEmailLogin } from "~/hooks/useEmailAuthentication";
+import { useEmailRegistration, useEmailLogin, useResetPasswordRequest } from "~/hooks/useEmailAuthentication";
 
 const validateEmail = (email) => {
   return email.includes("@") && email.length > 4
@@ -58,7 +58,7 @@ export const WalletControl = ({
 
   const {
     registerByEmail,
-    registrationError
+    registrationError,    
   } = useEmailRegistration();
 
   const { 
@@ -68,10 +68,17 @@ export const WalletControl = ({
     loginByEmailSuccess
   } = useEmailLogin()
 
-  const walletDisclosure = useDisclosure();
-  const emailRegisterDisclosure = useDisclosure();
+  const { 
+    resetPasswordRequest,
+    resetPasswordError,
+    resetPasswordLoading,
+    resetPasswordSuccess,
+    setResetPasswordSuccess
+  } = useResetPasswordRequest()
 
-  console.log("[WalletControl]: ", stateUser, account)
+  const walletDisclosure = useDisclosure({defaultIsOpen: false});
+  const emailRegisterDisclosure = useDisclosure();
+  const forgotPasswordDisclosure = useDisclosure();
 
   useEffect(() => {
     if (
@@ -113,18 +120,38 @@ export const WalletControl = ({
   return (
     <Box>
       {/* ------- Buttons ------- */}
-      <Box>
+      <Box>        
         {!isAuthenticated && (
-          <Button
-            variant={location === "page" ? "outlineBlack" : "menuLink"}
-            onClick={() => {
-              walletDisclosure.onOpen()                            
-            }}
-            color={color}
-          >
-            Login
-          </Button>
+          <Box>
+            <Button
+              variant={location === "page" ? "outlineBlack" : "menuLink"}
+              onClick={() => {
+                emailRegisterDisclosure.onClose()                            
+                walletDisclosure.onOpen()                            
+              }}
+              color={color}
+            >
+              Login
+            </Button>
+          </Box>
         )}
+        
+
+        {!isAuthenticated && (
+          <Box>
+            <Button
+              variant={location === "page" ? "outlineBlack" : "menuLink"}
+              onClick={() => {
+                walletDisclosure.onClose()                            
+                emailRegisterDisclosure.onOpen()                            
+              }}
+              color={color}
+            >
+              Register
+            </Button>
+          </Box>
+        )}
+
 
         {isAuthenticated && (
           <Button
@@ -279,6 +306,14 @@ export const WalletControl = ({
               emailRegisterDisclosure.onOpen()
             }}>Register here</a></Text>
 
+            <Text color="white" my="4" mb="4" textStyle="small">Forgot your password? <a href="#" onClick={async () => {
+              emailRegisterDisclosure.onClose()
+              walletDisclosure.onClose()
+              forgotPasswordDisclosure.onOpen()
+              // await delay(500)              
+            }}>Reset it here</a></Text>
+
+
             <Text color="white" my="4" textStyle="small">Having trouble? <a href="mailto:contact@openar.art" >Contact support</a></Text>
           </ModalBody>
         </ModalContent>
@@ -358,10 +393,64 @@ export const WalletControl = ({
               // await delay(500)              
             }}>Sign in here</a></Text>
 
+
             <Text color="white" my="4" textStyle="small">Having trouble? <a href="mailto:contact@openar.art" >Contact support</a></Text>
           </ModalBody>
         </ModalContent>
       </Modal>      
+
+      <Modal
+        isOpen={forgotPasswordDisclosure.isOpen}
+        onClose={forgotPasswordDisclosure.onClose}
+      >
+        <ModalOverlay bg="blackAlpha.800" />
+        <ModalContent
+          color="white"
+          pt="0"
+          bg="openar.muddygreen"
+          borderRadius="0"
+        >
+          <ModalHeader pb="0">Reset your password</ModalHeader>
+          <ModalCloseButton fontSize="lg" />
+          <ModalBody pb="6">
+            <Text color="white" mb="4">
+              Type your email address below in order to request a new password.
+            </Text>
+            <Stack spacing={1}>
+              <Input 
+                placeholder='Email' 
+                size='md' 
+                value={userEmail} 
+                onChange={(e) => setUserEmail(e.target.value)} 
+              />              
+            </Stack>            
+
+            <Button
+                colorScheme="openarWhite"
+                justifyContent="space-between"
+                width="100%"
+                mb="0"
+                mt="4"
+                size="lg"
+                variant="outline"
+                isLoading={resetPasswordLoading}
+                disabled={userEmail.length == 0}
+                onClick={async () => {
+                  await resetPasswordRequest(userEmail)                                   
+                }}
+              >
+                Request new password
+            </Button>            
+            {resetPasswordError && (
+              <Text mt="2" color="openar.error">{resetPasswordError}</Text>
+            )}
+            {resetPasswordSuccess && (
+              <Text mt="2" color="openar.white">Request complete, please follow the link in your email in order to reset your password.</Text>
+            )}
+          </ModalBody>
+        </ModalContent>
+      </Modal>      
+
     </Box>
   );
 };

@@ -289,6 +289,36 @@ export const tokenGenerateVerifyEmailToken = async (
   return verifyEmailToken;
 };
 
+export const tokenGenerateResetPasswordToken = async (
+  ownerId: number
+) => {
+  daoTokenDeleteMany({
+    ownerId: ownerId,
+    type: TokenTypesEnum.RESET_PASSWORD,
+  });
+
+  const expires = addDays(
+    new Date(),
+    apiConfig.jwt.expiration.passwordReset
+  );
+  const resetPasswordToken = generateToken(
+    {
+      id: ownerId
+    },
+    ["api"],
+    expires,
+    TokenTypesEnum.RESET_PASSWORD
+  );
+  await daoTokenCreate(
+    resetPasswordToken,
+    ownerId,
+    expires,
+    TokenTypesEnum.RESET_PASSWORD
+  );
+  return resetPasswordToken;
+};
+
+
 export const tokenProcessRefreshToken = (
   res: Response,
   authPayload: AuthPayload

@@ -74,6 +74,27 @@ export const authChangePasswordMutationGQL = gql`
   }
 `;
 
+export const authResetPasswordRequestMutationGQL = gql`
+  mutation authResetPasswordRequest(    
+    $email: String!,
+  ) {
+    authResetPasswordRequest(email: $email) {
+      result    
+    }
+  }
+`;
+
+export const authResetPasswordMutationGQL = gql`
+  mutation authResetPassword(    
+    $password: String!,
+    $token: String!,
+  ) {
+    authResetPassword(password: $password, token: $token) {
+      result    
+    }
+  }
+`;
+
 export const authPreLoginMutationGQL = gql`
   mutation authPreLogin(
     $ethAddress: String!

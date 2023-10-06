@@ -513,6 +513,8 @@ export interface NexusGenFieldTypes {
     authRefresh: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     authRegisterByEmail: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     authRequestEmailVerificationEmail: NexusGenRootTypes['BooleanResult']; // BooleanResult!
+    authResetPassword: NexusGenRootTypes['BooleanResult']; // BooleanResult!
+    authResetPasswordRequest: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     authVerifyEmail: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     imageDelete: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     userDelete: NexusGenRootTypes['BooleanResult']; // BooleanResult!
@@ -751,6 +753,8 @@ export interface NexusGenFieldTypeNames {
     authRefresh: 'AuthPayload'
     authRegisterByEmail: 'AuthPayload'
     authRequestEmailVerificationEmail: 'BooleanResult'
+    authResetPassword: 'BooleanResult'
+    authResetPasswordRequest: 'BooleanResult'
     authVerifyEmail: 'BooleanResult'
     imageDelete: 'BooleanResult'
     userDelete: 'BooleanResult'
@@ -877,6 +881,13 @@ export interface NexusGenArgTypes {
     }
     authRequestEmailVerificationEmail: { // args
       userId: number; // Int!
+    }
+    authResetPassword: { // args
+      password: string; // String!
+      token: string; // String!
+    }
+    authResetPasswordRequest: { // args
+      email: string; // String!
     }
     authVerifyEmail: { // args
       token: string; // String!

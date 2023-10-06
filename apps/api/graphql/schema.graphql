@@ -290,6 +290,8 @@ type Mutation {
   authRefresh: AuthPayload!
   authRegisterByEmail(email: String!, password: String!): AuthPayload!
   authRequestEmailVerificationEmail(userId: Int!): BooleanResult!
+  authResetPassword(password: String!, token: String!): BooleanResult!
+  authResetPasswordRequest(email: String!): BooleanResult!
   authVerifyEmail(token: String!): BooleanResult!
   imageDelete(id: Int!): BooleanResult!
   userDelete(id: Int!): BooleanResult!

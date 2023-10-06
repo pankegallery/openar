@@ -15,7 +15,7 @@ export const appConfig: AppConfig = {
   apiDomain,
   contactEmail: "contact@openar.art",
   restrictedAccessRedirectUrl: "/",
-  reauthenticateRedirectUrl: "/login",
+  reauthenticateRedirectUrl: "/",
   apiUrl: `${process.env.NEXT_PUBLIC_API_URL}`,
   baseUrl: `${process.env.NEXT_PUBLIC_BASE_URL}`,
   apiGraphQLUrl: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,

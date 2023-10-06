@@ -9,6 +9,7 @@ import { appConfig } from "~/config";
 import { useAuthRegisterByEmailMutation } from "./mutations/useAuthRegisterByEmailMutation";
 import { useAuthLoginByEmailMutation } from "./mutations/useAuthLoginByEmailMutation"
 import { useAuthChangePasswordMutation } from "./mutations/useAuthChangePasswordMutation"
+import { useAuthResetPasswordRequestMutation, useAuthResetPasswordMutation } from "./mutations/useAuthResetPasswordMutation";
 
 export function useEmailRegistration() {
 
@@ -146,3 +147,86 @@ export function useChangePassword() {
     setUpdatePasswordSuccess
   } as const
 }
+
+export function useResetPasswordRequest() {
+  const [resetPasswordError, setResetPasswordError] = useState<string | null>(null)
+  const [resetPasswordLoading, setResetPasswordLoading] = useState<boolean>(false)
+  const [resetPasswordSuccess, setResetPasswordSuccess] = useState<boolean>(false)
+  const [resetPasswordRequestMutation] = useAuthResetPasswordRequestMutation()
+
+  const resetPasswordRequest = useCallback(
+    async (email: string) => {
+      setResetPasswordLoading(true)      
+      setResetPasswordError(null)
+      setResetPasswordSuccess(false)
+
+      const { data, errors } = await resetPasswordRequestMutation(email)
+      console.log("Mutation complete: ", data, errors)
+
+      setResetPasswordLoading(false)
+
+      if (!errors) {
+        setResetPasswordSuccess(true)        
+      } else {
+        setResetPasswordSuccess(false)
+        setResetPasswordError("Unable to request a password reset for this email address, please try again.")
+      }
+    },
+    [
+      resetPasswordRequestMutation,
+      setResetPasswordError,
+      setResetPasswordLoading,
+      setResetPasswordSuccess
+    ]
+  )
+
+  return {
+    resetPasswordRequest,
+    resetPasswordError,
+    resetPasswordLoading,
+    resetPasswordSuccess,
+    setResetPasswordSuccess
+  } as const
+}
+
+export function useResetPassword() {
+  const [resetPasswordError, setResetPasswordError] = useState<string | null>(null)
+  const [resetPasswordLoading, setResetPasswordLoading] = useState<boolean>(false)
+  const [resetPasswordSuccess, setResetPasswordSuccess] = useState<boolean>(false)
+  const [resetPasswordMutation] = useAuthResetPasswordMutation()
+
+  const resetPassword = useCallback(
+    async (password: string, token: string) => {
+      setResetPasswordLoading(true)      
+      setResetPasswordError(null)
+      setResetPasswordSuccess(false)
+
+      const { data, errors } = await resetPasswordMutation(password, token)
+      console.log("Mutation complete: ", data, errors)
+
+      setResetPasswordLoading(false)
+
+      if (!errors) {
+        setResetPasswordSuccess(true)        
+      } else {
+        setResetPasswordSuccess(false)
+        setResetPasswordError("Unable to update password, please request a new link.")
+      }
+    },
+    [
+      resetPasswordMutation,
+      setResetPasswordError,
+      setResetPasswordLoading,
+      setResetPasswordSuccess
+    ]
+  )
+
+  return {
+    resetPassword,
+    resetPasswordError,
+    resetPasswordLoading,
+    resetPasswordSuccess,
+    setResetPasswordSuccess
+  } as const
+}
+

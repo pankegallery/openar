@@ -23,7 +23,7 @@ export interface JwtPayloadAuthenticatedAppUser {
   id: number;
   pseudonym?: string | null;
   email?: string | null;
-  ethAddress: string;
+  ethAddress?: string;
   roles?: RoleName[];
   permissions?: PermissionName[];
 }
