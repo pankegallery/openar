@@ -41,8 +41,6 @@ export const context = ({
     : "no query passed in the body";
 
   let accessToken = req?.headers?.authorization ?? "";
-  logger.warn("[context.ts]: Access Token: ")
-  logger.warn(req.headers)
   
   if (accessToken) {
     accessTokenProvided = true;

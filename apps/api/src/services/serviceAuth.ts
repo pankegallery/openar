@@ -134,8 +134,6 @@ export const authRegisterByEmail = async (email: string, passwordPlain: string) 
   
   const passwordH = hashPassword(passwordPlain)
 
-  logger.warn(`authRegisterByEmail: ${email} ${passwordH}`)
-
   let user = await daoUserFindByEmail(email);
   if (!user) {
     user = await daoUserCreate({
@@ -143,7 +141,7 @@ export const authRegisterByEmail = async (email: string, passwordPlain: string) 
       password: passwordH,
       roles: ["newuser"]
     })
-    logger.warn(`authRegisterByEmail user: ${JSON.stringify(user, null, 4)}`)
+
     authPayload = await tokenGenerateAuthTokens(
       {
         id: user.id,
@@ -154,7 +152,6 @@ export const authRegisterByEmail = async (email: string, passwordPlain: string) 
       user.roles as RoleName[]
     );
 
-    logger.warn(`authRegisterByEmail payload: ${JSON.stringify(authPayload, null, 4)}`)
     return { authPayload, user }
   } else {
     throw new ApiError(httpStatus.FORBIDDEN, "User with email already exists...");
@@ -179,7 +176,6 @@ export const authLoginByEmail = async (email: string, passwordPlain: string) : P
       user.roles as RoleName[]
     );
 
-    logger.warn(`authRegisterByEmail payload: ${JSON.stringify(authPayload, null, 4)}`)
     return authPayload  
   }
 }
@@ -191,14 +187,12 @@ export const authPreLoginUserWithEthAddress = async (
   let authPayload: AuthPayload;
   let user = await daoUserFindByEthAddress(ethAddress);
 
-  logger.debug("User is: ", user)
-
   if (!user) {
     user = await daoUserCreate({
       ethAddress: ethAddress.toLowerCase(),
       roles: ["newuser"],
     });
-    logger.debug("Created user: ", user)
+
     authPayload = await tokenGenerateAuthTokens(
       {
         id: user.id,
@@ -227,7 +221,6 @@ export const authPreLoginUserWithEthAddress = async (
         "[auth.authRefresh] Please authenticate (1)"
       );
 
-    logger.debug("Generating auth token")
     authPayload = await tokenGenerateAuthTokens(
       {
         id: user.id,
@@ -248,7 +241,7 @@ export const authPreLoginUserWithEthAddress = async (
         ],
       },
     });
-    logger.debug("Generating signature token")
+
     authPayload = await tokenGenerateSignatureToken({
       id: user.id,
       ethAddress: ethAddress.toLowerCase(),
