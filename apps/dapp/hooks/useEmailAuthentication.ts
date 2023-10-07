@@ -96,6 +96,7 @@ export function useEmailLogin() {
   return {
     loginByEmail,
     loginError,
+    setLoginError,
     loginByEmailLoading,
     loginByEmailSuccess
   } as const

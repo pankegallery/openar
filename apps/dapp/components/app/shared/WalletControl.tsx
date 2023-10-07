@@ -13,6 +13,11 @@ import {
   Stack,
   Input,
   useDisclosure,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
 } from "@chakra-ui/react";
 
 import Image from "next/image";
@@ -64,6 +69,7 @@ export const WalletControl = ({
   const { 
     loginByEmail,
     loginError,
+    setLoginError,
     loginByEmailLoading,
     loginByEmailSuccess
   } = useEmailLogin()
@@ -172,7 +178,12 @@ export const WalletControl = ({
 
       <Modal
         isOpen={walletDisclosure.isOpen}
-        onClose={walletDisclosure.onClose}
+        onClose={() => {
+          walletDisclosure.onClose()
+          setUserEmail("")
+          setUserPassword("")
+          setLoginError(null)
+        }}
       >
         <ModalOverlay bg="blackAlpha.800" />
         <ModalContent
@@ -181,81 +192,9 @@ export const WalletControl = ({
           bg="openar.muddygreen"
           borderRadius="0"
         >
-          <ModalHeader pb="0">Connect your wallet</ModalHeader>
+          <ModalHeader pb="0">Authenticate via email</ModalHeader>
           <ModalCloseButton fontSize="lg" />
-          <ModalBody pb="6">
-            <Text color="white" mb="4">
-              Instead of a username and password we use your crypto wallet to authorize access to openAR.
-              <br />
-              <br />
-              If you’re new, recently cleared your cookies or haven’t connected for a while, you’ll need to sign a (free) transaction in your wallet to give our server permission to authorize your account.
-            </Text>
-            {walletLoginError && (
-              <Text color="openar.error">{walletLoginError}</Text>
-            )}
-            <Button
-              colorScheme="openarWhite"
-              justifyContent="space-between"
-              width="100%"
-              mt="4"
-              mb="4"
-              size="lg"
-              variant="outline"
-              isDisabled={!web3Injected}
-              isLoading={
-                isLoggingIn &&
-                awaitingUserInteraction &&
-                awaitingUserInteraction === "injected"
-              }
-              rightIcon={
-                <Image
-                  width="30px"
-                  height="30px"
-                  src="/images/logo-metamask.svg"
-                  alt="MetaMask"
-                />
-              }
-              onClick={async () => {
-
-                try {
-                  await connectInjected();
-
-                } catch (err) {
-                  console.log("connectInjected Error");
-                }
-                
-              }}
-            >
-              MetaMask
-            </Button>
-            <Button
-              colorScheme="openarWhite"
-              justifyContent="space-between"
-              width="100%"
-              mb="4"
-              size="lg"
-              variant="outline"
-              isLoading={
-                isLoggingIn &&
-                awaitingUserInteraction &&
-                awaitingUserInteraction === "walletconnect"
-              }
-              rightIcon={
-                <Image
-                  width="30px"
-                  height="30px"
-                  src="/images/logo-walletconnect.svg"
-                  alt="WalletConnect"
-                />
-              }
-              onClick={async () => {
-                await connectWalletConnect();
-              }}
-            >
-              WalletConnect
-            </Button>            
-
-            <ModalHeader pb="0" pt="2" ml="0" mr="0" pl="0" pr="0">Or authenticate using email</ModalHeader>
+          <ModalBody pb="6">          
 
             <Stack spacing={1}>
             <Input 
@@ -299,7 +238,7 @@ export const WalletControl = ({
             {loginError && (
               <Text mt="2" color="openar.error">{loginError}</Text>
             )}
-   
+
 
             <Text color="white" my="4" mb="4" textStyle="small">Don't have an account? <a href="#" onClick={async () => {
               walletDisclosure.onClose()              
@@ -312,6 +251,92 @@ export const WalletControl = ({
               forgotPasswordDisclosure.onOpen()
               // await delay(500)              
             }}>Reset it here</a></Text>
+
+            <Accordion defaultIndex={[-1]} allowMultiple>
+              <AccordionItem>
+            
+                <AccordionButton ml="0" pl="0" mb="2" _hover={{ background: 'none' }}>
+                  <Box as="span" flex='1' textAlign='left'>
+                    <ModalHeader pb="0" pt="2" ml="0" mr="0" pl="0" pr="0">Or connect your wallet (legacy)</ModalHeader>
+                  </Box>
+                  <AccordionIcon mt="3"/>
+                </AccordionButton>
+
+                <AccordionPanel ml="0" pl="0" mr="0" pr="0">
+                  <Text color="white" mb="4" textStyle="small">
+                    Instead of a username and password we use your crypto wallet to authorize access to openAR.
+                    <br />
+                    <br />
+                    If you’re new, recently cleared your cookies or haven’t connected for a while, you’ll need to sign a (free) transaction in your wallet to give our server permission to authorize your account.
+                  </Text>
+                  {walletLoginError && (
+                    <Text color="openar.error">{walletLoginError}</Text>
+                  )}
+                  <Button
+                    colorScheme="openarWhite"
+                    justifyContent="space-between"
+                    width="100%"
+                    mt="4"
+                    mb="4"
+                    size="lg"
+                    variant="outline"
+                    isDisabled={!web3Injected}
+                    isLoading={
+                      isLoggingIn &&
+                      awaitingUserInteraction &&
+                      awaitingUserInteraction === "injected"
+                    }
+                    rightIcon={
+                      <Image
+                        width="30px"
+                        height="30px"
+                        src="/images/logo-metamask.svg"
+                        alt="MetaMask"
+                      />
+                    }
+                    onClick={async () => {
+
+                      try {
+                        await connectInjected();
+
+                      } catch (err) {
+                        console.log("connectInjected Error");
+                      }
+                      
+                    }}
+                  >
+                    MetaMask
+                  </Button>
+                  <Button
+                    colorScheme="openarWhite"
+                    justifyContent="space-between"
+                    width="100%"
+                    mb="4"
+                    size="lg"
+                    variant="outline"
+                    isLoading={
+                      isLoggingIn &&
+                      awaitingUserInteraction &&
+                      awaitingUserInteraction === "walletconnect"
+                    }
+                    rightIcon={
+                      <Image
+                        width="30px"
+                        height="30px"
+                        src="/images/logo-walletconnect.svg"
+                        alt="WalletConnect"
+                      />
+                    }
+                    onClick={async () => {
+                      await connectWalletConnect();
+                    }}
+                  >
+                    WalletConnect
+                  </Button>            
+                </AccordionPanel>
+
+              </AccordionItem>
+            </Accordion>
 
 
             <Text color="white" my="4" textStyle="small">Having trouble? <a href="mailto:contact@openar.art" >Contact support</a></Text>
