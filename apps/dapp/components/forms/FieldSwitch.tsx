@@ -1,4 +1,4 @@
-import React from "react";
+import React, {ChangeEventHandler} from "react";
 import { Switch, FormControl, Flex, chakra, FormHelperText } from "@chakra-ui/react";
 import { useFormContext, Controller } from "react-hook-form";
 
@@ -14,6 +14,7 @@ export const FieldSwitch = ({
   isDisabled = false,
   defaultChecked = false,
   colorScheme,
+  onChangeHandler,
 }: {
   name: string;
   label: string | React.ReactNode;
@@ -24,6 +25,7 @@ export const FieldSwitch = ({
   isDisabled?: boolean;
   defaultChecked?: boolean;
   colorScheme?: string;
+  onChangeHandler?: ChangeEventHandler;
 }) => {
   const {
     register,
@@ -45,7 +47,10 @@ export const FieldSwitch = ({
           defaultValue={typeof defaultChecked === "boolean" ? defaultChecked : false}
           render={({ field: { onChange, onBlur, value } }) => (
             <Switch
-              onChange={onChange}
+              onChange={(e) => {
+                onChange(e)
+                onChangeHandler && onChangeHandler(e)
+              }}
               onBlur={onBlur}
               isDisabled={isDisabled}
               isChecked={typeof isChecked !== "undefined" ? !!isChecked : value}

@@ -46,6 +46,7 @@
     "ethers": "^5.4.1",
     "gray-matter": "^4.0.3",
     "is-plain-object": "^5.0.0",
+    "leaflet": "^1.9.4",
     "lodash": "^4.17.21",
     "next": "11.1.2",
     "raw-loader": "^4.0.2",
@@ -55,6 +56,7 @@
     "react-dropzone": "^11.4.2",
     "react-hook-form": "^7.15.4",
     "react-icons": "^4.2.0",
+    "react-leaflet": "^3.2.5",
     "react-markdown": "^7.0.1",
     "react-redux": "^7.2.4",
     "react-remove-scroll": "^2.4.1",
@@ -71,6 +73,7 @@
   },
   "devDependencies": {
     "@svgr/webpack": "^5.5.0",
+    "@types/leaflet": "^1.9.6",
     "@types/react": "17.0.24",
     "@types/react-beautiful-dnd": "^13.1.2",
     "@types/react-redux": "^7.1.18",

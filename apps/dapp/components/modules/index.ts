@@ -3,3 +3,4 @@ export * from "./ModulePage";
 export * from "./ModulePageNotFound";
 export * from "./ModulePageAccessDenied";
 export * from "./helpers";
+export * from "./map";
