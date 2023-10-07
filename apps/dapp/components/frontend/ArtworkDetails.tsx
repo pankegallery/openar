@@ -207,6 +207,8 @@ export const ArtworkDetails = ({
     account &&
     hasCookies();
 
+  console.log("COLLECTORS: ", collectors)
+
   return (
     <Flex
       direction="column"
@@ -266,29 +268,31 @@ export const ArtworkDetails = ({
             borderBottom="1px solid white"
             p="6"
             position="relative"
-          >
-            <CornerButton
-              label="Buy"
-              position="top"
-              emphasis
-              onClick={() => {
-                if (canBuy) {
-                  buy(ownedToken[0].id, parseFloat(currentAsk ?? "0"));
-                } else {
-                  if (
-                    `${artwork?.creator?.ethAddress}`.toLowerCase() ===
-                    `${appUser?.ethAddress}`.toLowerCase()
-                  ) {
-                    buyErrorToast("Oops", "You can't purchase your own token.");
-                  } else if (appUser && appUser.email) {
-                    buyErrorToast("Oops", "Please connect your xDai wallet to your account in order to purchase this work.");
+          >            
+              <CornerButton
+                label="Buy"
+                position="top"
+                emphasis
+                hasTooltip={true}
+                tooltipText="Buying artworks is a legacy feature"
+                onClick={() => {
+                  if (canBuy) {
+                    buy(ownedToken[0].id, parseFloat(currentAsk ?? "0"));
                   } else {
-                    buyErrorToast("Oops", "Please login to purchase this artwork.");
+                    if (
+                      `${artwork?.creator?.ethAddress}`.toLowerCase() ===
+                      `${appUser?.ethAddress}`.toLowerCase()
+                    ) {
+                      buyErrorToast("Oops", "You can't purchase your own token.");
+                    } else if (appUser && appUser.email) {
+                      buyErrorToast("Oops", "Please connect your xDai wallet to your account in order to purchase this work.");
+                    } else {
+                      buyErrorToast("Oops", "Please login to purchase this artwork.");
+                    }
                   }
-                }
-              }}
-              isDisabled={!canBuy}
-            />
+                }}
+                isDisabled={!canBuy}
+              />            
             <chakra.p
               textStyle="subtitle"
               mb="10"
@@ -383,7 +387,7 @@ export const ArtworkDetails = ({
 
               return (
                 <Box key={`c-${collector.collector.ethAddress}`}>
-                  <ArrowLink href={`/u/${collector.collector.ethAddress}`}>
+                  <ArrowLink href={`/u/${collector.collector.id}`}>
                     {getArtistName(
                       collector.collector.pseudonym,
                       collector.collector.ethAddress
