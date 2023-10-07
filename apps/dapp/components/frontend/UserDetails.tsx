@@ -95,8 +95,6 @@ export const UserDetails = ({
     }, []);
   }
 
-  console.log("Profile user: ", user)
-
   return (
     <Flex
       direction="column"

@@ -36,7 +36,6 @@ export const ArtworkDetails = ({
   artwork: any;
   object: any;
 }) => {
-  console.log("ARTWORK CREATOR: ", artwork.creator)
   const [profileUrl, setProfileUrl] = useState(
     `/u/${artwork.creator.id}`
   );
@@ -206,8 +205,6 @@ export const ArtworkDetails = ({
     appUser &&
     account &&
     hasCookies();
-
-  console.log("COLLECTORS: ", collectors)
 
   return (
     <Flex

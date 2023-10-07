@@ -18,7 +18,6 @@ export function useEmailRegistration() {
 
   const registerByEmail = useCallback(
     async (email: string, password: string) => {
-      console.log("Register by email: ", email, password)
       setRegistrationError(null);
 
       const { data, errors } = await registerByEmailMutation(email, password);
@@ -30,7 +29,6 @@ export function useEmailRegistration() {
   
           const accessToken = tokens?.access?.token;
           if (accessToken) {
-            console.log("Has access token: ", accessToken)
             return;
           }         
         } else if (errors) {
@@ -63,13 +61,11 @@ export function useEmailLogin() {
   const loginByEmail = useCallback(
     async (email: string, password: string) => {
       setLoginByEmailLoading(true)
-      console.log("Login by email: ", email, password)
       setLoginError(null);
 
       const { data, errors } = await loginByEmailMutation(email, password);
 
       setLoginByEmailLoading(false)
-      console.log("Mutation complete: ", data, errors)
   
       try {
         const { tokens } = data?.authLoginByEmail ?? {};
@@ -78,7 +74,6 @@ export function useEmailLogin() {
   
           const accessToken = tokens?.access?.token;
           setLoginByEmailSuccess(true)
-          console.log("Has access token: ", accessToken)
           return;
         } else if (errors) {
           throw errors[0];
@@ -115,12 +110,10 @@ export function useChangePassword() {
   const changePassword = useCallback(
     async (userId: number, password: string, newPassword: string) => {
       setUpdatePasswordLoading(true)
-      console.log("Updating password: ", password, newPassword)
       setUpdatePasswordError(null)
       setUpdatePasswordSuccess(false)
 
       const { data, errors } = await changePasswordMutation(userId, password, newPassword)
-      console.log("Mutation complete: ", data, errors)
 
       setUpdatePasswordLoading(false)
 
@@ -161,7 +154,6 @@ export function useResetPasswordRequest() {
       setResetPasswordSuccess(false)
 
       const { data, errors } = await resetPasswordRequestMutation(email)
-      console.log("Mutation complete: ", data, errors)
 
       setResetPasswordLoading(false)
 
@@ -202,7 +194,6 @@ export function useResetPassword() {
       setResetPasswordSuccess(false)
 
       const { data, errors } = await resetPasswordMutation(password, token)
-      console.log("Mutation complete: ", data, errors)
 
       setResetPasswordLoading(false)
 

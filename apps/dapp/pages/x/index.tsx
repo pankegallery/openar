@@ -92,10 +92,6 @@ export const User = () => {
 
   const [appUser] = useAuthentication();
 
-  console.log("App user is: ", appUser)
-
-  
-
   const { data, loading, error } = useQuery(userProfileQuery, {
     skip: !appUser, // if user is not logged in skip the query
     variables: {
@@ -103,8 +99,6 @@ export const User = () => {
       ethAddress: (appUser?.ethAddress ?? "").toLowerCase(),
     },
   });
-
-  console.log("X: ", data, loading, error)
 
   const { userProfileReadById, collection } = data ?? {};
   
