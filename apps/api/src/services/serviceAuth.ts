@@ -143,11 +143,14 @@ export const authRegisterByEmail = async (email: string, passwordPlain: string) 
   logger.warn(!!user)
 
   if (!user) {
+    logger.warn("pre daoUserCreate")
     user = await daoUserCreate({
       email: email,
       password: passwordH,
       roles: ["newuser"]
     })
+
+    logger.warn("post daoUserCreate, will generate tokens")
 
     authPayload = await tokenGenerateAuthTokens(
       {
@@ -158,6 +161,8 @@ export const authRegisterByEmail = async (email: string, passwordPlain: string) 
       },
       user.roles as RoleName[]
     );
+
+    logger.warn("tokens generated")
 
     return { authPayload, user }
   } else {
