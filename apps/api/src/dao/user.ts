@@ -47,12 +47,17 @@ export const daoUserCreate = async (
   //   throw new ApiError(httpStatus.BAD_REQUEST, "Email already taken");
   // }
 
+  logger.warn("daoUserCreate")
+  logger.warn(JSON.stringify(data, null, 4))
+
   const user: User = await prisma.user.create({
     data: {
       ...data,
       ethAddress: data.ethAddress?.toLowerCase() ?? "",
     },
   });
+
+  logger.warn("prisma user created")
 
   return filteredOutputByBlacklistOrNotFound(
     user,
