@@ -19,9 +19,10 @@ import { useSSRSaveMediaQuery, useAuthentication } from "~/hooks";
 import { getStatic } from "@ethersproject/properties";
 
 const userProfileQuery = gql`
-  query ($ethAddress: String!) {
-    userProfileRead(ethAddress: $ethAddress) {
+  query ($id: Int!, $ethAddress: String!) {
+    userProfileReadById(id: $id) {
       ethAddress
+      email
       bio
       url
       pseudonym
@@ -94,13 +95,14 @@ export const User = () => {
   const { data, loading, error } = useQuery(userProfileQuery, {
     skip: !appUser, // if user is not logged in skip the query
     variables: {
+      id: (appUser?.id ?? -1),
       ethAddress: (appUser?.ethAddress ?? "").toLowerCase(),
     },
   });
 
-  const { userProfileRead, collection } = data ?? {};
+  const { userProfileReadById, collection } = data ?? {};
   
-  const name = userProfileRead?.pseudonym ?? userProfileRead?.ethAddress;
+  const name = userProfileReadById?.pseudonym ?? userProfileReadById?.ethAddress;
 
   // ___________________ Set MediaQuery const __________________
 
@@ -112,7 +114,7 @@ export const User = () => {
 
   // ___________________ Build page module logic __________________
 
-  const hasArtworks = Array.isArray(userProfileRead?.artworks) && userProfileRead?.artworks.length > 0;
+  const hasArtworks = Array.isArray(userProfileReadById?.artworks) && userProfileReadById?.artworks.length > 0;
   const hasCollection = collection && collection.totalCount > 0;
 
   const showCollectionColumn = hasCollection;
@@ -144,7 +146,7 @@ export const User = () => {
         isError={!!error}
         isAccessDenied={!appUser}
       >
-        {userProfileRead && (
+        {userProfileReadById && (
           <Flex
             flexWrap={{
               base: "nowrap",
@@ -198,7 +200,7 @@ export const User = () => {
 
             <UserDetails
               isPublic={false}
-              user={userProfileRead}
+              user={userProfileReadById}
               showArtworks={true}
             />
           </Flex>

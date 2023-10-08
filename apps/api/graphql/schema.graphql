@@ -214,6 +214,7 @@ type Exhibition {
   imgUrl: String
   slug: JSON
   status: Int!
+  subtitlePrefix: String
   title: JSON
   type: String
   updatedAt: DateTime
@@ -281,11 +282,16 @@ type Mutation {
   artworkDelete(id: Int!): BooleanResult!
   artworkReorderArObjects(data: [ArtworkArObjectOrderInput]!, id: Int!): Artwork!
   artworkUpdate(data: ArtworkUpsertInput!, id: Int!): Artwork!
+  authChangePassword(currentPassword: String!, newPassword: String!, userId: Int!): BooleanResult!
   authLogin(ethAddress: String!, signedMessage: String!): AuthPayload!
+  authLoginByEmail(email: String!, password: String!): AuthPayload!
   authLogout(userId: Int!): BooleanResult!
   authPreLogin(ethAddress: String!): AuthPayload!
   authRefresh: AuthPayload!
+  authRegisterByEmail(email: String!, password: String!): AuthPayload!
   authRequestEmailVerificationEmail(userId: Int!): BooleanResult!
+  authResetPassword(password: String!, token: String!): BooleanResult!
+  authResetPasswordRequest(email: String!): BooleanResult!
   authVerifyEmail(token: String!): BooleanResult!
   imageDelete(id: Int!): BooleanResult!
   userDelete(id: Int!): BooleanResult!
@@ -318,11 +324,14 @@ type Query {
   artworks(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ArtworkQueryResult
   artworksReadOwn(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ArtworkQueryResult
   collection(ethAddress: String!): ArObjectQueryResult!
+  collectionById(id: Int!): ArObjectQueryResult!
   exhibition(slug: String!): Exhibition!
   exhibitions(orderBy: JSON, pageIndex: Int = 0, pageSize: Int = 50, where: JSON): ExhibitionQueryResult
   imageStatus(id: Int!): ImageStatus!
   user(ethAddress: String!): PublicUser
+  userById(id: Int!): PublicUser
   userProfileRead(ethAddress: String!): User
+  userProfileReadById(id: Int!): User
   userRead(id: Int!): User
 }
 

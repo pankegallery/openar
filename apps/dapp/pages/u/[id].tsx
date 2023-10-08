@@ -27,7 +27,9 @@ export const PublicUserProfile = ({
 }) => {
   const [appUser] = useAuthentication();
 
-  if (appUser && appUser.ethAddress === user.ethAddress) {
+  console.log("Public User Profile: ", user)
+
+  if (appUser && appUser.id === user.id) {
     Router.replace("/x/");
   }
 
@@ -161,8 +163,8 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 
   // TODO: enable read protection of non published artworks
   const userQuery = gql`
-    query ($ethAddress: String!) {
-      user(ethAddress: $ethAddress) {
+    query ($id: Int!) {
+      userById(id: $id) {
         ethAddress
         bio
         url
@@ -194,7 +196,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           }
         }
       }
-      collection(ethAddress: $ethAddress) {
+      collectionById(id: $id) {
         totalCount
         arObjects {
           id
@@ -229,15 +231,16 @@ export const getStaticProps = async ({ params }: { params: any }) => {
       }
     }
   `;
-
+  
   const { data } = await client.query({
     query: userQuery,
     variables: {
-      ethAddress: params.eth.toLowerCase(),
+      id: parseInt(params.id)
+      // ethAddress: params.eth.toLowerCase(),
     },
   });
 
-  if (!data?.user) {
+  if (!data?.userById) {
     return {
       notFound: true,
       revalidate: 240,
@@ -248,9 +251,9 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 
   return {
     props: {
-      user: data?.user,
-      artworks: data?.user?.artworks,
-      collection: data?.collection,
+      user: data?.userById,
+      artworks: data?.userById?.artworks,
+      collection: data?.collectionById,
     },
     revalidate: 240,
   };

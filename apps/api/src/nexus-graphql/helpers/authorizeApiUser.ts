@@ -1,6 +1,10 @@
 import type { PermissionName } from "../../apiuser";
 import type { NexusResolverContext } from "../context";
 
+// Important: Don't change the strings of the thrown exceptions here, because they are 
+// used for string matching in the frontend in order to determine whether the token
+// needs to be refreshed...
+
 export const authorizeApiUser = (
   ctx: NexusResolverContext,
   permissions: PermissionName | PermissionName[],
@@ -20,8 +24,10 @@ export const authorizeApiUser = (
 
   if (
     !(typeof ctx?.appUser?.can === "function" && ctx.appUser.can(permissions))
-  )
-    throw Error("GQL authorization rejected");
+  ) {    
+    throw Error("GQL authorization rejected");    
+  }
+    
 
   return true;
 };

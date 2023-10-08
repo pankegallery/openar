@@ -267,6 +267,7 @@ export interface NexusGenObjects {
     imgUrl?: string | null; // String
     slug?: NexusGenScalars['JSON'] | null; // JSON
     status: number; // Int!
+    subtitlePrefix?: string | null; // String
     title?: NexusGenScalars['JSON'] | null; // JSON
     type?: string | null; // String
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -459,6 +460,7 @@ export interface NexusGenFieldTypes {
     imgUrl: string | null; // String
     slug: NexusGenScalars['JSON'] | null; // JSON
     status: number; // Int!
+    subtitlePrefix: string | null; // String
     title: NexusGenScalars['JSON'] | null; // JSON
     type: string | null; // String
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -503,11 +505,16 @@ export interface NexusGenFieldTypes {
     artworkDelete: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     artworkReorderArObjects: NexusGenRootTypes['Artwork']; // Artwork!
     artworkUpdate: NexusGenRootTypes['Artwork']; // Artwork!
+    authChangePassword: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     authLogin: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    authLoginByEmail: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     authLogout: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     authPreLogin: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     authRefresh: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    authRegisterByEmail: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     authRequestEmailVerificationEmail: NexusGenRootTypes['BooleanResult']; // BooleanResult!
+    authResetPassword: NexusGenRootTypes['BooleanResult']; // BooleanResult!
+    authResetPasswordRequest: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     authVerifyEmail: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     imageDelete: NexusGenRootTypes['BooleanResult']; // BooleanResult!
     userDelete: NexusGenRootTypes['BooleanResult']; // BooleanResult!
@@ -538,11 +545,14 @@ export interface NexusGenFieldTypes {
     artworks: NexusGenRootTypes['ArtworkQueryResult'] | null; // ArtworkQueryResult
     artworksReadOwn: NexusGenRootTypes['ArtworkQueryResult'] | null; // ArtworkQueryResult
     collection: NexusGenRootTypes['ArObjectQueryResult']; // ArObjectQueryResult!
+    collectionById: NexusGenRootTypes['ArObjectQueryResult']; // ArObjectQueryResult!
     exhibition: NexusGenRootTypes['Exhibition']; // Exhibition!
     exhibitions: NexusGenRootTypes['ExhibitionQueryResult'] | null; // ExhibitionQueryResult
     imageStatus: NexusGenRootTypes['ImageStatus']; // ImageStatus!
     user: NexusGenRootTypes['PublicUser'] | null; // PublicUser
+    userById: NexusGenRootTypes['PublicUser'] | null; // PublicUser
     userProfileRead: NexusGenRootTypes['User'] | null; // User
+    userProfileReadById: NexusGenRootTypes['User'] | null; // User
     userRead: NexusGenRootTypes['User'] | null; // User
   }
   User: { // field return type
@@ -690,6 +700,7 @@ export interface NexusGenFieldTypeNames {
     imgUrl: 'String'
     slug: 'JSON'
     status: 'Int'
+    subtitlePrefix: 'String'
     title: 'JSON'
     type: 'String'
     updatedAt: 'DateTime'
@@ -734,11 +745,16 @@ export interface NexusGenFieldTypeNames {
     artworkDelete: 'BooleanResult'
     artworkReorderArObjects: 'Artwork'
     artworkUpdate: 'Artwork'
+    authChangePassword: 'BooleanResult'
     authLogin: 'AuthPayload'
+    authLoginByEmail: 'AuthPayload'
     authLogout: 'BooleanResult'
     authPreLogin: 'AuthPayload'
     authRefresh: 'AuthPayload'
+    authRegisterByEmail: 'AuthPayload'
     authRequestEmailVerificationEmail: 'BooleanResult'
+    authResetPassword: 'BooleanResult'
+    authResetPasswordRequest: 'BooleanResult'
     authVerifyEmail: 'BooleanResult'
     imageDelete: 'BooleanResult'
     userDelete: 'BooleanResult'
@@ -769,11 +785,14 @@ export interface NexusGenFieldTypeNames {
     artworks: 'ArtworkQueryResult'
     artworksReadOwn: 'ArtworkQueryResult'
     collection: 'ArObjectQueryResult'
+    collectionById: 'ArObjectQueryResult'
     exhibition: 'Exhibition'
     exhibitions: 'ExhibitionQueryResult'
     imageStatus: 'ImageStatus'
     user: 'PublicUser'
+    userById: 'PublicUser'
     userProfileRead: 'User'
+    userProfileReadById: 'User'
     userRead: 'User'
   }
   User: { // field return type name
@@ -837,9 +856,18 @@ export interface NexusGenArgTypes {
       data: NexusGenInputs['ArtworkUpsertInput']; // ArtworkUpsertInput!
       id: number; // Int!
     }
+    authChangePassword: { // args
+      currentPassword: string; // String!
+      newPassword: string; // String!
+      userId: number; // Int!
+    }
     authLogin: { // args
       ethAddress: string; // String!
       signedMessage: string; // String!
+    }
+    authLoginByEmail: { // args
+      email: string; // String!
+      password: string; // String!
     }
     authLogout: { // args
       userId: number; // Int!
@@ -847,8 +875,19 @@ export interface NexusGenArgTypes {
     authPreLogin: { // args
       ethAddress: string; // String!
     }
+    authRegisterByEmail: { // args
+      email: string; // String!
+      password: string; // String!
+    }
     authRequestEmailVerificationEmail: { // args
       userId: number; // Int!
+    }
+    authResetPassword: { // args
+      password: string; // String!
+      token: string; // String!
+    }
+    authResetPasswordRequest: { // args
+      email: string; // String!
     }
     authVerifyEmail: { // args
       token: string; // String!
@@ -920,6 +959,9 @@ export interface NexusGenArgTypes {
     collection: { // args
       ethAddress: string; // String!
     }
+    collectionById: { // args
+      id: number; // Int!
+    }
     exhibition: { // args
       slug: string; // String!
     }
@@ -935,8 +977,14 @@ export interface NexusGenArgTypes {
     user: { // args
       ethAddress: string; // String!
     }
+    userById: { // args
+      id: number; // Int!
+    }
     userProfileRead: { // args
       ethAddress: string; // String!
+    }
+    userProfileReadById: { // args
+      id: number; // Int!
     }
     userRead: { // args
       id: number; // Int!

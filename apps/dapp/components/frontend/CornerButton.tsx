@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, chakra, LinkBox, LinkOverlay } from "@chakra-ui/react";
+import { Box, chakra, LinkBox, LinkOverlay, Tooltip } from "@chakra-ui/react";
 
 const Wrapper = ({
   children,
@@ -106,6 +106,8 @@ export const CornerButton = ({
   position = "bottom",
   href,
   isDisabled = false,
+  hasTooltip = false,
+  tooltipText = "",
   onClick,
 }: {
   label?: string;
@@ -113,6 +115,8 @@ export const CornerButton = ({
   isDisabled?: boolean;
   position?: string;
   href?: string;
+  hasTooltip? : boolean;
+  tooltipText?: string;
   onClick?: () => void;
 }) => {
   const styles = {
@@ -147,15 +151,29 @@ export const CornerButton = ({
       </LinkBox>
     );
   } else {
-    return (
-      <button onClick={onClick} >
-        <Wrapper styles={styles} isDisabled={isDisabled}>
-          <Text styles={styles} position={position}>
-            {label}
-          </Text>
-        </Wrapper>
-      </button>
-    );
+    if (hasTooltip) {
+      return (
+        <button onClick={onClick} >          
+            <Wrapper styles={styles} isDisabled={isDisabled}>
+              <Tooltip label={tooltipText} shouldWrapChildren>
+                <Text styles={styles} position={position}>
+                  {label}
+                </Text>
+              </Tooltip>
+            </Wrapper>          
+        </button>
+      );  
+    } else {
+      return (
+        <button onClick={onClick} >
+          <Wrapper styles={styles} isDisabled={isDisabled}>
+            <Text styles={styles} position={position}>
+              {label}
+            </Text>
+          </Wrapper>
+        </button>
+      );  
+    }
   }
 };
 

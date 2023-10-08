@@ -1,5 +1,6 @@
 // import bcrypt from "bcrypt";
 import httpStatus from "http-status";
+import bcrypt from "bcryptjs"
 import { User, Prisma } from "@prisma/client";
 
 import {
@@ -10,6 +11,7 @@ import {
 import { getApiConfig } from "../config";
 import { getPrismaClient } from "../db/client";
 import { daoImageSetToDelete } from "./image";
+import { logger } from "../services/serviceLogging";
 
 const apiConfig = getApiConfig();
 const prisma = getPrismaClient();
@@ -177,30 +179,78 @@ export const daoUserGetById = async (id: number): Promise<User> => {
 
 export const daoUserGetByEthAddress = async (
   ethAddress: string
-): Promise<User> => {
-  const user: User | null = await prisma.user.findUnique({
-    where: {
-      ethAddress: ethAddress.toLowerCase(),
-    },
-  });
+): Promise<User | null> => {
+  let user: User | null
+  
+  if (ethAddress) {
+    user = await prisma.user.findFirst({
+      where: {
+        ethAddress: ethAddress.toLowerCase(),
+      },
+    });  
+  } else {
+    user = null
+  }
 
-  return filteredOutputByBlacklistOrNotFound(
-    user,
-    apiConfig.db.privateJSONDataKeys.user
-  );
+  if (user) {
+    return filteredOutputByBlacklistOrNotFound(
+      user,
+      apiConfig.db.privateJSONDataKeys.user
+    );  
+  } else {
+    return null
+  }
 };
 
 export const daoUserFindByEthAddress = async (
   ethAddress: string
-): Promise<User> => {
-  const user: User | null = await prisma.user.findUnique({
+): Promise<User | null> => {
+  return await daoUserGetByEthAddress(ethAddress)
+};
+
+export const daoUserFindByEmail = async (email: string) : Promise<User> => {
+  const user: User | null = await prisma.user.findFirst({
     where: {
-      ethAddress: ethAddress.toLowerCase(),
+      email: email.toLowerCase(),
     },
   });
 
+  logger.warn(user)
+
   return filteredOutputByBlacklist(user, apiConfig.db.privateJSONDataKeys.user);
-};
+}
+
+export const daoUserByEmailCheckPassword = async (email: string, passwordPlain : string) : Promise<User | null> => {
+  const user: User | null = await prisma.user.findFirst({
+    where: {
+      email: email.toLowerCase(),
+    },
+  });
+
+  if (bcrypt.compareSync(passwordPlain, user?.password)) {
+    return filteredOutputByBlacklist(user, apiConfig.db.privateJSONDataKeys.user);
+  } else {
+    return null
+  }
+}
+
+export const daoUserUpdatePassword = async (userId: number, newPassword : string) : Promise<boolean> => {
+  try {
+    await prisma.user.update({
+      where: {
+        id: userId
+      },
+      data: {
+        password: newPassword
+      }
+    })  
+  } catch (e) {
+    logger.error("Caught exception in updating password: ", e)
+    return false
+  }
+
+  return true
+}
 
 export const daoUserUpdate = async (
   id: number,

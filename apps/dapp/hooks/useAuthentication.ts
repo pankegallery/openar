@@ -13,7 +13,7 @@ export const useAuthentication = () => {
     authentication.getRefreshCookie() &&
     appUserData &&
     appUserData?.id &&
-    appUserData.ethAddress
+    (appUserData.ethAddress || appUserData.email)
       ? createAuthenticatedAppUser(appUserData)
       : null;
 

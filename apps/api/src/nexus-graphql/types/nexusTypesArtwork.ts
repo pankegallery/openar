@@ -231,6 +231,7 @@ export const ArtworkQueries = extendType({
                   pseudonym: true,
                   ethAddress: true,
                   isBanned: true,
+                  email: true
                 },
               },
             };
@@ -330,6 +331,7 @@ export const ArtworkQueries = extendType({
                 pseudonym: true,
                 ethAddress: true,
                 isBanned: true,
+                email: true
               },
             },
           };
