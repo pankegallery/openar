@@ -21,6 +21,7 @@ import { getStatic } from "@ethersproject/properties";
 const userProfileQuery = gql`
   query ($id: Int!, $ethAddress: String!) {
     userProfileReadById(id: $id) {
+      id
       ethAddress
       email
       bio
