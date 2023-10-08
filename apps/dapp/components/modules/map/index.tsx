@@ -1,7 +1,7 @@
 import React from 'react'
+import 'leaflet/dist/leaflet.css'
 import dynamic from 'next/dynamic'
-import 'leaflet/dist/leaflet.css';
-import {mapMarker} from './marker'
+import { mapMarker } from './marker'
 
 // const Leaflet : any = dynamic(() => import('react-leaflet'), { ssr: false })
 
@@ -27,9 +27,9 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
   markerIcon: any
   L: any
 
-  async componentDidMount() {
+  async componentDidMount() {    
     this.leaflet = await import('react-leaflet')
-    this.L = await import('leaflet')    
+    this.L = await import('leaflet')        
 
     console.log("Marker icon: ", this.markerIcon)
     this.setState({ inBrowser: true, centerX: this.props.lat, centerY: this.props.lng })    
