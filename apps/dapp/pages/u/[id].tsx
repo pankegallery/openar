@@ -75,6 +75,8 @@ export const PublicUserProfile = ({
     }
   }
 
+  console.log("User is: ", user)
+
   return (
     <>
       <Head>
@@ -170,6 +172,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
         url
         pseudonym
         roles
+        id
         artworks {
           id
           title

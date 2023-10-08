@@ -93,13 +93,19 @@ export const AuthMutations = extendType({
       },
       async resolve(...[, args, ctx]) {
         try {
+          logger.warn("Starting authRegisterByEmail")
           const { authPayload, user } = await authRegisterByEmail(
             args.email,
             args.password
           );
+
+          logger.warn("Got user")
+          logger.warn(user.email)
           
           if (user)
             await authRequestEmailVerificationEmail(user.id)
+
+            logger.warn("Requested email")
 
           logger.debug(
             `authRegisterByEmail ${authPayload?.tokens?.sign?.token}`
