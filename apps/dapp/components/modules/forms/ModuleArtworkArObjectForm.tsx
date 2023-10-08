@@ -34,7 +34,7 @@ import { yupIsFieldRequired } from "../validation";
 
 import { useCallback, useState } from 'react'
 
-import LeafletMap from "../map";
+// import LeafletMap from "../map";
 
 export const ModuleArtworkArObjectForm = ({
   action,
@@ -149,7 +149,7 @@ export const ModuleArtworkArObjectForm = ({
               }}
             />
           </FieldRow>
-          <FieldRow>
+          {/* <FieldRow>
             <FieldSwitch
               name="isGeolocationEnabled"
               label="Restrict access based on geolocation"
@@ -177,7 +177,7 @@ export const ModuleArtworkArObjectForm = ({
                 onCenterChange={onCenterChange}
               />
             }
-          </FieldRow>
+          </FieldRow> */}
 
         </Box>
         <Box
