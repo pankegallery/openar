@@ -32,7 +32,7 @@ import { ArObjectStatusEnum } from "~/utils";
 
 import { yupIsFieldRequired } from "../validation";
 
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import LeafletMap from "../map";
 
@@ -65,23 +65,38 @@ export const ModuleArtworkArObjectForm = ({
     {}
   );
 
-  const [geolocationToggleEnabled, setGeolocationToggleEnabled] = useState(false)
+  const [geolocationToggleEnabled, setGeolocationToggleEnabled] = useState(arObjectReadOwn.isGeolocationEnabled)
 
   console.log("Data is: ", data)
 
-  const [latitude, setLatitude] = useState(52.5164)
-  const [longitude, setLongitude] = useState(13.4024)
-
-  const onCenterChange = (lat, lng) => {
-    setLatitude(lat)
-    setLongitude(lng)
-  }
+  const [latitude, setLatitude] = useState(arObjectReadOwn.lat || 52.5164)
+  const [longitude, setLongitude] = useState(arObjectReadOwn.lng || 13.4024)
 
   const {
     formState,
     register,
     setValue,
   } = useFormContext();
+
+  const formGeolocationEnabled = register("isGeolocationEnabled", { required: true });
+  const formLat = register("lat", { required: false });
+  const formLng = register("lng", { required: false });
+
+  const onGeolocationEnabledChange = useCallback((e) => {    
+    setGeolocationToggleEnabled(e.target.checked)
+
+    formGeolocationEnabled.onChange(e)
+    setValue("isGeolocationEnabled", e.target.checked)
+  }, [setGeolocationToggleEnabled, formGeolocationEnabled, setValue])
+
+  const onCenterChange = useCallback((lat, lng) => {
+    setLatitude(lat)
+    setLongitude(lng)
+    setValue("lat", lat)
+    setValue("lng", lng)
+    // formLat.onChange(null)
+    // formLng.onChange(null)
+  }, [setLatitude, setLongitude, setValue, formLat, formLng]) 
 
   const disableFormFields =
     action !== "create" &&
@@ -98,7 +113,7 @@ export const ModuleArtworkArObjectForm = ({
         <Box>
           <FieldRow>
             <FieldInput
-              name="title2"
+              name="title"
               id="title"
               type="title"
               label="Object title"
@@ -138,19 +153,13 @@ export const ModuleArtworkArObjectForm = ({
           </FieldRow>
           <FieldRow>
             <FieldSwitch
-              name="geolocationEnabled"
-              id="geolocationEnabled"
+              name="isGeolocationEnabled"
+              id="isGeolocationEnabled"
               label="Restrict access based on geolocation"
               isDisabled={disableFormFields}
-              isRequired={yupIsFieldRequired("title", validationSchema)}
-              settings={{
-                // defaultValue: data.abc.key
-                placeholder: "Insert title here…",
-              }}
-              onChangeHandler={(e) => {
-                console.log("onChange", e.target.checked)
-                setGeolocationToggleEnabled(e.target.checked)
-              }}
+              isRequired={yupIsFieldRequired("isGeolocationEnabled", validationSchema)}
+              defaultChecked={arObjectReadOwn.isGeolocationEnabled}
+              onChangeHandler={onGeolocationEnabledChange}
             />
             <Text ml="6">
               Enabling this toggle will only allow users within 10 meters of the lat/lon coordinates you specify to view your object in AR.<br/>

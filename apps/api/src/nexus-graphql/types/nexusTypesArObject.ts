@@ -499,7 +499,11 @@ export const ArObjectQueries = extendType({
       async resolve(...[, args, { appUser }, info]) {
         const pRI = parseResolveInfo(info);
 
-        let include = {};
+        let include = {
+          // lat: true,
+          // lng: true,
+          // isGeolocationEnabled: true
+        };
 
         if ((pRI?.fieldsByTypeName?.ArObject as any)?.arModels) {
           include = {
