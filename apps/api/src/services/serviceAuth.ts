@@ -1,5 +1,7 @@
 import httpStatus from "http-status";
 import { User } from "@prisma/client";
+import bcrypt from 'bcryptjs'
+import generatePassword from 'generate-password'
 import { AuthenticationError } from "apollo-server-express";
 import { JwtPayload } from "jsonwebtoken";
 
@@ -7,7 +9,7 @@ import type { RoleName, AuthenticatedAppUser } from "../apiuser";
 import { createAuthenticatedAppUser } from "../apiuser";
 
 import { AuthPayload } from "../types/auth";
-import { daoTokenDeleteMany } from "../dao/token";
+import { daoTokenDeleteMany, daoTokenFindFirst } from "../dao/token";
 
 import type { NexusResolverContext } from "../nexus-graphql";
 
@@ -17,6 +19,9 @@ import {
   daoUserGetByEthAddress,
   daoUserFindByEthAddress,
   daoUserCreate,
+  daoUserFindByEmail,
+  daoUserByEmailCheckPassword,
+  daoUserUpdatePassword,
 } from "../dao/user";
 import { ApiError, TokenTypesEnum } from "../utils";
 import {
@@ -25,11 +30,12 @@ import {
   tokenVerifyInDB,
   tokenGenerateAuthTokens,
   tokenGenerateVerifyEmailToken,
+  tokenGenerateResetPasswordToken
 } from "./serviceToken";
 
 import { logger } from "./serviceLogging";
 
-import { sendEmailConfirmationEmail } from "./serviceEmail";
+import { sendEmailConfirmationEmail, sendEmailPasswordResetLink } from "./serviceEmail";
 
 export const authSendEmailConfirmationEmail = async (
   userId: number,
@@ -123,6 +129,57 @@ export const authLoginUserWithSignature = async (
   return authPayload;
 };
 
+export const authRegisterByEmail = async (email: string, passwordPlain: string) : Promise<any> => {
+  let authPayload : AuthPayload;
+  
+  const passwordH = hashPassword(passwordPlain)
+
+  let user = await daoUserFindByEmail(email);
+  if (!user) {
+    user = await daoUserCreate({
+      email: email,
+      password: passwordH,
+      roles: ["newuser"]
+    })
+
+    authPayload = await tokenGenerateAuthTokens(
+      {
+        id: user.id,
+        pseudonym: user.pseudonym,
+        email: user.email,
+        ethAddress: user.ethAddress || ""        
+      },
+      user.roles as RoleName[]
+    );
+
+    return { authPayload, user }
+  } else {
+    throw new ApiError(httpStatus.FORBIDDEN, "User with email already exists...");
+  } 
+}
+
+export const authLoginByEmail = async (email: string, passwordPlain: string) : Promise<AuthPayload> => {
+  let authPayload : AuthPayload;
+  
+  let user : User | null = await daoUserByEmailCheckPassword(email, passwordPlain);
+
+  if (!user) {
+    throw new ApiError(httpStatus.FORBIDDEN, "Authentication failed...");
+  } else {
+    authPayload = await tokenGenerateAuthTokens(
+      {
+        id: user.id,
+        pseudonym: user.pseudonym,
+        email: user.email,
+        ethAddress: user.ethAddress || ""        
+      },
+      user.roles as RoleName[]
+    );
+
+    return authPayload  
+  }
+}
+
 export const authPreLoginUserWithEthAddress = async (
   ethAddress: string,
   ctx: NexusResolverContext
@@ -135,6 +192,7 @@ export const authPreLoginUserWithEthAddress = async (
       ethAddress: ethAddress.toLowerCase(),
       roles: ["newuser"],
     });
+
     authPayload = await tokenGenerateAuthTokens(
       {
         id: user.id,
@@ -183,6 +241,7 @@ export const authPreLoginUserWithEthAddress = async (
         ],
       },
     });
+
     authPayload = await tokenGenerateSignatureToken({
       id: user.id,
       ethAddress: ethAddress.toLowerCase(),
@@ -209,6 +268,79 @@ export const authLogout = async (ownerId: number): Promise<boolean> => {
 
   return true;
 };
+
+export const authChangePassword = async (userId: number, currentPasswordPlain: string, newPasswordPlain: string) : Promise<boolean> => {  
+  let newPasswordHash = hashPassword(newPasswordPlain)
+
+  let user = await daoUserGetById(userId)
+
+  if (!user.email || user.email.length < 1) {
+    throw new AuthenticationError("[auth] Current user doesn't have an email assigned");
+  }
+
+  let userWithPassword : User | null = await daoUserByEmailCheckPassword(user.email, currentPasswordPlain);
+
+  let success : boolean
+
+  if (!userWithPassword) {
+    throw new AuthenticationError("[auth] Current password is incorrect");
+  } else {
+    success = await daoUserUpdatePassword(user.id, newPasswordHash)
+  }
+
+  return success
+}
+
+export const authResetPasswordRequest = async (email: string) : Promise<boolean> => {
+  let user = await daoUserFindByEmail(email)
+
+  if (!user) {
+    throw new AuthenticationError("[auth] Could not find a user with the given email");
+  }
+
+  const token = await tokenGenerateResetPasswordToken(user.id)
+  await sendEmailPasswordResetLink(email, token)
+
+  return true
+}
+
+export const authResetPassword = async (passwordPlain: string, token: string) : Promise<boolean> => {
+  const tokenPayload = await tokenVerifyInDB(
+    token,
+    TokenTypesEnum.RESET_PASSWORD
+  );
+
+  let success
+
+  if (tokenPayload && "user" in tokenPayload && "id" in tokenPayload.user) {
+    const user = await daoUserGetById(tokenPayload.user.id);
+
+    if (!user) {
+      throw new AuthenticationError("[Reset Password] Could not find user for token");  
+    }
+
+    let newPasswordHash = hashPassword(passwordPlain)
+    success = await daoUserUpdatePassword(user.id, newPasswordHash)
+
+    await daoTokenDeleteMany({
+      ownerId: user.id,
+      type: {
+        in: [
+          TokenTypesEnum.RESET_PASSWORD,
+        ],
+      },
+    });  
+
+  } else {
+    throw new AuthenticationError("[Reset Password] Token invalid");
+  }
+
+  return success
+}
+
+export const hashPassword = (password : string) : string => {
+  return bcrypt.hashSync(password, 8)
+}
 
 export const authRefresh = async (refreshToken: string) => {
   try {
@@ -315,6 +447,7 @@ export const authVerifyEmail = async (token: string) => {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Email verification failed");
   }
 };
+
 
 export default {
   authAuthenticateUserByToken,

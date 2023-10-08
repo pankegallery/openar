@@ -41,6 +41,7 @@ export const context = ({
     : "no query passed in the body";
 
   let accessToken = req?.headers?.authorization ?? "";
+  
   if (accessToken) {
     accessTokenProvided = true;
 

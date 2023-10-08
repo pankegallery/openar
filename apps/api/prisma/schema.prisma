@@ -12,9 +12,10 @@ generator client {
 
 model User {
   id        Int      @id @default(autoincrement())
-  email     String?  
+  email     String?
+  password  String?
   pseudonym String?
-  ethAddress String?   @db.VarChar(42) @unique
+  ethAddress String?   @db.VarChar(42)
   
   roles     String[]
 

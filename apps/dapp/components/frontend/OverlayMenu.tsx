@@ -294,7 +294,7 @@ export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
                       },
                     }}
                   >
-                    {account && appUser && (
+                    {appUser && (appUser.ethAddress || appUser.email) && (
                       <ActiveLink href={`/x/`}>Profile</ActiveLink>
                     )}
                     <WalletControl 

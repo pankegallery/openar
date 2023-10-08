@@ -41,6 +41,7 @@ import {
   daoSubgraphGetArObjectTokens,
   daoSubgraphGetParsedTokenInfos,
   daoPublicUserQuery,
+  daoUserGetById,
 } from "../../dao";
 
 const apiConfig = getApiConfig();
@@ -640,6 +641,111 @@ export const ArObjectQueries = extendType({
         };
       },
     });
+
+    t.nonNull.field("collectionById", {
+      type: "ArObjectQueryResult",
+
+      args: {
+        id: nonNull(intArg()),
+      },
+
+      // resolve(root, args, ctx, info)
+      async resolve(...[, args]) {
+        let user = await daoUserGetById(args.id)
+
+        if (!user.ethAddress || user.ethAddress.length == 0) {
+          return {
+            totalCount: 0,
+            arObjects: [],
+          };  
+        }
+
+        let ownedTokens = await daoSubgraphGetOwnedTokenByEthAddress(
+          user.ethAddress,
+          1000,
+          0
+        );
+        
+        if (ownedTokens) {
+          ownedTokens = ownedTokens.filter(
+            (token: any) => token.creator.id !== token.owner.id
+          );
+          if (!ownedTokens || ownedTokens.length === 0)
+            return {
+              totalCount: 0,
+              arObjects: [],
+            };
+
+          const tokensInfo = await daoSubgraphGetParsedTokenInfo(ownedTokens);
+
+          if (!tokensInfo || tokensInfo.length === 0)
+            return {
+              totalCount: 0,
+              arObjects: [],
+            };
+
+          const keys = Object.keys(tokensInfo);
+
+          let include: Prisma.ArObjectInclude = {
+            artwork: {
+              select: {
+                id: true,
+                key: true,
+                title: true,
+                heroImage: true,
+              },
+            },
+            heroImage: true,
+            creator: {
+              select: {
+                id: true,
+                pseudonym: true,
+                ethAddress: true,
+              },
+            },
+          };
+
+          const arObjects = await daoArObjectQuery(
+            {
+              key: {
+                in: keys,
+              },
+              artwork: {
+                isPublic: true,
+                isBanned: false,
+              },
+              isBanned: false,
+              isPublic: true,
+              creator: {
+                isBanned: false,
+              },
+            },
+            include,
+            {
+              updatedAt: "desc",
+            },
+            0,
+            1000
+          );
+
+          if (arObjects) {
+            return {
+              totalCount: arObjects.length,
+              arObjects: arObjects.map((arObj: any) => {
+                return {
+                  ...arObj,
+                  subgraphInfo: tokensInfo[arObj.key] ?? [],
+                };
+              }),
+            };
+          }
+        }
+        return {
+          totalCount: 0,
+          arObjects: [],
+        };
+      },
+    });    
 
     t.nonNull.field("arObjectTokens", {
       type: "ArObjectTokens",

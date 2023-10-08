@@ -24,6 +24,77 @@ export const authLogoutMutationGQL = gql`
   }
 `;
 
+export const authRegisterByEmailMutationGQL = gql`
+  mutation authRegisterByEmail(
+    $email: String!,
+    $password: String!
+  ) {
+    authRegisterByEmail(email: $email, password: $password) {
+      tokens {
+        access {
+          token
+          expires
+        }
+        refresh {
+          expires
+        }
+      }
+    }
+  }
+`;
+
+export const authLoginByEmailMutationGQL = gql`
+  mutation authLoginByEmail(    
+    $email: String!,
+    $password: String!
+  ) {
+    authLoginByEmail(email: $email, password: $password) {
+      tokens {
+        access {
+          token
+          expires
+        }
+        refresh {
+          expires
+        }
+      }
+    }
+  }
+`;
+
+export const authChangePasswordMutationGQL = gql`
+  mutation authChangePassword(
+    $userId: Int!,
+    $currentPassword: String!,
+    $newPassword: String!
+  ) {
+    authChangePassword(userId: $userId, currentPassword: $currentPassword, newPassword: $newPassword) {
+      result    
+    }
+  }
+`;
+
+export const authResetPasswordRequestMutationGQL = gql`
+  mutation authResetPasswordRequest(    
+    $email: String!,
+  ) {
+    authResetPasswordRequest(email: $email) {
+      result    
+    }
+  }
+`;
+
+export const authResetPasswordMutationGQL = gql`
+  mutation authResetPassword(    
+    $password: String!,
+    $token: String!,
+  ) {
+    authResetPassword(password: $password, token: $token) {
+      result    
+    }
+  }
+`;
+
 export const authPreLoginMutationGQL = gql`
   mutation authPreLogin(
     $ethAddress: String!

@@ -11,6 +11,7 @@ export interface AuthenticatedAppUserData {
   permissions: PermissionName[];
   pseudonym: string;
   ethAddress: string;
+  email: string;
   ens?: string;
 }
 
@@ -22,7 +23,7 @@ export interface JwtPayloadAuthenticatedAppUser {
   id: number;
   pseudonym?: string | null;
   email?: string | null;
-  ethAddress: string;
+  ethAddress?: string;
   roles?: RoleName[];
   permissions?: PermissionName[];
 }

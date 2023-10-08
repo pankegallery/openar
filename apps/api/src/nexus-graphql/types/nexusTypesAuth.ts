@@ -10,6 +10,11 @@ import {
   authRefresh,
   authRequestEmailVerificationEmail,
   authVerifyEmail,
+  authRegisterByEmail,
+  authLoginByEmail,
+  authChangePassword,
+  authResetPassword,
+  authResetPasswordRequest
 } from "../../services/serviceAuth";
 import {
   tokenProcessRefreshToken,
@@ -80,6 +85,59 @@ export const AuthMutations = extendType({
   type: "Mutation",
 
   definition(t) {
+    t.nonNull.field("authRegisterByEmail", {
+      type: "AuthPayload",
+      args: {
+        email: nonNull(stringArg()),
+        password: nonNull(stringArg())
+      },
+      async resolve(...[, args, ctx]) {
+        try {
+          const { authPayload, user } = await authRegisterByEmail(
+            args.email,
+            args.password
+          );
+          
+          if (user)
+            await authRequestEmailVerificationEmail(user.id)
+
+          logger.debug(
+            `authRegisterByEmail ${authPayload?.tokens?.sign?.token}`
+          );
+
+          return tokenProcessRefreshToken(ctx.res, authPayload);
+        } catch (Err) {
+          logger.debug(Err);
+          throw new AuthenticationError("Email Registration Failed");
+        }
+      },
+    });
+
+    t.nonNull.field("authLoginByEmail", {
+      type: "AuthPayload",
+      args: {
+        email: nonNull(stringArg()),
+        password: nonNull(stringArg())
+      },
+      async resolve(...[, args, ctx]) {
+        try {          
+          const authPayload = await authLoginByEmail(
+            args.email,
+            args.password
+          );
+
+          logger.debug(
+            `authLoginByEmail ${authPayload?.tokens?.sign?.token}`
+          );
+
+          return tokenProcessRefreshToken(ctx.res, authPayload);
+        } catch (Err) {
+          logger.debug(Err);
+          throw new AuthenticationError("Email Login Failed");
+        }
+      },
+    });
+
     t.nonNull.field("authPreLogin", {
       type: "AuthPayload",
       args: {
@@ -169,6 +227,55 @@ export const AuthMutations = extendType({
         const result = await authLogout(args.userId);
 
         if (!result) throw new AuthenticationError("Logout Failed (2)");
+
+        return { result };
+      },
+    });
+
+    t.nonNull.field("authChangePassword", {
+      type: BooleanResult,
+      args: {
+        userId: nonNull(intArg()),
+        currentPassword: nonNull(stringArg()),
+        newPassword: nonNull(stringArg())
+      },
+
+      authorize: (...[, args, ctx]) =>
+        authorizeApiUser(ctx, "profileUpdate") &&
+        isCurrentApiUser(ctx, args.userId),
+
+      async resolve(...[, args]) {
+        const result = await authChangePassword(args.userId, args.currentPassword, args.newPassword);
+        if (!result) throw new AuthenticationError("Failed to update password");
+
+        return { result };
+      },
+    });
+
+    t.nonNull.field("authResetPasswordRequest", {
+      type: BooleanResult,
+      args: {
+        email: nonNull(stringArg()),
+      },
+
+      async resolve(...[, args]) {
+        const result = await authResetPasswordRequest(args.email);
+        if (!result) throw new AuthenticationError("Failed request to reset password");
+
+        return { result };
+      },
+    });
+
+    t.nonNull.field("authResetPassword", {
+      type: BooleanResult,
+      args: {
+        password: nonNull(stringArg()),
+        token: nonNull(stringArg()),
+      },
+
+      async resolve(...[, args]) {
+        const result = await authResetPassword(args.password, args.token);
+        if (!result) throw new AuthenticationError("Failed to reset password");
 
         return { result };
       },

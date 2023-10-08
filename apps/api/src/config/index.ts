@@ -340,6 +340,13 @@ let apiConfig = {
       "",
       "Error: missing/wrong .env config: MAIL_PASSWORD"
     ),
+    sendgridApiKey: safeGuardVariable(
+      logger,
+      "string",
+      process.env.SENDGRID_API_KEY,
+      "",
+      "Error: missing/wrong .env config: SENDGRID_API_KEY"
+    ),
   },
   security: {
     saltRounds: 10,
