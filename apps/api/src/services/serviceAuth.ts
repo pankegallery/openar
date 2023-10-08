@@ -132,9 +132,16 @@ export const authLoginUserWithSignature = async (
 export const authRegisterByEmail = async (email: string, passwordPlain: string) : Promise<any> => {
   let authPayload : AuthPayload;
   
+  logger.warn("authRegisterByEmail")
+  logger.warn(email)
   const passwordH = hashPassword(passwordPlain)
+  logger.warn(passwordH)
 
   let user = await daoUserFindByEmail(email);
+
+  logger.warn("Found user?")
+  logger.warn(!!user)
+
   if (!user) {
     user = await daoUserCreate({
       email: email,
