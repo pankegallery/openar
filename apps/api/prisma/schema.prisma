@@ -94,6 +94,7 @@ model ArObject {
   
   lat           Float?
   lng           Float?
+  isGeolocationEnabled  Boolean? @default(false)
 
   setInitialAsk        Boolean @default(true)
 

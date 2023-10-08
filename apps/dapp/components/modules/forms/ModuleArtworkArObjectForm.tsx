@@ -11,6 +11,7 @@ import {
   Text,
   chakra,
   FormLabel,
+  Input
 } from "@chakra-ui/react";
 import pick from "lodash/pick";
 import { useFormContext } from "react-hook-form";
@@ -20,6 +21,8 @@ import {
   FieldRow,
   FieldTextEditor,
   FieldImageUploader,
+  FieldCheckbox,
+  FieldSwitch,
   FieldModelUploader
 } from "~/components/forms";
 
@@ -28,6 +31,10 @@ import { IncompleteOverlay } from "~/components/frontend";
 import { ArObjectStatusEnum } from "~/utils";
 
 import { yupIsFieldRequired } from "../validation";
+
+import { useCallback, useState } from 'react'
+
+import LeafletMap from "../map";
 
 export const ModuleArtworkArObjectForm = ({
   action,
@@ -44,6 +51,7 @@ export const ModuleArtworkArObjectForm = ({
   setActiveUploadCounter?: Function;
   disableNavigation?: Function;
 }) => {
+
   const { arObjectReadOwn } = data ?? {};
 
   const columns = { base: "100%", t: "50% 50%" };
@@ -56,6 +64,37 @@ export const ModuleArtworkArObjectForm = ({
     }),
     {}
   );
+
+  const [geolocationToggleEnabled, setGeolocationToggleEnabled] = useState(arObjectReadOwn.isGeolocationEnabled)
+
+  console.log("Data is: ", data)
+
+  const [latitude, setLatitude] = useState(arObjectReadOwn.lat || 52.5164)
+  const [longitude, setLongitude] = useState(arObjectReadOwn.lng || 13.4024)
+
+  const {
+    formState,
+    register,
+    setValue,
+  } = useFormContext();
+
+  const formGeolocationEnabled = register("isGeolocationEnabled", { required: true });
+
+  const onGeolocationEnabledChange = useCallback((e) => {    
+    setGeolocationToggleEnabled(e.target.checked)
+
+    formGeolocationEnabled.onChange(e)
+    setValue("isGeolocationEnabled", e.target.checked)
+  }, [setGeolocationToggleEnabled, formGeolocationEnabled, setValue])
+
+  const onCenterChange = useCallback((lat, lng) => {
+    setLatitude(lat)
+    setLongitude(lng)
+    setValue("lat", lat)
+    setValue("lng", lng)
+    // formLat.onChange(null)
+    // formLng.onChange(null)
+  }, [setLatitude, setLongitude, setValue]) 
 
   const disableFormFields =
     action !== "create" &&
@@ -110,6 +149,36 @@ export const ModuleArtworkArObjectForm = ({
               }}
             />
           </FieldRow>
+          <FieldRow>
+            <FieldSwitch
+              name="isGeolocationEnabled"
+              label="Restrict access based on geolocation"
+              isDisabled={disableFormFields}
+              isRequired={yupIsFieldRequired("isGeolocationEnabled", validationSchema)}
+              defaultChecked={arObjectReadOwn.isGeolocationEnabled}
+              onChangeHandler={onGeolocationEnabledChange}
+            />
+            <Text ml="6">
+              Enabling this toggle will only allow users within 10 meters of the lat/lon coordinates you specify to view your object in AR.<br/>
+              Users at a different location (or those who choose not to share the location with openAR) will still be able to see the object, but not place it in the world.
+            </Text>
+
+            { geolocationToggleEnabled &&
+
+               <Text ml="6">
+                  Move the map until the marker is placed at your chosen location.<br/>                  
+                  Your artwork&apos;s current coordinates are: {latitude.toFixed(6)} (lat), {longitude.toFixed(6)} (lng)
+                </Text> 
+            }
+            { geolocationToggleEnabled &&
+              <LeafletMap
+                lat={latitude}
+                lng={longitude}
+                onCenterChange={onCenterChange}
+              />
+            }
+          </FieldRow>
+
         </Box>
         <Box
           w={{ base: "50%", t: "auto" }}
