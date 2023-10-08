@@ -12,6 +12,7 @@ import {
 import { getPrismaClient } from "../db/client";
 import { getApiConfig } from "../config";
 import { daoImageSetToDelete } from ".";
+import logger from "../services/serviceLogging";
 
 const apiConfig = getApiConfig();
 const prisma = getPrismaClient();
@@ -123,6 +124,9 @@ export const daoArObjectGetOwnById = async (
     include,
   });
 
+  logger.warn("AR object is: ")
+  logger.warn(arObject)
+
   return filteredOutputByBlacklistOrNotFound(
     arObject,
     apiConfig.db.privateJSONDataKeys.arobject
@@ -148,6 +152,8 @@ export const daoArObjectUpdate = async (
   id: number,
   data: Prisma.ArObjectUpdateInput
 ): Promise<ArObject> => {
+  logger.warn("daoArObjectUpdate")
+  logger.warn(data)
   const arObject = await prisma.arObject.update({
     data,
     where: {

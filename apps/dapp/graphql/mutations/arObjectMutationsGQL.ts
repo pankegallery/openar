@@ -18,6 +18,9 @@ mutation arObjectUpdate($id: Int!, $data: ArObjectUpsertInput!) {
     title
     description
     status
+    isGeolocationEnabled
+    lat
+    lng
   }
 }
 `;

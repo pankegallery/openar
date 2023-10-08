@@ -56,6 +56,7 @@ export const arObjectReadOwnQueryGQL = gql`
       # isBanned TODO: make good use of this
       lat
       lng
+      isGeolocationEnabled
       # images {
       # }
       arModels {
@@ -147,6 +148,9 @@ const Update = () => {
         "title",
         "description",
         "status",
+        "isGeolocationEnabled",
+        "lat",
+        "lng"
       ]),
     });
   }, [reset, data]);
@@ -157,6 +161,7 @@ const Update = () => {
     setIsFormError(false);
     setIsNavigatingAway(false);
     try {
+      console.log("Form on submit: ", newData)
       if (appUser) {
         const { data, errors } = await firstMutation(
           parseInt(router.query.oid as string, 10),
@@ -164,6 +169,9 @@ const Update = () => {
             title: newData.title,
             description: newData.description,
             status: newData.status ?? null,
+            lat: newData.isGeolocationEnabled ? newData.lat : null,
+            lng: newData.isGeolocationEnabled ? newData.lng : null,
+            isGeolocationEnabled: newData.isGeolocationEnabled,
             creator: {
               connect: {
                 id: appUser.id,

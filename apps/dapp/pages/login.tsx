@@ -16,10 +16,11 @@ const OpenARLogin = () => {
   const [isNavigating, setIsNavigating] = useState(false)
 
   useEffect(() => {
+    console.log(library, appUser, stateUser, hasCookies())
     if (
-      library &&
-      library?.provider &&
-      account &&
+      // library &&
+      // library?.provider &&
+      // account &&
       appUser &&
       stateUser.authenticated && 
       hasCookies()
@@ -45,7 +46,7 @@ const OpenARLogin = () => {
 
   return (
     <Box p="6">
-      <Text mb="4">Please use your email or crypto wallet (deprecated) to login to openAR.</Text>
+      {/* <Text mb="4">Please use your email or crypto wallet (deprecated) to login to openAR.</Text> */}
 
       {(((!appUser || !stateUser.authenticated) && !isNavigating) ||
         !account) && (

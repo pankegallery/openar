@@ -82,6 +82,7 @@ export const ArObject = objectType({
 
     t.string("url");
     t.string("video");
+    t.boolean("isGeolocationEnabled");
     t.float("lat");
     t.float("lng");
 
@@ -498,7 +499,11 @@ export const ArObjectQueries = extendType({
       async resolve(...[, args, { appUser }, info]) {
         const pRI = parseResolveInfo(info);
 
-        let include = {};
+        let include = {
+          // lat: true,
+          // lng: true,
+          // isGeolocationEnabled: true
+        };
 
         if ((pRI?.fieldsByTypeName?.ArObject as any)?.arModels) {
           include = {
@@ -829,6 +834,7 @@ export const ArObjectUpsertInput = inputObjectType({
     t.nonNull.string("description");
     t.int("status");
     t.int("orderNumber");
+    t.boolean("isGeolocationEnabled");
     t.float("lng");
     t.float("askPrice");
     t.int("editionOf");

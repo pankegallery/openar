@@ -32,6 +32,7 @@ type ArObject {
   id: Int!
   images: [Image]
   isBanned: Boolean
+  isGeolocationEnabled: Boolean
   isPublic: Boolean
   key: String
   lat: Float
@@ -88,6 +89,7 @@ input ArObjectUpsertInput {
   heroImage: JSON
   id: Int
   images: JSON
+  isGeolocationEnabled: Boolean
   lat: Float
   lng: Float
   orderNumber: Int
