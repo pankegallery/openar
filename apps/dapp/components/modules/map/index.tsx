@@ -79,7 +79,7 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
         >
           <TileLayer
             attribution='Simultaneity'
-            url="https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png"
+            url="https://tiles-eu.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png"
           />
           <Circle center={[centerX, centerY]} pathOptions={{ fillColor: 'red', color: '#db93ba' }} radius={12.5}>
             <Popup>This is roughly the visibility area of your artwork</Popup>
