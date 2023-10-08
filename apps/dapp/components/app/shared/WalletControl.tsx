@@ -240,7 +240,7 @@ export const WalletControl = ({
             )}
 
 
-            <Text color="white" my="4" mb="4" textStyle="small">Don't have an account? <a href="#" onClick={async () => {
+            <Text color="white" my="4" mb="4" textStyle="small">Don&apos;t have an account? <a href="#" onClick={async () => {
               walletDisclosure.onClose()              
               emailRegisterDisclosure.onOpen()
             }}>Register here</a></Text>
