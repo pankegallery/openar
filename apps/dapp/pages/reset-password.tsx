@@ -93,7 +93,8 @@ const EmailConfirmation = () => {
   
   return (
     <Modal
-      isOpen={true}    
+      isOpen={true}
+      onClose={() => {{}}}
     >
     <ModalOverlay bg="blackAlpha.800" />
     <ModalContent
@@ -146,7 +147,7 @@ const EmailConfirmation = () => {
               isLoading={false}
               disabled={!resetButtonEnabled}
               onClick={async () => {
-                await resetPassword(userPassword, router.query.token)
+                await resetPassword(userPassword, (router.query.token ?? "") as string)
               }}
             >
               Reset Password
