@@ -77,7 +77,7 @@ const createCuratorLink = (curator) => {
   let name = curator.user.pseudonym
     ? curator.user.pseudonym
     : curator.user.ethAddress.slice(0, 8) + "…";
-  let url = `/u/${curator.user.ethAddress}`;
+  let url = `/u/${curator.user.id}`;
   // console.log("Curator: ", name, url);
   return <Link href={url}>{name}</Link>;
 };

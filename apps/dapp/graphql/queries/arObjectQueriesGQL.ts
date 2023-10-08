@@ -13,6 +13,7 @@ export const arObjectTokensQueryGQL = gql`
         collector {
           ethAddress
           pseudonym
+          id
         }
       }
       totalCount

@@ -3,6 +3,7 @@ export enum TokenTypesEnum {
   REFRESH,
   SIGNATURE,
   VERIFY_EMAIL,
+  RESET_PASSWORD
 }
 
 export enum ImageStatusEnum {

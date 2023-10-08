@@ -1,8 +1,4 @@
-- Meta tags
-- AR Button
-- Listings are fully clickable "everywhere"
-- New corner 
-
+# openAR
 
 This repository contains the code for the openAR api/backend, the dApp/frontent, and shared code provided as packages. We make use of package.json "packages" to allow you the convenience of importing shared code in the following way. 
 
@@ -35,6 +31,8 @@ npm i [NEW PACKAGE NAME] -w dapp
 
 *Configuration*
 
+Run `npm install` in `/`, as well as in `/apps/dapp` and in `/apps/api`.
+
 Please create a `.env.local` file in `/apps/dapp` and provide the following information
 
 ```bash
@@ -51,10 +49,30 @@ Please create a `.env` file in `/` and provide the following information
 
 ```bash
 DEV_DAPP_PORT=4400
+API_PORT=3001
 BASE_URL_API=[API_URL]
 ```
 
 In both cases `[API_URL]` can either be the URL to the local api if you are running it or if you just want to do frontend work you should be able to just use the live url https://api.openar.art 
+
+Please create a `openar.config.js` file in `/` and provide the following information
+
+```javascript
+const settings = {                                  
+  enablePublicRegistration: true,                   
+  defaultPageSize: 50,                              
+  privateJSONDataKeys: {                            
+    all: ["password", "test1"],                     
+    location: ["createdAt", "updatedAt", "test2"],  
+    event: ["createdAt", "updatedAt", "test3"],     
+    tour: ["createdAt", "updatedAt", "test4"],      
+    user: ["password", "test5"],                    
+  },                                                
+};                                                  
+module.exports = settings;
+```
+
+If you are developing with a local database, please install PostgresSQL on your machine, create an `openar` user in your DB, and change the `DATABASE_URL` variable in `.env` to point to your local database. Running `npx prisma migrate dev` will create the appropriate tables with the correct schema.
 
 For your convenience we provide several npm scripts to help you development. Please use
 

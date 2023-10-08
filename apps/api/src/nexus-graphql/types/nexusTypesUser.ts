@@ -288,6 +288,148 @@ export const UserQueries = extendType({
       },
     });
 
+    t.field("userById", {
+      type: "PublicUser",
+
+      args: {
+        id: nonNull(intArg()),
+      },
+
+      // resolve(root, args, ctx, info)
+      async resolve(...[, args, , info]) {
+        const pRI = parseResolveInfo(info);
+        let include = {};
+        let where: Prisma.UserWhereInput = {
+          isBanned: false,
+          id: args.id,
+        };
+        if ((pRI?.fieldsByTypeName?.PublicUser as any)?.profileImage) {
+          include = {
+            ...include,
+            profileImage: {
+              select: {
+                meta: true,
+                status: true,
+                id: true,
+              },
+            },
+          };
+          where = {
+            ...where,
+            OR: [
+              {
+                profileImage: {
+                  status: ImageStatusEnum.READY,
+                },
+              },
+              {
+                profileImage: null,
+              },
+            ],
+          };
+        }
+
+        if ((pRI?.fieldsByTypeName?.PublicUser as any)?.artworks) {
+          include = {
+            ...include,
+            artworks: {
+              select: {
+                id: true,
+                key: true,
+                title: true,
+                description: true,
+                url: true,
+                video: true,
+                createdAt: true,
+                isPublic: true,
+                heroImage: {
+                  select: {
+                    id: true,
+                    meta: true,
+                    status: true,
+                  },
+                },
+                creator: {
+                  select: {
+                    id: true,
+                    ethAddress: true,
+                    pseudonym: true,
+                  },
+                },
+                arObjects: {
+                  select: {
+                    id: true,
+                    status: true,
+                    key: true,
+                    orderNumber: true,
+                    title: true,
+                    askPrice: true,
+                    editionOf: true,
+                    isPublic: true,
+                    heroImage: {
+                      select: {
+                        id: true,
+                        meta: true,
+                        status: true,
+                      },
+                    },
+                    arModels: true,
+                  },
+                  where: {
+                    isBanned: false,
+                    isPublic: true,
+
+                    status: {
+                      in: [
+                        ArObjectStatusEnum.PUBLISHED,
+                        ArObjectStatusEnum.MINTCONFIRM,
+                        ArObjectStatusEnum.MINT,
+                        ArObjectStatusEnum.MINTING,
+                        ArObjectStatusEnum.MINTED,
+                      ],
+                    },
+                  },
+                  orderBy: {
+                    orderNumber: "asc",
+                  },
+                },
+              },
+              where: {
+                isBanned: false,
+                isPublic: true,
+                status: {
+                  in: [
+                    ArtworkStatusEnum.PUBLISHED,
+                    ArtworkStatusEnum.HASMINTEDOBJECTS,
+                  ],
+                },
+                arObjects: {
+                  some: {
+                    status: {
+                      in: [
+                        ArObjectStatusEnum.PUBLISHED,
+                        ArObjectStatusEnum.MINTCONFIRM,
+                        ArObjectStatusEnum.MINT,
+                        ArObjectStatusEnum.MINTING,
+                        ArObjectStatusEnum.MINTED,
+                      ],
+                    },
+                  },
+                },
+              },
+              orderBy: {
+                createdAt: "desc",
+              },
+            },
+          };
+        }
+        return daoUserFindFirst(
+          where,
+          Object.keys(include).length > 0 ? include : undefined
+        );
+      },
+    });
+
     t.field("userRead", {
       type: "User",
 
@@ -425,6 +567,132 @@ export const UserQueries = extendType({
         );
       },
     });
+
+    t.field("userProfileReadById", {
+      type: "User",
+
+      args: {
+        id: nonNull(intArg()),
+      },
+
+      authorize: (...[, args, ctx]) =>
+        authorizeApiUser(ctx, "profileRead") &&
+        isCurrentApiUser(ctx, args.id),
+      // authorize: (...[, args, ctx]) => true,
+
+
+      // resolve(root, args, ctx, info)
+      async resolve(...[, args, , info]) {
+        const pRI = parseResolveInfo(info);
+        let include = {};
+        let where: Prisma.UserWhereInput = {
+          isBanned: false,
+          id: args.id,
+        };
+
+        if ((pRI?.fieldsByTypeName?.User as any)?.profileImage) {
+          include = {
+            ...include,
+            profileImage: {
+              select: {
+                meta: true,
+                status: true,
+                id: true,
+              },
+            },
+          };
+          where = {
+            ...where,
+            OR: [
+              {
+                profileImage: {
+                  status: ImageStatusEnum.READY,
+                },
+              },
+              {
+                profileImage: null,
+              },
+            ],
+          };
+        }
+
+        if ((pRI?.fieldsByTypeName?.User as any)?.artworks) {
+          include = {
+            ...include,
+            artworks: {
+              select: {
+                id: true,
+                key: true,
+                title: true,
+                description: true,
+                url: true,
+                video: true,
+                createdAt: true,
+                isPublic: true,
+                heroImage: {
+                  select: {
+                    id: true,
+                    meta: true,
+                    status: true,
+                  },
+                },
+                creator: {
+                  select: {
+                    id: true,
+                    ethAddress: true,
+                    pseudonym: true,
+                  },
+                },
+                arObjects: {
+                  select: {
+                    id: true,
+                    status: true,
+                    key: true,
+                    orderNumber: true,
+                    title: true,
+                    askPrice: true,
+                    editionOf: true,
+                    isPublic: true,
+                    heroImage: {
+                      select: {
+                        id: true,
+                        meta: true,
+                        status: true,
+                      },
+                    },
+                    arModels: true,
+                  },
+                  where: {
+                    isBanned: false,
+                  },
+
+                  orderBy: {
+                    orderNumber: "asc",
+                  },
+                },
+              },
+              where: {
+                isBanned: false,
+                status: {
+                  not: {
+                    in: [ArtworkStatusEnum.TRASHED, ArtworkStatusEnum.DELETED],
+                  },
+                },
+              },
+              orderBy: {
+                createdAt: "desc",
+              },
+            },
+          };
+        }
+
+        return daoUserFindFirst(
+          where,
+          Object.keys(include).length > 0 ? include : undefined
+        );
+      },
+    });
+
   },
 });
 

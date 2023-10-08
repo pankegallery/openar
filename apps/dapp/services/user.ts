@@ -71,8 +71,9 @@ const setRefreshing = (status: boolean) =>
 
 const isRefreshing = () => store.getState().user.refreshing;
 
-const login = async (u: AuthenticatedAppUserData): Promise<boolean> =>
+const login = async (u: AuthenticatedAppUserData): Promise<boolean> =>  
   new Promise((resolve) => {
+    console.log("USER LOGIN", u)
     setRefreshing(false);
     setTabWideAccessStatus("logged-in");
 

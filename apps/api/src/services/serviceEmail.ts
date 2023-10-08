@@ -30,7 +30,7 @@ if (process.env.NODE_ENV !== "test") {
 }
 
 export const sendEmail = (to: string, subject: string, text: string) => {
-  const msg = { from: apiConfig.email.from, to, subject, text };
+  const msg = { from: apiConfig.email.from, to, subject, html: text };
 
   logger.info(`[service.email.sendMail]: ${subject}`);
 
@@ -45,16 +45,39 @@ export const sendEmailConfirmationEmail = async (to: string, token: string) => {
   // replace this url with the link to the reset password page of your front-end app
   const verificationEmailUrl = `${apiConfig.baseUrl.dapp}/email-confirmation/?token=${token}`;
 
-  const text = `Dear user,
+  const text = `<html><body>
+Dear OpenAR user,<br/><br/>
 
-To verify your email, click on this link: ${verificationEmailUrl}
-If you did not create a new account with us or just changed your email address, then please ignore this email.
+Welcome to the platform! To verify your email, click on this <a href="${verificationEmailUrl}">link</a>.<br/>
+If you did not create a new account with us or just changed your email address, then please ignore this email.<br/><br/>
 
-Thank you your, 
-${apiConfig.appName} team`;
+Thank you,<br/>
+your ${apiConfig.appName} team
+</body></html>
+`;
 
   await sendEmail(to, subject, text);
 };
+
+export const sendEmailPasswordResetLink = async (to: string, token: string) => {
+  const subject = `${apiConfig.email.subjectPrefix} Password Reset`;
+
+  // replace this url with the link to the reset password page of your front-end app
+  const passwordResetURL = `${apiConfig.baseUrl.dapp}/reset-password/?token=${token}`;
+
+  const text = `<html><body>
+Dear OpenAR user,<br/><br/>
+
+To reset your OpenAR account password, click on this <a href="${passwordResetURL}">link</a>.<br/>
+If you did not request to reset your password, please ignore this email.<br/><br/>
+
+Thank you,<br/>
+your ${apiConfig.appName} team
+</body></html>`;
+
+  await sendEmail(to, subject, text);
+
+}
 
 export default {
   transport,

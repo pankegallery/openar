@@ -213,6 +213,9 @@ const Update = () => {
     }
   }, [setCouldMint, getValues, data, errors, isValid]);
 
+  // console.log("App user is: ", appUser)
+  const hasEthWallet = (appUser && appUser.ethAddress && (appUser.ethAddress.length > 0))
+
   // TODO: this makes some trouble on SSR as the buttons look differently
   // as the user can't do thing on the server
   const buttonList: ButtonListElement[] = [
@@ -258,34 +261,37 @@ const Update = () => {
         data?.arObjectReadOwn?.status
       ),
     },
-    {
-      type: "button",
-      isLoading: false,
-      onClick: async () => {
-        if (isArObjectFormValid(data, errors, getValues)) {
-          Router.push(
-            `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/check`
-          );
-        } else {
-          setValue("status", ArObjectStatusEnum.PUBLISHED);
-          handleSubmit(onSubmit)();
-        }
-      },
-      label: "Mint as NFT",
-      isDisabled:
-        !(
-          data?.artworkReadOwn?.status === ArtworkStatusEnum.PUBLISHED ||
-          data?.artworkReadOwn?.status === ArtworkStatusEnum.HASMINTEDOBJECTS
-        ) ||
-        !(data?.arObjectReadOwn?.status === ArObjectStatusEnum.PUBLISHED) ||
-        !couldMint ||
-        disableNavigation ||
-        activeUploadCounter > 0,
-      skip: ![ArObjectStatusEnum.DRAFT, ArObjectStatusEnum.PUBLISHED].includes(
-        data?.arObjectReadOwn?.status
-      ),
-      userCan: "artworkUpdateOwn",
-    },
+    // {
+    //   type: "button",
+    //   isLoading: false,
+    //   onClick: async () => {
+    //     if (isArObjectFormValid(data, errors, getValues)) {
+    //       Router.push(
+    //         `${moduleConfig.rootPath}/${router.query.aid}/${router.query.oid}/check`
+    //       );
+    //     } else {
+    //       setValue("status", ArObjectStatusEnum.PUBLISHED);
+    //       handleSubmit(onSubmit)();
+    //     }
+    //   },
+    //   label: "Mint as NFT",
+    //   isDisabled:
+    //     !(
+    //       data?.artworkReadOwn?.status === ArtworkStatusEnum.PUBLISHED ||
+    //       data?.artworkReadOwn?.status === ArtworkStatusEnum.HASMINTEDOBJECTS
+    //     ) ||
+    //     !(data?.arObjectReadOwn?.status === ArObjectStatusEnum.PUBLISHED) ||
+    //     !couldMint ||
+    //     disableNavigation ||
+    //     !hasEthWallet ||
+    //     activeUploadCounter > 0,
+    //   skip: ![ArObjectStatusEnum.DRAFT, ArObjectStatusEnum.PUBLISHED].includes(
+    //     data?.arObjectReadOwn?.status
+    //   ),
+    //   hasTooltip: !hasEthWallet,
+    //   tooltipText: (hasEthWallet ? "" : "Please connect your ETH wallet in order to mint an NFT"),
+    //   userCan: "artworkUpdateOwn",
+    // },
   ];
 
   return (

@@ -376,6 +376,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           creator {
             pseudonym
             ethAddress
+            id
           }
           heroImage {
             id

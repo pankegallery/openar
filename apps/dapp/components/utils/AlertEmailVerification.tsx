@@ -13,8 +13,8 @@ import {
 import { useAuthRequestEmailVerificationEmail } from "~/hooks/mutations";
 
 const GET_EMAIL_VERIFICATION_STATUS = gql`
-  query userProfileRead($ethAddress: String!) {
-    userProfileRead(ethAddress: $ethAddress) {
+  query userProfileReadById($id: Int!) {
+    userProfileReadById(id: $id) {
       emailVerified
       email
     }
@@ -49,15 +49,15 @@ export const AlertEmailVerification = () => {
   const { data, error } = useQuery(GET_EMAIL_VERIFICATION_STATUS, {
     skip: !isLoggedIn() || emailVerified === "yes" || !showPopup,
     variables: {
-      ethAddress: (appUser?.ethAddress ?? "").toLowerCase(),
+      id: (appUser?.id ?? -1),
     },
   });
 
   let localEmailVerified =
-    typeof data?.userProfileRead?.emailVerified === "boolean"
-      ? data?.userProfileRead?.emailVerified &&
-        data?.userProfileRead?.email &&
-        `${data?.userProfileRead?.email}`.trim() !== ""
+    typeof data?.userProfileReadById?.emailVerified === "boolean"
+      ? data?.userProfileReadById?.emailVerified &&
+        data?.userProfileReadById?.email &&
+        `${data?.userProfileReadById?.email}`.trim() !== ""
         ? "yes"
         : "no"
       : emailVerified;
@@ -106,7 +106,7 @@ export const AlertEmailVerification = () => {
     <>
       {data &&
         showPopup &&
-        data?.userProfileRead?.email &&
+        data?.userProfileReadById?.email &&
         !error &&
         localEmailVerified === "no" &&
         !requestMutationResults.loading && (
