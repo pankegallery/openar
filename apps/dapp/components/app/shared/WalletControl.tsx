@@ -82,7 +82,7 @@ export const WalletControl = ({
     setResetPasswordSuccess
   } = useResetPasswordRequest()
 
-  const walletDisclosure = useDisclosure({defaultIsOpen: false});
+  const walletDisclosure = useDisclosure({defaultIsOpen: (location == "page")});
   const emailRegisterDisclosure = useDisclosure();
   const forgotPasswordDisclosure = useDisclosure();
 
@@ -127,7 +127,7 @@ export const WalletControl = ({
     <Box>
       {/* ------- Buttons ------- */}
       <Box>        
-        {!isAuthenticated && (
+        {!isAuthenticated && (location != "page" ) && (
           <Box>
             <Button
               variant={location === "page" ? "outlineBlack" : "menuLink"}
@@ -143,7 +143,7 @@ export const WalletControl = ({
         )}
         
 
-        {!isAuthenticated && (
+        {!isAuthenticated && (location != "page" ) && (
           <Box>
             <Button
               variant={location === "page" ? "outlineBlack" : "menuLink"}
@@ -159,7 +159,7 @@ export const WalletControl = ({
         )}
 
 
-        {isAuthenticated && (
+        {isAuthenticated && (location != "page") && (
           <Button
             variant="menuLink"
             onClick={async () => {
@@ -179,6 +179,7 @@ export const WalletControl = ({
       <Modal
         isOpen={walletDisclosure.isOpen}
         onClose={() => {
+          if (location == "page") return
           walletDisclosure.onClose()
           setUserEmail("")
           setUserPassword("")
@@ -193,7 +194,7 @@ export const WalletControl = ({
           borderRadius="0"
         >
           <ModalHeader pb="0">Authenticate via email</ModalHeader>
-          <ModalCloseButton fontSize="lg" />
+          { location != "page" && <ModalCloseButton fontSize="lg" /> }
           <ModalBody pb="6">          
 
             <Stack spacing={1}>
@@ -346,7 +347,13 @@ export const WalletControl = ({
 
       <Modal
         isOpen={emailRegisterDisclosure.isOpen}
-        onClose={emailRegisterDisclosure.onClose}
+        onClose={() => {
+          if (location == "page") return
+          emailRegisterDisclosure.onClose()
+          setUserEmail("")
+          setUserPassword("")
+          setUserPasswordConfirm("")
+        }}
       >
         <ModalOverlay bg="blackAlpha.800" />
         <ModalContent
@@ -356,7 +363,7 @@ export const WalletControl = ({
           borderRadius="0"
         >
           <ModalHeader pb="0">Register by email</ModalHeader>
-          <ModalCloseButton fontSize="lg" />
+          { location != "page" && <ModalCloseButton fontSize="lg" /> }
           <ModalBody pb="6">
             <Text color="white" mb="4">
               Register below by typing your email address and password.
@@ -426,7 +433,13 @@ export const WalletControl = ({
 
       <Modal
         isOpen={forgotPasswordDisclosure.isOpen}
-        onClose={forgotPasswordDisclosure.onClose}
+        onClose={() => {
+          if (location == "page") return
+          forgotPasswordDisclosure.onClose()                    
+          setUserEmail("")
+          setUserPassword("")
+          setUserPasswordConfirm("")
+        }}
       >
         <ModalOverlay bg="blackAlpha.800" />
         <ModalContent
@@ -436,7 +449,7 @@ export const WalletControl = ({
           borderRadius="0"
         >
           <ModalHeader pb="0">Reset your password</ModalHeader>
-          <ModalCloseButton fontSize="lg" />
+          { location != "page" && <ModalCloseButton fontSize="lg" /> }
           <ModalBody pb="6">
             <Text color="white" mb="4">
               Type your email address below in order to request a new password.
@@ -466,6 +479,12 @@ export const WalletControl = ({
               >
                 Request new password
             </Button>            
+
+            <Text color="white" my="4" mb="4" textStyle="small">Or go back to <a href="#" onClick={async () => {
+              emailRegisterDisclosure.onClose()
+              walletDisclosure.onOpen()
+              // await delay(500)              
+            }}>sign in</a>.</Text>
             {resetPasswordError && (
               <Text mt="2" color="openar.error">{resetPasswordError}</Text>
             )}

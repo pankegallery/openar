@@ -170,7 +170,7 @@ export const ModuleArtworkArObjectForm = ({
 
                <Text ml="6">
                   Move the map until the marker is placed at your chosen location.<br/>                  
-                  Your current coordinates are: {latitude.toFixed(6)} (lat), {longitude.toFixed(6)} (lng)
+                  Your artwork's current coordinates are: {latitude.toFixed(6)} (lat), {longitude.toFixed(6)} (lng)
                 </Text> 
             }
             { geolocationToggleEnabled &&
