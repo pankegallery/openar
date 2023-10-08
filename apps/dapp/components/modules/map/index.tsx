@@ -49,11 +49,11 @@ export default class LeafletMap extends React.Component {
     this.markerIcon = this.L.icon({
       iconUrl: mapMarker,
       iconSize: [iconSize, iconSize],
-      iconAnchor: [iconSize / 2, iconSize],
+      iconAnchor: [iconSize / 2, iconSize * 0.85],
 
     })
 
-    const { MapContainer, TileLayer, Marker, Popup } = this.leaflet
+    const { MapContainer, TileLayer, Marker, Popup, Circle } = this.leaflet
 
     const { centerX, centerY } = this.state
 
@@ -70,11 +70,10 @@ export default class LeafletMap extends React.Component {
             attribution='Simultaneity'
             url="https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png"
           />
-          <Marker icon={this.markerIcon} position={[centerX, centerY]}>
-            <Popup>
-              A pretty CSS3 popup. <br /> Easily customizable.
-            </Popup>
-          </Marker>
+          <Circle center={[centerX, centerY]} pathOptions={{ fillColor: 'red', color: '#db93ba' }} radius={12.5}>
+            <Popup>This is roughly the visibility area of your artwork</Popup>
+          </Circle>
+          <Marker icon={this.markerIcon} position={[centerX, centerY]}></Marker>          
         </MapContainer>
       </div>
     )
