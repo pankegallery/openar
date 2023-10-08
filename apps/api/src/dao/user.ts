@@ -50,12 +50,18 @@ export const daoUserCreate = async (
   logger.warn("daoUserCreate")
   logger.warn(JSON.stringify(data, null, 4))
 
-  const user: User = await prisma.user.create({
-    data: {
-      ...data,
-      ethAddress: data.ethAddress?.toLowerCase() ?? "",
-    },
-  });
+  let user : User | null = null
+  try {
+    user = await prisma.user.create({
+      data: {
+        ...data,
+        ethAddress: data.ethAddress?.toLowerCase() ?? "",
+      },
+    });
+  } catch (e) {
+    logger.warn("Caught exception in creating user")
+    logger.warn(e)
+  }
 
   logger.warn("prisma user created")
 
