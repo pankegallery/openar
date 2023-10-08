@@ -1,4 +1,5 @@
 import React from 'react'
+import 'leaflet/dist/leaflet.css'
 import dynamic from 'next/dynamic'
 import { mapMarker } from './marker'
 
@@ -26,8 +27,7 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
   markerIcon: any
   L: any
 
-  async componentDidMount() {
-    await import('leaflet/dist/leaflet.css')
+  async componentDidMount() {    
     this.leaflet = await import('react-leaflet')
     this.L = await import('leaflet')        
 
