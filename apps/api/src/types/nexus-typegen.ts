@@ -72,6 +72,7 @@ export interface NexusGenInputs {
     heroImage?: NexusGenScalars['JSON'] | null; // JSON
     id?: number | null; // Int
     images?: NexusGenScalars['JSON'] | null; // JSON
+    isGeolocationEnabled?: boolean | null; // Boolean
     lat?: number | null; // Float
     lng?: number | null; // Float
     orderNumber?: number | null; // Int
@@ -179,6 +180,7 @@ export interface NexusGenObjects {
     id: number; // Int!
     images?: Array<NexusGenRootTypes['Image'] | null> | null; // [Image]
     isBanned?: boolean | null; // Boolean
+    isGeolocationEnabled?: boolean | null; // Boolean
     isPublic?: boolean | null; // Boolean
     key?: string | null; // String
     lat?: number | null; // Float
@@ -372,6 +374,7 @@ export interface NexusGenFieldTypes {
     id: number; // Int!
     images: Array<NexusGenRootTypes['Image'] | null> | null; // [Image]
     isBanned: boolean | null; // Boolean
+    isGeolocationEnabled: boolean | null; // Boolean
     isPublic: boolean | null; // Boolean
     key: string | null; // String
     lat: number | null; // Float
@@ -612,6 +615,7 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
     images: 'Image'
     isBanned: 'Boolean'
+    isGeolocationEnabled: 'Boolean'
     isPublic: 'Boolean'
     key: 'String'
     lat: 'Float'

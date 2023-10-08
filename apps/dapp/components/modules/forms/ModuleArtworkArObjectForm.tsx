@@ -77,6 +77,12 @@ export const ModuleArtworkArObjectForm = ({
     setLongitude(lng)
   }
 
+  const {
+    formState,
+    register,
+    setValue,
+  } = useFormContext();
+
   const disableFormFields =
     action !== "create" &&
     ![ArObjectStatusEnum.DRAFT, ArObjectStatusEnum.PUBLISHED].includes(

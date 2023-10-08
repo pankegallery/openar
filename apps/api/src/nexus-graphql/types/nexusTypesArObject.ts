@@ -82,6 +82,7 @@ export const ArObject = objectType({
 
     t.string("url");
     t.string("video");
+    t.boolean("isGeolocationEnabled");
     t.float("lat");
     t.float("lng");
 
@@ -829,6 +830,7 @@ export const ArObjectUpsertInput = inputObjectType({
     t.nonNull.string("description");
     t.int("status");
     t.int("orderNumber");
+    t.boolean("isGeolocationEnabled");
     t.float("lng");
     t.float("askPrice");
     t.int("editionOf");
