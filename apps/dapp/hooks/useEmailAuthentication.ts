@@ -54,8 +54,8 @@ export function useEmailRegistration() {
 
 export function useEmailLogin() {
   const [loginError, setLoginError] = useState<string | null>(null);
-  const [loginByEmailLoading, setLoginByEmailLoading] = useState<Boolean>(false)
-  const [loginByEmailSuccess, setLoginByEmailSuccess] = useState<Boolean>(false)
+  const [loginByEmailLoading, setLoginByEmailLoading] = useState<boolean>(false)
+  const [loginByEmailSuccess, setLoginByEmailSuccess] = useState<boolean>(false)
   const [loginByEmailMutation] = useAuthLoginByEmailMutation()
 
   const loginByEmail = useCallback(
@@ -104,8 +104,8 @@ export function useEmailLogin() {
 
 export function useChangePassword() {
   const [updatePasswordError, setUpdatePasswordError] = useState<string | null>(null)
-  const [updatePasswordLoading, setUpdatePasswordLoading] = useState<Boolean>(false)
-  const [updatePasswordSuccess, setUpdatePasswordSuccess] = useState<Boolean>(false)
+  const [updatePasswordLoading, setUpdatePasswordLoading] = useState<boolean>(false)
+  const [updatePasswordSuccess, setUpdatePasswordSuccess] = useState<boolean>(false)
   const [changePasswordMutation] = useAuthChangePasswordMutation()
 
   const changePassword = useCallback(
