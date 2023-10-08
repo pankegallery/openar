@@ -25,6 +25,7 @@ import {
   ButtonListElement,
 } from "~/components/modules";
 import { trimStringToLength } from "~/utils";
+import { ErrorBoundary } from "react-error-boundary";
 
 export const artworkReadOwnQueryGQL = gql`
   query artworkReadOwn($id: Int!) {
@@ -178,6 +179,7 @@ const Create = () => {
                 disableNavigation={setDisableNavigation}
                 validationSchema={ModuleArObjectCreateSchema}
               />
+
             </ModulePage>
           </fieldset>
         </form>

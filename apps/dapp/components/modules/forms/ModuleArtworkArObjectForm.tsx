@@ -34,7 +34,7 @@ import { yupIsFieldRequired } from "../validation";
 
 import { useCallback, useState } from 'react'
 
-// import LeafletMap from "../map";
+import LeafletMap from "../map";
 
 export const ModuleArtworkArObjectForm = ({
   action,
@@ -65,12 +65,12 @@ export const ModuleArtworkArObjectForm = ({
     {}
   );
 
-  const [geolocationToggleEnabled, setGeolocationToggleEnabled] = useState(arObjectReadOwn.isGeolocationEnabled)
+  const [geolocationToggleEnabled, setGeolocationToggleEnabled] = useState(arObjectReadOwn?.isGeolocationEnabled || false)
 
   console.log("Data is: ", data)
 
-  const [latitude, setLatitude] = useState(arObjectReadOwn.lat || 52.5164)
-  const [longitude, setLongitude] = useState(arObjectReadOwn.lng || 13.4024)
+  const [latitude, setLatitude] = useState(arObjectReadOwn?.lat || 52.5164)
+  const [longitude, setLongitude] = useState(arObjectReadOwn?.lng || 13.4024)
 
   const {
     formState,
@@ -149,13 +149,13 @@ export const ModuleArtworkArObjectForm = ({
               }}
             />
           </FieldRow>
-          {/* <FieldRow>
+          <FieldRow>
             <FieldSwitch
               name="isGeolocationEnabled"
               label="Restrict access based on geolocation"
               isDisabled={disableFormFields}
               isRequired={yupIsFieldRequired("isGeolocationEnabled", validationSchema)}
-              defaultChecked={arObjectReadOwn.isGeolocationEnabled}
+              defaultChecked={arObjectReadOwn?.isGeolocationEnabled || false}
               onChangeHandler={onGeolocationEnabledChange}
             />
             <Text ml="6">
@@ -177,7 +177,7 @@ export const ModuleArtworkArObjectForm = ({
                 onCenterChange={onCenterChange}
               />
             }
-          </FieldRow> */}
+          </FieldRow>
 
         </Box>
         <Box
