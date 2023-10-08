@@ -79,8 +79,6 @@ export const ModuleArtworkArObjectForm = ({
   } = useFormContext();
 
   const formGeolocationEnabled = register("isGeolocationEnabled", { required: true });
-  const formLat = register("lat", { required: false });
-  const formLng = register("lng", { required: false });
 
   const onGeolocationEnabledChange = useCallback((e) => {    
     setGeolocationToggleEnabled(e.target.checked)
@@ -96,7 +94,7 @@ export const ModuleArtworkArObjectForm = ({
     setValue("lng", lng)
     // formLat.onChange(null)
     // formLng.onChange(null)
-  }, [setLatitude, setLongitude, setValue, formLat, formLng]) 
+  }, [setLatitude, setLongitude, setValue]) 
 
   const disableFormFields =
     action !== "create" &&
@@ -154,7 +152,6 @@ export const ModuleArtworkArObjectForm = ({
           <FieldRow>
             <FieldSwitch
               name="isGeolocationEnabled"
-              id="isGeolocationEnabled"
               label="Restrict access based on geolocation"
               isDisabled={disableFormFields}
               isRequired={yupIsFieldRequired("isGeolocationEnabled", validationSchema)}
@@ -170,7 +167,7 @@ export const ModuleArtworkArObjectForm = ({
 
                <Text ml="6">
                   Move the map until the marker is placed at your chosen location.<br/>                  
-                  Your artwork's current coordinates are: {latitude.toFixed(6)} (lat), {longitude.toFixed(6)} (lng)
+                  Your artwork&apos;s current coordinates are: {latitude.toFixed(6)} (lat), {longitude.toFixed(6)} (lng)
                 </Text> 
             }
             { geolocationToggleEnabled &&

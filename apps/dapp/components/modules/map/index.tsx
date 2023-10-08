@@ -5,7 +5,18 @@ import {mapMarker} from './marker'
 
 // const Leaflet : any = dynamic(() => import('react-leaflet'), { ssr: false })
 
-export default class LeafletMap extends React.Component {
+type LeafletMapProps = typeof LeafletMap.defaultProps & {
+  lat: number,
+  lng: number,
+  onCenterChange: (lat: number, lng: number) => any
+}
+
+export default class LeafletMap extends React.Component<LeafletMapProps> {
+  static defaultProps = {
+    lat: 51.05,
+    lng: -0.09,
+    onCenterChange: null
+  }
   state = {
     inBrowser: false,
     map: null,
