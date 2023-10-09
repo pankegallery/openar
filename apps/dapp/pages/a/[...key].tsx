@@ -216,7 +216,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
       artwork: data?.artwork,
       okey: okey,
     },
-    revalidate: 240,
+    revalidate: 0,
   };
 };
 
