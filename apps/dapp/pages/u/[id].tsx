@@ -246,7 +246,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   if (!data?.userById) {
     return {
       notFound: true,
-      revalidate: 240,
+      revalidate: 5,
     };
   }
 
@@ -258,7 +258,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
       artworks: data?.userById?.artworks,
       collection: data?.collectionById,
     },
-    revalidate: 240,
+    revalidate: 5,
   };
 };
 

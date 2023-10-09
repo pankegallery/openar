@@ -235,7 +235,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   if (!data?.exhibitions?.totalCount) {
     return {
       notFound: true,
-      revalidate: 240,
+      revalidate: 5,
     };
   }
 
@@ -247,7 +247,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
       pageDescription:
         "openAR makes it easy to exhibit, collect and discuss Augmented Reality (AR) works and allows artists to sell their works as NFTs. The open platform is organised as a cooperative, profits will be shared among the artists.",
     },
-    revalidate: 240,
+    revalidate: 5,
   };
 };
 

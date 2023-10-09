@@ -132,10 +132,7 @@ export const authLoginUserWithSignature = async (
 export const authRegisterByEmail = async (email: string, passwordPlain: string) : Promise<any> => {
   let authPayload : AuthPayload;
   
-  logger.warn("authRegisterByEmail")
-  logger.warn(email)
   const passwordH = hashPassword(passwordPlain)
-  logger.warn(passwordH)
 
   let user = await daoUserFindByEmail(email);
 
@@ -187,6 +184,8 @@ export const authLoginByEmail = async (email: string, passwordPlain: string) : P
       },
       user.roles as RoleName[]
     );
+
+    logger.warn("Successfully generated auth token")
 
     return authPayload  
   }

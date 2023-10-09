@@ -95,7 +95,7 @@ export const AuthMutations = extendType({
         try {
           logger.warn("Starting authRegisterByEmail")
           const { authPayload, user } = await authRegisterByEmail(
-            args.email,
+            args.email.toLowerCase().trim(),
             args.password
           );
 
@@ -126,9 +126,9 @@ export const AuthMutations = extendType({
         password: nonNull(stringArg())
       },
       async resolve(...[, args, ctx]) {
-        try {          
+        try {
           const authPayload = await authLoginByEmail(
-            args.email,
+            args.email.toLowerCase().trim(),
             args.password
           );
 

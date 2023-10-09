@@ -231,10 +231,10 @@ export const daoUserFindByEmail = async (email: string) : Promise<User> => {
   return filteredOutputByBlacklist(user, apiConfig.db.privateJSONDataKeys.user);
 }
 
-export const daoUserByEmailCheckPassword = async (email: string, passwordPlain : string) : Promise<User | null> => {
+export const daoUserByEmailCheckPassword = async (email: string, passwordPlain : string) : Promise<User | null> => {  
   const user: User | null = await prisma.user.findFirst({
     where: {
-      email: email.toLowerCase(),
+      email: email.toLowerCase().trim(),
     },
   });
 
