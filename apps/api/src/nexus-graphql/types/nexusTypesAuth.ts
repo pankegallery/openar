@@ -126,7 +126,10 @@ export const AuthMutations = extendType({
         password: nonNull(stringArg())
       },
       async resolve(...[, args, ctx]) {
-        try {          
+        try {
+          logger.warn("authLoginByEmail mutation")
+          logger.warn(args.email)
+          logger.warn(args.password)
           const authPayload = await authLoginByEmail(
             args.email,
             args.password
