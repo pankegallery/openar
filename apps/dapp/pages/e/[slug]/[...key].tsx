@@ -175,11 +175,11 @@ export const Artwork = ({
             </Flex>
           )}
 
-          <ArtworkImageViewer artwork={artwork} object={selectedObject} />
+          <ArtworkImageViewer artwork={artwork} object={selectedObject} userDistanceFromObject={-1} viewInARDisabled={false}/>
         </Flex>
 
         {/* --------- COL: Artwork details) --------- */}
-        <ArtworkDetails artwork={artwork} object={selectedObject} />
+        <ArtworkDetails artwork={artwork} object={selectedObject} onUserLocationUpdate={() => {}} />
       </Flex>{" "}
       {/* Column Layout close*/}
     </>
