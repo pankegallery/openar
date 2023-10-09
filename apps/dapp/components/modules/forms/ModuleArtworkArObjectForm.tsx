@@ -159,14 +159,15 @@ export const ModuleArtworkArObjectForm = ({
               onChangeHandler={onGeolocationEnabledChange}
             />
             <Text ml="6">
-              Enabling this toggle will only allow users within 10 meters of the lat/lon coordinates you specify to view your object in AR.<br/>
+              Enabling this toggle will only allow users within 5 meters of the lat/lon coordinates you specify to view your object in AR.<br/>
               Users at a different location (or those who choose not to share the location with openAR) will still be able to see the object, but not place it in the world.
             </Text>
 
             { geolocationToggleEnabled &&
 
                <Text ml="6">
-                  Move the map until the marker is placed at your chosen location.<br/>                  
+                  Move the map until the marker is placed at your chosen location.<br/>
+                  Zoom all the way in to see the visibility radius of your object.<br/><br/>                  
                   Your artwork&apos;s current coordinates are: {latitude.toFixed(6)} (lat), {longitude.toFixed(6)} (lng)
                 </Text> 
             }

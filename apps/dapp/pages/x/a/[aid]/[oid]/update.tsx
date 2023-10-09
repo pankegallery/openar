@@ -161,7 +161,6 @@ const Update = () => {
     setIsFormError(false);
     setIsNavigatingAway(false);
     try {
-      console.log("Form on submit: ", newData)
       if (appUser) {
         const { data, errors } = await firstMutation(
           parseInt(router.query.oid as string, 10),
