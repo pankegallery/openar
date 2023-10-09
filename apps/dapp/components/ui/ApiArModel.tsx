@@ -105,7 +105,7 @@ export const ApiArModel = ({
       if (!urlGlb && urlUsdz && !isIos)
         renderNotice = <Box position="absolute" p="3" top="50%" transform="translateY(-50%)" textAlign="center" w="100%" color="#666">.usdz file uploaded<br/>This file will be viewable on ios devices</Box>
 
-      const warningText = userDistanceFromObject > 0 ? `You are approx. ${Math.round(userDistanceFromObject)} meters away from the object. Get within 10 meters to see it in AR.` : `Unable to detect your location, viewing this object in AR is disabled.`
+      const warningText = userDistanceFromObject > 0 ? `You are approx. ${Math.round(userDistanceFromObject)} meters away from the object. Get within 7 meters to see it in AR.` : `Unable to detect your location, viewing this object in AR is disabled.`
 
       if (urlGlb || urlUsdz)
       setContent(

@@ -196,7 +196,7 @@ export const tokenGenerateAuthTokens = async (
   const refreshToken = generateToken(
     {
       id: user.id,
-      ethAddress: user.ethAddress.toLowerCase(),
+      ethAddress: user.ethAddress ? user.ethAddress?.toLowerCase() : user.email?.toLowerCase(),
     },
     roles,
     refreshTokenExpires,

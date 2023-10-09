@@ -33,8 +33,6 @@ export const ArtworkImageViewer = ({
   const showARButton = isMobile && (isChrome || isMobileSafari);
   const isExhibition = baseURL.includes("/e/")
 
-  console.log("IMG VIEWER: ", userDistanceFromObject, viewInARDisabled)
-
   let urlGlb, urlUsdz
 
   if (arObject) {

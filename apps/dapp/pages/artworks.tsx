@@ -136,7 +136,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   if (!data?.artworks?.totalCount) {
     return {
       notFound: true,
-      revalidate: 240,
+      revalidate: 5,
     };
   }
 
@@ -144,7 +144,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     props: {
       artworks: data?.artworks.artworks,
     },
-    revalidate: 240,
+    revalidate: 5,
   };
 };
 
