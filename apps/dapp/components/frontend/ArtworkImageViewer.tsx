@@ -12,10 +12,14 @@ export const ArtworkImageViewer = ({
   artwork,
   object,
   url,
+  userDistanceFromObject,
+  viewInARDisabled
 }: {
   artwork: any;
-  object: any;
+  object: any;  
   url?: String;
+  userDistanceFromObject?: number;
+  viewInARDisabled: boolean
 }) => {
   const router = useRouter();
 
@@ -29,10 +33,12 @@ export const ArtworkImageViewer = ({
   const showARButton = isMobile && (isChrome || isMobileSafari);
   const isExhibition = baseURL.includes("/e/")
 
+  console.log("IMG VIEWER: ", userDistanceFromObject, viewInARDisabled)
 
+  let urlGlb, urlUsdz
 
   if (arObject) {
-    const [urlGlb, urlUsdz] = arObject?.arModels.reduce(
+    const [urlGlbG, urlUsdzG] = arObject?.arModels.reduce(
       (acc: string[], model: any) => {
         if (model.type === "glb") return [model?.meta?.originalFileUrl, acc[1]];
 
@@ -42,18 +48,11 @@ export const ArtworkImageViewer = ({
       [undefined, undefined]
     );
 
-    if (urlGlb || urlUsdz) {
-      modelViewer = (
-        <ApiArModel
-          urlGlb={urlGlb}
-          urlUsdz={urlUsdz}
-          alt={artwork?.title}
-          loading="auto"
-          reveal="auto"
-        />
-      );
-    }
+    urlGlb = urlGlbG
+    urlUsdz = urlUsdzG
   }
+
+
 
   if (artwork.arObjects.length > 1) {
     // multiple object view
@@ -69,7 +68,16 @@ export const ArtworkImageViewer = ({
         >
           <Box position="relative" w="100%" h="100%">
             <Box w="100%" h="100%">
-              {modelViewer}
+              <ApiArModel
+                urlGlb={urlGlb}
+                urlUsdz={urlUsdz}
+                alt={artwork?.title}
+                loading="auto"
+                reveal="auto"
+                viewInARDisabled={viewInARDisabled}
+                userDistanceFromObject={userDistanceFromObject}
+              />
+
             </Box>            
             <Box
               textStyle="copyDark"
@@ -123,7 +131,15 @@ export const ArtworkImageViewer = ({
       >
         <Box position="relative" w="100%" h="100%">
           <Box w="100%" h="100%">
-            {modelViewer}
+            <ApiArModel
+              urlGlb={urlGlb}
+              urlUsdz={urlUsdz}
+              alt={artwork?.title}
+              loading="auto"
+              reveal="auto"
+              viewInARDisabled={viewInARDisabled}
+              userDistanceFromObject={userDistanceFromObject}
+            />
           </Box>          
         </Box>
       </Flex>

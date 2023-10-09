@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AspectRatio, Box, Button } from "@chakra-ui/react";
+import { AspectRatio, Box, Button, Text } from "@chakra-ui/react";
 import { primaryInput } from "detect-it";
 import BoxIcon from "~/assets/img/box.svg";
 
@@ -13,6 +13,8 @@ export type ApiArModelProps = {
   autoplay?: boolean;
   loading?: string;
   reveal?: string;
+  userDistanceFromObject?: number;
+  viewInARDisabled?: boolean
 };
 
 export interface ModelViewerJSX {
@@ -48,6 +50,8 @@ export const ApiArModel = ({
   loading = "interaction",
   reveal = "auto",
   enforceAspectRatio = false,
+  userDistanceFromObject = -1,
+  viewInARDisabled = true
 }: ApiArModelProps) => {
   const [content, setContent] = useState(<></>)
 
@@ -101,6 +105,8 @@ export const ApiArModel = ({
       if (!urlGlb && urlUsdz && !isIos)
         renderNotice = <Box position="absolute" p="3" top="50%" transform="translateY(-50%)" textAlign="center" w="100%" color="#666">.usdz file uploaded<br/>This file will be viewable on ios devices</Box>
 
+      const warningText = userDistanceFromObject > 0 ? `You are approx. ${Math.round(userDistanceFromObject)} meters away from the object. Get within 10 meters to see it in AR.` : `Unable to detect your location, viewing this object in AR is disabled.`
+
       if (urlGlb || urlUsdz)
       setContent(
           <model-viewer
@@ -116,17 +122,34 @@ export const ApiArModel = ({
             alt={alt}
             {...props}
           >{renderNotice}
-            <Button
-              borderColor="openar.dark"
-              color="openar.dark"
-              m="6"
-              slot="ar-button" 
-              position="absolute"
-              b="6"
-              r="6"
-            >
-              View in AR <BoxIcon viewBox="-10 -7 50 50" width="30px" height="25px" />
-            </Button>
+            { !viewInARDisabled ? 
+              <Button
+                borderColor="openar.dark"
+                // display={"none"}
+                color="openar.dark"
+                m="6"
+                slot="ar-button" 
+                position="absolute"
+                b="6"
+                r="6"
+              >
+                View in AR <BoxIcon viewBox="-10 -7 50 50" width="30px" height="25px" />
+              </Button>          
+          :
+              <Text
+                borderColor="openar.dark"
+                // display={"none"}
+                color="openar.dark"
+                m="6"
+                slot="ar-button" 
+                position="absolute"
+                b="6"
+                r="6"
+                width="300px"
+              >
+                {warningText}
+              </Text>              
+          }
        
           </model-viewer>
         );
