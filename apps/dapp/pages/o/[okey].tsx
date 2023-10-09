@@ -157,7 +157,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   if (!data?.arObject) {
     return {
       notFound: true,
-      revalidate: 240,
+      revalidate: 5,
     };
   }
 
@@ -165,7 +165,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     props: {
       arObject: data?.arObject,
     },
-    revalidate: 240, 
+    revalidate: 5, 
   };
 };
 

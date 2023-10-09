@@ -101,7 +101,7 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
       <div className="leaflet-map-container" style={{height: '500px', background: 'linear-gradient(90deg, rgb(201, 196, 169) 0%, rgb(137, 154, 190) 50%, rgba(214,180,229,1) 100%)'}}>
         <MapContainer 
           center={[centerX, centerY]} 
-          zoom={13} 
+          zoom={18} 
           scrollWheelZoom={false} 
           style={{height: '100%', 'mix-blend-mode': 'overlay'}}
           whenCreated={this.onMapCreated}
@@ -110,7 +110,7 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
             attribution='Simultaneity'
             url="https://tiles-eu.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png"
           />
-          <Circle center={markerCenter} pathOptions={{ fillColor: 'red', color: '#db93ba' }} radius={12.5}>
+          <Circle center={markerCenter} pathOptions={{ fillColor: 'red', color: '#db93ba', fillOpacity: 0.85, opacity: 0 }} radius={7.5}>
             <Popup>This is roughly the visibility area of your artwork</Popup>
           </Circle>
           { shouldLocateUser && 
