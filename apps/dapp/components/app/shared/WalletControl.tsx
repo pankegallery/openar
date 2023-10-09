@@ -118,6 +118,11 @@ export const WalletControl = ({
     walletDisclosure,
     library,
     onCloseMenu,
+    emailRegisterDisclosure.isOpen,
+    registerButtonEnabled,
+    userEmail,
+    userPassword,
+    userPasswordConfirm
   ]);
 
   const isAuthenticated = stateUser.authenticated

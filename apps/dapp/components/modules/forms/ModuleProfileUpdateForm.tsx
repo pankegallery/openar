@@ -77,7 +77,7 @@ export const ModuleProfileUpdateForm = ({
     }
 
 
-  })
+  }, [currentPassword.length, newPassword, newPasswordConfirm, updatePasswordButtonEnabled])
 
   return (
     <Grid
