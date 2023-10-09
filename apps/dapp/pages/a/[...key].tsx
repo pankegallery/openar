@@ -1,4 +1,5 @@
 import type { ReactElement } from "react";
+import { useCallback, useEffect, useState } from "react"
 import Head from "next/head";
 import { gql } from "@apollo/client";
 
@@ -17,6 +18,17 @@ import pick from "lodash/pick";
 import { ArrowLink } from "~/components/ui";
 import { useSSRSaveMediaQuery } from "~/hooks";
 
+function measureDistance(lat1, lon1, lat2, lon2){  // generally used geo measurement function
+  var R = 6378.137; // Radius of earth in KM
+  var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+  var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+  Math.sin(dLon/2) * Math.sin(dLon/2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  var d = R * c;
+  return d * 1000; // meters
+}
 
 export const Artwork = ({
   artwork,
@@ -27,12 +39,28 @@ export const Artwork = ({
 }) => {
   const isDesktop = useSSRSaveMediaQuery("(min-width: 75rem)");
 
-  let selectedObject = {}
+  let selectedObject : any = {}
   if (okey === "initial"){
     selectedObject = artwork.arObjects[0]
   } else {
     selectedObject = artwork.arObjects.find(o => o.key === okey)
   }
+
+  const [distanceFromObject, setDistanceFromObject] = useState(-1)
+  const [viewInARDisabled, setViewInARDisabled] = useState(selectedObject.isGeolocationEnabled)
+
+  const ARTWORK_RADIUS = 10
+  const onUserLocationUpdate = useCallback((lat, lng, accuracy) => {
+    if (!selectedObject.isGeolocationEnabled) return
+    const distance = measureDistance(selectedObject.lat, selectedObject.lng, lat, lng)
+    console.log("Distance is: ", distance)
+    setDistanceFromObject(distance)
+    if (distance > ARTWORK_RADIUS + accuracy) {
+      setViewInARDisabled(true)
+    } else {
+      setViewInARDisabled(false)
+    }    
+  }, [setDistanceFromObject, setViewInARDisabled])
 
   return (
     <>
@@ -93,12 +121,12 @@ export const Artwork = ({
           overflow="auto"
         >
 
-          <ArtworkImageViewer artwork={artwork} object={selectedObject}/>
+          <ArtworkImageViewer artwork={artwork} object={selectedObject} userDistanceFromObject={distanceFromObject} viewInARDisabled={viewInARDisabled}/>
 
         </Flex>
 
         {/* --------- COL: Artwork details) --------- */}
-        <ArtworkDetails artwork={artwork} object={selectedObject} />
+        <ArtworkDetails artwork={artwork} object={selectedObject} onUserLocationUpdate={onUserLocationUpdate} />
 
       </Flex>{" "}
       {/* Column Layout close*/}
@@ -148,6 +176,9 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           askPrice
           editionOf
           description
+          isGeolocationEnabled
+          lat
+          lng
           heroImage {
             id
             meta
