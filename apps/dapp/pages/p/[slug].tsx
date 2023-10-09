@@ -180,7 +180,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     // Import our .md file using the `slug` from the URL
     fileContent = await import(`~/content/${slug}.md`);
   } catch (err) {
-    return { notFound: true, revalidate: 240 };
+    return { notFound: true, revalidate: 5 };
   }
 
   // Parse .md data through matter
@@ -192,7 +192,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       content: pageData.content,
       data: pageData.data,
     },
-    revalidate: 240,
+    revalidate: 5,
   };
 };
 

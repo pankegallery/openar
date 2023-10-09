@@ -411,7 +411,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
   ) {
     return {
       notFound: true,
-      revalidate: 240,
+      revalidate: 5,
     };
   }
 
@@ -419,7 +419,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
     props: {
       exhibition: data?.exhibition,
     },
-    revalidate: 240,
+    revalidate: 5,
   };
 };
 
