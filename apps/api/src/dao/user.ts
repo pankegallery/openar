@@ -231,16 +231,12 @@ export const daoUserFindByEmail = async (email: string) : Promise<User> => {
   return filteredOutputByBlacklist(user, apiConfig.db.privateJSONDataKeys.user);
 }
 
-export const daoUserByEmailCheckPassword = async (email: string, passwordPlain : string) : Promise<User | null> => {
-  logger.warn("daoUserByEmailCheckPassword")
+export const daoUserByEmailCheckPassword = async (email: string, passwordPlain : string) : Promise<User | null> => {  
   const user: User | null = await prisma.user.findFirst({
     where: {
-      email: email.toLowerCase(),
+      email: email.toLowerCase().trim(),
     },
   });
-  logger.warn(user?.email)
-  logger.warn(user?.password)
-  logger.warn(bcrypt.compareSync(passwordPlain, user?.password))
 
   if (bcrypt.compareSync(passwordPlain, user?.password)) {
     return filteredOutputByBlacklist(user, apiConfig.db.privateJSONDataKeys.user);

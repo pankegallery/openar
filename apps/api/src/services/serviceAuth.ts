@@ -132,10 +132,7 @@ export const authLoginUserWithSignature = async (
 export const authRegisterByEmail = async (email: string, passwordPlain: string) : Promise<any> => {
   let authPayload : AuthPayload;
   
-  logger.warn("authRegisterByEmail")
-  logger.warn(email)
   const passwordH = hashPassword(passwordPlain)
-  logger.warn(passwordH)
 
   let user = await daoUserFindByEmail(email);
 
@@ -173,23 +170,11 @@ export const authRegisterByEmail = async (email: string, passwordPlain: string) 
 export const authLoginByEmail = async (email: string, passwordPlain: string) : Promise<AuthPayload> => {
   let authPayload : AuthPayload;
   
-  logger.warn("auth login by email")
-  logger.warn(email)
-  logger.warn(passwordPlain)
-
   let user : User | null = await daoUserByEmailCheckPassword(email, passwordPlain);
-
-  if (user) logger.warn(user.id)
-  else logger.warn("user not found")
 
   if (!user) {
     throw new ApiError(httpStatus.FORBIDDEN, "Authentication failed...");
   } else {
-    logger.warn("generating tokens")
-    logger.warn(user.id)
-    logger.warn(user.pseudonym)
-    logger.warn(user.email)
-    logger.warn(user.ethAddress)
     authPayload = await tokenGenerateAuthTokens(
       {
         id: user.id,
