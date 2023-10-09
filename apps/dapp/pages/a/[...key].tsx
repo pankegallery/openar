@@ -49,7 +49,7 @@ export const Artwork = ({
   const [distanceFromObject, setDistanceFromObject] = useState(-1)
   const [viewInARDisabled, setViewInARDisabled] = useState(selectedObject.isGeolocationEnabled)
 
-  const ARTWORK_RADIUS = 10
+  const ARTWORK_RADIUS = 7.5
   const onUserLocationUpdate = useCallback((lat, lng, accuracy) => {
     if (!selectedObject.isGeolocationEnabled) return
     const distance = measureDistance(selectedObject.lat, selectedObject.lng, lat, lng)

@@ -173,11 +173,23 @@ export const authRegisterByEmail = async (email: string, passwordPlain: string) 
 export const authLoginByEmail = async (email: string, passwordPlain: string) : Promise<AuthPayload> => {
   let authPayload : AuthPayload;
   
+  logger.debug("auth login by email")
+  logger.debug(email)
+  logger.debug(passwordPlain)
+
   let user : User | null = await daoUserByEmailCheckPassword(email, passwordPlain);
+
+  if (user) logger.debug(user.id)
+  else logger.debug("user not found")
 
   if (!user) {
     throw new ApiError(httpStatus.FORBIDDEN, "Authentication failed...");
   } else {
+    logger.debug("generating tokens")
+    logger.debug(user.id)
+    logger.debug(user.pseudonym)
+    logger.debug(user.email)
+    logger.debug(user.ethAddress)
     authPayload = await tokenGenerateAuthTokens(
       {
         id: user.id,
@@ -187,6 +199,8 @@ export const authLoginByEmail = async (email: string, passwordPlain: string) : P
       },
       user.roles as RoleName[]
     );
+
+    logger.debug("Successfully generated auth token")
 
     return authPayload  
   }
