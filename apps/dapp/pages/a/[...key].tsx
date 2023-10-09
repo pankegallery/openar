@@ -60,7 +60,7 @@ export const Artwork = ({
     } else {
       setViewInARDisabled(false)
     }    
-  }, [setDistanceFromObject, setViewInARDisabled, selectedObject.lat, selectedObject.lng])
+  }, [setDistanceFromObject, setViewInARDisabled, selectedObject.lat, selectedObject.lng, selectedObject.isGeolocationEnabled])
 
   return (
     <>
