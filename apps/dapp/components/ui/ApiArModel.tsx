@@ -157,7 +157,7 @@ export const ApiArModel = ({
     }
     run();
 
-  }, [urlGlb, urlUsdz, setContent, urlPoster, alt, autoplay, loading, reveal])
+  }, [urlGlb, urlUsdz, setContent, urlPoster, alt, autoplay, loading, reveal, viewInARDisabled, userDistanceFromObject])
 
   return <>
     {enforceAspectRatio && <AspectRatio ratio={1} bg={bg}>{content}</AspectRatio>}

@@ -28,7 +28,7 @@ const OpenARLogin = () => {
       Router.push("/x/");
       setIsNavigating(true);
     }
-  }, [library, library?.provider, account, appUser, stateUser.authenticated, hasCookies]);
+  }, [library, library?.provider, account, appUser, stateUser.authenticated, hasCookies, stateUser]);
 
   useEffect(() => {
     if (library || library?.provider) {
