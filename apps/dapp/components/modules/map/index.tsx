@@ -8,20 +8,29 @@ import { mapMarker } from './marker'
 type LeafletMapProps = typeof LeafletMap.defaultProps & {
   lat: number,
   lng: number,
-  onCenterChange: (lat: number, lng: number) => any
+  onCenterChange: (lat: number, lng: number) => any,  
+  shouldUpdateMarkerToMapCenter: boolean,
+  shouldLocateUser: boolean
+  onUserLocationUpdate: (lat: number, lng: number, accuracy: number) => any,
 }
 
 export default class LeafletMap extends React.Component<LeafletMapProps> {
   static defaultProps = {
     lat: 51.05,
     lng: -0.09,
-    onCenterChange: null
+    onCenterChange: null,
+    shouldUpdateMarkerToMapCenter: true,
+    shouldLocateUser: false,
+    onUserLocationUpdate: null
   }
   state = {
     inBrowser: false,
     map: null,
     centerX: 51.05,
-    centerY: -0.09
+    centerY: -0.09,
+    userLocationX: 0,
+    userLocationY: 0,
+    userAccuracy: 0
   }
   leaflet: any
   markerIcon: any
@@ -36,8 +45,26 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
   }
 
   onMapCreated = (m) => {
+    const { shouldLocateUser, onUserLocationUpdate } = this.props
+
     this.setState({ map: m }, () => {
       m.on('move', this.onMapMove)
+      if (shouldLocateUser) {
+        m.locate({ watch: true }).on('locationfound', (e) => {
+          this.setState({
+            userLocationX: e.latitude,
+            userLocationY: e.longitude,
+            userAccuracy: e.accuracy
+          })
+          if (onUserLocationUpdate) {
+            onUserLocationUpdate(e.latitude, e.longitude, e.accuracy)
+          }
+        })
+        .on('locationerror', (e) => {
+          console.log(e)
+          // alert(e.message)
+        })
+      }
     })
   }
 
@@ -64,9 +91,11 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
 
     })
 
-    const { MapContainer, TileLayer, Marker, Popup, Circle } = this.leaflet
+    const { MapContainer, TileLayer, Marker, Popup, Circle, CircleMarker } = this.leaflet
 
-    const { centerX, centerY } = this.state
+    const { centerX, centerY, userLocationX, userLocationY, userAccuracy } = this.state
+    const { shouldLocateUser, shouldUpdateMarkerToMapCenter, lat, lng } = this.props
+    const markerCenter = shouldUpdateMarkerToMapCenter ? [centerX, centerY] : [lat, lng]
 
     return (
       <div className="leaflet-map-container" style={{height: '500px', background: 'linear-gradient(90deg, rgb(201, 196, 169) 0%, rgb(137, 154, 190) 50%, rgba(214,180,229,1) 100%)'}}>
@@ -81,10 +110,16 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
             attribution='Simultaneity'
             url="https://tiles-eu.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png"
           />
-          <Circle center={[centerX, centerY]} pathOptions={{ fillColor: 'red', color: '#db93ba' }} radius={12.5}>
+          <Circle center={markerCenter} pathOptions={{ fillColor: 'red', color: '#db93ba' }} radius={12.5}>
             <Popup>This is roughly the visibility area of your artwork</Popup>
           </Circle>
-          <Marker icon={this.markerIcon} position={[centerX, centerY]}></Marker>          
+          { shouldLocateUser && 
+            <>
+              <CircleMarker center={[userLocationX, userLocationY]} pathOptions={{ fillColor: '#4466cc', color: '#221199', opacity: 1, fillOpacity: 1 }} radius={10}></CircleMarker>        
+              <Circle center={[userLocationX, userLocationY]} pathOptions={{ fillColor: '#112299', color: '#112299', opacity: 0.2, fillOpacity: 0.2 }} radius={userAccuracy}></Circle>        
+            </>
+          }
+          <Marker icon={this.markerIcon} position={markerCenter}></Marker>          
         </MapContainer>
       </div>
     )

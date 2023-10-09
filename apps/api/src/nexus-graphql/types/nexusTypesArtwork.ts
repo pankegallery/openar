@@ -198,6 +198,9 @@ export const ArtworkQueries = extendType({
                       status: true,
                     },
                   },
+                  isGeolocationEnabled: true,
+                  lat: true,
+                  lng: true
                 },
                 where: {
                   isBanned: false,
@@ -357,6 +360,9 @@ export const ArtworkQueries = extendType({
                     status: true,
                   },
                 },
+                isGeolocationEnabled: true,
+                lat: true,
+                lng: true,
                 arModels: true,
               },
               where: {
@@ -491,6 +497,9 @@ export const ArtworkQueries = extendType({
                       id: true,
                     },
                   },
+                  isGeolocationEnabled: true,
+                  lat: true,
+                  lng: true
                 },
                 where: {
                   isBanned: false,
@@ -574,6 +583,9 @@ export const ArtworkQueries = extendType({
                     id: true,
                   },
                 },
+                isGeolocationEnabled: true,
+                lat: true,
+                lng: true
               },
               where: {
                 isBanned: false,

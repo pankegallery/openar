@@ -16,6 +16,7 @@ import LogoXDAI from "~/assets/img/xdai/xdai-white.svg";
 import { useAuthentication, useWalletLogin, useAppToast } from "~/hooks";
 import { arObjectTokensQueryGQL } from "~/graphql/queries";
 import { BeatLoader } from "react-spinners";
+import LeafletMap from "../modules/map";
 
 import {
   OpenAR,
@@ -32,9 +33,11 @@ import { useUserMaybeClaimCollectorsRoleUpdateMutation } from "~/hooks/mutations
 export const ArtworkDetails = ({
   artwork,
   object,
+  onUserLocationUpdate
 }: {
   artwork: any;
   object: any;
+  onUserLocationUpdate: any;
 }) => {
   const [profileUrl, setProfileUrl] = useState(
     `/u/${artwork.creator.id}`
@@ -243,7 +246,25 @@ export const ArtworkDetails = ({
           borderBottom="1px solid white"
           p="6"
         >
-          <chakra.p textStyle="label" className="label">
+
+          {object?.isGeolocationEnabled && (
+            <>
+              <chakra.p textStyle="label" mt="0" className="label">
+                Location
+              </chakra.p>
+              <div style={{marginBottom: '7px'}}><em>This artwork is site-specific. Go to the location shown on the map in order to experience it in AR.</em></div>
+              <LeafletMap
+                lat={object.lat}
+                lng={object.lng}
+                shouldUpdateMarkerToMapCenter={false}
+                shouldLocateUser={true}
+                onUserLocationUpdate={onUserLocationUpdate}
+              />
+            </>
+          )
+          }
+
+          <chakra.p textStyle="label" className="label" mt="4">
             Artwork description
           </chakra.p>
           <div dangerouslySetInnerHTML={{ __html: artwork.description }} />
@@ -256,6 +277,7 @@ export const ArtworkDetails = ({
               <div dangerouslySetInnerHTML={{ __html: object.description }} />
             </>
           )}
+
         </Box>
 
         {/* ======== BOX: Artwork purchase  ======== */}
