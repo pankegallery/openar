@@ -185,9 +185,9 @@ const exhibitions: any = {
         }
       ],
       dateBegin: new Date("2023-10-12 12:00"),
-      dateEnd: new Date("2023-11-12 23:00"),
+      dateEnd: new Date("2023-10-28 23:00"),
       description:
-        `"Animal()City” is an aesthetic inquiry of the artists’ views on how AR may intercept different layers of perception and realities or completely superimpose them. The exhibition presents a collection of animals that transcend their natural forms and assume various "non-natural" shapes; from fantastical mythical creatures to archetypical animal sculpture adhering to classical composition to the most basic 3D animal assets, taken from game engine templates. These AR-animals introduce elements of imagination to their representation, inviting viewers to explore their own interpretations and engage with the artworks on different levels.`,
+        `With “Animal()City” we draw inspiration from the ghostly presence of foxes that roam the city at night - which nowadays is a common appearance in Berlin - evoking echoes of a pre-industrial era while at the same time drawing people’s attention to a layer of the city that completely eludes their perception in everyday life. In these moments we witness animals and plants forming their own realm and the city itself having its own life, acting like an entity, a ghost at times. Encounters with wild animals in the city make the parallel layers of the landscape momentarily tangible and remind us that we are part of these ‘non-human’ networks as well. On a darker note: urban wildlife not only echoes pre-industrial times but also projects an idea of what our cities will look like when all the people have disappeared due to the consequences of the climate catastrophe. However, the city may also be read analogous to the internet. Animals, humans and plants seldomly interact within the city, and while we might notice traces or encounter their phantoms we seem to live in parallel worlds. Similarly, online we are divided by platforms into threads and channels, living in multi-layered structures haunted by uncanny bots and AI agents.`,
       status: ExhibitionStatusEnum.DRAFT,
       artworks: await getExhibitionArtworks([
         "I3MUhwLxici21RF5",
