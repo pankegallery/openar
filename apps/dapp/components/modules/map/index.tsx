@@ -97,13 +97,17 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
     const { shouldLocateUser, shouldUpdateMarkerToMapCenter, lat, lng } = this.props
     const markerCenter = shouldUpdateMarkerToMapCenter ? [centerX, centerY] : [lat, lng]
 
-    return (
-      <div className="leaflet-map-container" style={{height: '500px', background: 'linear-gradient(90deg, rgb(201, 196, 169) 0%, rgb(137, 154, 190) 50%, rgba(214,180,229,1) 100%)'}}>
+    return (      
+      <div className="leaflet-map-container" style={{height: '500px' }}>
         <MapContainer 
           center={[centerX, centerY]} 
           zoom={18} 
           scrollWheelZoom={false} 
-          style={{height: '100%', 'mix-blend-mode': 'overlay'}}
+          style={{
+            height: '100%', 
+            'mixBlendMode': 'exclusion',
+            'filter': 'invert(100%)'
+          }}
           whenCreated={this.onMapCreated}
         >
           <TileLayer
@@ -121,6 +125,7 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
           }
           <Marker icon={this.markerIcon} position={markerCenter}></Marker>          
         </MapContainer>
+        <div className="test-overlay" style={{"mixBlendMode": 'overlay'}}></div>
       </div>
     )
   }
