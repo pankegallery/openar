@@ -171,8 +171,8 @@ const exhibitions: any = {
       title: "Animal()City",
       slug: "animal-city",
       imgUrl:
-        "https://baserow.panke.gallery/media/user_files/p4Pyi5XD5DbUv6fBLE5td7sNesLd6VAL_e3689dfa15db995316664f7e80620857cc4dcbef8a57f3b9cafb9b35ab99985a.png",
-      imgPosition: "center top",
+        "https://baserow.panke.gallery/media/user_files/EvoXClGpi1pvLnUZetcaDRlPSdtOfOfL_5e2e167834bb0c9302fa0df477b42e16e2228c8fad4975b473d5621d4215490d.jpg",
+      imgPosition: "center center",
       type: "groupshow",
       // A group show curated by ABC and BBB
       subtitlePrefix: "A group show curated by",
@@ -185,9 +185,9 @@ const exhibitions: any = {
         }
       ],
       dateBegin: new Date("2023-10-12 12:00"),
-      dateEnd: new Date("2023-11-12 12:00"),
+      dateEnd: new Date("2023-10-28 23:00"),
       description:
-        `"Animal()City” is an aesthetic inquiry of the artists’ views on how AR may intercept different layers of perception and realities or completely superimpose them. The exhibition presents a collection of animals that transcend their natural forms and assume various "non-natural" shapes; from fantastical mythical creatures to archetypical animal sculpture adhering to classical composition to the most basic 3D animal assets, taken from game engine templates. These AR-animals introduce elements of imagination to their representation, inviting viewers to explore their own interpretations and engage with the artworks on different levels.`,
+        `Animal City is inspired by the ghostly presence of foxes roaming the city at night – a common sight in Berlin today – evoking echoes of a pre-industrial era while drawing attention to a layer of the city that is completely invisible in everyday life. In these moments we witness animals and plants forming their own realm, and the city having a life of its own, acting like an entity, a ghost at times. Encounters with wild animals in the city make this parallel identity momentarily tangible, making us part of these ‘non-human’ networks while projecting ideas of dystopian, dehumanised cities of the future. The city can also be read as analogous to the Internet. Just as we are divided into threads and channels by platforms online, we also live in multi-layered structures that are haunted by sinister bots and AI agents.`,
       status: ExhibitionStatusEnum.DRAFT,
       artworks: await getExhibitionArtworks([
         "I3MUhwLxici21RF5",

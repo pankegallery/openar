@@ -242,7 +242,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 
   return {
     props: {
-      exhibitions: data?.exhibitions?.exhibitions.filter((exhibition: any) => {            
+      exhibitions: data?.exhibitions?.exhibitions.filter((exhibition) => {
         return (exhibition.status == ExhibitionStatusEnum.PUBLISHED)
       }),
       pageTitle: "openAR",
