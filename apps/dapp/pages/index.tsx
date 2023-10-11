@@ -8,6 +8,7 @@ import { Box } from "@chakra-ui/react";
 
 import { gql } from "@apollo/client";
 import { getApolloClient } from "~/services/apolloClient";
+import { ExhibitionStatusEnum } from "~/utils";
 
 export const Home = (props) => {
   const animatingRef = useRef(false);
@@ -241,7 +242,9 @@ export const getStaticProps = async ({ params }: { params: any }) => {
 
   return {
     props: {
-      exhibitions: data?.exhibitions?.exhibitions,
+      exhibitions: data?.exhibitions?.exhibitions.filter((exhibition) => {
+        return (exhibition.status == ExhibitionStatusEnum.PUBLISHED)
+      }),
       pageTitle: "openAR",
       pageSlogan: "The cooperative and crypto platform for AR artworks",
       pageDescription:
