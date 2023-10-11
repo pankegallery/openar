@@ -143,7 +143,63 @@ const getExhibitionUser = async (ethAddress: string) => {
   return user;
 };
 
+const getExhibitionUserById = async (id: number) => {
+  const user = await daoUserSelectFindFirst(
+    { id },
+    {
+      id: true,
+      ethAddress: true,
+      pseudonym: true,
+      bio: true,
+      profileImage: {
+        select: {
+          status: true,
+          id: true,
+          meta: true,
+        },
+      },
+    },
+    true
+  );
+  return user;
+};
+
 const exhibitions: any = {
+  "animal-city": async () => {
+    return {
+      id: 3,
+      title: "Animal()City",
+      slug: "animal-city",
+      imgUrl:
+        "https://baserow.panke.gallery/media/user_files/p4Pyi5XD5DbUv6fBLE5td7sNesLd6VAL_e3689dfa15db995316664f7e80620857cc4dcbef8a57f3b9cafb9b35ab99985a.png",
+      imgPosition: "center top",
+      type: "groupshow",
+      // A group show curated by ABC and BBB
+      subtitlePrefix: "A group show curated by",
+      curators: [
+        {
+          orderNumber: 1,
+          user: await getExhibitionUserById(
+            18
+          ),
+        }
+      ],
+      dateBegin: new Date("2023-10-12 12:00"),
+      dateEnd: new Date("2023-11-12 12:00"),
+      description:
+        `"Animal()City” is an aesthetic inquiry of the artists’ views on how AR may intercept different layers of perception and realities or completely superimpose them. The exhibition presents a collection of animals that transcend their natural forms and assume various "non-natural" shapes; from fantastical mythical creatures to archetypical animal sculpture adhering to classical composition to the most basic 3D animal assets, taken from game engine templates. These AR-animals introduce elements of imagination to their representation, inviting viewers to explore their own interpretations and engage with the artworks on different levels.`,
+      status: ExhibitionStatusEnum.DRAFT,
+      artworks: await getExhibitionArtworks([
+        "I3MUhwLxici21RF5",
+        "AI1A7yQdHQlTuNp0",
+        "fFllpSvUuvXL7zIo",
+        "kUIayNJbpHl5Sa7C",
+        "GSpeSfy655rVWERY",
+        "Athl28wGaJZRva25",
+        "wAjMr9jSxgoZ2QCM",
+      ]),
+    };
+  },
   "outside-in": async () => {
     return {
       id: 2,
