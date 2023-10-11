@@ -143,34 +143,60 @@ const getExhibitionUser = async (ethAddress: string) => {
   return user;
 };
 
+const getExhibitionUserById = async (id: number) => {
+  const user = await daoUserSelectFindFirst(
+    { id },
+    {
+      id: true,
+      ethAddress: true,
+      pseudonym: true,
+      bio: true,
+      profileImage: {
+        select: {
+          status: true,
+          id: true,
+          meta: true,
+        },
+      },
+    },
+    true
+  );
+  return user;
+};
+
 const exhibitions: any = {
   "animal-city": async () => {
     return {
-      id: 2,
-      title: "Anmial()City",
+      id: 3,
+      title: "Animal()City",
       slug: "animal-city",
       imgUrl:
-        "https://baserow.panke.gallery/media/user_files/oXk7jF0NLZwIyGMCOpG1ssyklHog36ba_f96fb0e4282c9e8221134508fa3eab565c12a945198011603151008f0a83e68e.png",
-      imgPosition: "center top",
-      type: "group show",
+        "https://baserow.panke.gallery/media/user_files/EvoXClGpi1pvLnUZetcaDRlPSdtOfOfL_5e2e167834bb0c9302fa0df477b42e16e2228c8fad4975b473d5621d4215490d.jpg",
+      imgPosition: "center center",
+      type: "groupshow",
       // A group show curated by ABC and BBB
       subtitlePrefix: "A group show curated by",
       curators: [
         {
           orderNumber: 1,
-          user: await getExhibitionUser(
-            "0xa358ba0c9777fa51340005c90511db0f193122e6"
+          user: await getExhibitionUserById(
+            18
           ),
         }
       ],
-      dateBegin: new Date("2023-10-12 16:00"),
-      dateEnd: new Date("2022-10-28 23:00"),
+      dateBegin: new Date("2023-10-12 12:00"),
+      dateEnd: new Date("2023-11-12 23:00"),
       description:
-        'With “Animal()City” we draw inspiration from the ghostly presence of foxes that roam the city at night - which nowadays is a common appearance in Berlin - evoking echoes of a pre-industrial era while at the same time drawing people’s attention to a layer of the city that completely eludes their perception in everyday life. In these moments we witness animals and plants forming their own realm and the city itself having its own life, acting like an entity, a ghost at times. Encounters with wild animals in the city make the parallel layers of the landscape momentarily tangible and remind us that we are part of these ‘non-human’ networks as well. On a darker note: urban wildlife not only echoes pre-industrial times but also projects an idea of what our cities will look like when all the people have disappeared due to the consequences of the climate catastrophe. However, the city may also be read analogous to the internet. Animals, humans and plants seldomly interact within the city, and while we might notice traces or encounter their phantoms we seem to live in parallel worlds. Similarly, online we are divided by platforms into threads and channels, living in multi-layered structures haunted by uncanny bots and AI agents.',
-      status: ExhibitionStatusEnum.PUBLISHED,
+        `"Animal()City” is an aesthetic inquiry of the artists’ views on how AR may intercept different layers of perception and realities or completely superimpose them. The exhibition presents a collection of animals that transcend their natural forms and assume various "non-natural" shapes; from fantastical mythical creatures to archetypical animal sculpture adhering to classical composition to the most basic 3D animal assets, taken from game engine templates. These AR-animals introduce elements of imagination to their representation, inviting viewers to explore their own interpretations and engage with the artworks on different levels.`,
+      status: ExhibitionStatusEnum.DRAFT,
       artworks: await getExhibitionArtworks([
+        "I3MUhwLxici21RF5",
+        "AI1A7yQdHQlTuNp0",
+        "fFllpSvUuvXL7zIo",
+        "kUIayNJbpHl5Sa7C",
+        "GSpeSfy655rVWERY",
         "Athl28wGaJZRva25",
-        "yD9OC0VzNcOA12jW",
+        "wAjMr9jSxgoZ2QCM",
       ]),
     };
   },
@@ -182,7 +208,7 @@ const exhibitions: any = {
       imgUrl:
         "https://baserow.panke.gallery/media/user_files/p4Pyi5XD5DbUv6fBLE5td7sNesLd6VAL_e3689dfa15db995316664f7e80620857cc4dcbef8a57f3b9cafb9b35ab99985a.png",
       imgPosition: "center top",
-      type: "group show",
+      type: "groupshow",
       // A group show curated by ABC and BBB
       subtitlePrefix: "A group show by",
       curators: [
@@ -219,7 +245,7 @@ const exhibitions: any = {
       imgUrl:
         "https://baserow.panke.gallery/media/user_files/kdMDZeqrEhGUOXeeaH9ymxJhKyK928R4_c64bd567451c1a69d4bb5b2bfae136df9661680694d32d8917921d5cbfd58d74.png",
       imgPosition: "center bottom",
-      type: "group show",
+      type: "groupshow",
       subtitlePrefix: "A group show curated by",
       curators: [
         {
