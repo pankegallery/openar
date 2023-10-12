@@ -188,7 +188,7 @@ const exhibitions: any = {
       dateEnd: new Date("2023-10-28 23:00"),
       description:
         `Animal()City is inspired by the ghostly presence of foxes roaming the city at night – a common sight in Berlin today – evoking echoes of a pre-industrial era while drawing attention to a layer of the city that is completely invisible in everyday life. In these moments we witness animals and plants forming their own realm, and the city having a life of its own, acting like an entity, a ghost at times. Encounters with wild animals in the city make this parallel identity momentarily tangible, making us part of these ‘non-human’ networks while projecting ideas of dystopian, dehumanised cities of the future. The city can also be read as analogous to the Internet. Just as we are divided into threads and channels by platforms online, we also live in multi-layered structures that are haunted by sinister bots and AI agents.`,
-      status: ExhibitionStatusEnum.PUBLISHED,
+      status: ExhibitionStatusEnum.DRAFT,
       artworks: await getExhibitionArtworks([
         "I3MUhwLxici21RF5",
         "AI1A7yQdHQlTuNp0",
