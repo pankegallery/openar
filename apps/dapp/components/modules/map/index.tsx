@@ -14,6 +14,8 @@ type LeafletMapProps = typeof LeafletMap.defaultProps & {
   onUserLocationUpdate: (lat: number, lng: number, accuracy: number) => any,
 }
 
+export const ARTWORK_RADIUS = 5
+
 export default class LeafletMap extends React.Component<LeafletMapProps> {
   static defaultProps = {
     lat: 51.05,
@@ -115,7 +117,7 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
             url="https://tiles-eu.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png"
           />
           <Circle center={markerCenter} pathOptions={{ fillColor: 'red', color: '#db93ba', fillOpacity: 0.85, opacity: 0 }} radius={7.5}>
-            <Popup>This is roughly the visibility area of your artwork</Popup>
+            { shouldUpdateMarkerToMapCenter && <Popup>This is roughly the visibility area of your artwork</Popup> }
           </Circle>
           { shouldLocateUser && 
             <>
