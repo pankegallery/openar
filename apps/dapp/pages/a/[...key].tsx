@@ -7,6 +7,8 @@ import { LayoutBlank } from "~/components/app";
 import { Box, Grid, Flex, chakra } from "@chakra-ui/react";
 import Link from "next/link";
 import Image from "next/image";
+import { measureDistance } from "~/components/utils/GeoDistance";
+import { ARTWORK_RADIUS  } from "~/components/modules";
 
 import { getApolloClient } from "~/services/apolloClient";
 
@@ -17,18 +19,6 @@ import { ArtworkDetails,
 import pick from "lodash/pick";
 import { ArrowLink } from "~/components/ui";
 import { useSSRSaveMediaQuery } from "~/hooks";
-
-function measureDistance(lat1, lon1, lat2, lon2){  // generally used geo measurement function
-  var R = 6378.137; // Radius of earth in KM
-  var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
-  var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
-  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-  Math.sin(dLon/2) * Math.sin(dLon/2);
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  var d = R * c;
-  return d * 1000; // meters
-}
 
 export const Artwork = ({
   artwork,
@@ -49,11 +39,9 @@ export const Artwork = ({
   const [distanceFromObject, setDistanceFromObject] = useState(-1)
   const [viewInARDisabled, setViewInARDisabled] = useState(selectedObject.isGeolocationEnabled)
 
-  const ARTWORK_RADIUS = 5
   const onUserLocationUpdate = useCallback((lat, lng, accuracy) => {
     if (!selectedObject.isGeolocationEnabled) return
-    const distance = measureDistance(selectedObject.lat, selectedObject.lng, lat, lng)
-    console.log("Distance is: ", distance)
+    const distance = measureDistance(selectedObject.lat, selectedObject.lng, lat, lng)    
     setDistanceFromObject(distance)
     if (distance > ARTWORK_RADIUS + accuracy) {
       setViewInARDisabled(true)

@@ -1,4 +1,5 @@
 import type { ReactElement } from "react";
+import { useCallback, useEffect, useState } from "react"
 import Head from "next/head";
 import { gql } from "@apollo/client";
 
@@ -8,6 +9,8 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { getApolloClient } from "~/services/apolloClient";
+import { measureDistance } from "~/components/utils/GeoDistance";
+import { ARTWORK_RADIUS } from "~/components/modules";
 
 import Arrow from "~/assets/img/arrow.svg";
 import {
@@ -51,12 +54,28 @@ export const Artwork = ({
 
   // _____________ Get initial or selected object _____________
 
-  let selectedObject = {};
+  let selectedObject : any = {};
   if (okey === "initial") {
     selectedObject = artwork.arObjects[0];
   } else {
     selectedObject = artwork.arObjects.find((o: any) => o.key === okey);
   }
+
+  // _____________ Geolocation _____________
+  const [distanceFromObject, setDistanceFromObject] = useState(-1)
+  const [viewInARDisabled, setViewInARDisabled] = useState(selectedObject.isGeolocationEnabled)
+
+  const onUserLocationUpdate = useCallback((lat, lng, accuracy) => {
+    if (!selectedObject.isGeolocationEnabled) return
+    const distance = measureDistance(selectedObject.lat, selectedObject.lng, lat, lng)    
+    setDistanceFromObject(distance)
+    if (distance > ARTWORK_RADIUS + accuracy) {
+      setViewInARDisabled(true)
+    } else {
+      setViewInARDisabled(false)
+    }    
+  }, [setDistanceFromObject, setViewInARDisabled, selectedObject.lat, selectedObject.lng, selectedObject.isGeolocationEnabled])
+
 
   // _____________ RETURN _____________
 
@@ -175,11 +194,11 @@ export const Artwork = ({
             </Flex>
           )}
 
-          <ArtworkImageViewer artwork={artwork} object={selectedObject} userDistanceFromObject={-1} viewInARDisabled={false}/>
+          <ArtworkImageViewer artwork={artwork} object={selectedObject} userDistanceFromObject={distanceFromObject} viewInARDisabled={viewInARDisabled}/>
         </Flex>
 
         {/* --------- COL: Artwork details) --------- */}
-        <ArtworkDetails artwork={artwork} object={selectedObject} onUserLocationUpdate={() => {}} />
+        <ArtworkDetails artwork={artwork} object={selectedObject} onUserLocationUpdate={onUserLocationUpdate} />
       </Flex>{" "}
       {/* Column Layout close*/}
     </>
@@ -226,6 +245,9 @@ export const getStaticProps = async ({ params }: { params: any }) => {
           status
           askPrice
           editionOf
+          isGeolocationEnabled
+          lat
+          lng
           heroImage {
             id
             meta
