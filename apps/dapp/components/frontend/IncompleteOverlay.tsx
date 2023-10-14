@@ -14,6 +14,7 @@ export const IncompleteOverlay = ({
   alignItems,
   marginBottom,
   cornerRem =  "10rem",
+  children,
 }: {
   cornerRem?: string;
   headline?: string;
@@ -28,6 +29,7 @@ export const IncompleteOverlay = ({
   marginLeft?: any;
   marginTop?: any;
   marginBottom?: any;
+  children?: any;
 }) => {
   return (
     <Flex
@@ -58,11 +60,23 @@ export const IncompleteOverlay = ({
       justifyContent={justifyContent ?? "flex-start"}
       alignItems={alignItems ?? "flex-start"}
     >
-      <Box mx={marginLeft} mb={marginBottom ?? "10"} mt={marginTop}>
-        {headline && <Text textStyle="subtitle">{headline}</Text>}
-        {subline && <Box>{subline}</Box>}
-        {button && <Box pt="6"><Button type="submit">{buttonLabel}</Button></Box>}
-      </Box>
+      {
+        children ? 
+        (
+          <Flex flexDirection="column" mx={marginLeft} mb={marginBottom ?? "10"} mt={marginTop} height="100%">
+            {headline && <Text textAlign="right" textStyle="subtitle">{headline}</Text>}
+            {subline && <Text marginLeft={cornerRem ?? "0rem"} textAlign="right" marginBottom="6">{subline}</Text>}
+            <Box flexGrow={1}>{children}</Box>
+          </Flex>
+        ):(
+          <Box mx={marginLeft} mb={marginBottom ?? "10"} mt={marginTop}>
+            {headline && <Text textStyle="subtitle">{headline}</Text>}
+            {subline && <Text>{subline}</Text>}
+            {button && <Box pt="6" mb="6"><Button type="submit">{buttonLabel}</Button></Box>}
+          </Box>
+        )
+      }
+
     </Flex>
   );
 };

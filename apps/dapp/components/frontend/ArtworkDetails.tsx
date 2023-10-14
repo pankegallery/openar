@@ -33,15 +33,13 @@ import { useUserMaybeClaimCollectorsRoleUpdateMutation } from "~/hooks/mutations
 export const ArtworkDetails = ({
   artwork,
   object,
-  onUserLocationUpdate
+  onUserLocationUpdate,
 }: {
   artwork: any;
   object: any;
   onUserLocationUpdate: any;
 }) => {
-  const [profileUrl, setProfileUrl] = useState(
-    `/u/${artwork.creator.id}`
-  );
+  const [profileUrl, setProfileUrl] = useState(`/u/${artwork.creator.id}`);
   const [claimCollectorRoleMutation] =
     useUserMaybeClaimCollectorsRoleUpdateMutation();
 
@@ -82,7 +80,7 @@ export const ArtworkDetails = ({
     subgraphQuery?.data?.arObjectTokens?.totalCount > 0
       ? subgraphQuery?.data?.arObjectTokens?.tokens.filter(
           (token) =>
-            token.subgraphinfo.creator === token.subgraphinfo.owner &&            
+            token.subgraphinfo.creator === token.subgraphinfo.owner &&
             token.subgraphinfo.creator.toLowerCase() ===
               artwork.creator?.ethAddress.toLowerCase()
         )
@@ -239,30 +237,33 @@ export const ArtworkDetails = ({
         </chakra.p>
       </Box>
 
-      <Box width="100%" overflow="auto" height="100%" flexGrow={0}>
+      <Box width="100%" overflow={object?.isGeolocationEnabled ? "hidden" : "auto"} height="100%" position="relative" flexGrow={0}>
+        {object?.isGeolocationEnabled && (
+          <IncompleteOverlay
+            cornerRem="6rem"
+            headline="This artwork is site-specific. "
+            subline="Go to the location shown on the map in order to experience it in AR."
+            href=""
+            height="100%"
+            marginLeft="6"
+            marginTop="10"
+            align="top"
+          >
+            <LeafletMap
+              lat={object.lat}
+              lng={object.lng}
+              shouldUpdateMarkerToMapCenter={false}
+              shouldLocateUser={true}
+              onUserLocationUpdate={onUserLocationUpdate}
+            />
+          </IncompleteOverlay>
+        )}
         {/* ======== BOX: Artwork description  ======== */}
         <Box
           className="artworkDescription"
           borderBottom="1px solid white"
           p="6"
         >
-
-          {object?.isGeolocationEnabled && (
-            <>
-              <chakra.p textStyle="label" mt="0" className="label">
-                Location
-              </chakra.p>
-              <div style={{marginBottom: '7px'}}><em>This artwork is site-specific. Go to the location shown on the map in order to experience it in AR.</em></div>
-              <LeafletMap
-                lat={object.lat}
-                lng={object.lng}
-                shouldUpdateMarkerToMapCenter={false}
-                shouldLocateUser={true}
-                onUserLocationUpdate={onUserLocationUpdate}
-              />
-            </>
-          )
-          }
 
           <chakra.p textStyle="label" className="label" mt="4">
             Artwork description
@@ -277,7 +278,6 @@ export const ArtworkDetails = ({
               <div dangerouslySetInnerHTML={{ __html: object.description }} />
             </>
           )}
-
         </Box>
 
         {/* ======== BOX: Artwork purchase  ======== */}
@@ -287,31 +287,37 @@ export const ArtworkDetails = ({
             borderBottom="1px solid white"
             p="6"
             position="relative"
-          >            
-              <CornerButton
-                label="Buy"
-                position="top"
-                emphasis
-                hasTooltip={true}
-                tooltipText="Buying artworks is a legacy feature"
-                onClick={() => {
-                  if (canBuy) {
-                    buy(ownedToken[0].id, parseFloat(currentAsk ?? "0"));
+          >
+            <CornerButton
+              label="Buy"
+              position="top"
+              emphasis
+              hasTooltip={true}
+              tooltipText="Buying artworks is a legacy feature"
+              onClick={() => {
+                if (canBuy) {
+                  buy(ownedToken[0].id, parseFloat(currentAsk ?? "0"));
+                } else {
+                  if (
+                    `${artwork?.creator?.ethAddress}`.toLowerCase() ===
+                    `${appUser?.ethAddress}`.toLowerCase()
+                  ) {
+                    buyErrorToast("Oops", "You can't purchase your own token.");
+                  } else if (appUser && appUser.email) {
+                    buyErrorToast(
+                      "Oops",
+                      "Please connect your xDai wallet to your account in order to purchase this work."
+                    );
                   } else {
-                    if (
-                      `${artwork?.creator?.ethAddress}`.toLowerCase() ===
-                      `${appUser?.ethAddress}`.toLowerCase()
-                    ) {
-                      buyErrorToast("Oops", "You can't purchase your own token.");
-                    } else if (appUser && appUser.email) {
-                      buyErrorToast("Oops", "Please connect your xDai wallet to your account in order to purchase this work.");
-                    } else {
-                      buyErrorToast("Oops", "Please login to purchase this artwork.");
-                    }
+                    buyErrorToast(
+                      "Oops",
+                      "Please login to purchase this artwork."
+                    );
                   }
-                }}
-                isDisabled={!canBuy}
-              />            
+                }
+              }}
+              isDisabled={!canBuy}
+            />
             <chakra.p
               textStyle="subtitle"
               mb="10"
@@ -325,9 +331,8 @@ export const ArtworkDetails = ({
               Edition of {ownedToken[0].subgraphinfo.editionOf}
             </chakra.p>
             <chakra.p>
-                {ownedToken.length} available.
-                Next for sale is edition number{" "}
-                {ownedToken[0].subgraphinfo.editionNumber}.
+              {ownedToken.length} available. Next for sale is edition number{" "}
+              {ownedToken[0].subgraphinfo.editionNumber}.
             </chakra.p>
             {(subgraphQuery.loading || isAwaitingBlockConfirmation) && (
               <IncompleteOverlay
