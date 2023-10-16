@@ -44,6 +44,7 @@
     "@web3-react/injected-connector": "^6.0.7",
     "@web3-react/walletconnect-connector": "^6.2.4",
     "axios": "^0.21.1",
+    "chakra-ui-autocomplete": "^1.4.5",
     "cookie": "^0.4.0",
     "detect-it": "^4.0.1",
     "ethers": "^5.4.1",

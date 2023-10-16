@@ -23,6 +23,11 @@ export const Sidebar = () => {
       label: " + Artwork",
       url: "/x/a/create",
     },
+    {
+      slug: "newExhibition",
+      label: " + Exhibition",
+      url: "/x/e/create",
+    },
   ];
 
   return (

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { DateSingleInput } from "@datepicker-react/styled";
-import { FormControl, FormLabel } from "@chakra-ui/react";
+import { Box, FormControl, FormLabel } from "@chakra-ui/react";
 import { useFormContext, Controller } from "react-hook-form";
 
 import FieldErrorMessage from "./FieldErrorMessage";
@@ -38,6 +38,16 @@ export const FieldSingleDate = ({
 
   return (
     <FormControl id={id} isInvalid={errors[name]?.message} {...{ isRequired }}>
+      <Box
+        className="datePicker"
+        alignItems="center"
+        p="6"
+        pb="4"
+        borderBottom="1px solid #fff"
+        borderLeft={errors[name]?.message ? "4px solid " : "0px"}
+        borderLeftColor="openar.error"
+        pl={errors[name]?.message ? "calc(var(--chakra-space-6) - 4px)" : "6"}
+      >
       <FormLabel htmlFor={id} mb="0.5">
         {label}
       </FormLabel>
@@ -89,6 +99,7 @@ export const FieldSingleDate = ({
       />
 
       <FieldErrorMessage error={errors[name]?.message} />
+      </Box>
     </FormControl>
   );
 };
