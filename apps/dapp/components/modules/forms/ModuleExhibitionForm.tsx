@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { imageDeleteMutationGQL } from "~/graphql/mutations";
 
 import { AspectRatio, Box, Grid, chakra } from "@chakra-ui/react";
@@ -8,6 +9,8 @@ import {
   FieldTextEditor,
   FieldSwitch,
   FieldImageUploader,
+  FieldSingleDate,
+  FieldAutocomplete
 } from "~/components/forms";
 
 import { IncompleteOverlay, ShowUrlAndCopy } from "~/components/frontend";
@@ -16,8 +19,6 @@ import { ModuleArtworkArObjectsList } from ".";
 import { yupIsFieldRequired } from "../validation";
 import { useFormContext } from "react-hook-form";
 import { appConfig } from "~/config";
-import { FieldSingleDate } from "~/components/forms/FieldSingleDate";
-import FieldAutocomplete from "~/components/forms/FieldAutocomplete";
 
 export const ModuleExhibitionForm = ({
   action,
@@ -36,7 +37,7 @@ export const ModuleExhibitionForm = ({
 }) => {
   const { artworkReadOwn } = data ?? {};
 
-  const href = `${appConfig.baseUrl}/a/${data?.artworkReadOwn?.key}/`;
+  const href = `${appConfig.baseUrl}/a/${data?.exhibitionReadOwn?.key}/`;
 
   const columns = { base: "100%", t: "50% 50%" };
   const rows = { base: "auto 1fr", t: "1fr" };
@@ -51,10 +52,33 @@ export const ModuleExhibitionForm = ({
     { value: "18", label: "Other user" },
   ];
 
+  const [currentTitleValue, setCurrentTitleValue] = useState<String>("");
+  const [slugDefault, setSlugDefault] = useState<String>("");
+  useEffect(() => {
+    // if (focused) {
+    //   inputRef.current.focus()
+    // } else {
+    //   inputRef.current.blur()
+    // }
+  }, [slugDefault])
+
+  const createSlugFromTitle = (t: any) => {
+    console.log("event:", t)
+
+    let slug= t
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+    setSlugDefault(slug);
+  } 
+
   return (
     <Grid
       templateColumns={columns}
-      templateRows={rows}
+      templateRows={rows} 
       minH="calc(100vh - 4rem)"
     >
       <Box>
@@ -68,6 +92,22 @@ export const ModuleExhibitionForm = ({
             settings={{
               // defaultValue: data.abc.key
               placeholder: "Insert exhibition title…",
+              onChange: (event) => setCurrentTitleValue(event.target.value),
+              onBlur: (event) => createSlugFromTitle(currentTitleValue),
+            }}
+            
+          />
+          <FieldInput
+            name="slug"
+            id="slug"
+            type="slug"
+            label="Exhibition slug"
+            isRequired={yupIsFieldRequired("slug", validationSchema)}
+            settings={{
+              defaultValue: slugDefault,
+              placeholder: "Insert exhibition slug…",
+              helpText:
+                "The slug may only contain lowercase letters and dashes.",
             }}
           />
         </FieldRow>
@@ -76,27 +116,27 @@ export const ModuleExhibitionForm = ({
             name="dateBegin"
             id="dateBegin"
             label="Start date"
-            placeholder="Pick date …"
+            placeholder="Pick date…"
             isRequired={yupIsFieldRequired("dateBegin", validationSchema)}
           />
           <FieldSingleDate
             name="dateEnd"
             id="dateEnd"
             label="End date"
-            placeholder="Pick date …"
+            placeholder="Pick date…"
             isRequired={yupIsFieldRequired("dateEnd", validationSchema)}
           />
         </FieldRow>
         <FieldRow>
           <FieldAutocomplete
-            name="curatos"
+            name="curators"
             items={curatorArray}
-            id="curatos"
+            id="curators"
             label="Curators"
             isRequired={yupIsFieldRequired("url", validationSchema)}
             settings={{
               // defaultValue: data.abc.key
-              placeholder: "Select curators or search by alias …",
+              placeholder: "Select curators or search by alias…",
               helpText:
                 "Curators must be registrated users of openAR to be selected",
             }}
@@ -110,7 +150,7 @@ export const ModuleExhibitionForm = ({
             settings={{
               // defaultValue: data.abc.key
               placeholder: "A [group show/exhibition/show] by …",
-              helpText: "Choose A [group show/exhibition/show] by …",
+              helpText: "Tagline prefix will be completed by list of curators",
             }}
           />
         </FieldRow>

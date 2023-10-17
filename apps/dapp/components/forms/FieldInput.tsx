@@ -26,6 +26,7 @@ import FieldErrorMessage from "./FieldErrorMessage";
 
 export interface FieldInputSettings {
   onChange?: ChangeEventHandler;
+  onBlur?: ChangeEventHandler;
   rows?: number;
   required?: boolean;
   autoComplete?: string;
@@ -105,6 +106,12 @@ export const FieldInput = ({
     }
   };
 
+  const onBlurHandler: ChangeEventHandler = (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    settings?.onBlur && settings?.onBlur.call(null, event);
+  };  
+
   fieldProps.type = revealFlag ? "text" : fieldProps.type;
 
   const visibilityClickEvent: MouseEventHandler<HTMLButtonElement> = (
@@ -122,7 +129,7 @@ export const FieldInput = ({
       name={name}
       onBlur={(event) => {
         onBlur(event);
-        onChangeHandler(event);
+        onBlurHandler(event);
       }}
       onChange={(event) => {
         onChange(event);

@@ -4,3 +4,4 @@ export * from "./imageMutationsGQL";
 export * from "./arModelMutationsGQL";
 export * from "./artworkMutationsGQL";
 export * from "./arObjectMutationsGQL";
+export * from "./exhibitionMutationsGQL";

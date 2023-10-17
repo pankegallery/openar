@@ -30,9 +30,12 @@ export const FieldSingleDate = ({
   displayFormat?: string;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+
   const {
     formState: { errors },
     control,
+    register,
+    setValue,
     getValues,
   } = useFormContext();
 
@@ -48,57 +51,70 @@ export const FieldSingleDate = ({
         borderLeftColor="openar.error"
         pl={errors[name]?.message ? "calc(var(--chakra-space-6) - 4px)" : "6"}
       >
-      <FormLabel htmlFor={id} mb="0.5">
-        {label}
-      </FormLabel>
+        {errors[name]?.message && (
+          <Box
+            m={0}
+            position="absolute"
+            top="0"
+            right="0"
+            pt="5"
+            pr="6"
+          >
+            <FieldErrorMessage error={errors[name]?.message} />
+          </Box>
+        )}
+        <FormLabel htmlFor={id} mb="0.5">
+          {label}
+        </FormLabel>
 
-      <Controller
-        control={control}
-        name={name}
-        render={({
-          field: { onChange, onBlur, value, name, ref },
-          fieldState: { invalid, isTouched, isDirty, error },
-          formState,
-        }) => {
-          const date = isValidDate(value) ? value : defaultValue;
-          return (
-            <DateSingleInput
-              onDateChange={(date) => {
-                onChange(date.date);
-              }}
-              onFocusChange={(focusedInput) => {
-                setIsOpen(focusedInput);
-              }}
-              displayFormat={displayFormat}
-              showCalendarIcon={true}
-              showClose={false}
-              showDatepicker={isOpen}
-              showResetDate={false}
-              phrases={{
-                dateAriaLabel: label,
-                datePlaceholder: placeholder ?? "",
-                datepickerStartDatePlaceholder: "",
-                datepickerStartDateLabel: "",
-                datepickerEndDateLabel: "",
-                datepickerEndDatePlaceholder: "",
-                resetDates: "",
-                close: "Close",
-              }}
-              date={date}
-              /* ayLabelFormat={(date: Date) => date.toLocaleString(i18n.language, {day: 'numeric'})} */
+        <Controller
+          control={control}
+          name={name}
+          render={({
+            field: { onChange, onBlur, value, name, ref },
+            fieldState: { invalid, isTouched, isDirty, error },
+            formState,
+          }) => {
+            const date = isValidDate(value) ? value : defaultValue;
+            return (
+              <DateSingleInput
+                onDateChange={(date) => {
+                  onChange(date.date);
+                }}
+                onFocusChange={(focusedInput) => {
+                  setIsOpen(focusedInput);
+                }}
+                displayFormat={displayFormat}
+                showCalendarIcon={true}
+                showClose={false}
+                showDatepicker={isOpen}
+                showResetDate={false}
+                phrases={{
+                  dateAriaLabel: label,
+                  datePlaceholder: placeholder ?? "",
+                  datepickerStartDatePlaceholder: "",
+                  datepickerStartDateLabel: "",
+                  datepickerEndDateLabel: "",
+                  datepickerEndDatePlaceholder: "",
+                  resetDates: "",
+                  close: "Close",
+                }}
+                date={date}
+                /* dayLabelFormat={(date: Date) => date.toLocaleString(i18n.language, {day: 'numeric'})} */
 
-              weekdayLabelFormat={(date: Date) =>
-                date.toLocaleString("en-GB", { weekday: "short" })
-              }
-              monthLabelFormat={(date: Date) =>
-                date.toLocaleString("en-GB", { month: "long" })
-              }
-            />
-          );
-        }}
-      />
+                weekdayLabelFormat={(date: Date) =>
+                  date.toLocaleString("en-GB", { weekday: "short" })
+                }
+                monthLabelFormat={(date: Date) =>
+                  date.toLocaleString("en-GB", { month: "long" })
+                }
 
-      <FieldErrorMessage error={errors[name]?.message} />
+              />
+            );
+          }}
+        />
+
+        <FieldErrorMessage error={errors[name]?.message} />
       </Box>
     </FormControl>
   );

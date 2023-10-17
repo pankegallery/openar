@@ -93,10 +93,11 @@ export const FieldAutocomplete = ({
           }) => (
             <CUIAutoComplete
               placeholder={placeholder}
-              label=""
+              label={label}
               onCreateItem={handleCreateItem}
               items={pickerItems}
               selectedItems={selectedItems}
+              disableCreateItem={true}
               onSelectedItemsChange={(changes) =>
                 handleSelectedItemsChange(changes.selectedItems)
               }
@@ -114,6 +115,7 @@ export const FieldAutocomplete = ({
               }}
               inputStyleProps={{
                 border: "none",
+                pt: "0"
               }}
               hideToggleButton={true}
               tagStyleProps={{
@@ -125,6 +127,9 @@ export const FieldAutocomplete = ({
                 color: "white",
                 icon: "CheckIcon",
               }}
+              labelStyleProps={
+                {display: "none"}
+              }
               icon={CheckIcon}
             />
           )}

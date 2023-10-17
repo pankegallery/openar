@@ -18,5 +18,6 @@ export * from "./FieldStatusSelect";
 export * from "./FieldRadioOrCheckboxGroup";
 export * from "./FieldHiddenShow";
 export * from "./FieldSingleImage";
+export * from "./FieldSingleDate";
 export * from "./FieldAutocomplete";
 export * from "./FormScrollInvalidIntoView";

@@ -7,13 +7,13 @@ import { Text } from "@chakra-ui/react";
 
 import { LayoutOpenAR } from "~/components/app";
 import { FormNavigationBlock } from "~/components/forms";
-import { moduleArtworksConfig as moduleConfig } from "~/components/modules/config";
+import { moduleExhibitionsConfig as moduleConfig } from "~/components/modules/config";
 import { ModuleExhibitionForm } from "~/components/modules/forms";
-import { ModuleArtworkCreateSchema } from "~/components/modules/validation";
+import { ModuleExhibitionCreateSchema } from "~/components/modules/validation";
 // import { RestrictPageAccess } from "~/components/utils";
 
 import { useAuthentication, useSuccessfullySavedToast } from "~/hooks";
-import { useArtworkCreateMutation } from "~/hooks/mutations";
+import { useExhibitionCreateMutation } from "~/hooks/mutations";
 import {
   ModuleSubNav,
   ModulePage,
@@ -25,7 +25,7 @@ const Create = () => {
   const successToast = useSuccessfullySavedToast();
   const [disableNavigation, setDisableNavigation] = useState(false);
   const [isNavigatingAway, setIsNavigatingAway] = useState(false);
-  const [firstMutation, firstMutationResults] = useArtworkCreateMutation();
+  const [firstMutation, firstMutationResults] = useExhibitionCreateMutation();
   const [isFormError, setIsFormError] = useState(false);
 
   const disableForm = firstMutationResults.loading;
@@ -33,7 +33,7 @@ const Create = () => {
   // TODO: there should be a nicer way to use react hook form in TS
   const formMethods = useForm<Record<string, any>>({
     mode: "onTouched",
-    resolver: yupResolver(ModuleArtworkCreateSchema) as any,
+    resolver: yupResolver(ModuleExhibitionCreateSchema) as any,
   });
 
   const {
@@ -42,7 +42,7 @@ const Create = () => {
   } = formMethods;
 
   const onSubmit = async (
-    newData: yup.InferType<typeof ModuleArtworkCreateSchema>
+    newData: yup.InferType<typeof ModuleExhibitionCreateSchema>
   ) => {
     setIsFormError(false);
     setIsNavigatingAway(false);
@@ -66,7 +66,7 @@ const Create = () => {
           successToast();
           setIsNavigatingAway(true);
           Router.push(
-            `${moduleConfig.rootPath}/${data?.artworkCreate?.id}/update`
+            `${moduleConfig.rootPath}/${data?.exhibitionCreate?.id}/update`
           );
         } else {
           setIsFormError(true);
@@ -123,14 +123,14 @@ const Create = () => {
                   borderBottom="1px solid #fff"
                   color="openar.error"
                 >
-                  Unfortunately, we could not save your artwork. Please try
+                  Unfortunately, we could not save your exhibition. Please try
                   again in a little bit.
                 </Text>
               )}
               <ModuleExhibitionForm
                 action="create"
                 disableNavigation={setDisableNavigation}
-                validationSchema={ModuleArtworkCreateSchema}
+                validationSchema={ModuleExhibitionCreateSchema}
               />
             </ModulePage>
           </fieldset>
@@ -144,5 +144,5 @@ Create.getLayout = function getLayout(page: ReactElement) {
   return <LayoutOpenAR>{page}</LayoutOpenAR>;
 };
 
-// export default RestrictPageAccess(Create, "artworkCreate");
+// export default RestrictPageAccess(Create, "exhibitionCreate");
 export default Create;
