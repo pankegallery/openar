@@ -9,7 +9,7 @@ export const ModuleExhibitionCreateSchema = object().shape({
   dateBegin: string().required(),
   dateEnd: string().required(),
   subtitlePrefix: string().required(),
-  description: string().nonEmptyHtml({ max: 500 }).required(),
+  description: string().nonEmptyHtml({ max: 750 }).required(),
   url: string().url().nullable(),
   video: string().url().nullable(),
   curators: string().required(),

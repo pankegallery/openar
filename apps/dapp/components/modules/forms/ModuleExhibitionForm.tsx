@@ -92,7 +92,7 @@ export const ModuleExhibitionForm = ({
             settings={{
               // defaultValue: data.abc.key
               placeholder: "Insert exhibition title…",
-              onChange: (event) => setCurrentTitleValue(event.target.value),
+              onChange: (event) => setCurrentTitleValue((event.target as HTMLButtonElement).value),
               onBlur: (event) => createSlugFromTitle(currentTitleValue),
             }}
             
@@ -149,8 +149,10 @@ export const ModuleExhibitionForm = ({
             isRequired={yupIsFieldRequired("url", validationSchema)}
             settings={{
               // defaultValue: data.abc.key
-              placeholder: "A [group show/exhibition/show] by …",
+              placeholder: "group show/exhibition/show",
               helpText: "Tagline prefix will be completed by list of curators",
+              leftElement: {element: (<span>A&nbsp;</span>), padding: "1em"},
+              rightElement: {element: (<span>by [list of curators].</span>), padding: "14em"},
             }}
           />
         </FieldRow>
@@ -162,27 +164,11 @@ export const ModuleExhibitionForm = ({
             label="Exhibition description"
             isRequired={yupIsFieldRequired("description", validationSchema)}
             settings={{
-              maxLength: 500,
+              maxLength: 750,
               defaultValue: artworkReadOwn?.description
                 ? artworkReadOwn?.description
                 : undefined,
-              placeholder: "Please describe your artwork in a few words…",
-            }}
-          />
-        </FieldRow>
-        <FieldRow>
-          <FieldInput
-            name="video"
-            id="video"
-            type="video"
-            label="Artwork video"
-            isRequired={yupIsFieldRequired("video", validationSchema)}
-            settings={{
-              // defaultValue: data.abc.key
-              placeholder:
-                "Add video URL (https://vimeo.com/... or https://youtube.com/...)",
-              helpText:
-                "Documentation of artwork creation, performances or additional background information",
+              placeholder: "Please describe the exhibition in a few words…",
             }}
           />
         </FieldRow>

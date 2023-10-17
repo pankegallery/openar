@@ -14,6 +14,7 @@ const themeConfig = {
   fonts: {
     heading: "Manrope, Helvetica, Arial, sans-serif",
     body: "Manrope, Helvetica, Arial, sans-serif",
+    mono: `"Source Code Pro", monospace`,
   },
   components,
   breakpoints: createBreakpoints({

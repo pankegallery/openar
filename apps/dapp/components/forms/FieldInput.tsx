@@ -14,6 +14,7 @@ import {
   FormHelperText,
   Input,
   InputGroup,
+  InputLeftElement,
   InputRightElement,
   IconButton,
   useBoolean,
@@ -42,6 +43,8 @@ export interface FieldInputSettings {
     min: number;
     max: number;
   };
+  leftElement?: any;
+  rightElement?: any;
 }
 
 export const FieldInput = ({
@@ -110,7 +113,7 @@ export const FieldInput = ({
     event: ChangeEvent<HTMLInputElement>
   ) => {
     settings?.onBlur && settings?.onBlur.call(null, event);
-  };  
+  };
 
   fieldProps.type = revealFlag ? "text" : fieldProps.type;
 
@@ -123,30 +126,38 @@ export const FieldInput = ({
 
   const { ref, onBlur, onChange } = register(id, { required: isRequired });
 
-  let input = (
-    <Input
-      variant="flushed"
-      name={name}
-      onBlur={(event) => {
-        onBlur(event);
-        onBlurHandler(event);
-      }}
-      onChange={(event) => {
-        onChange(event);
-        onChangeHandler(event);
-      }}
-      {...fieldProps}
-      ref={(e: HTMLInputElement) => {
-        ref(e);
-        fieldRef.current = e; // you can still assign to ref
-      }}
-      _placeholder={{
-        opacity: "0.6",
-        color: "white"
-      }}
-      border="0"
-    />
-  );
+  interface inputProps {
+    variant: string;
+    name: any;
+    border: string;
+    onBlur: any;
+    onChange: any;
+    ref: any;
+    _placeholder: any;
+  }
+  let inputProps = {
+    variant: "flushed",
+    name: name,
+    border: "0",
+    onBlur: (event) => {
+      onBlur(event);
+      onBlurHandler(event);
+    },
+    onChange: (event) => {
+      onChange(event);
+      onChangeHandler(event);
+    },
+    ref: (e: HTMLInputElement) => {
+      ref(e);
+      fieldRef.current = e; // you can still assign to ref
+    },
+    _placeholder: {
+      opacity: "0.6",
+      color: "white",
+    },
+  };
+
+  let input = <Input {...inputProps} {...fieldProps} />;
 
   // browser auto fill and form initation might be at the wrong times
   // if this happens the "hook forms" does not register the auto filled
@@ -168,12 +179,13 @@ export const FieldInput = ({
     return () => {
       clearInterval(interval);
     };
-  },[name, setValue]);
+  }, [name, setValue]);
 
+  // Adds passsword field elements on right
   if (type === "password") {
     input = (
       <InputGroup size="md">
-        {input}
+        <Input {...inputProps} {...fieldProps} pr="2.5rem" />
         <InputRightElement width="2.5rem">
           <IconButton
             border="1px"
@@ -195,6 +207,46 @@ export const FieldInput = ({
     );
   }
 
+  // Render left/right elements handed over by function
+  // Can be either in the form of leftElement: (<Tag>Content</Tag>)
+  // or passed as object with a defined width as padding
+  // e.g. leftElement: {element: (<Tag>Content</Tag>), padding: "value"}
+
+  if (settings?.leftElement || settings?.rightElement) {
+    let leftElement: any, rightElement: any;
+    if (typeof settings?.leftElement) {
+      leftElement = (
+        <InputLeftElement fontFamily="var(--chakra-fonts-mono)" width={settings?.leftElement.padding ? settings?.leftElement.padding : "auto"}>
+          {typeof settings?.leftElement === "object" ? settings?.leftElement.element : settings?.leftElement}
+        </InputLeftElement>
+      )
+    }
+    if (typeof settings?.rightElement) {
+      rightElement = (
+        <InputRightElement fontFamily="var(--chakra-fonts-mono)" width={settings?.rightElement.padding ? settings?.rightElement.padding : "auto"}>
+          {typeof settings?.rightElement === "object" ? settings?.rightElement.element : settings?.rightElement}
+        </InputRightElement>
+      )
+    }
+
+    input = (
+      <Input
+        {...inputProps}
+        {...fieldProps}
+        pl={settings?.leftElement?.padding}
+        pr={settings?.rightElement?.padding}
+      />
+    );
+
+    input = (
+      <InputGroup size="md">
+        {leftElement}
+        {input}
+        {rightElement}
+      </InputGroup>
+    );
+  }
+
   return (
     <FormControl
       id={id}
@@ -211,27 +263,17 @@ export const FieldInput = ({
         pl={errors[name]?.message ? "calc(var(--chakra-space-6) - 4px)" : "6"}
       >
         {errors[name]?.message && (
-          <Box
-            m={0}
-            position="absolute"
-            top="0"
-            right="0"
-            pt="5"
-            pr="6"
-          >
+          <Box m={0} position="absolute" top="0" right="0" pt="5" pr="6">
             <FieldErrorMessage error={errors[name]?.message} />
           </Box>
         )}
-        <FormLabel
-          htmlFor={id}
-          m={0}
-        >
+        <FormLabel htmlFor={id} m={0}>
           {label}
         </FormLabel>
-        {settings?.helpText &&
-        <FormHelperText>{settings?.helpText}</FormHelperText>}
+        {settings?.helpText && (
+          <FormHelperText>{settings?.helpText}</FormHelperText>
+        )}
         {input}
-
       </Box>
     </FormControl>
   );
