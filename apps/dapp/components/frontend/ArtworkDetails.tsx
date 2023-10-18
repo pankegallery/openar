@@ -34,10 +34,12 @@ export const ArtworkDetails = ({
   artwork,
   object,
   onUserLocationUpdate,
+  userIsInProximity,
 }: {
   artwork: any;
   object: any;
   onUserLocationUpdate: any;
+  userIsInProximity: any;
 }) => {
   const [profileUrl, setProfileUrl] = useState(`/u/${artwork.creator.id}`);
   const [claimCollectorRoleMutation] =
@@ -237,8 +239,8 @@ export const ArtworkDetails = ({
         </chakra.p>
       </Box>
 
-      <Box width="100%" overflow={object?.isGeolocationEnabled ? "hidden" : "auto"} height="100%" position="relative" flexGrow={0}>
-        {object?.isGeolocationEnabled && (
+      <Box width="100%" overflow={object?.isGeolocationEnabled && !userIsInProximity ? "hidden" : "auto"} height="100%" position="relative" flexGrow={0}>
+        {object?.isGeolocationEnabled && !userIsInProximity && (
           <IncompleteOverlay
             cornerRem="6rem"
             headline="This artwork is site-specific. "
@@ -279,6 +281,30 @@ export const ArtworkDetails = ({
             </>
           )}
         </Box>
+        
+        {/* ======== BOX: Artwork location  ======== */}
+        {object?.isGeolocationEnabled && userIsInProximity && (
+        <Box
+          className="artworkLocation"
+          borderBottom="1px solid white"
+          p="6"
+          height="500px"
+          pb="80px"
+        >
+
+          <chakra.p textStyle="label" className="label" mt="4" pb="4">
+            Artwork location
+          </chakra.p>
+
+          <LeafletMap
+              lat={object.lat}
+              lng={object.lng}
+              shouldUpdateMarkerToMapCenter={false}
+              shouldLocateUser={true}
+              onUserLocationUpdate={onUserLocationUpdate}
+            />
+        </Box>
+        )}
 
         {/* ======== BOX: Artwork purchase  ======== */}
         {currentAsk && ownedToken.length > 0 && (
