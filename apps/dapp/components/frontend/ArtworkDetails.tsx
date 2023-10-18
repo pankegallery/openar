@@ -42,6 +42,8 @@ export const ArtworkDetails = ({
   userIsInProximity: any;
 }) => {
   const [profileUrl, setProfileUrl] = useState(`/u/${artwork.creator.id}`);
+  const [disableOverlay, setDisableOverlay] = useState(false)
+  
   const [claimCollectorRoleMutation] =
     useUserMaybeClaimCollectorsRoleUpdateMutation();
 
@@ -239,7 +241,7 @@ export const ArtworkDetails = ({
         </chakra.p>
       </Box>
 
-      <Box width="100%" overflow={object?.isGeolocationEnabled && !userIsInProximity ? "hidden" : "auto"} height="100%" position="relative" flexGrow={0}>
+      <Box width="100%" overflow={object?.isGeolocationEnabled && !(userIsInProximity || disableOverlay) ? "hidden" : "auto"} height="100%" position="relative" flexGrow={0}>
         {object?.isGeolocationEnabled && !userIsInProximity && (
           <IncompleteOverlay
             cornerRem="6rem"
@@ -250,6 +252,9 @@ export const ArtworkDetails = ({
             marginLeft="6"
             marginTop="10"
             align="top"
+            enableCloseButton={true}
+            handleClose={() => setDisableOverlay(true)}
+            disabled={disableOverlay}
           >
             <LeafletMap
               lat={object.lat}
@@ -283,7 +288,7 @@ export const ArtworkDetails = ({
         </Box>
         
         {/* ======== BOX: Artwork location  ======== */}
-        {object?.isGeolocationEnabled && userIsInProximity && (
+        {(object?.isGeolocationEnabled && (userIsInProximity || disableOverlay)) && (
         <Box
           className="artworkLocation"
           borderBottom="1px solid white"
