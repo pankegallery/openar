@@ -114,7 +114,7 @@ export const FieldSingleDate = ({
           }}
         />
 
-        <FieldErrorMessage error={errors[name]?.message} />
+        {/* <FieldErrorMessage error={errors[name]?.message} /> */}
       </Box>
     </FormControl>
   );

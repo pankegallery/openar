@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { imageDeleteMutationGQL } from "~/graphql/mutations";
-
+// import { useQuery } from "@apollo/client";
+// import { usersQueryGQL } from "~/graphql/queries";
 import { AspectRatio, Box, Grid, chakra } from "@chakra-ui/react";
 
 import {
@@ -10,7 +11,7 @@ import {
   FieldSwitch,
   FieldImageUploader,
   FieldSingleDate,
-  FieldAutocomplete
+  FieldAutocomplete,
 } from "~/components/forms";
 
 import { IncompleteOverlay, ShowUrlAndCopy } from "~/components/frontend";
@@ -19,6 +20,7 @@ import { ModuleArtworkArObjectsList } from ".";
 import { yupIsFieldRequired } from "../validation";
 import { useFormContext } from "react-hook-form";
 import { appConfig } from "~/config";
+
 
 export const ModuleExhibitionForm = ({
   action,
@@ -35,7 +37,38 @@ export const ModuleExhibitionForm = ({
   setActiveUploadCounter?: Function;
   disableNavigation?: Function;
 }) => {
-  const { artworkReadOwn } = data ?? {};
+  // const { exhibitionReadOwn } = data ?? {};
+  // Workaround
+  const { exhibitionReadOwn } = data ?? {
+    id: 3,
+    title: "Animal()City",
+    slug: "animal-city",
+    imgUrl:
+      "https://baserow.panke.gallery/media/user_files/EvoXClGpi1pvLnUZetcaDRlPSdtOfOfL_5e2e167834bb0c9302fa0df477b42e16e2228c8fad4975b473d5621d4215490d.jpg",
+    imgPosition: "center center",
+    type: "groupshow",
+    // A group show curated by ABC and BBB
+    subtitlePrefix: "A group show curated by",
+    // curators: [
+    //   {
+    //     orderNumber: 1,
+    //     user: await getExhibitionUserById(18),
+    //   },
+    // ],
+    dateBegin: new Date("2023-10-12 12:00"),
+    dateEnd: new Date("2023-10-28 23:00"),
+    description: `Animal()City is inspired by the ghostly presence of foxes roaming the city at night – a common sight in Berlin today – evoking echoes of a pre-industrial era while drawing attention to a layer of the city that is completely invisible in everyday life. In these moments we witness animals and plants forming their own realm, and the city having a life of its own, acting like an entity, a ghost at times. Encounters with wild animals in the city make this parallel identity momentarily tangible, making us part of these ‘non-human’ networks while projecting ideas of dystopian, dehumanised cities of the future. The city can also be read as analogous to the Internet. Just as we are divided into threads and channels by platforms online, we also live in multi-layered structures that are haunted by sinister bots and AI agents.`,
+    // status: ExhibitionStatusEnum.PUBLISHED,
+    // artworks: await getExhibitionArtworks([
+    //   "I3MUhwLxici21RF5",
+    //   "AI1A7yQdHQlTuNp0",
+    //   "fFllpSvUuvXL7zIo",
+    //   "kUIayNJbpHl5Sa7C",
+    //   "GSpeSfy655rVWERY",
+    //   "Athl28wGaJZRva25",
+    //   "wAjMr9jSxgoZ2QCM",
+    // ]),
+  };
 
   const href = `${appConfig.baseUrl}/a/${data?.exhibitionReadOwn?.key}/`;
 
@@ -51,6 +84,14 @@ export const ModuleExhibitionForm = ({
     { value: "16", label: "Sakrowski" },
     { value: "18", label: "Other user" },
   ];
+  // const allUsers = useQuery(usersQueryGQL, {
+  //   variables: {
+  //     orderBy: {users: "pseudonym"},
+  //     pageIndex: 0,
+  //     pageSize: 100,
+  //   },
+  // });
+  // console.log(curatorArray, allUsers.data);
 
   const [currentTitleValue, setCurrentTitleValue] = useState<String>("");
   const [slugDefault, setSlugDefault] = useState<String>("");
@@ -60,25 +101,25 @@ export const ModuleExhibitionForm = ({
     // } else {
     //   inputRef.current.blur()
     // }
-  }, [slugDefault])
+  }, [slugDefault]);
 
   const createSlugFromTitle = (t: any) => {
-    console.log("event:", t)
+    console.log("event:", t);
 
-    let slug= t
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s]/g, '')
-    .replace(/[\s_-]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+    let slug = t
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s]/g, "")
+      .replace(/[\s_-]+/g, "-")
+      .replace(/^-+|-+$/g, "");
 
     setSlugDefault(slug);
-  } 
+  };
 
   return (
     <Grid
       templateColumns={columns}
-      templateRows={rows} 
+      templateRows={rows}
       minH="calc(100vh - 4rem)"
     >
       <Box>
@@ -92,10 +133,10 @@ export const ModuleExhibitionForm = ({
             settings={{
               // defaultValue: data.abc.key
               placeholder: "Insert exhibition title…",
-              onChange: (event) => setCurrentTitleValue((event.target as HTMLButtonElement).value),
+              onChange: (event) =>
+                setCurrentTitleValue((event.target as HTMLButtonElement).value),
               onBlur: (event) => createSlugFromTitle(currentTitleValue),
             }}
-            
           />
           <FieldInput
             name="slug"
@@ -133,7 +174,7 @@ export const ModuleExhibitionForm = ({
             items={curatorArray}
             id="curators"
             label="Curators"
-            isRequired={yupIsFieldRequired("url", validationSchema)}
+            isRequired={yupIsFieldRequired("curators", validationSchema)}
             settings={{
               // defaultValue: data.abc.key
               placeholder: "Select curators or search by alias…",
@@ -142,17 +183,19 @@ export const ModuleExhibitionForm = ({
             }}
           />
           <FieldInput
-            name="type"
-            id="type"
+            name="subtitlePrefix"
+            id="subtitlePrefix"
             type="text"
             label="Exhibition tagline"
-            isRequired={yupIsFieldRequired("url", validationSchema)}
+            isRequired={yupIsFieldRequired("subtitlePrefix", validationSchema)}
             settings={{
               // defaultValue: data.abc.key
-              placeholder: "group show/exhibition/show",
+              placeholder: "A group show/exhibition/show",
               helpText: "Tagline prefix will be completed by list of curators",
-              leftElement: {element: (<span>A&nbsp;</span>), padding: "1em"},
-              rightElement: {element: (<span>by [list of curators].</span>), padding: "14em"},
+              rightElement: {
+                element: <span>by [list of curators].</span>,
+                padding: "14em",
+              },
             }}
           />
         </FieldRow>
@@ -165,8 +208,8 @@ export const ModuleExhibitionForm = ({
             isRequired={yupIsFieldRequired("description", validationSchema)}
             settings={{
               maxLength: 750,
-              defaultValue: artworkReadOwn?.description
-                ? artworkReadOwn?.description
+              defaultValue: exhibitionReadOwn?.description
+                ? exhibitionReadOwn?.description
                 : undefined,
               placeholder: "Please describe the exhibition in a few words…",
             }}
@@ -176,13 +219,13 @@ export const ModuleExhibitionForm = ({
           <Box borderBottom="1px solid #fff">
             <FieldSwitch
               name="isPublic"
-              label="Is you artwork public?"
+              label="Is you exhibition public?"
               isRequired={yupIsFieldRequired("isPublic", validationSchema)}
-              defaultChecked={artworkReadOwn?.isPublic}
+              defaultChecked={exhibitionReadOwn?.isPublic}
               hint={
                 isPublic
-                  ? "Your artwork is visible on openAR"
-                  : "Your artwork will be hidden on openAR. You can always access your artwork via:"
+                  ? "Your exhibition is visible on openAR"
+                  : "Your exhibition will be hidden on openAR. You can always access your exhibition via:"
               }
             />
             {!isPublic && (
@@ -202,8 +245,8 @@ export const ModuleExhibitionForm = ({
         {/* ---- OVERLAY: Save to upload --- */}
         {action === "create" && (
           <IncompleteOverlay
-            headline="Save draft to upload material."
-            subline=" Please save as draft to unlock image and model uplodad."
+            headline="Save draft to add artworks."
+            subline=" Please save as draft to unlock artowkr and poster fields."
             button={true}
             buttonLabel="Save draft"
             href=""
@@ -263,6 +306,7 @@ export const ModuleExhibitionForm = ({
         )}
 
         {action === "update" && (
+          //TODO: Replace dummy content with fields from below
           <Box borderBottom="1px solid #fff" p="6">
             <FieldImageUploader
               route="image"
@@ -275,7 +319,7 @@ export const ModuleExhibitionForm = ({
               connectWith={{
                 heroImageArtworks: {
                   connect: {
-                    id: artworkReadOwn.id,
+                    id: exhibitionReadOwn.id,
                   },
                 },
               }}
@@ -285,9 +329,9 @@ export const ModuleExhibitionForm = ({
                 aspectRatioPB: 100, // % bottom padding
 
                 image: {
-                  status: artworkReadOwn?.heroImage?.status,
-                  id: artworkReadOwn?.heroImage?.id,
-                  meta: artworkReadOwn?.heroImage?.meta,
+                  status: exhibitionReadOwn?.heroImage?.status,
+                  id: exhibitionReadOwn?.heroImage?.id,
+                  meta: exhibitionReadOwn?.heroImage?.meta,
                   alt: `Poster Image`,
                   forceAspectRatioPB: 100,
                   showPlaceholder: true,

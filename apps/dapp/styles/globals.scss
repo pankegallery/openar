@@ -437,13 +437,16 @@ a {
 /* react-datepicker styling */
 
 .datePicker {
-  div {
+  
+  // date picker elements are preceeded by general form error div and label
+  div:last-child {
 
     // Calendar and arrows
     svg {
       color: white;
       fill: white;
     }
+
     // Form fields
     input,
     button {
@@ -456,7 +459,7 @@ a {
         opacity: 0.6;
       }
     }
-    
+
     label {
       border: none;
 

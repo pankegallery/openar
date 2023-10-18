@@ -77,6 +77,11 @@ export const FieldAutocomplete = ({
         borderLeftColor="openar.error"
         pl={errors[name]?.message ? "calc(var(--chakra-space-6) - 4px)" : "6"}
       >
+        {errors[name]?.message && (
+          <Box m={0} position="absolute" top="0" right="0" pt="5" pr="6">
+            <FieldErrorMessage error={errors[name]?.message} />
+          </Box>
+        )}
         <FormLabel htmlFor={id} mb="0.5">
           {label}
         </FormLabel>
@@ -135,7 +140,7 @@ export const FieldAutocomplete = ({
           )}
         />
 
-        <FieldErrorMessage error={errors[name]?.message} />
+        
       </Box>
     </FormControl>
   );

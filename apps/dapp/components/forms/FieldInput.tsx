@@ -214,14 +214,14 @@ export const FieldInput = ({
 
   if (settings?.leftElement || settings?.rightElement) {
     let leftElement: any, rightElement: any;
-    if (typeof settings?.leftElement) {
+    if (settings?.leftElement) {
       leftElement = (
         <InputLeftElement fontFamily="var(--chakra-fonts-mono)" width={settings?.leftElement.padding ? settings?.leftElement.padding : "auto"}>
           {typeof settings?.leftElement === "object" ? settings?.leftElement.element : settings?.leftElement}
         </InputLeftElement>
       )
     }
-    if (typeof settings?.rightElement) {
+    if (settings?.rightElement) {
       rightElement = (
         <InputRightElement fontFamily="var(--chakra-fonts-mono)" width={settings?.rightElement.padding ? settings?.rightElement.padding : "auto"}>
           {typeof settings?.rightElement === "object" ? settings?.rightElement.element : settings?.rightElement}
