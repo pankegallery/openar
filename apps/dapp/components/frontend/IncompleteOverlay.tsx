@@ -63,7 +63,7 @@ export const IncompleteOverlay = ({
       {
         children ? 
         (
-          <Flex flexDirection="column" mx={marginLeft} mb={marginBottom ?? "10"} mt={marginTop} height="100%">
+          <Flex flexDirection="column" mx={marginLeft} mb={marginBottom ?? "10"} mt={marginTop} height="100%" width={`calc(100% - 2 * var(--chakra-space-${marginLeft}))`}>
             {headline && <Text textAlign="right" textStyle="subtitle">{headline}</Text>}
             {subline && <Text marginLeft={cornerRem ?? "0rem"} textAlign="right" marginBottom="6">{subline}</Text>}
             <Box flexGrow={1}>{children}</Box>
