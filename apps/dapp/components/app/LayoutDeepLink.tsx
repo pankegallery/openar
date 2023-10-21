@@ -8,8 +8,8 @@ export const LayoutDeepLink = ({mode = "dark", children} : {mode?: any, children
   return (<>
 
       <Head>
-        <title>openAR · A cooperative and crypto platform for AR artworks</title>
-        <meta property="og:title" content="openAR · A cooperative and crypto platform for AR artworks" key="title" />
+        <title>openAR · An open platform for augmented reality (AR) artworks</title>
+        <meta property="og:title" content="openAR · An open platform for augmented reality (AR) artworks" key="title" />
       </Head>
       <Box className={`site content corner-${mode}`} h="100%">
         {children}

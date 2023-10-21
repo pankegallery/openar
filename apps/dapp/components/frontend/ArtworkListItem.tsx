@@ -13,7 +13,6 @@ import { ArtworkStatusEnum, getArtistName } from "~/utils";
 import Link from "next/link";
 import Router, {useRouter} from 'next/router'
 
-
 export const ArtworkListItem = ({
   id,
   title,
@@ -77,6 +76,30 @@ export const ArtworkListItem = ({
       className={`${isWhite ? "white" : ""} artwork list item col-${col}`}
       key={`artwork-${id}`}
       borderBottom="1px solid white"
+      _before={{
+        content: `"View artwork"`,
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "#bab79fee",
+          color: "white",
+          zIndex: "100",
+          textTransform: "uppercase",
+          fontWeight: "800",
+          pointerEvents: "none",
+          opacity: "0",
+          transition: "opacity ease 0.3s, transform ease 2s",
+          transform: "scale(98%)",
+      }}
+      _hover={{
+        _before: {
+          opacity: "100",
+          transform: "scale(102%)",
+        }
+      }}
     >
       <Box className="info" p="4">
         <chakra.h2
