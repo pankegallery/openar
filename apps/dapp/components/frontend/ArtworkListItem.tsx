@@ -12,9 +12,6 @@ import { ApiImage } from "../ui";
 import { ArtworkStatusEnum, getArtistName } from "~/utils";
 import Link from "next/link";
 import Router, {useRouter} from 'next/router'
-import { OpenAR } from "packages/crypto/src";
-import { FieldHiddenShow } from "../forms";
-
 
 export const ArtworkListItem = ({
   id,

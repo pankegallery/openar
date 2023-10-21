@@ -20,8 +20,7 @@ export const ExhibitionTitleTile = ({
   assembledCurators = exhibition?.curators?.map((c, i) => (
     <span key={`curator-${i}`}>
       {i > 0 && i < exhibition.curators.length - 1 && ", "}
-      {i == exhibition.curators.length - 1 &&
-        exhibition.curators.length > 1 &&
+      {i == exhibition.curators.length - 1 && exhibition.curators.length > 1 &&
         " and "}
       {createCuratorLink(exhibition.curators[i])}
     </span>
