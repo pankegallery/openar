@@ -42,7 +42,7 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
     this.leaflet = await import('react-leaflet')
     this.L = await import('leaflet')        
 
-    console.log("Marker icon: ", this.markerIcon)
+    // console.log("Marker icon: ", this.markerIcon)
     this.setState({ inBrowser: true, centerX: this.props.lat, centerY: this.props.lng })    
   }
 
@@ -63,6 +63,7 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
           }
         })
         .on('locationerror', (e) => {
+          // Log location errors
           console.log(e)
           // alert(e.message)
         })
