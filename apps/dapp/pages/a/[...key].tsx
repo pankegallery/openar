@@ -114,7 +114,7 @@ export const Artwork = ({
         </Flex>
 
         {/* --------- COL: Artwork details) --------- */}
-        <ArtworkDetails artwork={artwork} object={selectedObject} onUserLocationUpdate={onUserLocationUpdate} userIsInProximity={viewInARDisabled} />
+        <ArtworkDetails artwork={artwork} object={selectedObject} onUserLocationUpdate={onUserLocationUpdate} userIsInProximity={!viewInARDisabled} />
 
       </Flex>{" "}
       {/* Column Layout close*/}
