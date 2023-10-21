@@ -246,9 +246,9 @@ export const getStaticProps = async ({ params }: { params: any }) => {
         return (exhibition.status == ExhibitionStatusEnum.PUBLISHED)
       }),
       pageTitle: "openAR",
-      pageSlogan: "The cooperative and crypto platform for AR artworks",
+      pageSlogan: "An open platform for augmented reality (AR) artworks",
       pageDescription:
-        "openAR makes it easy to exhibit, collect and discuss Augmented Reality (AR) works and allows artists to sell their works as NFTs. The open platform is organised as a cooperative, profits will be shared among the artists.",
+        "openAR makes it easy to share, exhibit and collect Augmented Reality (AR) works and allows curators to create site-specific exhibitions with geocoded artworks.",
     },
     revalidate: 5,
   };
