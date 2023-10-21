@@ -100,7 +100,7 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
     const markerCenter = shouldUpdateMarkerToMapCenter ? [centerX, centerY] : [lat, lng]
 
     return (      
-      <div className="leaflet-map-container" style={{height: '600px', background: "#bab79f" }}>
+      <div className="leaflet-map-container" style={{minHeight: '200px', height: '100%', background: "#bab79f" }}>
         <MapContainer 
           center={[centerX, centerY]} 
           zoom={18} 
