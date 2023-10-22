@@ -42,8 +42,8 @@ export const ArtworkDetails = ({
   userIsInProximity: any;
 }) => {
   const [profileUrl, setProfileUrl] = useState(`/u/${artwork.creator.id}`);
-  const [disableOverlay, setDisableOverlay] = useState(false)
-  
+  const [disableOverlay, setDisableOverlay] = useState(false);
+
   const [claimCollectorRoleMutation] =
     useUserMaybeClaimCollectorsRoleUpdateMutation();
 
@@ -241,14 +241,29 @@ export const ArtworkDetails = ({
         </chakra.p>
       </Box>
 
-      <Box width="100%" overflow={object?.isGeolocationEnabled && !(userIsInProximity || disableOverlay) ? "hidden" : "auto"} height="100%" position="relative" flexGrow={0}>
+      <Box
+        width="100%"
+        overflow={
+          object?.isGeolocationEnabled && !(userIsInProximity || disableOverlay)
+            ? "hidden"
+            : "auto"
+        }
+        height={
+          object?.isGeolocationEnabled && !(userIsInProximity || disableOverlay)
+            ? "600px"
+            : "100%"
+        }
+        
+        position="relative"
+        flexGrow={0}
+      >
         {object?.isGeolocationEnabled && !userIsInProximity && (
           <IncompleteOverlay
             cornerRem="6rem"
             headline="This artwork is site-specific. "
             subline="Go to the location shown on the map in order to experience it in AR."
             href=""
-            height="100%"
+            height={{ base: "600px", t: "100%", d: "100%" }}
             marginLeft="6"
             marginTop="10"
             align="top"
@@ -271,7 +286,6 @@ export const ArtworkDetails = ({
           borderBottom="1px solid white"
           p="6"
         >
-
           <chakra.p textStyle="label" className="label" mt="4">
             Artwork description
           </chakra.p>
@@ -286,29 +300,28 @@ export const ArtworkDetails = ({
             </>
           )}
         </Box>
-        
+
         {/* ======== BOX: Artwork location  ======== */}
-        {(object?.isGeolocationEnabled && (userIsInProximity || disableOverlay)) && (
-        <Box
-          className="artworkLocation"
-          borderBottom="1px solid white"
-          p="6"
-          height="500px"
-          pb="80px"
-        >
+        {object?.isGeolocationEnabled && (userIsInProximity || disableOverlay) && (
+          <Box
+            className="artworkLocation"
+            borderBottom="1px solid white"
+            p="6"
+            height="500px"
+            pb="80px"
+          >
+            <chakra.p textStyle="label" className="label" mt="4" pb="4">
+              Artwork location
+            </chakra.p>
 
-          <chakra.p textStyle="label" className="label" mt="4" pb="4">
-            Artwork location
-          </chakra.p>
-
-          <LeafletMap
+            <LeafletMap
               lat={object.lat}
               lng={object.lng}
               shouldUpdateMarkerToMapCenter={false}
               shouldLocateUser={true}
               onUserLocationUpdate={onUserLocationUpdate}
             />
-        </Box>
+          </Box>
         )}
 
         {/* ======== BOX: Artwork purchase  ======== */}
