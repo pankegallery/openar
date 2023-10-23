@@ -32,8 +32,8 @@ export const LayoutBlank = ({
   return (
     <WalletConnectGate>
       <Head>
-        <title>openAR · A cooperative and crypto platform for AR artworks</title>
-        <meta property="og:title" content="openAR · A cooperative and crypto platform for AR artworks" key="title" />
+        <title>openAR · An open platform for augmented reality (AR) artworks</title>
+        <meta property="og:title" content="openAR · An open platform for augmented reality (AR) artworks" key="title" />
       </Head>
       <LoadingBar color="#000"/>
       <Box className={`site content corner-${mode}`} h="100%">

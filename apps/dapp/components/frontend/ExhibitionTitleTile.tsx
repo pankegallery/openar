@@ -20,7 +20,8 @@ export const ExhibitionTitleTile = ({
   assembledCurators = exhibition?.curators?.map((c, i) => (
     <span key={`curator-${i}`}>
       {i > 0 && i < exhibition.curators.length - 1 && ", "}
-      {i == exhibition.curators.length - 1 && exhibition.curators.length > 1 && " and "}
+      {i == exhibition.curators.length - 1 && exhibition.curators.length > 1 &&
+        " and "}
       {createCuratorLink(exhibition.curators[i])}
     </span>
   ));
@@ -32,6 +33,10 @@ export const ExhibitionTitleTile = ({
         className="exhibtion title tile"
         display="flex"
         flexDirection="column"
+        transition="ease all 0.5s"
+        _hover={{ 
+          transform: "scale(102%)", 
+        }}
       >
         <Heading as={titleTag as any} textStyle="worktitle" mt="auto" mb="2rem">
           <Link href={href} passHref>
