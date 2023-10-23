@@ -128,10 +128,6 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
-# Temporary folders
-tmp/
-temp/
-
 # dependencies
 /node_modules
 node_modules/
@@ -154,6 +150,11 @@ build/
 .DS_Store
 *.pem
 temp/*
+.vscode
+
+# Temporary folders
+tmp/
+temp/
 
 # debug
 npm-debug.log*
