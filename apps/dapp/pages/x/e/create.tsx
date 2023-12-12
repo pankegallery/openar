@@ -1,4 +1,6 @@
 import { useState, ReactElement } from "react";
+import Head from "next/head";
+
 import type * as yup from "yup";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -108,6 +110,11 @@ const Create = () => {
 
   return (
     <>
+      <Head>
+        <title>Add artwork · openAR</title>
+        <meta property="og:title" content={`Add artwork· OpenAR`} key="title" />
+      </Head>
+
       <FormNavigationBlock
         shouldBlock={!isNavigatingAway && isDirty && !isSubmitting}
       />
