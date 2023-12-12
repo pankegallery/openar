@@ -223,6 +223,7 @@ export const getStaticProps = async ({ params }: { params: any }) => {
         description
         status
         creator {
+          id
           pseudonym
           ethAddress
           bio
