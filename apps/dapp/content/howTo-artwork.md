@@ -5,36 +5,44 @@ parentPage:
     label: "Get started"
     url: "/p/getStarted"
 subPages:
-  - slug: "howTo-wallet"
-    label: "How to add a wallet"
-    url: "/p/howTo-wallet"
+  - slug: "howTo-register"
+    label: "How to register"
+    url: "/p/howTo-register"
+  - slug: "howTo-exhibition"
+    label: "How to curate an exhibition"
+    url: "/p/howTo-exhibition"   
   - slug: "howTo-collection"
     label: "How to start a collection"
     url: "/p/howTo-collection"
 ---
 
-Anybody can become a creator on openAR by uploading their work to the platform. You do not need an invitation to become a creator. However, you will need to connect and set up your MetaMask wallet and create an artist profile to upload and publish your artwork and mint it as a NFT. 
+## How to become a creator
 
-You can either publish your artwork on the platform without the option of selling it or mint it as an NFT (meaning your artwork is transferred to IPFS, a decentralized peer-to-peer storage network), set a price in xDai and list it for sale on openAR. 
+Becoming a creator on openAR is straightforward. Simply upload your work to the platform. No invitation is required, but you must register and create an artist profile to publish your artwork.
 
+You have the option to publish your artwork on the platform without selling it, or to mint it as an NFT (transferred to IPFS, a decentralised peer-to-peer storage network), set a price in xDai, and put it up for sale on openAR. To do this, connect and set up your MetaMask wallet.
 
-## How to publish artworks and mint them as NFT
+## Publishing Artworks
 
-If you want to publish your artwork or mint it and sell it as an NFT, please follow the step-by-step instructions below.
+To publish your artwork or mint it for sale, follow these steps after registering and creating your profile:
 
-**Note:** Make sure you have [set up your wallet](/p/howTo-wallet) and created your profile beforehand.
+    Complete your profile with a valid email address and accept the Terms of Service.
+    Fill out the artwork information (title, description).
+    Upload your augmented reality objects in USDZ and GLB formats (max size 20MB).
+    Upload a preview thumbnail for your artwork (jpg or png).
 
-- Complete your profile (a valid email address and accepted Terms of Service are mandatory to create an artwork)
-- Fill out the information about your artwork (title, description)
-- Upload your augmented reality artwork in the USDZ and GLB format of a size no larger than 20MB
-- Upload a preview thumbnail for your artwork (jpg or png)
-publish
+### Restrict access to artwork based on geolocation
 
-Optionally, you can now mint your artwork as an NFT and sell it on the openAR platform.
+openAR now allows creators to restrict access to artwork objects based on geolocation. Assign specific latitude and longitude coordinates to each artwork object, directing users to the exact location to experience the AR artwork.
 
-- Make sure the metadata/information are filled out correctly as changing it afterwards will cost you transaction fees
-- Select ‘edit artwork’
-- Select ‘minting’
-- Decide on the price of the artwork and size of the edition (note: you will not be able to change this information after minting it)
+This feature enables artists to embed digital creations into physical spaces, providing audiences with an immersive, location-specific experience of augmented reality art.
 
-**Important note:** You do not need to pay fees for minting the artworks and listing them, but will be charged transaction fees to make changes on your NFT. If you want to delete/burn an NFT that is minted, please contact our admin: contact@openAR.art 
+## Mint artworks as NFT (legacy feature)
+
+Optionally, you can mint your artwork as NFT and sell it on openAR. Login with a crypto wallet (legacy login) to mint your artwork:
+
+ - Make sure the metadata is correct before minting, as changes will incur transaction fees.
+ - Select 'edit artwork' then 'minting.'
+ - Decide on artwork price and edition size (note: cannot be changed after minting).
+
+**Important:** There are no fees for minting and listing artwork. However, changing NFT details will incur a transaction fee. To delete or burn a minted NFT, contact our Admin at contact@openAR.art.
