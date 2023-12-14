@@ -4,28 +4,27 @@ subPages:
   - slug: "getStarted"
     label: "Get started"
     url: "/p/getStarted"
-  - slug: "roles"
-    label: "Roles and Badges"
-    url: "/p/badges"
 ---
 
-## About openAR
+## About the platform
 
-openAR is the world's first cooperative platform for digital artists explicitly designed to help all artists prosper. It is founded on three principles:
+openAR is an open and collaborative platform dedicated to presenting and curating AR artworks, now offering innovative site-specific features. Explore artworks in their local context and curate exhibitions in public spaces.
 
-**1. Open.** Our platform aims to be fully transparent. There are no fees or gatekeepers – anyone can sign up and showcase their art in the spot. 
+Empowering artists, institutions and curators to use this platform as a tool for immersive artistic experiences, openAR is built on three pillars:
 
-**2. Cooperative.** openAR is a non-for-profit undertaking. 15% of every selling will be retained by the platform. This percentage will be used in parts to secure the operation and maintanance of the platform. Remaining funds will be rewarded to the community – in form of cooperatively distributed renumeration, curatorial funds or other community supporting initiatives. Every user of openAR becomes a member of the community. Depending on their activity they will take up different roles – such as artist, curator, collector or reviewer.  Your can find more information on the respective pages.
+**1. Open.** Our platform revolves around the presentation and curation of AR artworks, creating a unified space for artists to showcase their creativity without constraints.
 
-- [Platform funding](/p/funding) 
-- [Roles and badges](/p/badges) 
+**2. Curated.** We recognise the importance of context in art. Rather than navigating this content with a biased algorithm we trust the expertise of human curators. Through openAR, individuals and institutions are invited to curate exhibitions and site-specific shows, surfacing and creating meaningful connections between artworks to help audiences understand their meaning in context and space. openAR democratises this role by allowing anyone to create an exhibition and share it with the world via the front page.
 
-**3. Curated.** We believe that art requires context to be meaningful. Digital platforms have the tendency to overflow with content. Rather than navigating this content with a biased algorithm we trust the expertise of human curators. Curators traditionally surface and create meaningful connections between artworks to help audiences understand their importance in context. openAR democratizes this role by allowing anyone to create an exhibition and share it with the world via the frontpage.
+**3. Cooperative.** Originally designed as a cooperative community and  non-for-profit marketplace for AR art, users participate in various roles – artist, curator, collector or reviewer – contributing to a diverse art ecosystem.
 
-## How this platform works
+## How the platform works
 
-You can browse exhibitions, artworks and artists without any form of registration. To start collecting and contributing to our platform you need to register through a crypto wallet. This sounds more complicated as it is, please refer to our help pages for details:
+You have the freedom to explore exhibitions, artworks, and artists without prior registration. To add artworks, you can now simply sign up via email, removing the need for a crypto wallet. See our help pages for detailed instructions:
 
-- [How to add a wallet](/p/howTo-wallet)
+- [How to register](/p/howTo-register)
 - [How to add an artwork](/p/howTo-artwork)
+- [How to curate an exhibition](/p/howTo-exhibition)
 - [How to start a collection](/p/howTo-collection)
+
+The recently updated focus underlines openAR's commitment to being a central hub for showcasing and curating AR artworks, while simplifying the process for engagement and participation.
