@@ -2,6 +2,7 @@ import React from 'react'
 import 'leaflet/dist/leaflet.css'
 import dynamic from 'next/dynamic'
 import { mapMarker } from './marker'
+import { measureDistance } from "~/components/utils/GeoDistance";
 
 // const Leaflet : any = dynamic(() => import('react-leaflet'), { ssr: false })
 
@@ -32,16 +33,19 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
     centerY: -0.09,
     userLocationX: 0,
     userLocationY: 0,
-    userAccuracy: 0
+    userAccuracy: 0,
+    zoomLevel: 18,
   }
   leaflet: any
   markerIcon: any
   L: any
+  LRM: any
 
   async componentDidMount() {    
     this.leaflet = await import('react-leaflet')
     this.L = await import('leaflet')        
-
+    window.L = this.L
+    this.LRM = await import('leaflet-routing-machine')    
     // console.log("Marker icon: ", this.markerIcon)
     this.setState({ inBrowser: true, centerX: this.props.lat, centerY: this.props.lng })    
   }
@@ -60,6 +64,27 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
           })
           if (onUserLocationUpdate) {
             onUserLocationUpdate(e.latitude, e.longitude, e.accuracy)
+
+            try {
+              window.L.Routing.control({
+                waypoints: [
+                  window.L.latLng(e.latitude, e.longitude),
+                  window.L.latLng(this.props.lat, this.props.lng)
+                ],
+                createMarker: function() { return null; }
+              }).addTo(m);  
+            } catch (e) {
+              console.warn("Routing exception: ", e)
+            }
+
+            const userCoords = [e.latitude, e.longitude]
+            const artworkCoords = [this.props.lat, this.props.lng]
+            m.fitBounds([userCoords, artworkCoords])
+            this.setState({
+              zoomLevel: m.getZoom(),
+              centerX: m.getCenter()[0],
+              centerY: m.getCenter()[1]
+            })
           }
         })
         .on('locationerror', (e) => {
@@ -96,7 +121,7 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
 
     const { MapContainer, TileLayer, Marker, Popup, Circle, CircleMarker } = this.leaflet
 
-    const { centerX, centerY, userLocationX, userLocationY, userAccuracy } = this.state
+    const { centerX, centerY, userLocationX, userLocationY, userAccuracy, zoomLevel } = this.state
     const { shouldLocateUser, shouldUpdateMarkerToMapCenter, lat, lng } = this.props
     const markerCenter = shouldUpdateMarkerToMapCenter ? [centerX, centerY] : [lat, lng]
 
@@ -104,7 +129,7 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
       <div className="leaflet-map-container" style={{minHeight: '200px', height: '100%', background: "#bab79f" }}>
         <MapContainer 
           center={[centerX, centerY]} 
-          zoom={18} 
+          zoom={zoomLevel} 
           scrollWheelZoom={false} 
           style={{
             // transform: "translate3d(0,0,0)",
