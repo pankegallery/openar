@@ -420,3 +420,7 @@ a {
   float: right;
   margin-top: 3px;
 }
+
+.leaflet-routing-container {
+  display: none !important;
+}
