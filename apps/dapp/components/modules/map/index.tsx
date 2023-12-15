@@ -66,6 +66,7 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
             onUserLocationUpdate(e.latitude, e.longitude, e.accuracy)
 
             try {
+              // @ts-ignore
               window.L.Routing.control({
                 waypoints: [
                   window.L.latLng(e.latitude, e.longitude),
