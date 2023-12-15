@@ -35,6 +35,7 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
     userLocationY: 0,
     userAccuracy: 0,
     zoomLevel: 18,
+    isFirstLocationFound: true
   }
   leaflet: any
   markerIcon: any
@@ -65,27 +66,30 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
           if (onUserLocationUpdate) {
             onUserLocationUpdate(e.latitude, e.longitude, e.accuracy)
 
-            try {
-              // @ts-ignore
-              window.L.Routing.control({
-                waypoints: [
-                  window.L.latLng(e.latitude, e.longitude),
-                  window.L.latLng(this.props.lat, this.props.lng)
-                ],
-                createMarker: function() { return null; }
-              }).addTo(m);  
-            } catch (e) {
-              console.warn("Routing exception: ", e)
+            if (this.state.isFirstLocationFound) {
+              this.setState({ isFirstLocationFound: false })
+              try {
+                // @ts-ignore
+                window.L.Routing.control({
+                  waypoints: [
+                    window.L.latLng(e.latitude, e.longitude),
+                    window.L.latLng(this.props.lat, this.props.lng)
+                  ],
+                  createMarker: function() { return null; }
+                }).addTo(m);  
+              } catch (e) {
+                console.warn("Routing exception: ", e)
+              }
+  
+              const userCoords = [e.latitude, e.longitude]
+              const artworkCoords = [this.props.lat, this.props.lng]
+              m.fitBounds([userCoords, artworkCoords])
+              this.setState({
+                zoomLevel: m.getZoom(),
+                centerX: m.getCenter()[0],
+                centerY: m.getCenter()[1]
+              })  
             }
-
-            const userCoords = [e.latitude, e.longitude]
-            const artworkCoords = [this.props.lat, this.props.lng]
-            m.fitBounds([userCoords, artworkCoords])
-            this.setState({
-              zoomLevel: m.getZoom(),
-              centerX: m.getCenter()[0],
-              centerY: m.getCenter()[1]
-            })
           }
         })
         .on('locationerror', (e) => {
