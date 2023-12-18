@@ -177,9 +177,10 @@ export const ModuleExhibitionForm = ({
             isRequired={yupIsFieldRequired("curators", validationSchema)}
             settings={{
               // defaultValue: data.abc.key
+              onChange: (event) => console.log("curators", event),
               placeholder: "Select curators or search by alias…",
               helpText:
-                "Curators must be registrated users of openAR to be selected",
+                "Curators must be registrated users of openAR to be selected.",
             }}
           />
           <FieldInput
@@ -246,11 +247,12 @@ export const ModuleExhibitionForm = ({
         {action === "create" && (
           <IncompleteOverlay
             headline="Save draft to add artworks."
-            subline=" Please save as draft to unlock artowkr and poster fields."
+            subline=" Please save as draft to unlock artwork and poster fields."
             button={true}
             buttonLabel="Save draft"
-            href=""
             height="100%"
+            // alignItems="flex-start"
+            // justifyContent="flex-start"
             marginLeft="20"
             marginTop="60"
             align="top"
