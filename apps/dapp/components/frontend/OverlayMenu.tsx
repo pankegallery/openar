@@ -39,7 +39,7 @@ export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
 
   const aboutText = (
     <Box textStyle="subtitle">
-      oopenAR is an open and collaborative platform dedicated to presenting and curating AR artworks and creating site-specific, immersive artistic experiences.
+      oopenAR is an open and collaborative platform dedicated to presenting and curating AR artworks.
     </Box>
   );
 

@@ -10,9 +10,9 @@ subPages:
 
 openAR is an open and collaborative platform dedicated to presenting and curating AR artworks, now offering innovative site-specific features. Explore artworks in their local context and curate exhibitions in public spaces.
 
-Empowering artists, institutions and curators to use this platform as a tool for immersive artistic experiences, openAR is built on three pillars:
+openAR is built on three pillars, empowering artists, institutions and curators to use the platform as a tool for immersive artistic experiences:
 
-**1. Open.** Our platform revolves around the presentation and curation of AR artworks, creating a unified space for artists to showcase their creativity without constraints.
+**1. Open.** Our platform revolves around the browser-based presentation and curation of AR artworks, creating a unified space for artists to showcase their creativity without constraints.
 
 **2. Curated.** We recognise the importance of context in art. Rather than navigating this content with a biased algorithm we trust the expertise of human curators. Through openAR, individuals and institutions are invited to curate exhibitions and site-specific shows, surfacing and creating meaningful connections between artworks to help audiences understand their meaning in context and space. openAR democratises this role by allowing anyone to create an exhibition and share it with the world via the front page.
 
