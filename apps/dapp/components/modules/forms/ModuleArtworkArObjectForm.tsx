@@ -172,11 +172,13 @@ export const ModuleArtworkArObjectForm = ({
                 </Text> 
             }
             { geolocationToggleEnabled &&
-              <LeafletMap
-                lat={latitude}
-                lng={longitude}
-                onCenterChange={onCenterChange}
-              />
+              <div style={{height: '600px'}}>
+                <LeafletMap
+                  lat={latitude}
+                  lng={longitude}
+                  onCenterChange={onCenterChange}
+                />
+              </div>
             }
           </FieldRow>
 

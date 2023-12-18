@@ -52,7 +52,7 @@ export const Home = (props) => {
           content={`${props.pageTitle} · ${props.pageSlogan}`}
           key="title"
         />
-        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/icon.png" />
         <meta name="description" content={props.pageDescription} />
       </Head>
       <Box

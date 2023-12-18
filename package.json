@@ -39,7 +39,7 @@
     "app:dapp:start": "cross-env NODE_ENV=production npm run start -w dapp",
     "app:dapp:build": "cross-env NODE_ENV=production npm run package:crypto:build && npm run build -w dapp",
     "app:dapp:deploy": "cross-env NODE_ENV=production npm run package:crypto:build && npm run build -w dapp && openar_dapp_restart",
-    "app:dapp:dev:correct": "cross-env PORT=$(grep DEV_DAPP_PORT .env | cut -d '=' -f2) NEXT_PUBLIC_API_URL=$(grep '^BASE_URL_API' .env | cut -d '=' -f2) npm run dev -w dapp",
+    "app:dapp:dev:remote": "cross-env PORT=$(grep DEV_DAPP_PORT .env | cut -d '=' -f2) NEXT_PUBLIC_API_URL=$(grep '^BASE_URL_API' .env | cut -d '=' -f2) npm run dev -w dapp",
     "app:dapp:dev": "cross-env PORT=5005 NEXT_PUBLIC_API_URL=http://127.0.0.1:3001 npm run dev -w dapp",
     "app:dapp:lint": "npm run lint -w dapp",
     "package:contracts:lint": "eslint ./packages/contracts/src --ext .js,.ts",
