@@ -52,6 +52,7 @@
     "gray-matter": "^4.0.3",
     "is-plain-object": "^5.0.0",
     "leaflet": "^1.9.4",
+    "leaflet-routing-machine": "^3.2.12",
     "lodash": "^4.17.21",
     "next": "11.1.2",
     "raw-loader": "^4.0.2",

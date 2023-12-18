@@ -10,7 +10,7 @@ import { MediaFactory } from "@openar/contracts"
 
 However, Api and Dapp can be run separately. 
 
-Please remember to work on to create your own branch or work on the `development` branch. But, pull requests are obviously always welcome. 
+Please remember to create your own branch or work on the `development` branch. But, pull requests are obviously always welcome. 
 
 Also, remember to always run a build and lint to ensure everyting is working before you push changes
 

@@ -434,6 +434,10 @@ a {
   margin-top: 3px;
 }
 
+.leaflet-routing-container {
+  display: none !important;
+}
+
 /* react-datepicker styling */
 
 .datePicker {

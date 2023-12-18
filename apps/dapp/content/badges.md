@@ -10,7 +10,7 @@ parentPage:
 
 Users of our platform can take on different roles as they browse, collect, contribute and review artworks. Each role is associated to a badges, which are designed each year by another artist.
 
-Badges are NFT's that are collected by different activities on the platform. As the platform grows in functionallity it will establish the following roles:
+Badges are collected by different activities on the platform. As the platform grows in functionallity it will establish the following roles:
 
 - User
 - Collector
@@ -21,7 +21,7 @@ Badges are NFT's that are collected by different activities on the platform. As 
 
 ### User
 
-Signin to openAR is provided by crypto wallets. You can browse the platform incognito or create your own openAR alter ego. Once you start building your profile, you will earn the user badge – the sky is the limit to your creativity.
+You can browse the platform incognito or create your own openAR alter ego. Once you start building your profile, you will earn the user badge – the sky is the limit to your creativity.
 
 ### Collector
 
@@ -33,7 +33,7 @@ Curate an exhibition to earn a curator badge. (Coming soon)
 
 ## Badges 2021
 
-Each year, we nominate an artist to create badges for openAR. The badges of 2021 have been designed by artist [Anna-Luise Lorenz](https://annaluiselorenz.com/).
+The badges of 2021 have been designed by artist [Anna-Luise Lorenz](https://annaluiselorenz.com/).
 
 ![User Badge](/images/badges2021/user@14x-100.jpg)
 
