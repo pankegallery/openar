@@ -196,6 +196,7 @@ const exhibitions: any = {
         "JxgpsYXrh1Jy4iPr", 
         "PLea7ibqpwKPiqYj", 
         "jUDh9O3AE05w6XKl",
+        "ppfaturQjedBXCk3",
       ]),
     };
   },
