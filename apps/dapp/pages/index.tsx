@@ -29,12 +29,12 @@ export const Home = (props) => {
       }, 1000);
 
       switch (direction) {
-        case "prev":
+        case "next":
           currentSlide != 0
             ? setCurrentSlide(currentSlide - 1)
             : setCurrentSlide(exhibitions.length - 1);
           break;
-        case "next":
+        case "prev":
           currentSlide != exhibitions.length - 1
             ? setCurrentSlide(currentSlide + 1)
             : setCurrentSlide(0);

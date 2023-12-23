@@ -165,6 +165,41 @@ const getExhibitionUserById = async (id: number) => {
 };
 
 const exhibitions: any = {
+  "animal-city-unleashed": async () => {
+    return {
+      id: 4,
+      title: "ANIMAL()CITY: Unleashed!",
+      slug: "animal-city-unleashed",
+      imgUrl:
+        "https://baserow.panke.gallery/media/user_files/I4Sv6eNyUim7LKbiEg2aL6csA1nWf5Hg_ea68826944b3ba7df66b390c90c3d50d5c6d607adef341a08429bff47e07aa6b.jpg",
+      imgPosition: "center center",
+      type: "groupshow",
+      // A group show curated by ABC and BBB
+      subtitlePrefix: "A group show curated by",
+      curators: [
+        {
+          orderNumber: 1,
+          user: await getExhibitionUserById(
+            18
+          ),
+        }
+      ],
+      dateBegin: new Date("2023-12-27 12:00"),
+      dateEnd: new Date("2023-12-30 23:00"),
+      description:
+        `The immersive exhibition invites you into a world where the urban landscape intertwines with the untamed essence of the wild. Building on the evocative spirit of Animal()City, this iteration takes place against the backdrop of the 37th Chaos Communication Congress (37c3) in Hamburg. Inspired by the nocturnal presence of foxes roaming the streets of Berlin, the exhibition continues to unravel the enigmatic layers of urban environments, where wildlife thrives unseen amidst concrete and neon. Just as online worlds harbor hidden AI entities, the city echoes this intricate web, provoking reflection on merging physical and virtual domains. Redefining the urban canvas, encounters with wildlife remind us of the city's hidden vitality. Enter this spectral realm, where boundaries blur, and the city pulsates with a life both cryptic and familiar.`,
+      status: ExhibitionStatusEnum.DRAFT,
+      artworks: await getExhibitionArtworks([
+        "7ewb9Sk5LFW1LJxp", 
+        "fhu664SGZOIZNkgU", 
+        "1e2YEmKGZIuSkcw1", 
+        "JxgpsYXrh1Jy4iPr", 
+        "PLea7ibqpwKPiqYj", 
+        "jUDh9O3AE05w6XKl",
+        "ppfaturQjedBXCk3",
+      ]),
+    };
+  },
   "animal-city": async () => {
     return {
       id: 3,
