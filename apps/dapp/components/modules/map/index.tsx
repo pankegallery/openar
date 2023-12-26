@@ -53,10 +53,8 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
     this.setState({ inBrowser: true, centerX: this.props.lat, centerY: this.props.lng })    
   }
 
-  componentWillUnmount(): void {
-    console.log("Map will unmount")
-    if (this.state.map) {
-      console.log("Unmounting map...")
+  componentWillUnmount(): void {    
+    if (this.state.map) {      
       try {
         this.state.map.stopLocate()
         this.state.map.remove()
