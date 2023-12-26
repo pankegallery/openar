@@ -42,7 +42,7 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
   L: any
   LRM: any
 
-  async componentWillMount() {
+  async UNSAFE_componentWillMount() {
     if (window.L) delete window.L
     this.leaflet = await import('react-leaflet')
     this.L = window.L || await import('leaflet')        
