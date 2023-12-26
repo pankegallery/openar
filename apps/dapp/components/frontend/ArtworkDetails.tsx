@@ -212,7 +212,6 @@ export const ArtworkDetails = ({
     account &&
     hasCookies();
 
-  console.log("Object is: ", object)
   return (
     <Flex
       direction="column"
