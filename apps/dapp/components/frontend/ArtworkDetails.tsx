@@ -274,6 +274,7 @@ export const ArtworkDetails = ({
           >
             <NoSsr>
               <LeafletMap
+                key={`${object.id}-overlay`}
                 lat={object.lat}
                 lng={object.lng}
                 shouldUpdateMarkerToMapCenter={false}
@@ -317,13 +318,16 @@ export const ArtworkDetails = ({
               Artwork location
             </chakra.p>
 
-            <LeafletMap
-              lat={object.lat}
-              lng={object.lng}
-              shouldUpdateMarkerToMapCenter={false}
-              shouldLocateUser={true}
-              onUserLocationUpdate={onUserLocationUpdate}
-            />
+            <NoSsr>
+              <LeafletMap
+                key={`${object.id}-map`}
+                lat={object.lat}
+                lng={object.lng}
+                shouldUpdateMarkerToMapCenter={false}
+                shouldLocateUser={true}
+                onUserLocationUpdate={onUserLocationUpdate}
+              />
+            </NoSsr>
           </Box>
         )}
 
