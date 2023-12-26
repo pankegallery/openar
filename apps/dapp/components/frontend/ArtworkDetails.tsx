@@ -17,6 +17,7 @@ import { useAuthentication, useWalletLogin, useAppToast } from "~/hooks";
 import { arObjectTokensQueryGQL } from "~/graphql/queries";
 import { BeatLoader } from "react-spinners";
 import LeafletMap from "../modules/map";
+import NoSsr from "../modules/map/NoSsr"
 
 import {
   OpenAR,
@@ -271,13 +272,15 @@ export const ArtworkDetails = ({
             handleClose={() => setDisableOverlay(true)}
             disabled={disableOverlay}
           >
-            <LeafletMap
-              lat={object.lat}
-              lng={object.lng}
-              shouldUpdateMarkerToMapCenter={false}
-              shouldLocateUser={true}
-              onUserLocationUpdate={onUserLocationUpdate}
-            />
+            <NoSsr>
+              <LeafletMap
+                lat={object.lat}
+                lng={object.lng}
+                shouldUpdateMarkerToMapCenter={false}
+                shouldLocateUser={true}
+                onUserLocationUpdate={onUserLocationUpdate}
+              />
+            </NoSsr>
           </IncompleteOverlay>
         )}
         {/* ======== BOX: Artwork description  ======== */}
