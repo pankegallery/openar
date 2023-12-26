@@ -42,13 +42,30 @@ export default class LeafletMap extends React.Component<LeafletMapProps> {
   L: any
   LRM: any
 
-  async componentDidMount() {    
+  async componentWillMount() {
+    if (window.L) delete window.L
     this.leaflet = await import('react-leaflet')
-    this.L = await import('leaflet')        
+    this.L = window.L || await import('leaflet')        
     window.L = this.L
-    this.LRM = await import('leaflet-routing-machine')    
+    await import('leaflet-routing-machine')
+    // console.log("LRM: ", this.LRM, window.L.Routing)
     // console.log("Marker icon: ", this.markerIcon)
     this.setState({ inBrowser: true, centerX: this.props.lat, centerY: this.props.lng })    
+  }
+
+  componentWillUnmount(): void {
+    console.log("Map will unmount")
+    if (this.state.map) {
+      console.log("Unmounting map...")
+      try {
+        this.state.map.stopLocate()
+        this.state.map.remove()
+        // if (window.L) delete window.L
+        // if (this.LRM) delete this.LRM
+      } catch (e) {
+        console.log(e)
+      }
+    }
   }
 
   onMapCreated = (m) => {
