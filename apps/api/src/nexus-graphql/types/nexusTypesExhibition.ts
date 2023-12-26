@@ -188,7 +188,7 @@ const exhibitions: any = {
       dateEnd: new Date("2023-12-30 23:00"),
       description:
         `The immersive exhibition invites you into a world where the urban landscape intertwines with the untamed essence of the wild. Building on the evocative spirit of Animal()City, this iteration takes place against the backdrop of the 37th Chaos Communication Congress (37c3) in Hamburg. Inspired by the nocturnal presence of foxes roaming the streets of Berlin, the exhibition continues to unravel the enigmatic layers of urban environments, where wildlife thrives unseen amidst concrete and neon. Just as online worlds harbor hidden AI entities, the city echoes this intricate web, provoking reflection on merging physical and virtual domains. Redefining the urban canvas, encounters with wildlife remind us of the city's hidden vitality. Enter this spectral realm, where boundaries blur, and the city pulsates with a life both cryptic and familiar.`,
-      status: ExhibitionStatusEnum.DRAFT,
+      status: ExhibitionStatusEnum.PUBLISHED,
       artworks: await getExhibitionArtworks([
         "7ewb9Sk5LFW1LJxp", 
         "fhu664SGZOIZNkgU", 
