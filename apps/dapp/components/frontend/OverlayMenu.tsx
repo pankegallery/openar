@@ -93,14 +93,8 @@ export const OverlayMenu = ({ mode = "dark" }: { mode?: any }) => {
             />
             <MenuCornerDarkHover
               viewBox="0 0 240 240"
-              width={{
-                base: "100px",
-                t: "150px",
-              }}
-              height={{
-                base: "100px",
-                t: "150px",
-              }}
+              width={menuWidth}
+              height={menuWidth}
               className="menuCornerHover"
             />
           </>
