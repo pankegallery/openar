@@ -171,7 +171,7 @@ const exhibitions: any = {
       title: "G.E.O. Geographic Environment Observation (1)!",
       slug: "geo-1",
       imgUrl:
-        "https://baserow.panke.gallery/media/user_files/I4Sv6eNyUim7LKbiEg2aL6csA1nWf5Hg_ea68826944b3ba7df66b390c90c3d50d5c6d607adef341a08429bff47e07aa6b.jpg",
+        "https://baserow.panke.gallery/media/user_files/62F6LCevXfByaSk9Tk4Y4oDs7voNk7qJ_b74b2b1adddf0184532f89144ebb73c2d9e3f4d9ab6787d138c509df42306b94.jpg",
       imgPosition: "center center",
       type: "solo exhibition",
       // A group show curated by ABC and BBB
