@@ -165,6 +165,35 @@ const getExhibitionUserById = async (id: number) => {
 };
 
 const exhibitions: any = {
+  "geo-1": async () => {
+    return {
+      id: 5,
+      title: "G.E.O. Geographic Environment Observation (1)!",
+      slug: "geo-1",
+      imgUrl:
+        "https://baserow.panke.gallery/media/user_files/I4Sv6eNyUim7LKbiEg2aL6csA1nWf5Hg_ea68826944b3ba7df66b390c90c3d50d5c6d607adef341a08429bff47e07aa6b.jpg",
+      imgPosition: "center center",
+      type: "solo exhibition",
+      // A group show curated by ABC and BBB
+      subtitlePrefix: "A solo exhibition by",
+      curators: [
+        {
+          orderNumber: 1,
+          user: await getExhibitionUserById(
+            17
+          ),
+        }
+      ],
+      dateBegin: new Date("2024-02-01 12:00"),
+      dateEnd: new Date("2024-03-03 23:59"),
+      description:
+        `G.E.O. is a solo exhibition by Joachim Blank at “Die Moeglichkeit einer Insel” in Berlin. The AR part is presented by OpenAR. The starting point of the exhibition is an archive of the German-language reportage magazine GEO (“Das neue Bild der Welt”,“Die Welt mit anderen Augen sehen”) from 1976 to the end of the 1990s. After acquiring a second-hand magazine archive in 2018, Joachim Blank photographed the contents of these magazines with a smartphone while leafing through them. The resulting image archive currently comprises more than 3000 photos. These pictures mostly show image details, little to no text and mix advertising with editorial photo series. They form an independent, digital image archive, from which he uses a few images for the exhibition at “Die Moeglichkeit einer Insel”  in order to process them further using his specific methods. This resulted in pictures of pictures of pictures. In “dialogue” with an AI and digital image filters, he created installative images that return to the physical space as large-format fine art prints with epoxy layers. He also reconstructed image fragments into three AR figures with installative interventions in the exhibition space.`,
+      status: ExhibitionStatusEnum.DRAFT,
+        artworks: await getExhibitionArtworks([
+        "iP8pp3MSI4Xls0yy", 
+      ]),
+    };
+  },
   "animal-city-unleashed": async () => {
     return {
       id: 4,
