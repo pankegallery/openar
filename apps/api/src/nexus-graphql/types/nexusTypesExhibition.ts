@@ -187,9 +187,8 @@ const exhibitions: any = {
       dateBegin: new Date("2024-02-01 12:00"),
       dateEnd: new Date("2024-03-03 23:59"),
       description:
-        `Joachim Blank's solo exhibition, G.E.O., is currently on display at 'Die Moeglichkeit einer Insel' in Berlin, featuring an AR component presented by OpenAR. \n
-        In 2018, Joachim Blank acquired an archive of the German-language reportage magazine GEO spanning from 1976 to the end of the 1990s. While leafing through them, he captured their contents using his smartphone. They form an independent, digital image archive comprising more than 3000 pictures, from which he uses and further processes a selected images for the exhibition – hence creating pictures of pictures of pictures. In dialogue with an AI and digital image filters, he created installative images that return to the physical space as large-format fine art prints with epoxy layers. He also reconstructed image fragments into three AR figures with installative interventions in the exhibition space.`,
-      status: ExhibitionStatusEnum.DRAFT,
+        `Joachim Blank's solo exhibition, G.E.O., is currently on display at 'Die Moeglichkeit einer Insel' in Berlin, featuring an AR component presented by OpenAR. In 2018, Joachim Blank acquired an archive of the German-language reportage magazine GEO spanning from 1976 to the end of the 1990s. While leafing through the magazines, he captured their contents using his smartphone, forming an independent, digital image archive of more than 3000 pictures. For the exhibition, the artist reused and further processed selected images, hence creating pictures of pictures of pictures. In dialogue with an AI and digital image filters, he created installative images that return to the physical space as large-format fine art prints with epoxy layers. He also reconstructed image fragments into three AR figures with installative interventions in the exhibition space.`,
+      status: ExhibitionStatusEnum.PUBLISHED,
         artworks: await getExhibitionArtworks([
         "iP8pp3MSI4Xls0yy", 
       ]),
