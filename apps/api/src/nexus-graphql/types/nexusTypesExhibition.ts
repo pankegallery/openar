@@ -168,7 +168,7 @@ const exhibitions: any = {
   "geo-1": async () => {
     return {
       id: 5,
-      title: "G.E.O. Geographic Environment Observation (1)!",
+      title: "G.E.O. (1)",
       slug: "geo-1",
       imgUrl:
         "https://baserow.panke.gallery/media/user_files/62F6LCevXfByaSk9Tk4Y4oDs7voNk7qJ_b74b2b1adddf0184532f89144ebb73c2d9e3f4d9ab6787d138c509df42306b94.jpg",
@@ -187,7 +187,7 @@ const exhibitions: any = {
       dateBegin: new Date("2024-02-01 12:00"),
       dateEnd: new Date("2024-03-03 23:59"),
       description:
-        `Joachim Blank's solo exhibition, G.E.O., is currently on display at 'Die Moeglichkeit einer Insel' in Berlin, featuring an AR component presented by OpenAR. In 2018, Joachim Blank acquired an archive of the German-language reportage magazine GEO spanning from 1976 to the end of the 1990s. While leafing through the magazines, he captured their contents using his smartphone, forming an independent, digital image archive of more than 3000 pictures. For the exhibition, the artist reused and further processed selected images, hence creating pictures of pictures of pictures. In dialogue with an AI and digital image filters, he created installative images that return to the physical space as large-format fine art prints with epoxy layers. He also reconstructed image fragments into three AR figures with installative interventions in the exhibition space.`,
+        `Joachim Blank's solo exhibition G.E.O. – Geographic Environment Observation – is currently on display at 'Die Moeglichkeit einer Insel' in Berlin, featuring an AR component presented by OpenAR. In 2018, Joachim Blank acquired an archive of the German-language reportage magazine GEO spanning from 1976 to the end of the 1990s. While leafing through the magazines, he captured their contents using his smartphone, forming an independent, digital image archive of more than 3000 pictures. For the exhibition, the artist reused and further processed selected images, hence creating pictures of pictures of pictures. In dialogue with an AI and digital image filters, he created installative images that return to the physical space as large-format fine art prints with epoxy layers. He also reconstructed image fragments into three AR figures with installative interventions in the exhibition space.`,
       status: ExhibitionStatusEnum.PUBLISHED,
         artworks: await getExhibitionArtworks([
         "iP8pp3MSI4Xls0yy", 

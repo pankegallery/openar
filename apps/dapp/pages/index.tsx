@@ -60,7 +60,7 @@ export const Home = (props) => {
         height="100vh"
         onWheel={(e: WheelEvent) => {
           if (Math.abs(e.deltaY) > 10) {
-            e.deltaY > 0 ? scrollToSlide("prev") : scrollToSlide("next");
+            e.deltaY > 0 ? scrollToSlide("next") : scrollToSlide("prev");
           }
         }}
       >
