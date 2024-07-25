@@ -175,7 +175,7 @@ const exhibitions: any = {
       imgPosition: "left center",
       type: "solo exhibition",
       // A group show curated by ABC and BBB
-      subtitlePrefix: "A solo exhibition by",
+      subtitlePrefix: "By",
       curators: [
         {
           orderNumber: 1,
@@ -187,7 +187,7 @@ const exhibitions: any = {
       dateBegin: new Date("2024-02-01 12:00"),
       dateEnd: new Date("2024-03-03 23:59"),
       description:
-        `Joachim Blank's solo exhibition G.E.O. – Geographic Environment Observation – is currently on display at 'Die Moeglichkeit einer Insel' in Berlin, featuring an AR component presented by OpenAR. In 2018, Joachim Blank acquired an archive of the German-language reportage magazine GEO spanning from 1976 to the end of the 1990s. While leafing through the magazines, he captured their contents using his smartphone, forming an independent, digital image archive of more than 3000 pictures. For the exhibition, the artist reused and further processed selected images, hence creating pictures of pictures of pictures. In dialogue with an AI and digital image filters, he created installative images that return to the physical space as large-format fine art prints with epoxy layers. He also reconstructed image fragments into three AR figures with installative interventions in the exhibition space.`,
+        `G.E.O. is a work by Joachim Blank that includes fine art prints with epoxy layers, a spatial installation and AR figures.  After the solo show at the Berlin art space “Möglichkeit einer Insel” in 2024, G.E.O. is now part of the group exhibition “Viewing the World - Positions of current post-photography and digital image culture" (curated by Sabine Maria Schmidt) at Kunstammlungen Chemnitz from July 28 - October 27, 2024. The AR part of G.E.O. includes four Ape-characters which are presented by OpenAR.`,
       status: ExhibitionStatusEnum.PUBLISHED,
         artworks: await getExhibitionArtworks([
         "iP8pp3MSI4Xls0yy", 
