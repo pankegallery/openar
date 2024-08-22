@@ -151,6 +151,7 @@ build/
 *.pem
 temp/*
 .vscode
+scripts/*
 
 # Temporary folders
 tmp/

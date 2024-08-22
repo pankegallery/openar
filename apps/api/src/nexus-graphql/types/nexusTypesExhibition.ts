@@ -165,6 +165,35 @@ const getExhibitionUserById = async (id: number) => {
 };
 
 const exhibitions: any = {
+  "new-myth": async () => {
+    return {
+      id: 6,
+      title: "In Search of a new Myth",
+      slug: "new-myth",
+      imgUrl:
+        "https://baserow.panke.gallery/media/user_files/wBv5igLsvbOPGVXfVEg5joGkMzuLEdqb_c9b42bf27346be4940c7b21ee290419915f0d0e217535c363d961dac1bff95b9.jpeg",
+      imgPosition: "left center",
+      type: "solo exhibition",
+      // A group show curated by ABC and BBB
+      subtitlePrefix: "By",
+      curators: [
+        {
+          orderNumber: 1,
+          user: await getExhibitionUserById(90),
+        },
+      ],
+      dateBegin: new Date("2024-08-28 12:00"),
+      dateEnd: new Date("2024-08-31 23:59"),
+      description: `Life in Athens is usually associated with images from before the market crash of 2008. Breathtaking views, dreamy sunsets, a carefree lifestyle. The reality, however, is far from the postcard image of Greece. Unable to withstand the pressure of a harsh reality, many people are choosing to leave the country in search of a more stable future. In Search of a new Myth is an AR collection of artworks, that seek to explore the idea of a myth as a passage from one city to another. It explores the dreams and aspirations, the joy and pain, the known and the unknown. Through this passage we want to get closer to the idea of home as a myth. Is it a personal sense of ambition and vanity? Or is it a sense of hope and the fulfilment of dreams?`,
+      status: ExhibitionStatusEnum.PUBLISHED,
+      artworks: await getExhibitionArtworks([
+        "ixbAlrncTgzCUqdM",
+        "cUZDctBjeA3l5l7n",
+        "bpDO4fhM778Jc7Me",
+        "aoybGYwFZXwQ7uE7",
+      ]),
+    };
+  },
   "geo-1": async () => {
     return {
       id: 5,
@@ -173,24 +202,21 @@ const exhibitions: any = {
       imgUrl:
         "https://baserow.panke.gallery/media/user_files/62F6LCevXfByaSk9Tk4Y4oDs7voNk7qJ_b74b2b1adddf0184532f89144ebb73c2d9e3f4d9ab6787d138c509df42306b94.jpg",
       imgPosition: "left center",
-      type: "solo exhibition",
+      type: "exhibition",
       // A group show curated by ABC and BBB
-      subtitlePrefix: "By",
+      subtitlePrefix: "An exhibition by",
       curators: [
         {
           orderNumber: 1,
-          user: await getExhibitionUserById(
-            17
-          ),
-        }
+          user: await getExhibitionUserById(17),
+        },
       ],
       dateBegin: new Date("2024-02-01 12:00"),
       dateEnd: new Date("2024-03-03 23:59"),
-      description:
-        `G.E.O. is a work by Joachim Blank that includes fine art prints with epoxy layers, a spatial installation and AR figures.  After the solo show at the Berlin art space “Möglichkeit einer Insel” in 2024, G.E.O. is now part of the group exhibition “Viewing the World - Positions of current post-photography and digital image culture" (curated by Sabine Maria Schmidt) at Kunstammlungen Chemnitz from July 28 - October 27, 2024. The AR part of G.E.O. includes four Ape-characters which are presented by OpenAR.`,
+      description: `G.E.O. is a work by Joachim Blank that includes fine art prints with epoxy layers, a spatial installation and AR figures.  After the solo show at the Berlin art space “Möglichkeit einer Insel” in 2024, G.E.O. is now part of the group exhibition “Viewing the World - Positions of current post-photography and digital image culture" (curated by Sabine Maria Schmidt) at Kunstammlungen Chemnitz from July 28 - October 27, 2024. The AR part of G.E.O. includes four Ape-characters which are presented by OpenAR.`,
       status: ExhibitionStatusEnum.PUBLISHED,
-        artworks: await getExhibitionArtworks([
-        "iP8pp3MSI4Xls0yy", 
+      artworks: await getExhibitionArtworks([
+        "iP8pp3MSI4Xls0yy"
       ]),
     };
   },
@@ -208,22 +234,19 @@ const exhibitions: any = {
       curators: [
         {
           orderNumber: 1,
-          user: await getExhibitionUserById(
-            18
-          ),
-        }
+          user: await getExhibitionUserById(18),
+        },
       ],
       dateBegin: new Date("2023-12-27 12:00"),
       dateEnd: new Date("2023-12-30 23:00"),
-      description:
-        `The immersive exhibition invites you into a world where the urban landscape intertwines with the untamed essence of the wild. Building on the evocative spirit of Animal()City, this iteration takes place against the backdrop of the 37th Chaos Communication Congress (37c3) in Hamburg. Inspired by the nocturnal presence of foxes roaming the streets of Berlin, the exhibition continues to unravel the enigmatic layers of urban environments, where wildlife thrives unseen amidst concrete and neon. Just as online worlds harbor hidden AI entities, the city echoes this intricate web, provoking reflection on merging physical and virtual domains. Redefining the urban canvas, encounters with wildlife remind us of the city's hidden vitality. Enter this spectral realm, where boundaries blur, and the city pulsates with a life both cryptic and familiar.`,
+      description: `The immersive exhibition invites you into a world where the urban landscape intertwines with the untamed essence of the wild. Building on the evocative spirit of Animal()City, this iteration takes place against the backdrop of the 37th Chaos Communication Congress (37c3) in Hamburg. Inspired by the nocturnal presence of foxes roaming the streets of Berlin, the exhibition continues to unravel the enigmatic layers of urban environments, where wildlife thrives unseen amidst concrete and neon. Just as online worlds harbor hidden AI entities, the city echoes this intricate web, provoking reflection on merging physical and virtual domains. Redefining the urban canvas, encounters with wildlife remind us of the city's hidden vitality. Enter this spectral realm, where boundaries blur, and the city pulsates with a life both cryptic and familiar.`,
       status: ExhibitionStatusEnum.PUBLISHED,
       artworks: await getExhibitionArtworks([
-        "7ewb9Sk5LFW1LJxp", 
-        "fhu664SGZOIZNkgU", 
-        "1e2YEmKGZIuSkcw1", 
-        "JxgpsYXrh1Jy4iPr", 
-        "PLea7ibqpwKPiqYj", 
+        "7ewb9Sk5LFW1LJxp",
+        "fhu664SGZOIZNkgU",
+        "1e2YEmKGZIuSkcw1",
+        "JxgpsYXrh1Jy4iPr",
+        "PLea7ibqpwKPiqYj",
         "jUDh9O3AE05w6XKl",
         "ppfaturQjedBXCk3",
       ]),
@@ -243,15 +266,12 @@ const exhibitions: any = {
       curators: [
         {
           orderNumber: 1,
-          user: await getExhibitionUserById(
-            18
-          ),
-        }
+          user: await getExhibitionUserById(18),
+        },
       ],
       dateBegin: new Date("2023-10-12 12:00"),
       dateEnd: new Date("2023-10-28 23:00"),
-      description:
-        `Animal()City is inspired by the ghostly presence of foxes roaming the city at night – a common sight in Berlin today – evoking echoes of a pre-industrial era while drawing attention to a layer of the city that is completely invisible in everyday life. In these moments we witness animals and plants forming their own realm, and the city having a life of its own, acting like an entity, a ghost at times. Encounters with wild animals in the city make this parallel identity momentarily tangible, making us part of these ‘non-human’ networks while projecting ideas of dystopian, dehumanised cities of the future. The city can also be read as analogous to the Internet. Just as we are divided into threads and channels by platforms online, we also live in multi-layered structures that are haunted by sinister bots and AI agents.`,
+      description: `Animal()City is inspired by the ghostly presence of foxes roaming the city at night – a common sight in Berlin today – evoking echoes of a pre-industrial era while drawing attention to a layer of the city that is completely invisible in everyday life. In these moments we witness animals and plants forming their own realm, and the city having a life of its own, acting like an entity, a ghost at times. Encounters with wild animals in the city make this parallel identity momentarily tangible, making us part of these ‘non-human’ networks while projecting ideas of dystopian, dehumanised cities of the future. The city can also be read as analogous to the Internet. Just as we are divided into threads and channels by platforms online, we also live in multi-layered structures that are haunted by sinister bots and AI agents.`,
       status: ExhibitionStatusEnum.PUBLISHED,
       artworks: await getExhibitionArtworks([
         "I3MUhwLxici21RF5",
