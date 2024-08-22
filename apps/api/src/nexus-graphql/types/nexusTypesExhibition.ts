@@ -172,10 +172,10 @@ const exhibitions: any = {
       slug: "new-myth",
       imgUrl:
         "https://baserow.panke.gallery/media/user_files/wBv5igLsvbOPGVXfVEg5joGkMzuLEdqb_c9b42bf27346be4940c7b21ee290419915f0d0e217535c363d961dac1bff95b9.jpeg",
-      imgPosition: "left center",
+      imgPosition: "center center",
       type: "solo exhibition",
       // A group show curated by ABC and BBB
-      subtitlePrefix: "An exhibition by",
+      subtitlePrefix: "An exhibition curated by",
       curators: [
         {
           orderNumber: 1,
