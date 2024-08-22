@@ -4,6 +4,8 @@ import { Provider } from "react-redux";
 import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
+import {init} from "@socialgouv/matomo-next"
+import { useEffect } from "react";
 
 import { ChakraProvider } from "@chakra-ui/react";
 import { store } from "~/redux/store";
@@ -14,6 +16,9 @@ import {
   OpenARDappProvider,
 } from "~/providers";
 import { chakraTheme } from "~/theme";
+
+const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL;
+const MATOMO_SITE_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_ID;
 
 // import "@fontsource/manrope/300.css";
 // import "@fontsource/manrope/400.css";
@@ -31,6 +36,11 @@ type AppPropsWithLayout = AppProps & {
 
 function OpenARApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
+
+  useEffect(() => {
+    init({ url: MATOMO_URL, siteId: MATOMO_SITE_ID });
+  }, []);
+
 
   return (
     <ConfigContextProvider>
