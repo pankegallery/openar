@@ -25,7 +25,7 @@ export const ExhibitionTitleTile = ({
       {createCuratorLink(exhibition.curators[i])}
     </span>
   ));
-
+  
   if (link) {
     return (
       <LinkBox
@@ -77,7 +77,7 @@ export const ExhibitionTitleTile = ({
 };
 
 const createCuratorLink = (curator) => {
-  if (!curator?.user?.ethAddress) return <></>;
+  if (!curator?.user?.ethAddress && !curator?.user?.pseudonym) return <></>;
 
   let name = curator.user.pseudonym
     ? curator.user.pseudonym
