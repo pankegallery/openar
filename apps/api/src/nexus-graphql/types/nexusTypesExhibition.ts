@@ -185,7 +185,7 @@ const exhibitions: any = {
       dateBegin: new Date("2024-08-28 12:00"),
       dateEnd: new Date("2024-08-31 23:59"),
       description: `Life in Athens is usually associated with images from before the market crash of 2008. Breathtaking views, dreamy sunsets, a carefree lifestyle. The reality, however, is far from the postcard image of Greece. Unable to withstand the pressure of a harsh reality, many people are choosing to leave the country in search of a more stable future. In Search of a new Myth is an AR collection of artworks, that seek to explore the idea of a myth as a passage from one city to another. It explores the dreams and aspirations, the joy and pain, the known and the unknown. Through this passage we want to get closer to the idea of home as a myth. Is it a personal sense of ambition and vanity? Or is it a sense of hope and the fulfilment of dreams?`,
-      status: ExhibitionStatusEnum.DRAFT,
+      status: ExhibitionStatusEnum.PUBLISHED,
       artworks: await getExhibitionArtworks([
         "ixbAlrncTgzCUqdM",
         "cUZDctBjeA3l5l7n",
